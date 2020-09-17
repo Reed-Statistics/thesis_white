@@ -1,19 +1,12 @@
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-tex2jax: {
-inlineMath: [['$','$'], ['\\(','\\)']],
-processEscapes: true},
-jax: ["input/TeX","input/MathML","input/AsciiMath","output/CommonHTML"],
-extensions: ["tex2jax.js","mml2jax.js","asciimath2jax.js","MathMenu.js","MathZoom.js","AssistiveMML.js", "[Contrib]/a11y/accessibility-menu.js"],
-TeX: {
-extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"],
-equationNumbers: {
-autoNumber: "AMS"
-}
-}
-});
-</script>
+---
+title: "Literature Review"
+author: "Grayson White"
+output: rmarkdown::github_document
+---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
 
 ## Literature Review
 
@@ -31,6 +24,7 @@ that follows a conditional autoregressive (CAR) prior distribution which allows 
 $$
 v = (v_1, \dots, v_m) \sim N(0, \Sigma (\sigma^2_v, \lambda))
 $$
+
 where $\lambda$ is the autocorrelation parameter. They also specify the definition of the covariance matrix:
 $$
 \Sigma (\sigma^2_v, \lambda) = \sigma^2_v[\lambda R + (1-\lambda)I]^{-1}
