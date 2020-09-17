@@ -1,7 +1,9 @@
 ---
 title: "Literature Review"
 author: "Grayson White"
-output: rmarkdown::github_document
+output:
+  pdf_document:
+    keep_md: true
 ---
 
 ```{r setup, include=FALSE}
@@ -14,9 +16,12 @@ knitr::opts_chunk$set(echo = TRUE)
 
 This paper proposes three Hierarchical Bayesian (HB) models for small area estimation (SAE) of above ground biomass (AGB). These models are the Fay-Herriot (FH), Fay-Herriot with conditional autoregressive random effects (FHCAR), and FHCAR with smoothed sampling variance. They first introduce the FH model with is defined as: 
 $$
-Y_i = \theta_i + \epsilon_i \\
+Y_i = \theta_i + \epsilon_i 
+$$
+$$
 \theta_i = x_i \beta + v_i
 $$
+
 where $\theta_i$ is the mean AGB, $\epsilon_i \sim N(0,\sigma^2_i)$, the $x_i$ is a $(p \times 1)$ matrix, $\beta$ is the $(p\times 1)$ matrix of regression coefficients, and $v_i \sim N(0, \sigma^2_v)$. Note: $1\leq i \leq m$ where we are indexing over forest stands. 
 
 The FHCAR model is very similar, except for the fact that it adds a spatially structured random effect
@@ -32,7 +37,9 @@ $$
 
 The third model they specify is again similar to the first two, but with more: they want to be able to reduce instability in variance estimates in small sample sizes and so instead of saying that we have a fixed and known sampling variance (which is common practice), they specify the FHCAR-SMOOTH model where they define the following: 
 $$
-\tilde{\sigma_i^2} = \frac{V_e}{n_i} \\
+\tilde{\sigma_i^2} = \frac{V_e}{n_i}
+$$
+$$
 V_e = \frac{\sum_{i=1}^{m} a_i \sigma^2_i}{\sum_{i=1}^{m} a_i}
 $$
 where $n_i$ is the number of variable radius plots in stand $i$. 
