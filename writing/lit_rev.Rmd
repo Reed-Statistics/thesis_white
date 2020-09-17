@@ -49,6 +49,10 @@ After the authors introduce these three models, they discuss the priors used in 
 After running their models, they compared their results to Breidenbach et al. (2016) and Mauro et al. (2016) and those author's frequentist results. The HB models had higher $\sigma^2_v$ which allows for more realistic inference dealing with the uncertainty associated with estimating above ground biomass. 
 
 
-### Breidenbach 2012 (Frequentist methods)
+### Breidenbach (2012) (Frequentist methods): Small area estimation of forest attributes in the Norwegian National Forest Inventory
 
-This study's goal is the measure mean forest biomass in a forest of Vestfold County, Norway. The authors compared simple random sampling, generalized regression, and EBLUP estimators. 
+This study's goal is the measure mean forest biomass in a forest of Vestfold County, Norway. The authors compared simple random sampling, generalized regression, and EBLUP estimators. For the simple random sampling estimator, the authors calculate the sample mean, however they note that the MSE is unstable due to the small number of random samples. The next estimator that they discuss is the synthetic regression estimator which is an indirect estimator. This estimator is "synthetic" because it "synthesizes information from sample plots also outside the domain of interest." They estimate the mean with the following:
+$$
+\bar{Y}_{S,i} = \sum_{j=1}^{N_i} \vec x_{ij}^T \vec\beta
+$$
+For this estimator, they do not calculate the MSE because "the domain-level model bias cannot be considered adequately with the existing MSE estimators, which is why we will not derive MSE estimates for the SRE." 
