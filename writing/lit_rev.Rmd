@@ -64,3 +64,12 @@ $$
 which handles the weight of the bias correction factor according to model accuracy and $n$. Finally, the EBLUP estimator uses estimated variances rather than the true value of the variances as in the BLUP model.
 
 The authors found that the MSE of the EBLUP estimator was much lower than that of the SRS given a reliable estimate was possible. Most of the time, the MSE of the EBLUP was smaller than that of the GREG as well. The authors conclude to favor the EBLUP over the two other SAE methods (GREG and SRS).
+
+
+### Finley (2009): Improving the performance of predictive process modeling for large datasets
+
+In this paper, Finley proposes a knot-based predictive process aimed to reduce computation time and preserve "the richness of desired hierarchical spatial modeling specifications in the presence of large datasets." Included in the paper is a section on the application to forest biomass prediction and modeling. When applying this method, they found: "Convergence diagnostics revealed 5000 iterations to be sufficient for initial burn-in and so the remaining 30,000 samples from each chain were used for posterior inference. The 206 knot model required approximately 2 h to complete the MCMC sampling with the 106 and 51 knot models requiring substantially less time to collect the specified number of samples" and concluded that "Ultimately, the predictive process model makes this analysis and subsequent pixel-level prediction trivial for even a common single processor workstation."
+
+I am unsure if this computation barrier will become relevant when doing small area estimation, however if it does this knot-based approach seems extremely relevant to look into and potentially implement.
+
+
