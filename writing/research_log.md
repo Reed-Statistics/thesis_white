@@ -16,6 +16,10 @@ Fall, Week 1
 
 ### This Week's Work
 
+This week, I have been reviewing relevant literature on both Hierarchical Bayesian modeling and forestry research, along with familiarizing myself with the data. 
+
 ### Upcoming Work
 
 ### Points of confusion
+
+I am hoping to get a better sense of (many things... to be updated soon)

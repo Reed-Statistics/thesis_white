@@ -53,4 +53,12 @@ This study's goal is the measure mean forest biomass in a forest of Vestfold Cou
 $$
 \bar{Y}_{S,i} = \sum_{j=1}^{N_i} \vec x_{ij}^T \vec\beta
 $$
-For this estimator, they do not calculate the MSE because "the domain-level model bias cannot be considered adequately with the existing MSE estimators, which is why we will not derive MSE estimates for the SRE." 
+For this estimator, they do not calculate the MSE because "the domain-level model bias cannot be considered adequately with the existing MSE estimators, which is why we will not derive MSE estimates for the SRE." To deal with the bias, the authors introduced the generalized regression estimator (GREG) which uses a correction term that accounts for bias given $n$ is large enough.
+
+They next discuss the BLUP estimator. This is a model based estimator rather than a direct or indirect estimator and it combines direct and indirect estimates. The BLUP estimator is very similar to the GREG estimator, except for the factor: 
+$$
+\gamma_i = \frac{\sigma^2_v}{\sigma^2_v + \sigma^2_\epsilon / n_i}
+$$
+which handles the weight of the bias correction factor according to model accuracy and $n$. Finally, the EBLUP estimator uses estimated variances rather than the true value of the variances as in the BLUP model.
+
+The authors found that the MSE of the EBLUP estimator was much lower than that of the SRS given a reliable estimate was possible. Most of the time, the MSE of the EBLUP was smaller than that of the GREG as well. The authors conclude to favor the EBLUP over the two other SAE methods (GREG and SRS).
