@@ -49,6 +49,25 @@ After the authors introduce these three models, they discuss the priors used in 
 After running their models, they compared their results to Breidenbach et al. (2016) and Mauro et al. (2016) and those author's frequentist results. The HB models had higher $\sigma^2_v$ which allows for more realistic inference dealing with the uncertainty associated with estimating above ground biomass. 
 
 
+### Finley (2017): Hierarchical Bayesian models for small area estimation of county-level private forest landowner population
+
+NOTE: This paper is *super* similar to the LiDAR paper, I believe that this is a draft of that paper, but without using the LiDAR technology and few extras that got cut out of the final paper. This paper is a draft copy from another journal. 
+
+This paper first gives a very nice summary of small area estimation and what kinds of direct estimates are used:
+
+Direct estimates: estimates taken from design-based framework (NWOS survey). Low precision since low response rate. Used for benchmarking against model based approach.
+
+SAE: Combines direct estimates and covariates/explanatory variables to produce better estimates. So, SAE is composed of wo component models: a sampling (direct estimate) and a linking model. "The linking model is a linear model with random effects that relate the small areas of interest with some error."
+
+2.3: Simulation Study. This portion is not in the published paper. Relevant to assesing models: "One iteration in the simulation study produces a set of county-level direct and SAE model estimates by: i) drawing a random probability proportional to size sample from the private forest ownership list sample frame; ii) computing direct estimates (Section 2.2.1); iii) estimating FH and FH- CAR models (Section 2.2.2); iv) evaluating differences between SAE model population estimates and truth. Summarizing results from iv for a large number of iterations allows us to assess precision and bias in SAE model population estimates."
+
+They used population density and total forest area as explanatory variables. When assesing their simulation, the checked bias, "relative bias" = the bias relative to the truth for each county, MSE, RMSE, credible intervals. 
+
+Results: explanatory variables were significant in almost all simulations (95% credible interval). The biases for the states were very low with the FH and FHCAR models (less than 1/10th of a percent for Montana and less than 2/10th of a percent for NJ)
+
+Discussion: One thing that they note is that more/better covariates could be useful. I wonder what others we have access to that would be useful? They also note that the FHCAR model did not do a great job, and while its use is to deal with spatial covariates that are not directly included in the model, there was not significant improvement from the FHCAR model. 
+
+
 ### Breidenbach (2012) (Frequentist methods): Small area estimation of forest attributes in the Norwegian National Forest Inventory
 
 This study's goal is the measure mean forest biomass in a forest of Vestfold County, Norway. The authors compared simple random sampling, generalized regression, and EBLUP estimators. For the simple random sampling estimator, the authors calculate the sample mean, however they note that the MSE is unstable due to the small number of random samples. The next estimator that they discuss is the synthetic regression estimator which is an indirect estimator. This estimator is "synthetic" because it "synthesizes information from sample plots also outside the domain of interest." They estimate the mean with the following:
@@ -71,5 +90,3 @@ The authors found that the MSE of the EBLUP estimator was much lower than that o
 In this paper, Finley proposes a knot-based predictive process aimed to reduce computation time and preserve "the richness of desired hierarchical spatial modeling specifications in the presence of large datasets." Included in the paper is a section on the application to forest biomass prediction and modeling. When applying this method, they found: "Convergence diagnostics revealed 5000 iterations to be sufficient for initial burn-in and so the remaining 30,000 samples from each chain were used for posterior inference. The 206 knot model required approximately 2 h to complete the MCMC sampling with the 106 and 51 knot models requiring substantially less time to collect the specified number of samples" and concluded that "Ultimately, the predictive process model makes this analysis and subsequent pixel-level prediction trivial for even a common single processor workstation."
 
 I am unsure if this computation barrier will become relevant when doing small area estimation, however if it does this knot-based approach seems extremely relevant to look into and potentially implement.
-
-
