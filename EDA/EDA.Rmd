@@ -1,0 +1,113 @@
+---
+title: "Exploratory Data Analysis"
+author: "Grayson White"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+
+## Data wrangling:
+```{r message = FALSE, warning = FALSE}
+# Import data
+spatial <- read_csv("../data/plot_level/plt_spatial.csv")
+response <- read_csv("../data/plot_level/plot_response.csv")
+
+# Join data
+## Keep only observations in both `spatial` and `response`
+dat <- inner_join(spatial, response, 
+                  by = c("PLT_CN" = "PLT_CN",
+                         "INVYR" = "INVYR"))
+
+# Create columns for province, sections, and subsections
+dat <- dat %>%
+  mutate(
+    subsection = ECOSUBCD.x,
+    section = str_remove_all(ECOSUBCD.x, "[:lower:]"),
+    province = str_sub(section, end = -2)
+  )
+
+# Select small subset of columns to work with for this EDA
+dat_small <- dat %>%
+  select(PLT_CN, INVYR, PLOT.x, LON_PUBLIC.x, LAT_PUBLIC.x, LON_PUBLIC.y, LAT_PUBLIC.y,
+         ELEV_PUBLIC.x, ELEV_PUBLIC.y, forgrp, forprob, nlcd11, demLF, evtLF, forbio,
+         BALIVE_TPA, CNTLIVE_TPA, BIOLIVE_TPA, VOLNLIVE_TPA, subsection, section, province)
+
+# Check if a couple of columns are the same
+all.equal(dat_small$LON_PUBLIC.x, dat_small$LON_PUBLIC.y)
+all.equal(dat_small$LAT_PUBLIC.x, dat_small$LAT_PUBLIC.y)
+all.equal(dat_small$ELEV_PUBLIC.x, dat_small$ELEV_PUBLIC.y)
+
+# Remove redundent columns, rename columns for ease of use
+dat_small <- dat_small %>%
+  select(-LON_PUBLIC.y, -LAT_PUBLIC.y, -ELEV_PUBLIC.y) %>%
+  rename(PLOT = PLOT.x,
+         LON_PUBLIC = LON_PUBLIC.x,
+         LAT_PUBLIC = LAT_PUBLIC.x,
+         ELEV_PUBLIC = ELEV_PUBLIC.x)
+```
+
+
+## Exploratory Data Analysis
+
+I will first look into the province `M333`, which is the Northern Rocky Mountain Forest. This province has a maritime-influenced cool temperate climate with warm, dry summers and cold, moist winters with heavy snowfall. Small areas of glaciers occur near the Canadian border. High-elevation, high-relief mountains are the main landforms.
+
+```{r}
+# Create dataframe
+north_rocky <- dat_small %>%
+  filter(province == "M333")
+
+# Summary stats
+north_rocky %>%
+  summarize(
+    mean_forprob = mean(forprob),
+    mean_forbio = mean(forbio)
+  )
+
+# Distribution of variables
+ggplot(north_rocky,
+       aes(x = forprob)) +
+  geom_histogram(bins = 20, fill = "darkgreen",  color = "black") +
+  theme_bw()
+
+ggplot(north_rocky,
+       aes(x = forbio)) +
+  geom_histogram(bins = 20, fill = "darkgreen",  color = "black") +
+  theme_bw()
+
+# forest biomass, by forest group
+
+## filter to groups with greater than 100 observations
+forgrp_big <- north_rocky %>%
+  group_by(forgrp) %>%
+  summarize(count = n()) %>%
+  filter(count > 100 & forgrp != 0) %>%
+  pull(forgrp)
+
+
+north_rocky %>%
+  filter(forgrp %in% forgrp_big) %>%
+ggplot(aes(x = forbio)) +
+  geom_histogram(bins = 20, fill = "darkgreen",  color = "black") +
+  theme_bw() +
+  facet_wrap(~forgrp, nrow = 3)
+```
+
+
+Here we go, time to make a map :-)
+
+```{r}
+library(sf)
+library(USAboundaries)
+
+interior_west <- c("AZ", "CO", "ID", "MT", "NV", "NM", "UT", "WY")
+
+ggplot(data = north_rocky) +
+  geom_sf(data = us_boundaries(type = "state",
+                               states = interior_west)) +
+  theme_minimal()
+```
+
