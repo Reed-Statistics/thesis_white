@@ -102,12 +102,82 @@ Here we go, time to make a map :-)
 ```{r}
 library(sf)
 library(USAboundaries)
+`%ni%` <- Negate(`%in%`)
 
 interior_west <- c("AZ", "CO", "ID", "MT", "NV", "NM", "UT", "WY")
 
+states <- data.frame(state.abb) %>%
+  filter(state.abb %ni% interior_west & state.abb %ni% c("AK", "HI")) %>%
+  pull()
+
+
+# The interior west plotted in green on the USA
 ggplot(data = north_rocky) +
   geom_sf(data = us_boundaries(type = "state",
-                               states = interior_west)) +
+                               states = interior_west),
+          fill = "#597058",
+          color = "black") +
+  geom_sf(data = us_boundaries(type = "state",
+                               states = states),
+          fill = "grey",
+          color = "black") +
+  theme_minimal() +
+  labs(
+    title = "The Interior West"
+  ) 
+```
+
+```{r}
+# Add the north rocky forest onto the interior west map
+library(concaveman)
+
+points <- north_rocky %>%
+  st_as_sf(coords = c("LON_PUBLIC", "LAT_PUBLIC"), crs = 4326)
+
+forest <- concaveman(points)
+
+ggplot(data = north_rocky) +
+  geom_sf(data = forest,
+          fill = "#C96733",
+          color = "black") +
+  theme_minimal()
+
+ggplot(data = north_rocky) +
+  geom_sf(data = us_boundaries(type = "state",
+                               states = interior_west),
+          fill = "#597058",
+          color = "black") +
+  geom_sf(data = us_boundaries(type = "state",
+                               states = states),
+          fill = "grey",
+          color = "black") +
+  geom_sf(data = forest,
+          fill = "#C96733",
+          color = "black") +
+  theme_minimal() +
+  labs(
+    title = "The Interior West with the North Rocky Forest"
+  ) 
+```
+
+
+Time to use the data on these nice maps:
+```{r}
+ggplot(data = north_rocky) +
+  geom_sf(data = us_boundaries(type = "state",
+                               states = c("ID", "MT", "WY")),
+          fill = "#597058",
+          color = "black") +
+  geom_sf(data = forest,
+          fill = "#C96733",
+          color = "black") +
+  stat_summary_hex(data = north_rocky,
+                  fun = function(x) mean(x),
+          aes(x = LON_PUBLIC,
+              y = LAT_PUBLIC,
+              z = forprob)) +
   theme_minimal()
 ```
+
+
 
