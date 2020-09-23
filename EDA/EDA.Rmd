@@ -177,6 +177,17 @@ ggplot(data = north_rocky) +
               y = LAT_PUBLIC,
               z = forprob)) +
   theme_minimal()
+
+
+ggplot(data = north_rocky) +
+  geom_sf(data = forest) +
+  stat_summary_hex(data = north_rocky,
+                  fun = function(x) mean(x),
+          aes(x = LON_PUBLIC,
+              y = LAT_PUBLIC,
+              z = forprob)) +
+  theme_minimal() +
+  scale_fill_gradient(low = "lightgrey", high = "#597058")
 ```
 
 
