@@ -166,16 +166,17 @@ Time to use the data on these nice maps:
 ggplot(data = north_rocky) +
   geom_sf(data = us_boundaries(type = "state",
                                states = c("ID", "MT", "WY")),
-          fill = "#597058",
+          fill = "lightgrey",
           color = "black") +
-  geom_sf(data = forest,
-          fill = "#C96733",
-          color = "black") +
+  # geom_sf(data = forest,
+  #         fill = "#C96733",
+  #         color = "black") +
   stat_summary_hex(data = north_rocky,
                   fun = function(x) mean(x),
           aes(x = LON_PUBLIC,
               y = LAT_PUBLIC,
               z = forprob)) +
+  scale_fill_gradient(low = "lightgrey", high = "#597058") +
   theme_minimal()
 
 
@@ -188,6 +189,72 @@ ggplot(data = north_rocky) +
               z = forprob)) +
   theme_minimal() +
   scale_fill_gradient(low = "lightgrey", high = "#597058")
+```
+
+Let's take a step back and look at probabilty of forest over a larger area:
+
+```{r}
+ggplot(data = north_rocky) +
+  stat_summary_hex(
+    data = dat_small,
+    fun = function(x)
+      mean(x),
+    aes(x = LON_PUBLIC,
+        y = LAT_PUBLIC,
+        z = forprob),
+    bins = 50
+  ) +
+  geom_sf(
+    data = us_boundaries(type = "state",
+                         states = c(states, interior_west)),
+    fill = NA,
+    color = "black"
+  ) +
+  scale_fill_gradient(low = "lightgrey", high = "#597058") +
+  theme_minimal()
+```
+
+Zooming into the interior west:
+
+```{r}
+ggplot(data = north_rocky) +
+  stat_summary_hex(
+    data = dat_small,
+    fun = function(x)
+      mean(x),
+    aes(x = LON_PUBLIC,
+        y = LAT_PUBLIC,
+        z = forprob),
+    bins = 50
+  ) +
+  geom_sf(
+    data = us_boundaries(type = "state",
+                         states = c(interior_west)),
+    fill = NA,
+    color = "black"
+  ) +
+  scale_fill_gradient(low = "lightgrey", high = "#597058") +
+  theme_minimal()
+```
+
+
+Now, let's explore areas that are likely (>0.75) forests.
+
+```{r}
+forest75 <- dat_small %>%
+  filter(forprob > 0.75)
+
+# summary stats by province
+
+forest75 %>%
+  group_by(province) %>%
+  summarize(
+    mean_basal_area = mean(BALIVE_TPA),
+    mean_CNT = mean(CNTLIVE_TPA),
+    mean_BIO = mean(BIOLIVE_TPA),
+    mean_VOLN = mean(VOLNLIVE_TPA),
+    mean_biomass = mean(forbio)
+  )
 ```
 
 
