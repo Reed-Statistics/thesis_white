@@ -1,7 +1,9 @@
 ---
 title: "Exploratory Data Analysis"
 author: "Grayson White"
-output: html_document
+output:
+  html_document:
+    df_print: paged
 ---
 
 ```{r setup, include=FALSE}
@@ -276,9 +278,15 @@ ggplot(forest75,
 
 ## by mtn vs. not
 ggplot(forest75,
-       aes(x = mountain,
+       aes(x = factor(mountain),
            y = BALIVE_TPA)) +
   geom_violin() +
+  theme_bw()
+
+ggplot(forest75,
+       aes(x = factor(mountain),
+           y = BALIVE_TPA)) +
+  geom_boxplot(alpha = 0.2) +
   theme_bw()
 
 ## we could do an anova to see if these are really different
