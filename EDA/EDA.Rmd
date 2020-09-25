@@ -2,6 +2,7 @@
 title: "Exploratory Data Analysis"
 author: "Grayson White"
 output:
+  pdf_document: default
   html_document:
     df_print: paged
 ---
@@ -289,15 +290,15 @@ ggplot(forest75,
   geom_boxplot(alpha = 0.2) +
   theme_bw()
 
-## we could do an anova to see if these are really different
-forest75 %>%
-  group_by(mountain) %>%
-  summarize(mean(BALIVE_TPA))
+## we could do a t test to see if these are really different
+t.test(BALIVE_TPA ~ mountain, data = forest75)
 
-aov <- aov(mountain ~ BALIVE_TPA, data = forest75)
-summary(aov)
+## do any response variables have very similar means between mountain vs not?
+t.test(BIOLIVE_TPA ~ mountain, data = forest75)
+t.test(CNTLIVE_TPA ~ mountain, data = forest75)
+t.test(VOLNLIVE_TPA ~ mountain, data = forest75)
 
-
+### no, these are all pretty different. interesting. 
 ```
 
 
