@@ -1,3 +1,27 @@
+Fall, Week 2
+----------------
+
+### This Week's Work
+
+This week, I have primarily doing two things: exploratory data analysis and gaining knowledge about hierarchical bayesian modeling. 
+
+In terms of exploratory data analysis, I have created the EDA folder which include an `.Rmd` with the work I have done there. I looked into a particular province and tried to see how much I could learn about it through data visualization and summary statistics. While the findings are not extremely exciting, working with the data has given me a much better grasp of the variables that we have along with just an overall good sense of the data. 
+
+I have also been looking more at Hierarchical Bayesian Modeling. I found a lecture online from Richard McElreath which was very useful in understanding the concepts on HB modeling and how it will be useful for us. I was also able to source an electronic copy of his book (Statistical Rethinking), which has been very helpful. The book uses the package `rethinking` to specify hierarchical models, which seems like a powerful package. It is educational however, so it requires the user to specify every piece of the model explicitly. 
+
+To do (still this week): understand the packages a bit more, maybe try to fit a model with a few packages and see how it goes. 
+
+
+### Upcoming Work
+
+* Decide on which package to use to do the modeling
+
+* 
+
+### Points of confusion
+
+*
+
 Fall, Week 1
 ----------------
 
