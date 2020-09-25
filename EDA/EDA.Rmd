@@ -246,7 +246,7 @@ forest75 <- dat_small %>%
 
 # summary stats by province
 
-forest75 %>%
+forest75_summaries <- forest75 %>%
   group_by(province) %>%
   summarize(
     mean_basal_area = mean(BALIVE_TPA),
@@ -255,6 +255,41 @@ forest75 %>%
     mean_VOLN = mean(VOLNLIVE_TPA),
     mean_biomass = mean(forbio)
   )
+forest75_summaries
+
+# Learning more about distribution of these variables in likely forests:
+## Mountain or not variable:
+forest75 <- forest75 %>%
+  mutate(
+    mountain = case_when(
+      province %in% c("M313", "M331", "M341", "M333", "M332", "M261", "M334") ~ 1,
+      TRUE ~ 0
+    )
+  )
+
+## By province
+ggplot(forest75,
+       aes(y = BALIVE_TPA,
+           x = province)) +
+  geom_violin() +
+  theme_bw()
+
+## by mtn vs. not
+ggplot(forest75,
+       aes(x = mountain,
+           y = BALIVE_TPA)) +
+  geom_violin() +
+  theme_bw()
+
+## we could do an anova to see if these are really different
+forest75 %>%
+  group_by(mountain) %>%
+  summarize(mean(BALIVE_TPA))
+
+aov <- aov(mountain ~ BALIVE_TPA, data = forest75)
+summary(aov)
+
+
 ```
 
 

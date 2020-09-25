@@ -593,26 +593,27 @@ forest75 %&gt;%
     mean_basal_area = mean(BALIVE_TPA),
     mean_CNT = mean(CNTLIVE_TPA),
     mean_BIO = mean(BIOLIVE_TPA),
-    mean_VOLN = mean(VOLNLIVE_TPA)
+    mean_VOLN = mean(VOLNLIVE_TPA),
+    mean_biomass = mean(forbio)
   )</code></pre>
 <pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
-<pre><code>## # A tibble: 14 x 5
-##    province mean_basal_area mean_CNT mean_BIO mean_VOLN
-##    &lt;chr&gt;              &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
-##  1 313                 79.5     296.    15.7       846.
-##  2 315                 65.6     211.     7.93      491.
-##  3 321                 44.9     203.     7.97      404.
-##  4 322                 68.6     186.    10.1       539.
-##  5 331                 68.3     350.    18.8      1013.
-##  6 341                 86.4     333.    12.9       683.
-##  7 342                 80.4     227.    20.9      1131.
-##  8 M261                82.2     242.    26.7      1578.
-##  9 M313                83.9     294.    20.4      1112.
-## 10 M331                93.1     486.    29.7      1675.
-## 11 M332                81.8     356.    31.2      1721.
-## 12 M333               104.      473.    45.2      2529.
-## 13 M334                68.3     308.    26.3      1380.
-## 14 M341                94.5     341.    15.6       852.</code></pre>
+<pre><code>## # A tibble: 14 x 6
+##    province mean_basal_area mean_CNT mean_BIO mean_VOLN mean_biomass
+##    &lt;chr&gt;              &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;
+##  1 313                 79.5     296.    15.7       846.        12.8 
+##  2 315                 65.6     211.     7.93      491.         6.23
+##  3 321                 44.9     203.     7.97      404.        13.3 
+##  4 322                 68.6     186.    10.1       539.        10.1 
+##  5 331                 68.3     350.    18.8      1013.        22.0 
+##  6 341                 86.4     333.    12.9       683.        13.9 
+##  7 342                 80.4     227.    20.9      1131.        30.2 
+##  8 M261                82.2     242.    26.7      1578.        78.9 
+##  9 M313                83.9     294.    20.4      1112.        21.9 
+## 10 M331                93.1     486.    29.7      1675.        34.3 
+## 11 M332                81.8     356.    31.2      1721.        40.4 
+## 12 M333               104.      473.    45.2      2529.        45.8 
+## 13 M334                68.3     308.    26.3      1380.        23.5 
+## 14 M341                94.5     341.    15.6       852.        17.2</code></pre>
 </div>
 
 
