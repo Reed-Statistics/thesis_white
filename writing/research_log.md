@@ -3,24 +3,24 @@ Fall, Week 2
 
 ### This Week's Work
 
-This week, I have primarily doing two things: exploratory data analysis and gaining knowledge about hierarchical bayesian modeling. 
+This week, I have been primarily doing three things: exploratory data analysis, gaining knowledge about hierarchical bayesian modeling, and looking into software. 
 
 In terms of exploratory data analysis, I have created the EDA folder which include an `.Rmd` with the work I have done there. I looked into a particular province and tried to see how much I could learn about it through data visualization and summary statistics. While the findings are not extremely exciting, working with the data has given me a much better grasp of the variables that we have along with just an overall good sense of the data. 
 
 I have also been looking more at Hierarchical Bayesian Modeling. I found a lecture online from Richard McElreath which was very useful in understanding the concepts on HB modeling and how it will be useful for us. I was also able to source an electronic copy of his book (Statistical Rethinking), which has been very helpful. The book uses the package `rethinking` to specify hierarchical models, which seems like a powerful package. It is educational however, so it requires the user to specify every piece of the model explicitly. 
 
-To do (still this week): understand the packages a bit more, maybe try to fit a model with a few packages and see how it goes. 
+The most promising software I have found is the `spbayes` package by Finley, I will need more time to figure out if it will work for our purposes as I found it late in the week, but so far the examples I have seen of it being used have been for similar things to the goal of my thesis. 
 
 
 ### Upcoming Work
 
 * Decide on which package to use to do the modeling
 
-* 
+    * Dive deep into `spbayes` (and maybe `hbsae`)
 
 ### Points of confusion
 
-*
+* Clarification on what type(s) of HB models we are going to use. I want to make sure the software is flexible enough to specify these models easily and be able to change small details about the models easily. There seems to be a tradeoff in some of the software, where a package like `rethinking` is extremely flexible and you specify every tiny piece of the model, vs. some other packages where much less is needed to run the model but some assumptions are made for you. 
 
 Fall, Week 1
 ----------------
