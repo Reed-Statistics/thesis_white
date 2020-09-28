@@ -1,4 +1,19 @@
-Fall, Week 2
+Fall, Week 5
+----------------
+
+### This Week's Work
+
+*
+
+### Upcoming Work
+
+*
+
+### Points of confusion
+
+*
+
+Fall, Week 4
 ----------------
 
 ### This Week's Work
@@ -22,7 +37,7 @@ The most promising software I have found is the `spbayes` package by Finley, I w
 
 * Clarification on what type(s) of HB models we are going to use. I want to make sure the software is flexible enough to specify these models easily and be able to change small details about the models easily. There seems to be a tradeoff in some of the software, where a package like `rethinking` is extremely flexible and you specify every tiny piece of the model, vs. some other packages where much less is needed to run the model but some assumptions are made for you. 
 
-Fall, Week 1
+Fall, Week 3
 ----------------
 
 ### This Week's Work
