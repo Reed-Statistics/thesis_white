@@ -119,5 +119,5 @@ m332a_area / total_area # This is the proportion of total area m332a takes up
 ### this doesn't seem right based on the picture. revisit this with fresh eyes tomorrow. 
 ```
 
-
+# Quantifying Homogeneity in Ecosubsections
 
