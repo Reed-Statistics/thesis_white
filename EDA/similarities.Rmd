@@ -70,9 +70,30 @@ median(n_subsections$number_of_subsections)
 ggplot(n_subsections, aes(x = number_of_subsections)) +
   geom_histogram(bins = 15, aes(y = ..density..)) +
   geom_density()
+
+## What about sections in provinces?
+n_sections <- dat_small %>%
+  group_by(province, section) %>%
+  summarize(n()) %>%
+  group_by(province) %>%
+  summarize(number_of_sections = n())
+
+head(n_sections)
+
+mean(n_sections$number_of_sections)
+median(n_sections$number_of_sections)
+sd(n_sections$number_of_sections)
+
+ggplot(n_sections, aes(x = number_of_sections)) +
+  geom_histogram(bins = 10, aes(y = ..density..)) +
+  geom_density() +
+  theme_bw()
 ```
 
-From this, we see that the average number of subsections in a section is about 7, with a median of 5 giving us a right-skewed distribution. There is one outlying section which I will investigate now:
+
+From this, we see that the average number of subsections in a section is about 7, with a median of 5 giving us a right-skewed distribution. We have a similar right-skewed distribution with numbers of sections in provinces, with a smaller mean and median. This makes me think we may be able to take info from subsection up to province, however we must first look at how similar or different attributes are in each subsection/section/province. 
+
+Aside: There is one outlying section which I will investigate now:
 
 ```{r}
 # M332A: Idaho Batholith, "The batholith section is a large, contiguous uplifted area of granitic plutons characterized by large, mountain masses and basin areas. Soils formed in gruss, loess, and volcanic ash. Part of the section is deeply cut by the Idaho canyonlands."
@@ -101,23 +122,33 @@ ggplot() +
   theme_bw()
   
 # Okay, so it is a big section, but is it way bigger than others?
-interior_west_sf <- dat_small %>%
-  st_as_sf(coords = c("LON_PUBLIC", "LAT_PUBLIC"),
-           crs = 4326) %>%
-  concaveman()
-
-total_area <- st_area(interior_west_sf)
-m332a_area <- st_area(m332a_poly)
-
-m332a_area / total_area # This is the proportion of total area m332a takes up
-
-
-1 / length(unique(dat_small$section)) # This is the proportion of total area an "average" section would take up
+# interior_west_sf <- dat_small %>%
+#   st_as_sf(coords = c("LON_PUBLIC", "LAT_PUBLIC"),
+#            crs = 4326) %>%
+#   concaveman()
+# 
+# total_area <- st_area(interior_west_sf)
+# m332a_area <- st_area(m332a_poly)
+# 
+# m332a_area / total_area # This is the proportion of total area m332a takes up
+# 
+# 
+# 1 / length(unique(dat_small$section)) # This is the proportion of total area an "average" section would take up
 
 # M332A takes up more area than average but not *way* more. This means that it likely has some small subsections. 
 
 ### this doesn't seem right based on the picture. revisit this with fresh eyes tomorrow. 
 ```
 
+This section has many subsections (29), but based on the map we can tell that it is a very large section. 
+
+
 # Quantifying Homogeneity in Ecosubsections
+
+```{r}
+# dat_small %>%
+#   group_by(section, subsection) %>%
+#   summarize()
+```
+
 
