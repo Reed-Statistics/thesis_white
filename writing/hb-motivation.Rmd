@@ -14,10 +14,17 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Hierarchical models (also known as multilevel models or mixed effects models) are an extension of linear modeling which account for a hierarchical structure in the data such as ecosubsections within ecosections or even provinces. This thesis implements *Bayesian* hierarchical models to accomplish small area estimation on forest attributes, meaning that these models do not only take into account the hierarchical structure of the data, but they also prior information about the covariates in the model. 
 
+insert mathematical form of model here 
+
+insert explanation and intuition of mathematical form
 
 
 ## Why use it?
 
-do not need indepencee of observations
+observations do not need to be independent -- we actually assume that they are not independent
+
+"borrowing strength" / models that don't have amnesia
 
 ## Example
+
+think i'll be able to make this forestry related. 
