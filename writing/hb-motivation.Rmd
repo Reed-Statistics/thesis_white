@@ -1,6 +1,4 @@
 ---
-title: "Why Use Hierarchical Bayesian Modeling?"
-author: "Grayson White"
 output: pdf_document
 ---
 
@@ -12,11 +10,18 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## What is it?
 
-Hierarchical models (also known as multilevel models or mixed effects models) are an extension of linear modeling which account for a hierarchical structure in the data such as ecosubsections within ecosections or even provinces. This thesis implements *Bayesian* hierarchical models to accomplish small area estimation on forest attributes, meaning that these models do not only take into account the hierarchical structure of the data, but they also prior information about the covariates in the model. 
+Hierarchical models (also known as multilevel models or mixed effects models) are an extension of linear modeling which account for a hierarchical structure in the data such as ecosubsections within ecosections or even provinces. This thesis implements *Bayesian* hierarchical models to accomplish small area estimation on forest attributes, meaning that these models do not only take into account the hierarchical structure of the data, but they also incorporate prior information about the covariates in the model. To best understand a Bayesian hierarchical model, I will first begin with the standard OLS regression form. We have
+$$
+Y_i = \beta_0 + \beta_1 x_1 + \cdots + \beta_p x_p + \epsilon_i
+$$
+where $Y_i$ is the response variable for the $i$th observation and all observations are assumed to be independent. In this case, $\beta_0$ is the intercept term, $\epsilon_i$ is the unexplained error, and $x_1, \dots, x_p$ are predictors or "covariates" with coefficient estimates $\beta_1, \dots, \beta_p$ fit with the methods of Least Squares. The method of Least Squares estimates the intercept and slopes of these covariates by fitting a hyperplane which minimizes sum of squared residuals, where each residual is defined as $e_i = Y_{observed} - Y_{expected}$.
 
-insert mathematical form of model here 
-
-insert explanation and intuition of mathematical form
+Bayesian hierarchical modeling does not use the method of Least Squares to estimate parameter values, instead we specify priors on each covariate and then sample from the posterior distribution using Markov Chain Monte Carlo (MCMC) methods. The most common MCMC method for hierarchical modeling is the Gibbs Sampler. THe Gibbs Sampler is useful because it uses the conditional distributions for each variable (which we will specify in our model) to estimate the joint distribution of our response variable. Now, we can specify the Bayesian hierarchical model as follows:
+\begin{align*}
+Y_i = \theta_i + \epsilon_i \\
+\theta_i = x_i \beta_i + v_i
+\end{align*}
+where $Y_i$ is again the response variable which we are using the model to estimate, $\theta_i$ is a vector of $p$ covariates 
 
 
 ## Why use it?
