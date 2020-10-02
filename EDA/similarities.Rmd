@@ -1,6 +1,6 @@
 ---
 author: "Grayson White"
-output: pdf_document
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -190,5 +190,74 @@ comparison <- tibble(
 Holy hell. Okay, so we first took the mean of variables by subsection. That is the `means` dataframe. Then we took the standard deviation of the means of the subsections. So, this is looking at how different the means are from each other throughout each subsection. 
 
 Now, this is where it gets crazy. We group by section, and then take the standard deviation of the means of each section. Finally we take the mean of that standard deviation to give us something like the "average standard deviation of the means within a section." My god. There has to be a better way to do this. Or a less complicated way to explain what has been done. Or a simpler statistic. 
+
+But we can look at the results:
+
+```{r}
+comparison
+```
+
+So from this table we can see that these variables vary less within their sections. The next natural question to ask is if they vary less within their provinces. We can answer that:
+
+```{r}
+means_prov <- dat_small %>%
+  group_by(subsection, province) %>%
+  summarize(avg_balive = mean(BALIVE_TPA),
+            avg_cntlive = mean(CNTLIVE_TPA),
+            avg_biolive = mean(BIOLIVE_TPA),
+            avg_volnlive = mean(VOLNLIVE_TPA),
+            avg_forbio = mean(forbio))
+
+# Is the variation of means within sections less variable than the variation of means overall?
+
+overall_balive_prov <- sd(means_prov$avg_balive, na.rm = TRUE)
+overall_cntlive_prov <- sd(means_prov$avg_cntlive, na.rm = TRUE)
+overall_biolive_prov <- sd(means_prov$avg_biolive, na.rm = TRUE)
+overall_volnlive_prov <- sd(means_prov$avg_volnlive, na.rm = TRUE)
+overall_forbio_prov <- sd(means_prov$avg_forbio, na.rm = TRUE)
+
+meta_sd_prov <- means_prov %>%
+  group_by(province) %>%
+  summarize(
+    sd_mean_balive = sd(avg_balive, na.rm = TRUE),
+    sd_mean_cntlive = sd(avg_cntlive, na.rm = TRUE),
+    sd_mean_biolive = sd(avg_biolive, na.rm = TRUE),
+    sd_mean_volnlive = sd(avg_volnlive, na.rm = TRUE),
+    sd_mean_forbio = sd(avg_forbio, na.rm = TRUE)
+  ) %>%
+  summarize(
+    mean(sd_mean_balive, na.rm = TRUE),
+    mean(sd_mean_cntlive, na.rm = TRUE),
+    mean(sd_mean_biolive, na.rm = TRUE),
+    mean(sd_mean_volnlive, na.rm = TRUE),
+    mean(sd_mean_forbio, na.rm = TRUE)
+  ) 
+
+comparison_prov <- tibble(
+  overall_sd_of_mean = c(overall_balive_prov, overall_cntlive_prov, overall_biolive_prov,
+                         overall_volnlive_prov, overall_forbio_prov),
+  sd_of_mean_by_province = c(pull(meta_sd_prov[,1]), pull(meta_sd_prov[,2]), pull(meta_sd_prov[,3]),
+                            pull(meta_sd_prov[,4]), pull(meta_sd_prov[,5])),
+  variable_name = c("balive", "cntlive", "biolive", "volnlive", "forbio")
+)
+
+comparison_prov
+```
+
+More useful: put these tables together
+
+```{r}
+cbind(comparison, comparison_prov) %>%
+  select(1:3, 5) %>%
+  relocate(variable_name, overall_sd_of_mean, sd_of_mean_by_province) %>%
+  rename(variable = variable_name,
+         overall_variation = overall_sd_of_mean,
+         variation_by_province = sd_of_mean_by_province,
+         variation_by_section = sd_of_mean_by_section) %>%
+  DT::datatable()
+```
+
+
+
 
 
