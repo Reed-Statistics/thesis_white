@@ -3,15 +3,19 @@ Fall, Week 5
 
 ### This Week's Work
 
-*
+This week, I primarily worked on two things: (1) data analysis that helped (a) understand the structure of ecosubsections within ecosections, and ecosections within provinces and (b) quantified how much key variables changed within sections and within provinces vs. within the interior west. (2) Completed the writing goal for this week. I wrote about what hierarchial bayesian modeling is, why someone might want to use it, and created an example of hierarchical bayesian modeling and explained what specific benefits that model would have in that setting. (this writing goal to be finished today/tomorrow... still havent finished writing the example.) This writing goal took suprisingly longer than expected, when I began writing about the model it really made me realize what I did and didn't know. Writing down exact model forms really helped me solidify my understanding. 
 
 ### Upcoming Work
+
+* Pick software to use
 
 *
 
 ### Points of confusion
 
-*
+* I'd love to talk about the data analysis I did to make sure I am comparing apples to apples in the sense that I am measuring variability across groups accurately. 
+
+* I think I would also benefit from going through and writing out a sketch of a potential model -- looking at what explanatory variables we would use and what would be multilevel vs. not
 
 Fall, Week 4
 ----------------
