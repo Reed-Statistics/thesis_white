@@ -10,6 +10,8 @@ library(tidyverse)
 
 # Exploring Similarities and Differences in Ecosubsections
 
+## Loading data
+
 ```{r message = FALSE, warning = FALSE}
 # Import data
 spatial <- read_csv("../data/plot_level/plt_spatial.csv")
@@ -43,6 +45,8 @@ dat_small <- dat_small %>%
          LAT_PUBLIC = LAT_PUBLIC.x,
          ELEV_PUBLIC = ELEV_PUBLIC.x)
 ```
+
+## How many subsections are in sections? Sections in provinces?
 
 ```{r}
 n_subsections <- dat_small %>%
@@ -143,7 +147,8 @@ ggplot() +
 This section has many subsections (29), but based on the map we can tell that it is a very large section. 
 
 
-# Quantifying Homogeneity in Ecosubsections
+## Quantifying Homogeneity in Ecosubsections
+### Exploring key variables variation at different levels
 
 ```{r}
 means <- dat_small %>%
@@ -257,6 +262,52 @@ cbind(comparison, comparison_prov) %>%
   DT::datatable()
 ```
 
+```{r}
+comparison_df <- cbind(comparison, comparison_prov) %>%
+  select(1:3, 5) %>%
+  relocate(variable_name, overall_sd_of_mean, sd_of_mean_by_province) %>%
+  rename(variable = variable_name,
+         overall_variation = overall_sd_of_mean,
+         variation_by_province = sd_of_mean_by_province,
+         variation_by_section = sd_of_mean_by_section)
+
+# data viz
+
+comparison_props <- comparison_df %>%
+  mutate(
+    province_overall = variation_by_province / overall_variation,
+    section_overall = variation_by_section / overall_variation,
+    overall_normalized = rep(1, 5)
+  ) %>%
+  select(province_overall, section_overall, overall_normalized, variable)
+
+comparison_pivot <- comparison_props %>%
+  pivot_longer(names_to = "variation", values_to = "value", cols = c(overall_normalized,
+                                                              province_overall,
+                                                              section_overall
+                                                              ))
+
+comparison_pivot %>%
+  mutate(
+    Level = case_when(
+      variation == "overall_normalized" ~ "Overall",
+      variation == "province_overall" ~ "Province",
+      variation == "section_overall" ~ "Section"
+    )
+  ) %>%
+  ggplot(aes(x = variable,
+             y = value,
+             fill = Level)) +
+  geom_col(position = "dodge") +
+  theme_bw() +
+  scale_fill_manual(values = c("darkgreen", "forestgreen", "lightgreen")) +
+  labs(
+    title = "Proportion of Variation of Forest Attributes By Province and Section",
+    subtitle = "Normalized by overall variation in the Interior West",
+    y = "Proportion of Variation",
+    x = "Forest Attribute"
+  )
+```
 
 
 
