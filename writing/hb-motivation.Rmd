@@ -34,4 +34,4 @@ Now that we have explicitly written the model form out we can consider why one m
 
 ## Example
 
-think i'll be able to make this forestry related. 
+Now that we know what Hierarchical Bayesian model is, lets think about using on in practice and the practical benefits we would gain from it in a concrete sense.
