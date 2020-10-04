@@ -21,19 +21,19 @@ Bayesian hierarchical modeling does not use the method of Least Squares to estim
 
 Before we dig much deeper into how to use the Gibbs Sampler in this case, we should specify the model. I will first specify a very simple multilevel model and we will work up from there. With a multilevel model, we can choose to vary to slope(s), the intercept, or both. First, let's consider a varying intercept model with $j$ levels:
 \begin{align*}
-&Y_i \sim N(\alpha_j + \vec\beta\vec X_i, \sigma^2) \\
-&\alpha_j \sim N(\mu_\alpha, \sigma^2_\alpha)
+Y_i &\sim N(\alpha_j + \vec\beta\vec X_i,~ \sigma^2) \\
+\alpha_j &\sim N(\mu_\alpha,~ \sigma^2_\alpha)
 \end{align*}
 In this model, we have the response variable, $Y$, which is modeled to have a Gaussian posterior distribution with mean $\alpha_j + \vec\beta\vec X_i$ which can change intercept based on the level that a given observation is in. Another type of Bayesian Multilevel Model is the varying slopes model, where the coefficient of each parameter estimate can change based on the level of the observation. We specify that model as follows:
 \begin{align*}
-&Y_i \sim N(\alpha + \vec\beta_j\vec X_i, \sigma^2) \\
-& \vec\beta_j \sim N(\vec\mu_\beta, \sigma^2_{\beta})
+Y_i &\sim N(\alpha + \vec\beta_j\vec X_i,~ \sigma^2) \\
+\vec\beta_j &\sim N(\vec\mu_\beta,~ \sigma^2_{\beta})
 \end{align*}
 In this model, the intercept of each level is set to be the same, however the coefficients ($\beta$'s) can change between groups. Neither of these models are too common, as it often makes sense to allow both the slope and intercept to vary across levels. From these first two models, it is easy to imagine what this varying-intercept-and-slopes model will look like:
 \begin{align*}
-&Y_i \sim N(\alpha_j + \vec\beta_j\vec X_i, \sigma^2) \\
-&\alpha_j \sim N(\mu_\alpha, \sigma^2_\alpha) \\
-& \vec\beta_j \sim N(\vec\mu_\beta, \sigma^2_{\beta})
+Y_i &\sim N(\alpha_j + \vec\beta_j\vec X_i,~ \sigma^2) \\
+\alpha_j &\sim N(\mu_\alpha,~ \sigma^2_\alpha) \\
+ \vec\beta_j &\sim N(\vec\mu_\beta,~ \sigma^2_{\beta})
 \end{align*}
 This multilevel model allows for both the slopes and intercept to vary between groups by placing prior distributions on each which will update simulataneously between groups when we use the Gibbs sampler to sample from the posterior distribution. While these groups are specified to allow for different parameter estimates and intercept, they are also not unaware of each other. The model borrows strength from other levels and uses this information to help create the posterior distribution as well. 
 
@@ -43,4 +43,31 @@ Now that we have explicitly written the model form out we can consider why one m
 
 ## Example
 
-As noted above, this thesis estimates forest attributes by implementing Bayesian Multilevel Models. To get a concrete sense of Bayesian Multilevel Models and the forestry data, consider a multilevel model estimating mean basal area per acre. Mean basal area is the average amount of area that tree stems occupy when we measure their area at breast height. 
+As noted above, this thesis estimates forest attributes by implementing Bayesian Multilevel Models. To get a concrete sense of Bayesian Multilevel Models and the forestry data, consider a multilevel model estimating mean basal area per acre with one explanatory variable: forest biomass. Mean basal area is the average amount of area that tree stems occupy when we measure their area at breast height while forest biomass is the total biomass of the trees in the forest. 
+
+We could naively model this for the entire interior west as a linear function using OLS and get the following output:
+$$
+\hat{Y}_i = 8.54 + 2.13x_i \quad (R^2 = 0.44)
+$$
+
+```{r, message = FALSE, warning = FALSE, echo=FALSE, include = FALSE} 
+library(tidyverse)
+df <- read_csv("../data/subsets/dat_small.csv")
+m1 <- lm(BALIVE_TPA ~ forbio, data = df)
+summary(m1)
+```
+
+
+This gives us a relatively poor fitting model that would not be any use for us in terms of prediction. Perhaps we want to know about basal area in some given small area, say an ecosubsection. Rather than using ecosubsection as an indicator variable, we can use Bayesian Multilevel Modeling which allows us to help update our priors for a given ecosubseciton with data from the surrounding area, say the ecosection that ecosubsection resides in. To understand this technique, let's specify the model form:
+\begin{align*}
+Y_i &\sim N(\alpha_j + \beta_j X,~ \sigma^2) \\
+\alpha_j &\sim N(0,~ 10) \\
+\beta_j &\sim N(0,~ 10) \\
+\sigma &\sim Exp(1)
+\end{align*}
+
+Here, $Y_i$ is the mean basal area for a observation with a given ecosubsection, and we are allowing its slope and intercept to vary for each ecosubsection. The slope and intercept are given relatively uninformative priors, both Gaussian with mean 0 and variance 10. We must also put a prior on the variance of $Y_i$, and so we specify 
+
+```{r}
+library(hbsae)
+```
