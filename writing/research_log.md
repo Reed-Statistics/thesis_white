@@ -1,3 +1,26 @@
+Fall, Week 6
+----------------
+
+### This Week's Work
+
+To do:
+
+* Writing Goal
+
+* Finley's model spec
+
+Done:
+
+* ANOVA
+
+### Upcoming Work
+
+*
+
+### Points of confusion
+
+*
+
 Fall, Week 5
 ----------------
 
