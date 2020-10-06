@@ -1,0 +1,36 @@
+---
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# ANOVA Models for variables of interest
+
+```{r message = FALSE, warning = FALSE}
+library(tidyverse)
+dat_small <- read_csv("../data/subsets/dat_small.csv")
+```
+
+```{r, cache = TRUE, warning=FALSE}
+anova_forprob <- aov(forprob ~ province + section + subsection, data = dat_small)
+summary(anova_forprob)
+
+anova_BALIVE_TPA <- aov(BALIVE_TPA ~ province + section + subsection, data = dat_small)
+summary(anova_BALIVE_TPA)
+
+anova_BIOLIVE_TPA <- aov(BIOLIVE_TPA ~ province + section + subsection, data = dat_small)
+summary(anova_BIOLIVE_TPA)
+
+anova_CNTLIVE_TPA <- aov(CNTLIVE_TPA ~ province + section + subsection, data = dat_small)
+summary(anova_CNTLIVE_TPA)
+
+anova_VOLNLIVE_TPA <- aov(VOLNLIVE_TPA ~ province + section + subsection, data = dat_small)
+summary(anova_VOLNLIVE_TPA)
+
+anova_forbio <- aov(forbio ~ province + section + subsection, data = dat_small)
+summary(anova_forbio)
+```
+
+
