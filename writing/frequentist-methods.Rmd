@@ -7,3 +7,11 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Frequentist Methods
+
+While this thesis mainly focuses on applications of hierarchical Bayesian models to estimation of forestry data, it also strives to compare the performance of these models to the common frequentist model used in the same context the empirical best linear unbiased prediction estimator, or EBLUP. This model is also hierarchical as it takes into account random effects in a similar way to the hierarchical Bayesian model. The form of the model is as follows:
+$$
+Y_{i} = \vec\beta\vec X_i + v_j + \epsilon_i
+$$
+where $Y_i$ is the response variable, $\vec\beta$ is the vector of coefficients of fixed-effect predictors, $\vec X_i$ is the vector of fixed-effect predictors, $v_j$ is the random-effects term. Note that this is a varying intercepts model where the intercept can change based on the group that the observation is in, however the coefficient estimates do not vary between groups. 
+
+It is important to note that with the EBLUP model, the estimates of $\beta$ and $v_j$ are soley derived from the data, rather than the Bayesian hierarchical model which uses both the prior distribution put on parameters and the likelihood (data given parameters). 
