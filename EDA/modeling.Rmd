@@ -1,0 +1,22 @@
+---
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Suggested model based packages: `sae`, `JoSae`, `yalmpute`
+
+```{r}
+library(hbsae)
+library(tidyverse)
+dat_small <- read_csv("../data/subsets/dat_small.csv")
+
+mod <- fSAE.Unit(
+  y = dat_small$BIOLIVE_TPA,
+  X = dat_small %>% select(forbio),
+  area = dat_small$subsection
+)
+```
+
