@@ -4,19 +4,45 @@ output: pdf_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(hbsae)
 ```
 
-Suggested model based packages: `sae`, `JoSae`, `yalmpute`
+# Creating models
 
-```{r}
-library(hbsae)
-library(tidyverse)
+```{r warning=F, message=FALSE}
 dat_small <- read_csv("../data/subsets/dat_small.csv")
 
-mod <- fSAE.Unit(
+mod_hb <- fSAE.Unit(
   y = dat_small$BIOLIVE_TPA,
   X = dat_small %>% select(forbio),
   area = dat_small$subsection
 )
+
+# figure out what lambda0 should be:
+
+within <- dat_small %>%
+  group_by(subsection) %>%
+  summarize(var = sd(BIOLIVE_TPA, na.rm = TRUE)^2) %>%
+  summarize(mean(var, na.rm = TRUE)) %>%
+  pull()
+
+between <- dat_small %>%
+  summarize(var = sd(BIOLIVE_TPA, na.rm = TRUE)) %>%
+  summarize(mean(var, na.rm = TRUE)) %>%
+  pull()
+
+lambda0 <- between / within
+
+mod_freq <- fSAE.Unit(
+  y = dat_small$BIOLIVE_TPA,
+  X = dat_small %>% select(forbio),
+  area = dat_small$subsection,
+  method = "BLUP",
+  lambda0 = lambda0 
+)
+
+print(mod_hb)
+print(mod_freq)
 ```
 

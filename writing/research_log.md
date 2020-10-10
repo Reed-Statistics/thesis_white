@@ -3,19 +3,12 @@ Fall, Week 6
 
 ### This Week's Work
 
-To do:
+This week, I did a few things: performed ANOVAs to verify that the key variables vary less at the ecosubsection levels vs ecosections vs. provinces; looked at Finley's model specification and figured out that it is just a varying intercept model by group with fixed effect slopes; did a (somewhat short) writing about the frequentist mixed model form; and began experimenting with `hbsae` to fit a baby model. 
 
-* Writing Goal
-
-* Finley's model spec
-
-Done:
-
-* ANOVA
 
 ### Upcoming Work
 
-*
+Next week I plan to dig even deeper into `hbsae` and try to understand how to fit a good model there. 
 
 ### Points of confusion
 
