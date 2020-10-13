@@ -1,3 +1,18 @@
+Fall, Week 7
+----------------
+
+### This Week's Work
+
+*
+
+### Upcoming Work
+
+*
+
+### Points of confusion
+
+* 
+
 Fall, Week 6
 ----------------
 
