@@ -52,22 +52,25 @@ north_rocky <- dat_small %>%
 Xpop <- north_rocky %>%
   group_by(subsection) %>%
   summarize(mean = mean(BIOLIVE_TPA),
-            count = n()) 
+            count = n(),
+            sum = sum(BIOLIVE_TPA))
 
 m1 <- fSAE.Unit(
   y = north_rocky$BIOLIVE_TPA,
   X = north_rocky$forprob,
-  Xpop = Xpop %>% dplyr::select(mean),
-  Narea = Xpop %>% dplyr::select(count) %>% pull(),
   area = north_rocky$subsection,
+  # Narea = Xpop %>% dplyr::select(count) %>% pull(),
+  fpc = FALSE,
+  Xpop = Xpop %>% dplyr::select(mean),
   method = "HB",
-  keep.data = TRUE
-)
+  silent = TRUE
+  )
 
 model_df <- tibble(
   estimates = EST(m1),
   standard_error = SE(m1),
   mean = Xpop$mean,
+  sum = Xpop$sum,
   subsection = Xpop$subsection
 )
 
@@ -81,5 +84,27 @@ ggplot(model_df, aes(x = subsection,
   theme(
     axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)
     )
+
+cor(Xpop$mean, model_df$estimates) # Bad
+
+model_df$estimates / Xpop$mean
 ```
+
+
+```{r}
+## try to do the area level stuff
+
+# pop_data <- north_rocky %>%
+#   group_by(subsection) %>%
+#   summarize(forprob = sum(forprob),
+#             `(Intercept)` = 1)
+# 
+# sae0 <- fSAE(BIOLIVE_TPA ~ forprob,
+#              data = north_rocky,
+#              area = "subsection",
+#              type = "direct",
+#              #popdata = pop_data,
+#              keep.data = TRUE)
+```
+
 

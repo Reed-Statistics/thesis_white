@@ -15,7 +15,21 @@ The data used in this thesis was collected by the Forest Inventory and Analysis 
 \end{figure}
 While the data covers the Interior West as a whole, we have very granular information, as each row represents a plot sampled by FIA. The data also includes variables that subset the Interior West into provinces which contain ecosections, and these ecosections contain ecosubsections. In our data, on average, each ecosection contains approximately 7.06 ecosubsections, and each province contains an average of 4.86 ecosections. So, an average province then contains just over 34 ecosubsections. This hierarchical struture of the data allows for us to more easily create hierarchical models which borrow strength from surrounding areas. 
 
-While this data contains a multitude of variables, the analyses done in this thesis focus on four key response variables and two explanatory variables. First, the response variables used are basal area (square-foot), trees per acre, above-ground biomass (lbs), and net volume (ft^3)
+While this data contains a multitude of variables, the analyses done in this thesis focus on four key response variables and two explanatory variables. The response variables used are basal area (square-foot), trees per acre, above-ground biomass (lbs), and net volume (ft^3). The explanatory variables used are remotely sense variables: forest biomass and forest probability. 
+
+```{r}
+library(sf)
+library(concaveman)
+
+# for(i in 1:480) {
+#   l[i] <- list(NA)
+#   df <- dat_small %>%
+#     filter(subsection == unique(dat_small$subsection)[i]) %>%
+#     st_as_sf(coords = c("LON_PUBLIC", "LAT_PUBLIC"), crs = 4326)
+#   l[i] <- concaveman(df)
+# }
+```
+
 
 
 

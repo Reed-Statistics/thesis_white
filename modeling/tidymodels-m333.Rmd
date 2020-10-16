@@ -52,7 +52,11 @@ north_rocky <- dat_small %>%
 ```{r}
 set.seed(1)
 hier_model_spec <- linear_reg() %>%
-  set_engine("stan-glmer")
+  set_engine("stan-glmer",
+             prior_aux =  rstanarm::exponential(rate = 1),
+             prior = NULL,
+             prior_intercept = NULL,
+             prior_covariance = rstanarm::decov(shape = 2))
 
 nr_train <- north_rocky %>%
   sample_frac(0.75)
@@ -66,7 +70,29 @@ hier_model_fit <-
   fit(BIOLIVE_TPA ~ 1 +  forprob + (1 | subsection),
       data = nr_train)
 
-hier_model_fit
+
+forprob_samples <- data.frame(
+  samples = c(
+    hier_model_fit$fit$stanfit@sim$samples[[1]]$`beta[1]`,
+    hier_model_fit$fit$stanfit@sim$samples[[2]]$`beta[1]`,
+    hier_model_fit$fit$stanfit@sim$samples[[3]]$`beta[1]`,
+    hier_model_fit$fit$stanfit@sim$samples[[4]]$`beta[1]`
+  )
+)
+
+ggplot(forprob_samples,
+       aes(samples)) +
+  scale_fill_manual(values = c("goldenrod")) +
+  geom_density(aes(fill = "Posterior"), alpha = 0.4) +
+  theme_bw() +
+    theme(
+    legend.position = "none"
+  ) +
+  labs(title = "Forprob",
+       y = "",
+       x = "Estimate")
+
+
 
 
 results_test <- hier_model_fit %>%
