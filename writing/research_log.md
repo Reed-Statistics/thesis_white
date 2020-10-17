@@ -11,7 +11,7 @@ I have also started working on the data chapter. (this part not done yet -- fini
 
 * Finish a rough draft of the data chapter
 
-* More modeling -- different response variables. Compare performance of models. Credible intervals. 
+* More modeling -- different response variables. Compare performance of models. Credible intervals. Get the priors right. 
 
 ### Points of confusion
 
