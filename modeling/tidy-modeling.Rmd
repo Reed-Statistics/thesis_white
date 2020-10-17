@@ -43,7 +43,7 @@ hb_fit <-
 hb_fit
 ```
 
-```{r}
+```{r, message = FALSE}
 # Let's plot the means
 hb_fit_df <- data.frame(
   fitted = hb_fit$fit$fitted.values,
@@ -51,7 +51,9 @@ hb_fit_df <- data.frame(
   subsection = m333$subsection
   )
 
-# In this plot, I would like error bars on the HB estimate. however, since the model fits to the plot level and then I summarized these means, I am not sure what a true error bar would look like.
+# In this plot, I would like error bars on the HB estimate. however, since the model fits
+# to the plot level and then I summarized these means, I am not sure what a true error
+# bar would look like.
 hb_fit_df %>%
   group_by(subsection) %>%
   summarize(mean_fit = mean(fitted),
@@ -86,7 +88,7 @@ hb_fit_df %>%
 
 #### Fit freq model, split data, compare test MSEs
 
-```{r}
+```{r, message = FALSE}
 set.seed(1)
 m333_test <- m333 %>%
   sample_frac(0.25)
