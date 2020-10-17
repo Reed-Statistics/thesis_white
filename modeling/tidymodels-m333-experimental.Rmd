@@ -48,6 +48,64 @@ north_rocky <- dat_small %>%
   filter(province == "M333")
 ```
 
+
+
+
+```{r}
+north_rocky_2 <- north_rocky %>%
+  group_by(subsection) %>%
+  summarize(
+    mean_BIOLIVE_TPA = mean(BIOLIVE_TPA),
+    var_BIOLIVE_TPA = var(BIOLIVE_TPA),
+    mean_CNTLIVE_TPA = mean(CNTLIVE_TPA),
+    var_CNTLIVE_TPA = var(CNTLIVE_TPA),
+    mean_BALIVE_TPA = mean(BALIVE_TPA),
+    mean_VOLNLIVE_TPA = mean(VOLNLIVE_TPA),
+    mean_forprob = mean(forprob),
+    var_forprob = var(forprob),
+    n = n()
+  )
+
+
+set.seed(1)
+hier_model_spec <- linear_reg() %>%
+  set_engine("stan-glmer",
+             prior_aux =  rstanarm::exponential(rate = 1),
+             prior = NULL,
+             prior_intercept = NULL,
+             prior_covariance = rstanarm::decov(shape = 2))
+
+hier_model_fit <- 
+  hier_model_spec %>% 
+  fit(mean_BIOLIVE_TPA ~ 1 +  mean_forprob + (1 | subsection),
+      data = north_rocky_2)
+
+
+model_df_2 <- data.frame(fitted = hier_model_fit$fit$fitted.values,
+           true = north_rocky_2$mean_BIOLIVE_TPA,
+           subsection = north_rocky_2$subsection)
+
+model_df_2 %>%
+  ggplot(aes(x = subsection,
+             y = fitted)) +
+  geom_point() +
+  geom_point(aes(y = true), color = "red") +
+  theme_bw() +
+  theme(axis.text.x = element_text(
+    angle = 90,
+    vjust = 0.5,
+    hjust = 1
+  )) +
+  labs(
+    x = "Subsection",
+    y = "Estimated (Black) and True (Red) Average Biomass"
+  )
+```
+
+
+
+
+
 ## Fit a model
 ```{r}
 set.seed(1)
@@ -122,7 +180,7 @@ nr_fit <-
       data = north_rocky)
 
 model_df <- data.frame(fitted = nr_fit$fit$fitted.values,
-           true = north_rocky$BALIVE_TPA,
+           true = north_rocky$BIOLIVE_TPA,
            subsection = north_rocky$subsection)
 
 model_df %>%
