@@ -3,15 +3,19 @@ Fall, Week 7
 
 ### This Week's Work
 
-*
+This week, I spent a large amount of time figuring out how to make the modeling work. Initially, I used `hbsae`, but found that when I inputted data into the model, the output was perfectly correlated with the input data. Next, I tried to use `tidymodels` but was not getting the output I wanted. So, I found Finley's code from the LiDAR paper and tried to use it. However, I eventually went back to `tidymodels` and found a few errors in my code which had made me think that I was not creating a good model when in fact it was working as it should. 
+
+I have also started working on the data chapter. (this part not done yet -- finish this weekend.)
 
 ### Upcoming Work
 
-*
+* Finish a rough draft of the data chapter
+
+* More modeling -- different response variables. Compare performance of models. Credible intervals. 
 
 ### Points of confusion
 
-* 
+* I want to make sure the model output is correct. This has been throwing me for a bit of a loop. The response variable is at the plot level, so we get plot level estimates. But we want ecosubsection level estimates. So, I took the mean of the plot level estimates grouped by ecosubsection, but I am not sure if that is the correct way to do things. 
 
 Fall, Week 6
 ----------------
