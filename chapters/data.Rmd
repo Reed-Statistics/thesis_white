@@ -25,9 +25,7 @@ The data used in this thesis was collected by the Forest Inventory and Analysis 
 
 Again, the data we have is from the Interior West, and the FIA defines the Interior West as Arizona, Colorado, Idaho, Montana, Nevada, New Mexico, Utah, and Wyoming. For reference we have provided the Interior West colored green on a map of the continental United States:
 
-(FIGURE OF INTERIOR WEST)
-
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
+```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.align="center", cache=TRUE}
 ggplot() +
   geom_sf(data = us_boundaries(type = "state",
                                states = interior_west),
@@ -43,139 +41,74 @@ ggplot() +
 
 While the data covers the Interior West as a whole, we have very granular information, as each row represents a plot sampled by FIA. The data also includes variables that subset the Interior West into provinces which contain ecosections, and these ecosections contain ecosubsections. In our data, on average, each ecosection contains approximately 7.06 ecosubsections, and each province contains an average of 4.86 ecosections. So, an average province then contains just over 34 ecosubsections. This hierarchical struture of the data allows for us to more easily create hierarchical models which borrow strength from surrounding areas. 
 
-While this data contains a multitude of variables, the analyses done in this thesis focus on four key response variables and two explanatory variables. The response variables used are basal area (square-foot), trees per acre, above-ground biomass (lbs), and net volume (ft^3). The explanatory variables used are remotely sense variables: forest biomass and forest probability. We can look at the log average of these variables across the Interior West region (really want this by ecosubsection... having trouble with the shape file):
+While this data contains a multitude of variables, the analyses done in this thesis focus on four key response variables and two explanatory variables. The response variables used are basal area (square-foot), trees per acre, above-ground biomass (lbs), and net volume (ft^3). The explanatory variables used are remotely sense variables: forest biomass and forest probability. We can look at the average of these variables across the Interior West region by ecosubsection:
 
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
-p1 <- ggplot(dat_small) +
-  stat_summary_hex(
-    fun = function(x) {
-      log(mean(x))
-    },
-    mapping = aes(x = LON_PUBLIC,
-                  y = LAT_PUBLIC,
-                  z = BIOLIVE_TPA)
-  ) +
-  geom_sf(
-    data = us_boundaries(type = "state",
-                         states = interior_west),
-    color = "black",
-    alpha = 0
-  ) +
+```{r, echo = FALSE, message = FALSE, warning = FALSE, cache = TRUE, fig.retina = 2, fig.align = 'center'}
+subsections <- st_read("../data/SA_eco_subsection/SA_eco_subsection.shp", quiet = TRUE)
+
+subsections1 <- subsections %>%
+  filter(SUBSECT %in% dat_small$subsection)
+
+int_west_sf <- us_boundaries(type = "state",
+                         states = interior_west)
+
+intersection <- st_intersection(int_west_sf, subsections1)
+
+dat_summary <- dat_small %>%
+  group_by(subsection) %>%
+  summarize(mean_bio = mean(BIOLIVE_TPA),
+            mean_cnt = mean(CNTLIVE_TPA),
+            mean_vol = mean(VOLNLIVE_TPA),
+            mean_bas = mean(BALIVE_TPA))
+
+intersection <- left_join(intersection, dat_summary, by = c("SUBSECT" = "subsection"))
+
+plot1 <- ggplot() +
+  geom_sf(data = intersection,
+          mapping = aes(fill = mean_bio)) +
+  geom_sf(data = us_boundaries(type = "state",
+                               states = interior_west),
+          color = "black",
+          alpha = 0) +
+  scale_fill_viridis_c() +
   theme_void() +
-  scale_fill_gradient(low = "#A9875C", high = "#597058") +
-  labs(x = "", y = "", fill = "Biomass") +
-  theme(
-    legend.position = "left"
-  )
+  labs(fill = "Average Biomass")
 
-p2 <- ggplot(dat_small) +
-  stat_summary_hex(
-    fun = function(x) {
-      log(mean(x))
-    },
-    mapping = aes(x = LON_PUBLIC,
-                  y = LAT_PUBLIC,
-                  z = BALIVE_TPA)
-  ) +
-  geom_sf(
-    data = us_boundaries(type = "state",
-                         states = interior_west),
-    color = "black",
-    alpha = 0
-  ) +
+plot2 <- ggplot() +
+  geom_sf(data = intersection,
+          mapping = aes(fill = mean_cnt)) +
+  geom_sf(data = us_boundaries(type = "state",
+                               states = interior_west),
+          color = "black",
+          alpha = 0) +
+  scale_fill_viridis_c() +
   theme_void() +
-  scale_fill_gradient(low = "#A9875C", high = "#597058") +
-  labs(x = "", y = "", fill = "Basal Area") 
+  labs(fill = "Average Tree Count")
 
-p3 <- ggplot(dat_small) +
-  stat_summary_hex(
-    fun = function(x) {
-      log(mean(x))
-    },
-    mapping = aes(x = LON_PUBLIC,
-                  y = LAT_PUBLIC,
-                  z = CNTLIVE_TPA)
-  ) +
-  geom_sf(
-    data = us_boundaries(type = "state",
-                         states = interior_west),
-    color = "black",
-    alpha = 0
-  ) +
+plot3 <- ggplot() +
+  geom_sf(data = intersection,
+          mapping = aes(fill = mean_vol)) +
+  geom_sf(data = us_boundaries(type = "state",
+                               states = interior_west),
+          color = "black",
+          alpha = 0) +
+  scale_fill_viridis_c() +
   theme_void() +
-  scale_fill_gradient(low = "#A9875C", high = "#597058") +
-  labs(x = "", y = "", fill = "Count") +
-  theme(
-    legend.position = "left"
-  )
+  labs(fill = "Average Volume")
 
-p4 <- ggplot(dat_small) +
-  stat_summary_hex(
-    fun = function(x) {
-      log(mean(x))
-    },
-    mapping = aes(x = LON_PUBLIC,
-                  y = LAT_PUBLIC,
-                  z = VOLNLIVE_TPA)
-  ) +
-  geom_sf(
-    data = us_boundaries(type = "state",
-                         states = interior_west),
-    color = "black",
-    alpha = 0
-  ) +
+plot4 <- ggplot() +
+  geom_sf(data = intersection,
+          mapping = aes(fill = mean_bas)) +
+  geom_sf(data = us_boundaries(type = "state",
+                               states = interior_west),
+          color = "black",
+          alpha = 0) +
+  scale_fill_viridis_c() +
   theme_void() +
-  scale_fill_gradient(low = "#A9875C",
-                       # mid = "#597058", 
-                       high = "#597058") +
-  labs(x = "", y = "", fill = "Net Volume") 
+  labs(fill = "Average Basal Area")
 
-(p1 + p2) / (p3 + p4)
+(plot1 + plot2) / (plot3 + plot4)
 ```
-
-
-
-
-
-
-
-
-
-
-
-```{r}
-#library(sf)
-#library(concaveman)
-
-#dat_small <- read_csv("../data/subsets/dat_small.csv")
-
-#y_summarize <- dat_small %>%
-#  group_by(subsection) %>%
-#  summarize(
-#    mean_BIOLIVE_TPA = mean(BIOLIVE_TPA),
-#    mean_BALIVE_TPA = mean(BALIVE_TPA),
-#    mean_CNTLIVE_TPA = mean(CNTLIVE_TPA),
-#    mean_VOLNLIVE_TPA = mean(VOLNLIVE_TPA)
-#  )
-# 
-# ggplot(data = ecomap_section) +
-#   geom_sf(position = "geometry")
-
-
-# dat_small_spatial <- dat_small %>%
-#  filter(subsection %ni% c("322Ad", "331Ff", "341Df", "341Di", "322Ab")) %>%
-#  st_as_sf(., coords = c("LON_PUBLIC", "LAT_PUBLIC"))
-
-#polys <- st_sf(aggregate(dat_small_spatial$geometry,
- #                        list(dat_small_spatial$subsection),
-  #                       function(g) {
-   #                        st_cast(st_combine(g), "POLYGON")
-    #                     }))
-
-#ggplot(polys) +
- # geom_sf()
-```
-
 
 
 
