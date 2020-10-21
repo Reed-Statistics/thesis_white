@@ -49,9 +49,10 @@ borrow strength from surrounding areas.
 While this data contains a multitude of variables, the analyses done in
 this thesis focus on four key response variables and two explanatory
 variables. The response variables used are basal area (square-foot),
-trees per acre, above-ground biomass (lbs), and net volume (ft^3). We
-can look at the average of these variables across the Interior West
-region by ecosubsection in the plots
+trees per acre, above-ground biomass (lbs), and net volume (ft^3). These
+variables are coded as `BALIVE_TPA`, `CNTLIVE_TPA`, `BIOLIVE_TPA`, and
+`VOLNLIVE_TPA`, respectively. We can look at the average of these
+variables across the Interior West region by ecosubsection in the plots
 below.
 
 <img src="data_files/figure-gfm/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" />
@@ -59,12 +60,311 @@ below.
 While we have four variables which we will model as response variables
 throughout the analyses, we also have two predictor variables which will
 be of much use to us. In particular, forest probability and forest
-biomass. These variables which we will treat as predictors are remotely
-sensed data, meaning that they were not collected by FIA crew members
-and are truly estimated quantities. However, we will be using these
-variables to attempt to predict our response variables in order to
-understand how good of estimates we can make based off of remote data
-that does not require as much effort to collect. While it may seem
-unnatural to attempt to predict forest biomass with forest biomass, the
-differences in the data collection process between the ground level data
-and remotely sensed data are quite different.
+biomass (coded as `forprob` and `forbio`. These variables which we will
+treat as predictors are remotely sensed data, meaning that they were not
+collected by FIA crew members and are truly estimated quantities.
+However, we will be using these variables to attempt to predict our
+response variables in order to understand how good of estimates we can
+make based off of remote data that does not require as much effort to
+collect. While it may seem unnatural to attempt to predict forest
+biomass with forest biomass, the differences in the data collection
+process between the ground level data and remotely sensed data are quite
+different.
+
+Summary of the data:
+
+<!--html_preserve-->
+
+<table style="border-collapse:collapse;" class="table_5826" border="0">
+
+<thead>
+
+<tr style="border-bottom:2px solid black;border-top:3px solid black;">
+
+<th id="tableHTML_header_1">
+
+variable
+
+</th>
+
+<th id="tableHTML_header_2">
+
+mean
+
+</th>
+
+<th id="tableHTML_header_3">
+
+median
+
+</th>
+
+<th id="tableHTML_header_4">
+
+min
+
+</th>
+
+<th id="tableHTML_header_5">
+
+max
+
+</th>
+
+<th id="tableHTML_header_6">
+
+na\_count
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td id="tableHTML_column_1" style="text-align:center;">
+
+forbio
+
+</td>
+
+<td id="tableHTML_column_2" style="text-align:center;">
+
+6.66
+
+</td>
+
+<td id="tableHTML_column_3" style="text-align:center;">
+
+0
+
+</td>
+
+<td id="tableHTML_column_4" style="text-align:center;">
+
+0
+
+</td>
+
+<td id="tableHTML_column_5" style="text-align:center;">
+
+118
+
+</td>
+
+<td id="tableHTML_column_6" style="text-align:center;">
+
+0
+
+</td>
+
+</tr>
+
+<tr>
+
+<td id="tableHTML_column_1" style="text-align:center;">
+
+forprob
+
+</td>
+
+<td id="tableHTML_column_2" style="text-align:center;">
+
+0.27
+
+</td>
+
+<td id="tableHTML_column_3" style="text-align:center;">
+
+0.07
+
+</td>
+
+<td id="tableHTML_column_4" style="text-align:center;">
+
+0
+
+</td>
+
+<td id="tableHTML_column_5" style="text-align:center;">
+
+1
+
+</td>
+
+<td id="tableHTML_column_6" style="text-align:center;">
+
+1
+
+</td>
+
+</tr>
+
+<tr>
+
+<td id="tableHTML_column_1" style="text-align:center;">
+
+BIOLIVE\_TPA
+
+</td>
+
+<td id="tableHTML_column_2" style="text-align:center;">
+
+6.23
+
+</td>
+
+<td id="tableHTML_column_3" style="text-align:center;">
+
+0
+
+</td>
+
+<td id="tableHTML_column_4" style="text-align:center;">
+
+0
+
+</td>
+
+<td id="tableHTML_column_5" style="text-align:center;">
+
+244.35
+
+</td>
+
+<td id="tableHTML_column_6" style="text-align:center;">
+
+0
+
+</td>
+
+</tr>
+
+<tr>
+
+<td id="tableHTML_column_1" style="text-align:center;">
+
+BALIVE\_TPA
+
+</td>
+
+<td id="tableHTML_column_2" style="text-align:center;">
+
+22.75
+
+</td>
+
+<td id="tableHTML_column_3" style="text-align:center;">
+
+0
+
+</td>
+
+<td id="tableHTML_column_4" style="text-align:center;">
+
+0
+
+</td>
+
+<td id="tableHTML_column_5" style="text-align:center;">
+
+469.39
+
+</td>
+
+<td id="tableHTML_column_6" style="text-align:center;">
+
+0
+
+</td>
+
+</tr>
+
+<tr>
+
+<td id="tableHTML_column_1" style="text-align:center;">
+
+CNTLIVE\_TPA
+
+</td>
+
+<td id="tableHTML_column_2" style="text-align:center;">
+
+98.6
+
+</td>
+
+<td id="tableHTML_column_3" style="text-align:center;">
+
+0
+
+</td>
+
+<td id="tableHTML_column_4" style="text-align:center;">
+
+0
+
+</td>
+
+<td id="tableHTML_column_5" style="text-align:center;">
+
+6677.93
+
+</td>
+
+<td id="tableHTML_column_6" style="text-align:center;">
+
+0
+
+</td>
+
+</tr>
+
+<tr style="border-bottom:3px solid black;">
+
+<td id="tableHTML_column_1" style="text-align:center;">
+
+VOLNLIVE\_TPA
+
+</td>
+
+<td id="tableHTML_column_2" style="text-align:center;">
+
+342.32
+
+</td>
+
+<td id="tableHTML_column_3" style="text-align:center;">
+
+0
+
+</td>
+
+<td id="tableHTML_column_4" style="text-align:center;">
+
+0
+
+</td>
+
+<td id="tableHTML_column_5" style="text-align:center;">
+
+16435.55
+
+</td>
+
+<td id="tableHTML_column_6" style="text-align:center;">
+
+0
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+<!--/html_preserve-->
