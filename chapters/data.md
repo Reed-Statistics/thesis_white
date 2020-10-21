@@ -64,4 +64,7 @@ sensed data, meaning that they were not collected by FIA crew members
 and are truly estimated quantities. However, we will be using these
 variables to attempt to predict our response variables in order to
 understand how good of estimates we can make based off of remote data
-that does not require as much effort to collect.
+that does not require as much effort to collect. While it may seem
+unnatural to attempt to predict forest biomass with forest biomass, the
+differences in the data collection process between the ground level data
+and remotely sensed data are quite different.
