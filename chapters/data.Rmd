@@ -21,7 +21,23 @@ dat_small <- read_csv("../data/subsets/dat_small.csv")
 
 # Data
 
-The data used in this thesis was collected by the Forest Inventory and Analysis Program (FIA) in the span of 10 years from 2007 to 2017. While this data was collected over this 10 year period, the analyses done throughout this thesis are under the assumption that this is a "snapshot" of the Interior West at some moment in time. Thus we do not consider any temporal features of this dataset. The data we have is plot-level data for the Interior West region of the United States, where the data for each plot is collected by FIA and its crew members. The units measured by the FIA and their ground crews are approximately 30 m by 30 m hexagonal units. Since the Interior West covers over 140 million acres of forestland, it is extremely impractical for FIA to measure every unit (Source: https://www.fs.fed.us/rm/ogden/lib/interiorwest2.pdf). Instead, they sample from the population of 30 m by 30 m hexagonal units by using a geographically-based systematic sampling design (Source: McConville et al, 2020). The FIA chooses these samples by first overlaying a hexagonal grid over the United States where each hexagon contains 6000 acres of land. Then, they fill these hexagons with much smaller hexagons and randomly sample from the population of small hexagons. Then, ground crews go to these sampled small hexagons and collect variables such as basal area, trees per acre, etc. This plot level data is what we are working with throughout the duration of the thesis. In particular, the dataset contains 86085 plots. 
+The data used in this thesis was collected by the Forest Inventory and Analysis Program (FIA) in the span of 10 years from 2007 to 2017. While this data was collected over this 10 year period, the analyses done throughout this thesis are under the assumption that this is a "snapshot" of the Interior West at some moment in time. Thus we do not consider any temporal features of this dataset. The data we have is plot-level data for the Interior West region of the United States, where the data for each plot is collected by FIA and its crew members. The units measured by the FIA and their ground crews are approximately 30 m by 30 m hexagonal units. Since the Interior West covers over 140 million acres of forestland, it is extremely impractical for FIA to measure every unit (Source: https://www.fs.fed.us/rm/ogden/lib/interiorwest2.pdf). Instead, they sample from the population of 30 m by 30 m hexagonal units by using a geographically-based systematic sampling design (Source: McConville et al, 2020). The FIA chooses these samples by first overlaying a hexagonal grid over the United States where each hexagon contains 6000 acres of land. Then, they fill these hexagons with much smaller hexagons and randomly sample from the population of small hexagons. Then, ground crews go to these sampled small hexagons and collect variables such as basal area, trees per acre, etc. This plot level data is what we are working with throughout the duration of the thesis.
+
+The dataframe used in this thesis is a joined dataframe derived from two FIA datasets of the Interior West, `spatial` and `response`. The `spatial` dataframe contains 89444 observations and 70 variables, most notably two predictor variables (`forprob` and `forbio`), location information, and ecosubsection. The `response` dataframe contains 86085 observations and 67 variables, most notably four predictor variables collected by FIA crew members (`BALIVE_TPA`, `CNTLIVE_TPA`, `BIOLIVE_TPA`, and `VOLNLIVE_TPA`), location information, and ecosubsection. We join these dataframes by their unique plot number, and subset the number of variables significantly to 19 variables which contain plot information, longitude & lattitude, elevation, predictor variables, response variables, ecosubsection, ecosection, and province. The resulting joined dataframe has 86085 rows as these are the rows which share the same plots between the `response` and `spatial` dataframes. We can see the first few rows of the dataframe with relevant columns selected and digits rounded:
+
+```{r, echo = FALSE}
+library(gt)
+dat_small %>%
+  select(INVYR, PLOT, LON_PUBLIC, LAT_PUBLIC, ELEV_PUBLIC, forgrp, forprob, demLF) %>%
+  slice(30:35) %>%
+  gt()
+
+dat_small %>%
+  select(forbio, BALIVE_TPA, CNTLIVE_TPA, BIOLIVE_TPA, VOLNLIVE_TPA, subsection, section, province) %>%
+  slice(30:35) %>%
+  gt()
+```
+
 
 Again, the data we have is from the Interior West, and the FIA defines the Interior West as Arizona, Colorado, Idaho, Montana, Nevada, New Mexico, Utah, and Wyoming. For reference we have provided the Interior West colored green on a map of the continental United States:
 
@@ -144,7 +160,6 @@ hist6 <- ggplot(dat_small) +
 
 It is notable that the `forprob` variable is bimodal and modes zero and one, while all other variables are extremely right-skewed. We can also summarize the data to see some summary statistics of our six key variables:
 ```{r, message = FALSE, warning=FALSE, echo = FALSE, fig.align="center", fig.retina=4}
-library(gt)
 library(swfscMisc)
 vars <- list(dat_small$forbio, dat_small$forprob, dat_small$BIOLIVE_TPA,
              dat_small$BALIVE_TPA, dat_small$CNTLIVE_TPA, dat_small$VOLNLIVE_TPA)
