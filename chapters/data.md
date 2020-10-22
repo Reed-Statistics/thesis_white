@@ -31,7 +31,7 @@ Mexico, Utah, and Wyoming. For reference we have provided the Interior
 West colored green on a map of the continental United
 States:
 
-<img src="data_files/figure-gfm/unnamed-chunk-1-1.png" style="display: block; margin: auto;" />
+<img src="data_files/figure-gfm/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" />
 
 While the data covers the Interior West as a whole, we have very
 granular information, as each row represents a plot sampled by FIA. The
@@ -55,27 +55,31 @@ variables are coded as `BALIVE_TPA`, `CNTLIVE_TPA`, `BIOLIVE_TPA`, and
 variables across the Interior West region by ecosubsection in the plots
 below.
 
-<img src="data_files/figure-gfm/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" />
+<img src="data_files/figure-gfm/unnamed-chunk-2-1.png" width="960" style="display: block; margin: auto;" />
 
 While we have four variables which we will model as response variables
 throughout the analyses, we also have two predictor variables which will
 be of much use to us. In particular, forest probability and forest
-biomass (coded as `forprob` and `forbio`. These variables which we will
-treat as predictors are remotely sensed data, meaning that they were not
-collected by FIA crew members and are truly estimated quantities.
-However, we will be using these variables to attempt to predict our
-response variables in order to understand how good of estimates we can
-make based off of remote data that does not require as much effort to
-collect. While it may seem unnatural to attempt to predict forest
-biomass with forest biomass, the differences in the data collection
-process between the ground level data and remotely sensed data are quite
-different.
+biomass (coded as `forprob` and `forbio`.) These variables which we will
+treat as predictors are remotely sensed variables, meaning that they
+were not collected by FIA crew members, but rather with aerial
+photography and/or satellite imagery. However, we will be using these
+variables to attempt to predict our response variables in order to
+understand how good of estimates we can make with this remote data that
+does not require as much effort to collect. While it may seem unnatural
+to attempt to predict forest biomass with forest biomass, the
+differences in the data collection process between the ground level data
+and remotely sensed data are quite different.
 
-Summary of the data:
+These variables are all right-skewed, and all have take value zero quite
+often. This is because there is lots of land in the Interior West which
+is not forest, hence our forestry variables should take the value zero.
+We can see the skewness of the data with a summary of the data and
+histograms:
 
 <!--html_preserve-->
 
-<table style="border-collapse:collapse;" class="table_5826" border="0">
+<table style="border-collapse:collapse;" class="table_6182" border="0">
 
 <thead>
 
@@ -368,3 +372,5 @@ VOLNLIVE\_TPA
 </table>
 
 <!--/html_preserve-->
+
+<img src="data_files/figure-gfm/unnamed-chunk-3-1.png" width="960" style="display: block; margin: auto;" />
