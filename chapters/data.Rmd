@@ -1,5 +1,5 @@
 ---
-output: github_document
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
@@ -43,7 +43,7 @@ While the data covers the Interior West as a whole, we have very granular inform
 
 While this data contains a multitude of variables, the analyses done in this thesis focus on four key response variables and two explanatory variables. The response variables used are basal area (square-foot), trees per acre, above-ground biomass (lbs), and net volume (ft^3). These variables are coded as `BALIVE_TPA`, `CNTLIVE_TPA`, `BIOLIVE_TPA`, and `VOLNLIVE_TPA`, respectively. We can look at the average of these variables across the Interior West region by ecosubsection in the plots below. 
 
-```{r, echo = FALSE, message = FALSE, warning = FALSE, cache = TRUE, fig.retina = 4, fig.align = 'center', fig.height=6, fig.width=10}
+```{r, echo = FALSE, message = FALSE, warning = FALSE, cache = TRUE, fig.retina = 4, fig.align = 'center', fig.height=4, fig.width=6}
 subsections <- st_read("../data/SA_eco_subsection/SA_eco_subsection.shp", quiet = TRUE)
 
 subsections1 <- subsections %>%
@@ -114,7 +114,7 @@ While we have four variables which we will model as response variables throughou
 
 These variables are almost all right-skewed, and all take value zero quite often. This is because there is lots of land in the Interior West which is not forest, hence our forestry variables should take the value zero. To see these phenomena, we can look at histograms of our six key variables:
 
-```{r, message = FALSE, warning=FALSE, echo = FALSE, fig.align="center", fig.retina=4, fig.height=6, fig.width=10, cache=TRUE}
+```{r, message = FALSE, warning=FALSE, echo = FALSE, fig.align="center", fig.retina=4, fig.height=4, fig.width=6, cache=TRUE}
 hist1 <- ggplot(dat_small) +
   geom_histogram(mapping = aes(x = forprob, y = ..count.. / 1000), color = "black", fill = "steelblue") +
   theme_bw() +
