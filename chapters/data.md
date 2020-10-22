@@ -71,51 +71,407 @@ to attempt to predict forest biomass with forest biomass, the
 differences in the data collection process between the ground level data
 and remotely sensed data are quite different.
 
-These variables are all right-skewed, and all have take value zero quite
-often. This is because there is lots of land in the Interior West which
-is not forest, hence our forestry variables should take the value zero.
-We can see the skewness of the data with a summary of the data and
-histograms:
+These variables are almost all right-skewed, and all take value zero
+quite often. This is because there is lots of land in the Interior West
+which is not forest, hence our forestry variables should take the value
+zero. To see these phenomena, we can look at histograms of our six key
+variables:
 
-<!--html_preserve-->
+<img src="data_files/figure-gfm/unnamed-chunk-3-1.png" width="960" style="display: block; margin: auto;" />
 
-<table style="border-collapse:collapse;" class="table_6182" border="0">
+It is notable that the `forprob` variable is bimodal and modes zero and
+one, while all other variables are extremely right-skewed. We can also
+summarize the data to see some summary statistics of our six key
+variables: <!--html_preserve-->
 
-<thead>
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
 
-<tr style="border-bottom:2px solid black;border-top:3px solid black;">
+#vygsiqakoe .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
 
-<th id="tableHTML_header_1">
+#vygsiqakoe .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#vygsiqakoe .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#vygsiqakoe .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 4px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#vygsiqakoe .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vygsiqakoe .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#vygsiqakoe .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#vygsiqakoe .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#vygsiqakoe .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#vygsiqakoe .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#vygsiqakoe .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#vygsiqakoe .gt_group_heading {
+  padding: 8px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#vygsiqakoe .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#vygsiqakoe .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#vygsiqakoe .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#vygsiqakoe .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#vygsiqakoe .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#vygsiqakoe .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vygsiqakoe .gt_first_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#vygsiqakoe .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vygsiqakoe .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#vygsiqakoe .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#vygsiqakoe .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vygsiqakoe .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#vygsiqakoe .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding: 4px;
+}
+
+#vygsiqakoe .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#vygsiqakoe .gt_sourcenote {
+  font-size: 90%;
+  padding: 4px;
+}
+
+#vygsiqakoe .gt_left {
+  text-align: left;
+}
+
+#vygsiqakoe .gt_center {
+  text-align: center;
+}
+
+#vygsiqakoe .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#vygsiqakoe .gt_font_normal {
+  font-weight: normal;
+}
+
+#vygsiqakoe .gt_font_bold {
+  font-weight: bold;
+}
+
+#vygsiqakoe .gt_font_italic {
+  font-style: italic;
+}
+
+#vygsiqakoe .gt_super {
+  font-size: 65%;
+}
+
+#vygsiqakoe .gt_footnote_marks {
+  font-style: italic;
+  font-size: 65%;
+}
+</style>
+
+<div id="vygsiqakoe" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+
+<table class="gt_table">
+
+<thead class="gt_col_headings">
+
+<tr>
+
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">
 
 variable
 
 </th>
 
-<th id="tableHTML_header_2">
+<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">
 
 mean
 
 </th>
 
-<th id="tableHTML_header_3">
+<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">
+
+quantile\_25
+
+</th>
+
+<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">
 
 median
 
 </th>
 
-<th id="tableHTML_header_4">
+<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">
+
+quantile\_75
+
+</th>
+
+<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">
 
 min
 
 </th>
 
-<th id="tableHTML_header_5">
+<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">
 
 max
 
 </th>
 
-<th id="tableHTML_header_6">
+<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">
 
 na\_count
 
@@ -125,41 +481,53 @@ na\_count
 
 </thead>
 
-<tbody>
+<tbody class="gt_table_body">
 
 <tr>
 
-<td id="tableHTML_column_1" style="text-align:center;">
+<td class="gt_row gt_left">
 
 forbio
 
 </td>
 
-<td id="tableHTML_column_2" style="text-align:center;">
+<td class="gt_row gt_right">
 
 6.66
 
 </td>
 
-<td id="tableHTML_column_3" style="text-align:center;">
+<td class="gt_row gt_right">
 
 0
 
 </td>
 
-<td id="tableHTML_column_4" style="text-align:center;">
+<td class="gt_row gt_right">
+
+0.00
+
+</td>
+
+<td class="gt_row gt_right">
+
+0.00
+
+</td>
+
+<td class="gt_row gt_right">
 
 0
 
 </td>
 
-<td id="tableHTML_column_5" style="text-align:center;">
+<td class="gt_row gt_right">
 
-118
+118.00
 
 </td>
 
-<td id="tableHTML_column_6" style="text-align:center;">
+<td class="gt_row gt_right">
 
 0
 
@@ -169,37 +537,49 @@ forbio
 
 <tr>
 
-<td id="tableHTML_column_1" style="text-align:center;">
+<td class="gt_row gt_left">
 
 forprob
 
 </td>
 
-<td id="tableHTML_column_2" style="text-align:center;">
+<td class="gt_row gt_right">
 
 0.27
 
 </td>
 
-<td id="tableHTML_column_3" style="text-align:center;">
+<td class="gt_row gt_right">
+
+0
+
+</td>
+
+<td class="gt_row gt_right">
 
 0.07
 
 </td>
 
-<td id="tableHTML_column_4" style="text-align:center;">
+<td class="gt_row gt_right">
+
+0.56
+
+</td>
+
+<td class="gt_row gt_right">
 
 0
 
 </td>
 
-<td id="tableHTML_column_5" style="text-align:center;">
+<td class="gt_row gt_right">
 
-1
+1.00
 
 </td>
 
-<td id="tableHTML_column_6" style="text-align:center;">
+<td class="gt_row gt_right">
 
 1
 
@@ -209,37 +589,49 @@ forprob
 
 <tr>
 
-<td id="tableHTML_column_1" style="text-align:center;">
+<td class="gt_row gt_left">
 
 BIOLIVE\_TPA
 
 </td>
 
-<td id="tableHTML_column_2" style="text-align:center;">
+<td class="gt_row gt_right">
 
 6.23
 
 </td>
 
-<td id="tableHTML_column_3" style="text-align:center;">
+<td class="gt_row gt_right">
 
 0
 
 </td>
 
-<td id="tableHTML_column_4" style="text-align:center;">
+<td class="gt_row gt_right">
+
+0.00
+
+</td>
+
+<td class="gt_row gt_right">
+
+1.98
+
+</td>
+
+<td class="gt_row gt_right">
 
 0
 
 </td>
 
-<td id="tableHTML_column_5" style="text-align:center;">
+<td class="gt_row gt_right">
 
 244.35
 
 </td>
 
-<td id="tableHTML_column_6" style="text-align:center;">
+<td class="gt_row gt_right">
 
 0
 
@@ -249,37 +641,49 @@ BIOLIVE\_TPA
 
 <tr>
 
-<td id="tableHTML_column_1" style="text-align:center;">
+<td class="gt_row gt_left">
 
 BALIVE\_TPA
 
 </td>
 
-<td id="tableHTML_column_2" style="text-align:center;">
+<td class="gt_row gt_right">
 
 22.75
 
 </td>
 
-<td id="tableHTML_column_3" style="text-align:center;">
+<td class="gt_row gt_right">
 
 0
 
 </td>
 
-<td id="tableHTML_column_4" style="text-align:center;">
+<td class="gt_row gt_right">
+
+0.00
+
+</td>
+
+<td class="gt_row gt_right">
+
+14.75
+
+</td>
+
+<td class="gt_row gt_right">
 
 0
 
 </td>
 
-<td id="tableHTML_column_5" style="text-align:center;">
+<td class="gt_row gt_right">
 
 469.39
 
 </td>
 
-<td id="tableHTML_column_6" style="text-align:center;">
+<td class="gt_row gt_right">
 
 0
 
@@ -289,37 +693,49 @@ BALIVE\_TPA
 
 <tr>
 
-<td id="tableHTML_column_1" style="text-align:center;">
+<td class="gt_row gt_left">
 
 CNTLIVE\_TPA
 
 </td>
 
-<td id="tableHTML_column_2" style="text-align:center;">
+<td class="gt_row gt_right">
 
-98.6
+98.60
 
 </td>
 
-<td id="tableHTML_column_3" style="text-align:center;">
+<td class="gt_row gt_right">
 
 0
 
 </td>
 
-<td id="tableHTML_column_4" style="text-align:center;">
+<td class="gt_row gt_right">
+
+0.00
+
+</td>
+
+<td class="gt_row gt_right">
+
+30.09
+
+</td>
+
+<td class="gt_row gt_right">
 
 0
 
 </td>
 
-<td id="tableHTML_column_5" style="text-align:center;">
+<td class="gt_row gt_right">
 
 6677.93
 
 </td>
 
-<td id="tableHTML_column_6" style="text-align:center;">
+<td class="gt_row gt_right">
 
 0
 
@@ -327,39 +743,51 @@ CNTLIVE\_TPA
 
 </tr>
 
-<tr style="border-bottom:3px solid black;">
+<tr>
 
-<td id="tableHTML_column_1" style="text-align:center;">
+<td class="gt_row gt_left">
 
 VOLNLIVE\_TPA
 
 </td>
 
-<td id="tableHTML_column_2" style="text-align:center;">
+<td class="gt_row gt_right">
 
 342.32
 
 </td>
 
-<td id="tableHTML_column_3" style="text-align:center;">
+<td class="gt_row gt_right">
 
 0
 
 </td>
 
-<td id="tableHTML_column_4" style="text-align:center;">
+<td class="gt_row gt_right">
+
+0.00
+
+</td>
+
+<td class="gt_row gt_right">
+
+74.69
+
+</td>
+
+<td class="gt_row gt_right">
 
 0
 
 </td>
 
-<td id="tableHTML_column_5" style="text-align:center;">
+<td class="gt_row gt_right">
 
 16435.55
 
 </td>
 
-<td id="tableHTML_column_6" style="text-align:center;">
+<td class="gt_row gt_right">
 
 0
 
@@ -371,6 +799,6 @@ VOLNLIVE\_TPA
 
 </table>
 
-<!--/html_preserve-->
+</div>
 
-<img src="data_files/figure-gfm/unnamed-chunk-3-1.png" width="960" style="display: block; margin: auto;" />
+<!--/html_preserve-->
