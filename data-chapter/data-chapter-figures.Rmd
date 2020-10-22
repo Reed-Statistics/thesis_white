@@ -1,0 +1,111 @@
+---
+title: "data-chapter-figures"
+author: "Grayson White"
+date: "10/22/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(sf)
+library(USAboundaries)
+library(patchwork)
+`%ni%` <- Negate(`%in%`)
+
+interior_west <- c("AZ", "CO", "ID", "MT", "NV", "NM", "UT", "WY")
+
+states <- data.frame(state.abb) %>%
+  filter(state.abb %ni% interior_west & state.abb %ni% c("AK", "HI")) %>%
+  pull()
+
+dat_small <- read_csv("../data/subsets/dat_small.csv")
+```
+
+This document includes the R code needed to create the figures in the data chapter. 
+
+```{r, message = FALSE, warning = FALSE, fig.align="center", fig.retina=4}
+# R Code for generating the int west on USA
+ggplot() +
+  geom_sf(data = us_boundaries(type = "state",
+                               states = interior_west),
+          fill = "#597058",
+          color = "black") +
+  geom_sf(data = us_boundaries(type = "state",
+                               states = states),
+          fill = "grey",
+          color = "black") +
+  theme_void()
+```
+
+```{r, message = FALSE, warning = FALSE, fig.retina = 4, fig.align = 'center', fig.height=4, fig.width=6}
+# R Code for creating the summary stat maps
+subsections <- st_read("../data/SA_eco_subsection/SA_eco_subsection.shp", quiet = TRUE)
+
+subsections1 <- subsections %>%
+  filter(SUBSECT %in% dat_small$subsection)
+
+int_west_sf <- us_boundaries(type = "state",
+                         states = interior_west)
+
+intersection <- st_intersection(int_west_sf, subsections1)
+
+dat_summary <- dat_small %>%
+  group_by(subsection) %>%
+  summarize(mean_bio = mean(BIOLIVE_TPA),
+            mean_cnt = mean(CNTLIVE_TPA),
+            mean_vol = mean(VOLNLIVE_TPA),
+            mean_bas = mean(BALIVE_TPA))
+
+intersection <- left_join(intersection, dat_summary, by = c("SUBSECT" = "subsection"))
+
+plot1 <- ggplot() +
+  geom_sf(data = intersection,
+          mapping = aes(fill = mean_bio)) +
+  geom_sf(data = us_boundaries(type = "state",
+                               states = interior_west),
+          color = "black",
+          alpha = 0,
+          size = 0.25) +
+  scale_fill_viridis_c() +
+  theme_void() +
+  labs(fill = "Average Biomass")
+
+plot2 <- ggplot() +
+  geom_sf(data = intersection,
+          mapping = aes(fill = mean_cnt)) +
+  geom_sf(data = us_boundaries(type = "state",
+                               states = interior_west),
+          color = "black",
+          alpha = 0,
+          size = 0.25) +
+  scale_fill_viridis_c() +
+  theme_void() +
+  labs(fill = "Average Tree Count")
+
+plot3 <- ggplot() +
+  geom_sf(data = intersection,
+          mapping = aes(fill = mean_vol)) +
+  geom_sf(data = us_boundaries(type = "state",
+                               states = interior_west),
+          color = "black",
+          alpha = 0,
+          size = 0.25) +
+  scale_fill_viridis_c() +
+  theme_void() +
+  labs(fill = "Average Volume")
+
+plot4 <- ggplot() +
+  geom_sf(data = intersection,
+          mapping = aes(fill = mean_bas)) +
+  geom_sf(data = us_boundaries(type = "state",
+                               states = interior_west),
+          color = "black",
+          alpha = 0,
+          size = 0.25) +
+  scale_fill_viridis_c() +
+  theme_void() +
+  labs(fill = "Average Basal Area")
+```
+
+
