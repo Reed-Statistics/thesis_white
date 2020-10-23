@@ -30,7 +30,38 @@ anova_VOLNLIVE_TPA <- aov(VOLNLIVE_TPA ~ province + section + subsection, data =
 summary(anova_VOLNLIVE_TPA)
 
 anova_forbio <- aov(forbio ~ province + section + subsection, data = dat_small)
-summary(anova_forbio)
+summary(anova_forbio)[[1]][["Mean Sq"]][1:3]
+
+anova_table <- tibble(
+  data.frame(
+    variable = c(
+      "forbio",
+      "forprob",
+      "BIOLIVE_TPA",
+      "BALIVE_TPA",
+      "CNTLIVE_TPA",
+      "VOLNLIVE_TPA"
+    )
+  ) %>%
+    cbind(
+      rbind(
+        summary(anova_forbio)[[1]][["Mean Sq"]][1:3],
+        summary(anova_forprob)[[1]][["Mean Sq"]][1:3],
+        summary(anova_BIOLIVE_TPA)[[1]][["Mean Sq"]][1:3],
+        summary(anova_BALIVE_TPA)[[1]][["Mean Sq"]][1:3],
+        summary(anova_CNTLIVE_TPA)[[1]][["Mean Sq"]][1:3],
+        summary(anova_VOLNLIVE_TPA)[[1]][["Mean Sq"]][1:3]
+      )
+    ) %>%
+    rename(
+      province_MSE = "1",
+      ecosection_MSE = "2",
+      ecosubsection_MSE = "3"
+    ) %>%
+    round(digits = 1)
+) 
+
+# write.csv(anova_table, "anova.csv")
 ```
 
 
