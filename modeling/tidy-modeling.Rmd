@@ -41,6 +41,9 @@ hb_fit <-
       data = m333)
 
 hb_fit
+
+hb_stan <- hb_fit$fit$stanfit
+print(hb_stan)
 ```
 
 ```{r, message = FALSE}
@@ -51,6 +54,9 @@ hb_fit_df <- data.frame(
   subsection = m333$subsection
   )
 
+# Load sds
+conf <- read_csv("sd_df.csv")
+
 # In this plot, I would like error bars on the HB estimate. however, since the model fits
 # to the plot level and then I summarized these means, I am not sure what a true error
 # bar would look like.
@@ -58,15 +64,34 @@ hb_fit_df %>%
   group_by(subsection) %>%
   summarize(mean_fit = mean(fitted),
             mean_true = mean(true)) %>%
+  left_join(conf, by = c("subsection" = "id")) %>%
   mutate(subsection = fct_reorder(subsection, mean_true)) %>%
   ggplot(aes(x = subsection,
              y = mean_fit)) +
   geom_point(aes(color = "goldenrod"),
              alpha = 0.75,
              position = position_nudge(x = -0.1)) +
-  geom_point(aes(y = mean_true, color = "forestgreen"),
-             alpha = 0.75,
-             position = position_nudge(x = 0.1)) +
+  geom_point(
+    aes(y = mean_true, color = "forestgreen"),
+    alpha = 0.75,
+    position = position_nudge(x = 0.1)
+  ) +
+  geom_errorbar(
+    mapping = aes(
+      ymin = mean_fit - 1.96 * bootstrap_sd,
+      ymax = mean_fit + 1.96 * bootstrap_sd
+    ),
+    position = position_nudge(x = -0.1),
+    color = "goldenrod"
+  ) +
+  geom_errorbar(
+    mapping = aes(
+      ymin = mean_true - 1.96 * direct_sd,
+      ymax = mean_true + 1.96 * direct_sd
+    ),
+    position = position_nudge(x = 0.1),
+    color = "forestgreen"
+  ) +
   theme_bw() +
   theme(axis.text.x = element_text(
     angle = 90,
@@ -84,7 +109,90 @@ hb_fit_df %>%
                                'forestgreen'='forestgreen'),
                      labels = c('Direct (Mean)','Hierarchical Bayesian'),
                      guide = "legend")
+
+# m333 %>%
+#   group_by(subsection) %>%
+#   arrange(subsection) %>%
+#   summarize(n = n()) %>% View()
 ```
+
+### Bootstrap
+```{r eval = FALSE}
+set.seed(13)
+m333_nested <- m333 %>%
+  mutate(id = subsection) %>%
+  group_by(subsection) %>%
+  nest()
+means <- data.frame()
+for (j in 1:length(unique(m333$subsection))) {
+  for (i in 1:1000) {
+    means[j, i] <- sample_n(
+      m333_nested[[2]][[j]],
+      size = length(m333_nested[[2]][[j]]$BIOLIVE_TPA),
+      replace = TRUE
+    ) %>%
+      summarize(mean = mean(BIOLIVE_TPA)) %>%
+      select(mean)
+  }
+}
+library(matrixStats)
+sds <- means %>%
+  as.matrix() %>%
+  rowSds()
+
+
+ordered_subsections <- m333 %>%
+  arrange(subsection) %>%
+  select(subsection) %>% 
+  unique() %>%
+  unlist()
+
+set.seed(utf8ToInt("this is gonna take awhile"))
+boots <- list()
+fit <- list()
+mean_df <- list()
+final <- data.frame()
+
+for(i in 1:1000){
+for(j in 1:length(unique(m333$subsection))) {
+    boots[[j]] <- sample_n(
+      m333_nested[[2]][[j]],
+      size = length(m333_nested[[2]][[j]]$BIOLIVE_TPA),
+      replace = TRUE
+    )
+    boots_df <- bind_rows(boots) 
+    }
+    
+    fit[[i]] <- hb_spec %>%
+      fit(BIOLIVE_TPA ~ 1 +  forprob + (1 | id),
+          data = boots_df)
+    
+    mean_df[[i]] <- data.frame(fitted = fit[[i]]$fit$fitted.values,
+                                   subsection = boots_df$id)
+    
+    final[1:20, i] <- mean_df[[i]] %>%
+      group_by(subsection) %>%
+      summarize(mean = mean(fitted)) %>%
+      select(mean)
+    
+    if (i %% 50 == 1) {
+      print(i)
+    }
+}
+
+boot_sds <- final %>%
+  as.matrix() %>%
+  rowSds()
+
+sd_df <- data.frame(
+  id = ordered_subsections,
+  direct_sd = sds,
+  bootstrap_sd = boot_sds
+)
+
+saveRDS(sd_df, file = "sd_df.rds")
+```
+
 
 #### Fit freq model, split data, compare test MSEs
 
