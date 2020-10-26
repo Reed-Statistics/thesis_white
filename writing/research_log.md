@@ -7,6 +7,8 @@ This week, I worked mainly on two things: writing the rough draft of the Data ch
 
 To quantify uncertainty, rather than finding an exact mathematical formula for the standard errors of the estimates, I bootstrapped the results for both the direct mean estimate and the hierarchial bayesian model. The direct mean bootstrap loop takes just a few minutes to run, but the HB model took overnight (approx 11-12 hours) to get 1000 bootstrap estimates. 
 
+Also: (Did this today (Monday) morning). I worked through Finley's code and fit a model which gave different (but not wildly different) results. 
+
 
 ### Upcoming Work
 
@@ -19,6 +21,8 @@ In the coming week, I still need to do some finetuning of my first model.
 ### Points of confusion
 
 * I feel like the data chapter is still a little fuzzy on FIA's sampling design -- I think I would benefit from talking through the data collection to make sure I wrote about that correctly in the data chapter. 
+
+* Priors - so confusing.
 
 Fall, Week 7
 ----------------
