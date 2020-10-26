@@ -129,7 +129,7 @@ From this table, we can see how heavily skewed these key variables are, with ove
 
 ## Data Structure & Hierarchy
 
-As hinted at throughout earlier parts of the chapter, the data used in this thesis has a hierarchical structure, where ecosubsections are nested within ecosections which are in turn nested within provinces. Each plot has each level of location data recorded 
+As hinted at throughout earlier parts of the chapter, the data used in this thesis has a hierarchical structure, where ecosubsections are nested within ecosections which are in turn nested within provinces. Every plot has each level of granularity of location data recorded and this is what allows us to choose how far to borrow strength from other plots. 
 
 The largest motivation for hierarchical modeling in this particular application is that observations are more similar within the hierarchies which we split them into. To understand if this is true, we can do a preliminary analysis on the data by performing three-way ANOVAs for each key variable with predictors `province`, `section`, and `subsection`. By just looking at the MSE of the ANOVA results, we can see that we should expect more homogeneity within ecosubsections:
 
@@ -139,4 +139,7 @@ anova %>%
   select(-X1) %>%
   gt()
 ```
+(* Need a better way to output this table and show province level model is significant)
+
+These results allow us to conclude that it is reasonable to believe that observations within a given province are more homogeneous than observations throughout the Interior West. Thus, if we want ecosubsection level estimates of variables, it makes sense to borrow information from other ecosubsections within the same province as each other. This data structure and homogeneity within provinces is what drives the analyses done henceforth in this thesis. 
 
