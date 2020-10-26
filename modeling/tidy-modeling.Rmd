@@ -29,7 +29,7 @@ set.seed(37) # the best number
 # HB engine, standard priors
 hb_spec <- linear_reg() %>%
   set_engine("stan-glmer",
-             prior_aux =  rstanarm::exponential(rate = 1),
+             prior_aux = rstanarm::exponential(rate = 1),
              prior = NULL,
              prior_intercept = NULL,
              prior_covariance = rstanarm::decov(shape = 2))
