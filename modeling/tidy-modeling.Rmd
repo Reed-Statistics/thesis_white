@@ -38,7 +38,8 @@ hb_spec <- linear_reg() %>%
 hb_fit <- 
   hb_spec %>% 
   fit(BIOLIVE_TPA ~ 1 +  forprob + (1 | subsection), # varying intercepts
-      data = m333)
+      data = m333,
+      groups = subsection)
 
 hb_fit
 

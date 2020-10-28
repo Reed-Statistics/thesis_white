@@ -1,0 +1,93 @@
+---
+title: "Untitled"
+author: "Grayson White"
+date: "10/28/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(rstan)
+library(rstanarm)
+library(tidyverse)
+```
+
+
+```{r}
+mod <- stan_lmer(BIOLIVE_TPA ~ 1 + nlcd11 + (1 | subsection),
+                 data = m333)
+
+summary(mod)
+
+new_dat <- m333 %>%
+  group_by(subsection) %>%
+  summarize(nlcd11 = mean(nlcd11))
+
+pred <- posterior_predict(mod, new_dat) %>%
+  colMeans()
+
+se <- rstanarm::se(mod)[3:22]
+```
+
+```{r}
+hb_fit_df <- data.frame(
+  fitted = pred,
+  se = se,
+  true = m333_area$mean_BIOLIVE,
+  subsection = m333_area$subsection,
+  mean_lower = m333_area$mean_BIOLIVE - 1.96*sds,
+  mean_upper = m333_area$mean_BIOLIVE + 1.96*sds
+  )
+
+
+hb_fit_df %>%
+  mutate(subsection = fct_reorder(subsection, true)) %>%
+  ggplot(aes(x = subsection,
+             y = fitted)) +
+  geom_point(aes(color = "goldenrod"),
+             alpha = 0.75,
+             position = position_nudge(x = -0.1)) +
+  geom_point(
+    aes(y = true, color = "forestgreen"),
+    alpha = 0.75,
+    position = position_nudge(x = 0.1)
+  ) +
+  geom_errorbar(
+    mapping = aes(
+      ymin = fitted - 1.96*se,
+      ymax = fitted + 1.96*se
+    ),
+    position = position_nudge(x = -0.1),
+    color = "goldenrod"
+  ) +
+  geom_errorbar(
+    mapping = aes(
+      ymin = mean_lower,
+      ymax = mean_upper
+    ),
+    position = position_nudge(x = 0.1),
+    color = "forestgreen"
+  ) +
+  theme_bw() +
+  theme(axis.text.x = element_text(
+    angle = 90,
+    vjust = 0.5,
+    hjust = 1
+    ),
+    legend.position = "bottom") +
+  labs(
+    x = "Subsection",
+    y = "Average Above Ground Biomass",
+    title = "Above Ground Biomass Estimates in the North Rocky Forest"
+  ) +
+  scale_color_manual(name = 'Estimate Type', 
+                     values =c('goldenrod'='goldenrod',
+                               'forestgreen'='forestgreen'),
+                     labels = c('Direct (Mean)','Hierarchical Bayesian'),
+                     guide = "legend")
+```
+
+
