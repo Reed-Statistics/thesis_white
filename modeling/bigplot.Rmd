@@ -1,0 +1,88 @@
+---
+title: "Untitled"
+author: "Grayson White"
+date: "10/28/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(rstan)
+library(rstanarm)
+library(tidyverse)
+```
+
+```{r}
+models <- readRDS("models.rds")
+```
+
+```{r}
+mod_l <- list()
+for(i in 1:14) {
+  mod_l[[i]] <- data.frame(
+  fitted = models[[i]]$fitted.values,
+  subsection = models[[i]]$data$subsection,
+  true = models[[i]]$y
+)
+}
+mod_df <- mod_l %>%
+  bind_rows()
+
+mod_df %>%
+  group_by(subsection) %>%
+  summarize(bayes_cv = sd(fitted) / mean(fitted),
+            direct_cv = sd(true) / mean(true)) %>%
+  mutate(subsection = fct_reorder(subsection, direct_cv)) %>%
+  ggplot(aes(x = subsection)) +
+  geom_point(aes(y = bayes_cv, color = "goldenrod"), ) +
+  geom_point(aes(y = direct_cv, color = "forestgreen")) +
+  theme_bw() +
+  scale_color_manual(
+    name = 'Estimate Type',
+    values = c('goldenrod' = 'goldenrod',
+               'forestgreen' = 'forestgreen'),
+    labels = c('Direct (Mean)', 'Hierarchical Bayesian'),
+    guide = "legend"
+  ) +
+  theme(axis.text.x = element_text(
+    angle = 90,
+    vjust = 0.5,
+    hjust = 1
+  ),
+  legend.position = "bottom") +
+  labs(x = "Subsection",
+       y = "Coeffcient of Variation") +
+  ylim(0,10) +
+  theme(axis.text.x = element_blank())
+
+mod_df %>%
+  group_by(subsection) %>%
+  summarize(mean_direct = mean(true),
+            mean_bayes = mean(fitted)) %>%
+  mutate(subsection = fct_reorder(subsection, mean_direct)) %>%
+  ggplot(aes(x = subsection)) +
+  geom_point(aes(y = mean_bayes,
+                 color = "goldenrod"),
+             position = position_nudge(x = -0.1)) + 
+  geom_point(aes(y = mean_direct,
+                 color = "forestgreen"),
+             position = position_nudge(x = 0.1)) +
+  theme_bw() +
+  scale_color_manual(
+    name = 'Estimate Type',
+    values = c('goldenrod' = 'goldenrod',
+               'forestgreen' = 'forestgreen'),
+    labels = c('Direct (Mean)', 'Hierarchical Bayesian'),
+    guide = "legend"
+  ) +
+  theme(axis.text.x = element_text(
+    angle = 90,
+    vjust = 0.5,
+    hjust = 1
+  ),
+  legend.position = "bottom") +
+  labs(x = "Subsection",
+       y = "Estimate")
+```
+
+
