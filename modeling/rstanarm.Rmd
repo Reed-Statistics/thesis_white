@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
+```{r message = FALSE}
 library(rstan)
 library(rstanarm)
 library(tidyverse)
@@ -17,77 +17,78 @@ library(tidyverse)
 
 
 ```{r}
+m333 <- read_csv("../data/subsets/dat_small.csv") %>%
+  filter(province == "M333")
+
 mod <- stan_lmer(BIOLIVE_TPA ~ 1 + nlcd11 + (1 | subsection),
-                 data = m333)
+                 data = m333,
+                 verbose = FALSE)
 
-summary(mod)
+mod_df <- data.frame(
+  fitted = mod$fitted.values,
+  subsection = m333 %>% dplyr::select(subsection),
+  true = mod$y
+)
 
-new_dat <- m333 %>%
+mod_df %>%
   group_by(subsection) %>%
-  summarize(nlcd11 = mean(nlcd11))
+  summarize(bayes_cv = sd(fitted) / mean(fitted),
+            direct_cv = sd(true) / mean(true)) %>%
+  summarize(mean(bayes_cv / direct_cv)) %>%
+  pull()
 
-pred <- posterior_predict(mod, new_dat) %>%
-  colMeans()
-
-se <- rstanarm::se(mod)[3:22]
-```
-
-```{r}
-hb_fit_df <- data.frame(
-  fitted = pred,
-  se = se,
-  true = m333_area$mean_BIOLIVE,
-  subsection = m333_area$subsection,
-  mean_lower = m333_area$mean_BIOLIVE - 1.96*sds,
-  mean_upper = m333_area$mean_BIOLIVE + 1.96*sds
-  )
-
-
-hb_fit_df %>%
-  mutate(subsection = fct_reorder(subsection, true)) %>%
-  ggplot(aes(x = subsection,
-             y = fitted)) +
-  geom_point(aes(color = "goldenrod"),
-             alpha = 0.75,
-             position = position_nudge(x = -0.1)) +
-  geom_point(
-    aes(y = true, color = "forestgreen"),
-    alpha = 0.75,
-    position = position_nudge(x = 0.1)
-  ) +
-  geom_errorbar(
-    mapping = aes(
-      ymin = fitted - 1.96*se,
-      ymax = fitted + 1.96*se
-    ),
-    position = position_nudge(x = -0.1),
-    color = "goldenrod"
-  ) +
-  geom_errorbar(
-    mapping = aes(
-      ymin = mean_lower,
-      ymax = mean_upper
-    ),
-    position = position_nudge(x = 0.1),
-    color = "forestgreen"
-  ) +
+mod_df %>%
+  group_by(subsection) %>%
+  summarize(bayes_cv = sd(fitted) / mean(fitted),
+            direct_cv = sd(true) / mean(true)) %>%
+  mutate(subsection = fct_reorder(subsection, direct_cv)) %>%
+  ggplot(aes(x = subsection)) +
+  geom_point(aes(y = bayes_cv, color = "goldenrod"), ) +
+  geom_point(aes(y = direct_cv, color = "forestgreen")) +
   theme_bw() +
+  scale_color_manual(
+    name = 'Estimate Type',
+    values = c('goldenrod' = 'goldenrod',
+               'forestgreen' = 'forestgreen'),
+    labels = c('Direct (Mean)', 'Hierarchical Bayesian'),
+    guide = "legend"
+  ) +
   theme(axis.text.x = element_text(
     angle = 90,
     vjust = 0.5,
     hjust = 1
-    ),
-    legend.position = "bottom") +
-  labs(
-    x = "Subsection",
-    y = "Average Above Ground Biomass",
-    title = "Above Ground Biomass Estimates in the North Rocky Forest"
+  ),
+  legend.position = "bottom") +
+  labs(x = "Subsection",
+       y = "Coeffcient of Variation")
+
+mod_df %>%
+  group_by(subsection) %>%
+  summarize(mean_direct = mean(true),
+            mean_bayes = mean(fitted)) %>%
+  mutate(subsection = fct_reorder(subsection, mean_direct)) %>%
+  ggplot(aes(x = subsection)) +
+  geom_point(aes(y = mean_bayes,
+                 color = "goldenrod"),
+             position = position_nudge(x = -0.1)) + 
+  geom_point(aes(y = mean_direct,
+                 color = "forestgreen"),
+             position = position_nudge(x = 0.1)) +
+  theme_bw() +
+  scale_color_manual(
+    name = 'Estimate Type',
+    values = c('goldenrod' = 'goldenrod',
+               'forestgreen' = 'forestgreen'),
+    labels = c('Direct (Mean)', 'Hierarchical Bayesian'),
+    guide = "legend"
   ) +
-  scale_color_manual(name = 'Estimate Type', 
-                     values =c('goldenrod'='goldenrod',
-                               'forestgreen'='forestgreen'),
-                     labels = c('Direct (Mean)','Hierarchical Bayesian'),
-                     guide = "legend")
+  theme(axis.text.x = element_text(
+    angle = 90,
+    vjust = 0.5,
+    hjust = 1
+  ),
+  legend.position = "bottom")
+  
 ```
 
 
