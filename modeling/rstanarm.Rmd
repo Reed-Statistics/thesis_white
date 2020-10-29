@@ -1,8 +1,5 @@
 ---
-title: "Untitled"
-author: "Grayson White"
-date: "10/28/2020"
-output: html_document
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
@@ -87,8 +84,50 @@ mod_df %>%
     vjust = 0.5,
     hjust = 1
   ),
-  legend.position = "bottom")
+  legend.position = "bottom") +
+  labs(x = "Subsection",
+       y = "Estimate")
   
 ```
+
+
+## All the provinces
+
+```{r}
+df <- read_csv("../data/subsets/dat_small.csv")
+df <- df %>%
+  mutate(id = province) %>%
+  group_by(id) %>%
+  nest()
+
+models_df <- list()
+cv <- c()
+models <- readRDS("models.rds")
+for(i in 1:14) {
+  # models[[i]] <- stan_lmer(BIOLIVE_TPA ~ 1 + nlcd11 + (1 | subsection),
+  #                data = df[[i,2]][[1]],
+  #                verbose = FALSE)
+  
+  models_df[[i]] <- data.frame(
+  fitted = models[[i]]$fitted.values,
+  subsection = df[[i,2]][[1]] %>% dplyr::select(subsection),
+  true = models[[i]]$y
+  ) }
+
+
+cv <- list()
+for(i in 1:14){
+
+cv[i] <- models_df[[i]] %>%
+  group_by(subsection) %>%
+  summarize(bayes_cv = sd(fitted, na.rm = TRUE) / mean(fitted, na.rm = TRUE),
+            direct_cv = sd(true, na.rm = TRUE) / mean(true, na.rm = TRUE)) %>%
+ summarize(median(bayes_cv / direct_cv, na.rm = TRUE))
+}
+unlist(cv)
+mean(unlist(cv))
+
+```
+
 
 
