@@ -1,0 +1,102 @@
+---
+title: "area-level"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(rstan)
+library(rstanarm)
+library(tidymodels)
+library(multilevelmod)
+```
+
+```{r message = F, warning = F}
+dat_small <- read_csv("../data/subsets/dat_small.csv")
+
+dat_area <- dat_small %>%
+  group_by(subsection, section, province) %>%
+  summarize(mean_BIOLIVE = mean(BIOLIVE_TPA),
+            mean_BALIVE = mean(BALIVE_TPA),
+            mean_CNTLIVE = mean(CNTLIVE_TPA),
+            mean_VOLNLIVE = mean(VOLNLIVE_TPA),
+            var_BIOLIVE = var(BIOLIVE_TPA),
+            var_BALIVE = var(BALIVE_TPA),
+            var_CNTLIVE = var(CNTLIVE_TPA),
+            var_VOLNLIVE = var(VOLNLIVE_TPA),
+            mean_nlcd11 = mean(nlcd11),
+            var_nlcd11 = var(nlcd11)) 
+m333_area <- dat_area %>%
+  filter(province == "M333")
+
+mod_area <- stan_lmer(mean_BIOLIVE ~ mean_nlcd11 + 1 + (1 | section),
+          data = m333_area)
+mod_area_lm <- lm(mean_BIOLIVE ~ mean_nlcd11, data = m333_area)
+
+mod_area_df <- data.frame(
+  fitted = mod_area$fitted.values,
+  section = m333_area %>% dplyr::select(section),
+  true = mod_area$y
+)
+
+mod_area_lm_df <- data.frame(
+  fitted = mod_area_lm$fitted.values,
+  section = m333_area %>% dplyr::select(section),
+  true = m333_area$mean_BIOLIVE
+)
+
+
+yardstick::rmse(mod_area_df, truth = true, estimate = fitted)
+yardstick::rmse(mod_area_lm_df, truth = true, estimate = fitted)
+```
+
+```{r}
+MSE_bayes <- (rmse(mod_area_df, truth = true, estimate = fitted) %>% select(.estimate) %>% pull())^2
+MSE_direct <- (m333_area %>%
+  group_by(section) %>%
+  summarize(mean = mean(mean_BIOLIVE)) %>%
+  right_join(m333_area) %>%
+  rmse(truth = mean_BIOLIVE,
+       estimate = mean) %>%
+  dplyr::select(.estimate) %>%
+  pull())^2
+
+aparant_ss <- (MSE_direct / MSE_bayes) * nrow(dat_area)
+aparant_ss
+```
+
+
+```{r}
+cv_bayes <- mod_area_df %>%
+  group_by(section.section) %>%
+  yardstick::rmse(truth = true, estimate = fitted) %>%
+  select(section.section, .estimate) %>%
+  right_join(mod_area_df) %>%
+  group_by(section.section) %>%
+  summarise(cv = .estimate / mean(fitted)) %>%
+  unique()
+
+cv_lm <- mod_area_lm_df %>%
+  group_by(section.section) %>%
+  yardstick::rmse(truth = true, estimate = fitted) %>%
+  select(section.section, .estimate) %>%
+  right_join(mod_area_lm_df) %>%
+  group_by(section.section) %>%
+  summarise(cv = .estimate / mean(fitted)) %>%
+  unique()
+
+left_join(cv_bayes, cv_lm, by = "section.section") %>%
+  rename(cv_bayes = cv.x,
+         cv_lm = cv.y) %>%
+  pivot_longer(cols = c("cv_bayes", "cv_lm")) %>%
+  ggplot(aes(x = section.section,
+             y = value,
+             color = name)) +
+  geom_point() +
+  scale_color_manual(values = c("goldenrod", "forestgreen")) +
+  theme_bw()
+```
+
+
+

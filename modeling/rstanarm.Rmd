@@ -21,11 +21,35 @@ mod <- stan_lmer(BIOLIVE_TPA ~ 1 + nlcd11 + (1 | subsection),
                  data = m333,
                  verbose = FALSE)
 
+# ggplot(m333, aes(x = nlcd11,
+#                  y = BIOLIVE_TPA)) +
+#   geom_point() +
+#   facet_wrap(~subsection)
+
+
 mod_df <- data.frame(
   fitted = mod$fitted.values,
   subsection = m333 %>% dplyr::select(subsection),
   true = mod$y
 )
+
+mod_df %>%
+  yardstick::metrics(truth = true,
+                     estimate = fitted)
+
+sub_mean <- mod_df %>%
+  group_by(subsection) %>%
+  summarize(mean_y = mean(true))
+
+mod_df %>%
+  group_by(subsection) %>%
+  yardstick::rmse(truth = true,
+                  estimate = fitted) %>%
+  left_join(sub_mean) %>%
+  summarize(cv = .estimate / mean_y)
+
+
+
 
 mod_df %>%
   group_by(subsection) %>%
