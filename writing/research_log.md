@@ -3,12 +3,15 @@ Fall, Week 9
 
 ### This Week's Work
 
-This week, I have been working on quantifying uncertainty of our Bayesian estimates, looking at comparisons between relationships of predictors and response at unit/area level, watching FIA videos, and learning a tad about post-stratification. 
+This week, I have been working on quantifying uncertainty of our Bayesian estimates, looking at comparisons between relationships of predictors and response at unit/area level, watching FIA videos, and learning a tad about post-stratification. In particular, I have found that the area level models seem to do much better on a variety of metrics, and with the unit level models where they are at now I am not sure how viable they are. I also watched the FIA video from Radke which was informative in terms of talking about things like the coefficient of variation. When looking at relationships between the predictors and response variables, I found much stronger linear relationships at the area level. 
 
 ### Upcoming Work
 
+I really feel like I need to get to a solid model form and have been struggling there (area vs. unit, what to vary intercepts over, what models to compare the HB model to). 
 
 ### Points of confusion
+
+
 
 
 Fall, Week 8

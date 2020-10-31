@@ -53,7 +53,7 @@ yardstick::rmse(mod_area_lm_df, truth = true, estimate = fitted)
 
 ```{r}
 MSE_bayes <- (rmse(mod_area_df, truth = true, estimate = fitted) %>% select(.estimate) %>% pull())^2
-MSE_direct <- (m333_area %>%
+MSE_direct <- (m333_area %>% # I am not sure if this is how the calc the direct MSE
   group_by(section) %>%
   summarize(mean = mean(mean_BIOLIVE)) %>%
   right_join(m333_area) %>%
@@ -62,7 +62,7 @@ MSE_direct <- (m333_area %>%
   dplyr::select(.estimate) %>%
   pull())^2
 
-aparant_ss <- (MSE_direct / MSE_bayes) * nrow(dat_area)
+aparant_ss <- (MSE_direct / MSE_bayes) * nrow(m333_area)
 aparant_ss
 ```
 
