@@ -1,3 +1,16 @@
+Fall, Week 9
+----------------
+
+### This Week's Work
+
+This week, I have been working on quantifying uncertainty of our Bayesian estimates, looking at comparisons between relationships of predictors and response at unit/area level, watching FIA videos, and learning a tad about post-stratification. 
+
+### Upcoming Work
+
+
+### Points of confusion
+
+
 Fall, Week 8
 ----------------
 
