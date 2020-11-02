@@ -41,30 +41,21 @@ sub_mean <- mod_df %>%
   group_by(subsection) %>%
   summarize(mean_y = mean(true))
 
-mod_df %>%
+bayes_cv <- mod_df %>%
   group_by(subsection) %>%
   yardstick::rmse(truth = true,
                   estimate = fitted) %>%
   left_join(sub_mean) %>%
+  group_by(subsection) %>%
   summarize(cv = .estimate / mean_y)
 
-
-
-
 mod_df %>%
   group_by(subsection) %>%
-  summarize(bayes_cv = sd(fitted) / mean(fitted),
-            direct_cv = sd(true) / mean(true)) %>%
-  summarize(mean(bayes_cv / direct_cv)) %>%
-  pull()
-
-mod_df %>%
-  group_by(subsection) %>%
-  summarize(bayes_cv = sd(fitted) / mean(fitted),
-            direct_cv = sd(true) / mean(true)) %>%
+  summarize(direct_cv = sd(true) / mean(true)) %>%
+  left_join(bayes_cv) %>%
   mutate(subsection = fct_reorder(subsection, direct_cv)) %>%
   ggplot(aes(x = subsection)) +
-  geom_point(aes(y = bayes_cv, color = "goldenrod"), ) +
+  geom_point(aes(y = cv, color = "goldenrod")) +
   geom_point(aes(y = direct_cv, color = "forestgreen")) +
   theme_bw() +
   scale_color_manual(
