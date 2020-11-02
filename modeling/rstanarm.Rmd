@@ -103,6 +103,11 @@ mod_df %>%
   labs(x = "Subsection",
        y = "Estimate")
   
+
+ggplot(data = mod_df,
+       aes(x = fitted,
+           y = true)) +
+  geom_point()
 ```
 
 
