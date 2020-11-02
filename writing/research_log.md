@@ -3,15 +3,21 @@ Fall, Week 9
 
 ### This Week's Work
 
-This week, I have been working on quantifying uncertainty of our Bayesian estimates, looking at comparisons between relationships of predictors and response at unit/area level, watching FIA videos, and learning a tad about post-stratification. In particular, I have found that the area level models seem to do much better on a variety of metrics, and with the unit level models where they are at now I am not sure how viable they are. I also watched the FIA video from Radke which was informative in terms of talking about things like the coefficient of variation. When looking at relationships between the predictors and response variables, I found much stronger linear relationships at the area level. 
+This week, I have been working on quantifying uncertainty of our Bayesian estimates, looking at comparisons between relationships of predictors and response at unit/area level, watching FIA videos, and learning a tad about post-stratification. In particular, I have found that the area level models seem to do much better on a variety of metrics, and with the unit level models where they are at now I am not sure how viable they are. I also watched the FIA video from Radke which was informative in terms of talking about things like the coefficient of variation. When looking at relationships between the predictors and response variables, I found much stronger linear relationships at the area level. Currently, I am feeling somewhat lost in terms of whether or not the unit level models I created are salvagable due to their seemingly large confidence intervals/coefs of variation. 
 
 ### Upcoming Work
 
-I really feel like I need to get to a solid model form and have been struggling there (area vs. unit, what to vary intercepts over, what models to compare the HB model to). 
+* Modeling: Figuring out what models are working well, and which are not. I think there is some work to be done to organize what I have done already and taking a good look at making sure quantification of uncertainty is consistent across models. Also, I think it would be good to asses the goals of which models will be in the thesis and what comparisons need to be made across models. 
+
+* Writing: Start the context chapter
+
+* Other: Watch the other videos Gretchen was talking about
 
 ### Points of confusion
 
+I really feel like I need to get to a solid model form and have been struggling there (area vs. unit, what to vary intercepts over, what models to compare the HB model to). 
 
+In general, refocusing onto what precise work needs to be done to compare models in the thesis. 
 
 
 Fall, Week 8
