@@ -28,7 +28,7 @@ The FIA collects data all throughout the United States by completing a survey ea
 
 While the FIA collects data in all regions of the United States, the analyses done in this thesis uses data from the Interior West Forest Inventory and Analysis Unit (IW-FIA). Data from this unit will henceforth be refered to as data from "the Interior West". The Interior West is defined as a broad region of the United States, covering the states of Arizona, Colorado, Idaho, Montana, Nevada, New Mexico, Utah, and Wyoming. For reference we have provided the Interior West colored green on a map of the continental United States:
 
-```{r, fig.align="center", echo = FALSE}
+```{r, fig.align="center", out.width='100%', echo = FALSE}
 knitr::include_graphics("figure/interior-west-on-usa.png")
 ```
 
@@ -60,7 +60,7 @@ While the data covers the Interior West as a whole, we have very granular inform
 
 While this data contains a multitude of variables, the analyses done in this thesis focus on four key response variables and two explanatory variables. The response variables used are basal area (square-foot), trees per acre, above-ground biomass (lbs), and net volume (ft^3). These variables are coded as `BALIVE_TPA`, `CNTLIVE_TPA`, `BIOLIVE_TPA`, and `VOLNLIVE_TPA`, respectively. We can look at the average of these variables across the Interior West region by ecosubsection in the four following maps of the interior west. 
 
-```{r, fig.align="center", out.height= '65%', out.width='65%', echo = FALSE}
+```{r, fig.align="center", out.width='70%', echo = FALSE}
 knitr::include_graphics("figure/basal.png")
 knitr::include_graphics("figure/biomass.png")
 knitr::include_graphics("figure/count.png")
