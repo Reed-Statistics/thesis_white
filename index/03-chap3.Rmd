@@ -28,7 +28,7 @@ The FIA collects data all throughout the United States by completing a survey ea
 
 While the FIA collects data in all regions of the United States, the analyses done in this thesis uses data from the Interior West Forest Inventory and Analysis Unit (IW-FIA). Data from this unit will henceforth be refered to as data from "the Interior West". The Interior West is defined as a broad region of the United States, covering the states of Arizona, Colorado, Idaho, Montana, Nevada, New Mexico, Utah, and Wyoming. For reference we have provided the Interior West colored green on a map of the continental United States:
 
-```{r, fig.align="center", out.width='100%', echo = FALSE}
+```{r, fig.align="center", out.width='100%', echo = FALSE, fig.cap="The Interior West Region of the United States"}
 knitr::include_graphics("figure/interior-west-on-usa.png")
 ```
 
@@ -60,12 +60,19 @@ While the data covers the Interior West as a whole, we have very granular inform
 
 While this data contains a multitude of variables, the analyses done in this thesis focus on four key response variables and two explanatory variables. The response variables used are basal area (square-foot), trees per acre, above-ground biomass (lbs), and net volume (ft^3). These variables are coded as `BALIVE_TPA`, `CNTLIVE_TPA`, `BIOLIVE_TPA`, and `VOLNLIVE_TPA`, respectively. We can look at the average of these variables across the Interior West region by ecosubsection in the four following maps of the interior west. 
 
-```{r, fig.align="center", out.width='70%', echo = FALSE}
+```{r, fig.align="center", out.width='65%', echo = FALSE, fig.cap="Mean Basal Area in Interior West Ecosubsections"}
 knitr::include_graphics("figure/basal.png")
+```
+```{r, fig.align="center", out.width='65%', echo = FALSE, fig.cap="Mean Biomass in Interior West Ecosubsections"}
 knitr::include_graphics("figure/biomass.png")
+```
+```{r, fig.align="center", out.width='65%', echo = FALSE, fig.cap="Mean Tree Count per acre in Interior West Ecosubsections"}
 knitr::include_graphics("figure/count.png")
+```
+```{r, fig.align="center", out.width='65%', echo = FALSE, fig.cap="Mean Net Volume in Interior West Ecosubsections"}
 knitr::include_graphics("figure/voln.png")
 ```
+
 
 While we have four variables which we will model as response variables throughout the analyses, we also have two predictor variables which will be of much use to us. In particular, forest probability and forest biomass (coded as `forprob` and `forbio`.) These variables which we will treat as predictors are remotely sensed variables, meaning that they were not collected by FIA crew members, but rather with aerial photography and/or satellite imagery. However, we will be using these variables to attempt to predict our response variables in order to understand how good of estimates we can make with this remote data that does not require as much effort to collect. While it may seem unnatural to attempt to predict forest biomass (`BIOLIVE_TPA`) with forest biomass (`forbio`), the differences in the data collection process between the ground level data and remotely sensed data are quite different. 
 

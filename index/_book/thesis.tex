@@ -263,8 +263,14 @@ The FIA collects data all throughout the United States by completing a survey ea
 \section{The Interior West}\label{the-interior-west}}
 
 While the FIA collects data in all regions of the United States, the analyses done in this thesis uses data from the Interior West Forest Inventory and Analysis Unit (IW-FIA). Data from this unit will henceforth be refered to as data from ``the Interior West''. The Interior West is defined as a broad region of the United States, covering the states of Arizona, Colorado, Idaho, Montana, Nevada, New Mexico, Utah, and Wyoming. For reference we have provided the Interior West colored green on a map of the continental United States:
-\begin{center}\includegraphics[width=1\linewidth]{figure/interior-west-on-usa} \end{center}
+\begin{figure}
 
+{\centering \includegraphics[width=1\linewidth]{figure/interior-west-on-usa} 
+
+}
+
+\caption{The Interior West Region of the United States}\label{fig:unnamed-chunk-3}
+\end{figure}
 The IW-FIA collects annual inventories of the Interior West, with the goal of covering 10\% of the region each year, so every decade the IW-FIA should have measurement of 100\% of each Interior West state's forests.
 
 The Interior West region itself contains the states which encompass the Rocky Mountains along with some other smaller mountain ranges. The Interior West contains 855,767 square miles of land which has an extremely diverse landscape ranging from the high mountain peaks of the Rockies to flat desert plains in Nevada and other Interior West states. Along with desert and mountains, the Interior West also includes parts of the Great Plains.
@@ -305,15 +311,42 @@ CNTLIVE\_TPA & BIOLIVE\_TPA & VOLNLIVE\_TPA & subsection & section & province \\
 While the data covers the Interior West as a whole, we have very granular information, as each row represents a plot sampled by the FIA. The data also includes variables that subset the Interior West into provinces which contain ecosections, and these ecosections contain ecosubsections. In our data, on average, each ecosection contains approximately 7.06 ecosubsections, and each province contains an average of 4.86 ecosections. So, an average province then contains just over 34 ecosubsections. The data we have covers a total of 14 provinces, 68 ecosections, and 480 ecosubsections. The hierarchical struture of the data and nestedness of the ecosubsections within ecosections within provinces lends itself to be able to create hierarchical models which borrow strength from surrounding areas.
 
 While this data contains a multitude of variables, the analyses done in this thesis focus on four key response variables and two explanatory variables. The response variables used are basal area (square-foot), trees per acre, above-ground biomass (lbs), and net volume (ft\^{}3). These variables are coded as \texttt{BALIVE\_TPA}, \texttt{CNTLIVE\_TPA}, \texttt{BIOLIVE\_TPA}, and \texttt{VOLNLIVE\_TPA}, respectively. We can look at the average of these variables across the Interior West region by ecosubsection in the four following maps of the interior west.
-\begin{center}\includegraphics[width=0.7\linewidth]{figure/basal} \end{center}
-\begin{center}\includegraphics[width=0.7\linewidth]{figure/biomass} \end{center}
-\begin{center}\includegraphics[width=0.7\linewidth]{figure/count} \end{center}
-\begin{center}\includegraphics[width=0.7\linewidth]{figure/voln} \end{center}
+\begin{figure}
 
+{\centering \includegraphics[width=0.65\linewidth]{figure/basal} 
+
+}
+
+\caption{Mean Basal Area in Interior West Ecosubsections}\label{fig:unnamed-chunk-5}
+\end{figure}
+\begin{figure}
+
+{\centering \includegraphics[width=0.65\linewidth]{figure/biomass} 
+
+}
+
+\caption{Mean Biomass in Interior West Ecosubsections}\label{fig:unnamed-chunk-6}
+\end{figure}
+\begin{figure}
+
+{\centering \includegraphics[width=0.65\linewidth]{figure/count} 
+
+}
+
+\caption{Mean Tree Count per acre in Interior West Ecosubsections}\label{fig:unnamed-chunk-7}
+\end{figure}
+\begin{figure}
+
+{\centering \includegraphics[width=0.65\linewidth]{figure/voln} 
+
+}
+
+\caption{Mean Net Volume in Interior West Ecosubsections}\label{fig:unnamed-chunk-8}
+\end{figure}
 While we have four variables which we will model as response variables throughout the analyses, we also have two predictor variables which will be of much use to us. In particular, forest probability and forest biomass (coded as \texttt{forprob} and \texttt{forbio}.) These variables which we will treat as predictors are remotely sensed variables, meaning that they were not collected by FIA crew members, but rather with aerial photography and/or satellite imagery. However, we will be using these variables to attempt to predict our response variables in order to understand how good of estimates we can make with this remote data that does not require as much effort to collect. While it may seem unnatural to attempt to predict forest biomass (\texttt{BIOLIVE\_TPA}) with forest biomass (\texttt{forbio}), the differences in the data collection process between the ground level data and remotely sensed data are quite different.
 
 These variables are almost all right-skewed, and all take value zero quite often. To get a good sense of the distributions of the six key variables, we can look at histograms of each variable:
-\begin{center}\includegraphics[width=432px]{thesis_files/figure-latex/unnamed-chunk-6-1} \end{center}
+\begin{center}\includegraphics[width=432px]{thesis_files/figure-latex/unnamed-chunk-9-1} \end{center}
 
 It is notable that the \texttt{forprob} variable is bimodal and modes zero and one, while all other variables are extremely right-skewed. This is likely because when \texttt{forprob} is decided from the remotely sensed data, there are likely areas that are either very clearly forest or very clearly not forest (residential areas, for example).
 
