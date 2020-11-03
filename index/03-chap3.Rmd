@@ -111,7 +111,6 @@ It is notable that the `forprob` variable is bimodal and modes zero and one, whi
 Apart from making histograms of our data, we can also summarize the data to see some summary statistics of our six key variables:
 
 ```{r, message = FALSE, warning=FALSE, echo = FALSE, fig.align="center", fig.retina=4}
-library(swfscMisc)
 vars <- list(dat_small$forbio, dat_small$forprob, dat_small$BIOLIVE_TPA,
              dat_small$BALIVE_TPA, dat_small$CNTLIVE_TPA, dat_small$VOLNLIVE_TPA)
 dat_small %>%
@@ -123,7 +122,7 @@ dat_small %>%
     quantile_75 = unlist(lapply(vars, quantile, na.rm = T, probs = 0.75)),
     min = unlist(lapply(vars, min, na.rm = T)),
     max = unlist(lapply(vars, max, na.rm = T)),
-    na_count = unlist(lapply(vars, FUN = na.count))
+    na_count = unlist(lapply(vars, FUN = swfscMisc::na.count))
   ) %>% 
   round(digits = 2) %>%
   gt()
