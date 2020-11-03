@@ -21,6 +21,10 @@ mod <- stan_lmer(BIOLIVE_TPA ~ 1 + nlcd11 + (1 | subsection),
                  data = m333,
                  verbose = FALSE)
 
+mod_poly <- stan_lmer(BIOLIVE_TPA ~ 1 + poly(nlcd11, 2) + (1 | subsection),
+                 data = m333,
+                 verbose = FALSE)
+
 # ggplot(m333, aes(x = nlcd11,
 #                  y = BIOLIVE_TPA)) +
 #   geom_point() +
@@ -31,6 +35,12 @@ mod_df <- data.frame(
   fitted = mod$fitted.values,
   subsection = m333 %>% dplyr::select(subsection),
   true = mod$y
+)
+
+mod_df_poly <- data.frame(
+  fitted = mod_poly$fitted.values,
+  subsection = m333 %>% dplyr::select(subsection),
+  true = mod_poly$y
 )
 
 mod_df %>%
