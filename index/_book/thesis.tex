@@ -69,6 +69,46 @@
 % \usepackage{times} % other fonts are available like times, bookman, charter, palatino
 
 % Syntax highlighting #22
+  \usepackage{color}
+  \usepackage{fancyvrb}
+  \newcommand{\VerbBar}{|}
+  \newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+  \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+  % Add ',fontsize=\small' for more characters per line
+  \usepackage{framed}
+  \definecolor{shadecolor}{RGB}{248,248,248}
+  \newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+  \newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+  \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+  \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+  \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+  \newcommand{\BuiltInTok}[1]{#1}
+  \newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+  \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+  \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+  \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+  \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+  \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+  \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+  \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+  \newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+  \newcommand{\ExtensionTok}[1]{#1}
+  \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+  \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+  \newcommand{\ImportTok}[1]{#1}
+  \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+  \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+  \newcommand{\NormalTok}[1]{#1}
+  \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+  \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+  \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+  \newcommand{\RegionMarkerTok}[1]{#1}
+  \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+  \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+  \newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+  \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+  \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+  \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 
 % To pass between YAML and LaTeX the dollar signs are added by CII
 \title{Hierarchical Bayesian Modeling of Forest Attributes}
@@ -183,59 +223,31 @@ Second paragraph of abstract starts here.
 \mainmatter % here the regular arabic numbering starts
 \pagestyle{fancyplain} % turns page numbering back on
 
-\hypertarget{if-you-have-more-two-advisors-un-silence-line-7}{%
-\chapter{If you have more two advisors, un-silence line 7}\label{if-you-have-more-two-advisors-un-silence-line-7}}
+\hypertarget{introduction}{%
+\chapter*{Introduction}\label{introduction}}
+\addcontentsline{toc}{chapter}{Introduction}
 
-Placeholder
+Welcome to the \emph{R Markdown} thesis template. This template is based on (and in many places copied directly from) the Reed College LaTeX template, but hopefully it will provide a nicer interface for those that have never used TeX or LaTeX before. Using \emph{R Markdown} will also allow you to easily keep track of your analyses in \textbf{R} chunks of code, with the resulting plots and output included as well. The hope is this \emph{R Markdown} template gets you in the habit of doing reproducible research, which benefits you long-term as a researcher, but also will greatly help anyone that is trying to reproduce or build onto your results down the road.
 
-\hypertarget{rmd-basics}{%
-\chapter{R Markdown Basics}\label{rmd-basics}}
+Hopefully, you won't have much of a learning period to go through and you will reap the benefits of a nicely formatted thesis. The use of LaTeX in combination with \emph{Markdown} is more consistent than the output of a word processor, much less prone to corruption or crashing, and the resulting file is smaller than a Word file. While you may have never had problems using Word in the past, your thesis is likely going to be about twice as large and complex as anything you've written before, taxing Word's capabilities. After working with \emph{Markdown} and \textbf{R} together for a few weeks, we are confident this will be your reporting style of choice going forward.
 
-Placeholder
+\textbf{Why use it?}
 
-\hypertarget{lists}{%
-\section{Lists}\label{lists}}
+\emph{R Markdown} creates a simple and straightforward way to interface with the beauty of LaTeX. Packages have been written in \textbf{R} to work directly with LaTeX to produce nicely formatting tables and paragraphs. In addition to creating a user friendly interface to LaTeX, \emph{R Markdown} also allows you to read in your data, to analyze it and to visualize it using \textbf{R} functions, and also to provide the documentation and commentary on the results of your project. Further, it allows for \textbf{R} results to be passed inline to the commentary of your results. You'll see more on this later.
 
-\hypertarget{line-breaks}{%
-\section{Line breaks}\label{line-breaks}}
+\textbf{Who should use it?}
 
-\hypertarget{r-chunks}{%
-\section{R chunks}\label{r-chunks}}
+Anyone who needs to use data analysis, math, tables, a lot of figures, complex cross-references, or who just cares about the final appearance of their document should use \emph{R Markdown}. Of particular use should be anyone in the sciences, but the user-friendly nature of \emph{Markdown} and its ability to keep track of and easily include figures, automatically generate a table of contents, index, references, table of figures, etc. should make it of great benefit to nearly anyone writing a thesis project.
 
-\hypertarget{inline-code}{%
-\section{Inline code}\label{inline-code}}
+\textbf{For additional help with bookdown}
 
-\hypertarget{including-plots}{%
-\section{Including plots}\label{including-plots}}
+Please visit \href{https://bookdown.org/yihui/bookdown/}{the free online bookdown reference guide}.
 
-\hypertarget{loading-and-exploring-data}{%
-\section{Loading and exploring data}\label{loading-and-exploring-data}}
+\hypertarget{context}{%
+\chapter{Context}\label{context}}
 
-\hypertarget{additional-resources}{%
-\section{Additional resources}\label{additional-resources}}
-
-\hypertarget{math-sci}{%
-\chapter{Mathematics and Science}\label{math-sci}}
-
-Placeholder
-
-\hypertarget{math}{%
-\section{Math}\label{math}}
-
-\hypertarget{chemistry-101-symbols}{%
-\section{Chemistry 101: Symbols}\label{chemistry-101-symbols}}
-
-\hypertarget{typesetting-reactions}{%
-\subsection{Typesetting reactions}\label{typesetting-reactions}}
-
-\hypertarget{other-examples-of-reactions}{%
-\subsection{Other examples of reactions}\label{other-examples-of-reactions}}
-
-\hypertarget{physics}{%
-\section{Physics}\label{physics}}
-
-\hypertarget{biology}{%
-\section{Biology}\label{biology}}
+\hypertarget{overview}{%
+\chapter{Overview}\label{overview}}
 
 \hypertarget{data}{%
 \chapter{Data}\label{data}}
@@ -301,7 +313,7 @@ While this data contains a multitude of variables, the analyses done in this the
 While we have four variables which we will model as response variables throughout the analyses, we also have two predictor variables which will be of much use to us. In particular, forest probability and forest biomass (coded as \texttt{forprob} and \texttt{forbio}.) These variables which we will treat as predictors are remotely sensed variables, meaning that they were not collected by FIA crew members, but rather with aerial photography and/or satellite imagery. However, we will be using these variables to attempt to predict our response variables in order to understand how good of estimates we can make with this remote data that does not require as much effort to collect. While it may seem unnatural to attempt to predict forest biomass (\texttt{BIOLIVE\_TPA}) with forest biomass (\texttt{forbio}), the differences in the data collection process between the ground level data and remotely sensed data are quite different.
 
 These variables are almost all right-skewed, and all take value zero quite often. To get a good sense of the distributions of the six key variables, we can look at histograms of each variable:
-\begin{center}\includegraphics[width=432px]{thesis_files/figure-latex/unnamed-chunk-4-1} \end{center}
+\begin{center}\includegraphics[width=432px]{thesis_files/figure-latex/unnamed-chunk-6-1} \end{center}
 
 It is notable that the \texttt{forprob} variable is bimodal and modes zero and one, while all other variables are extremely right-skewed. This is likely because when \texttt{forprob} is decided from the remotely sensed data, there are likely areas that are either very clearly forest or very clearly not forest (residential areas, for example).
 
@@ -364,17 +376,67 @@ And here's some other random info: the first paragraph after a chapter title or 
 This first appendix includes all of the R chunks of code that were hidden throughout the document (using the \texttt{include\ =\ FALSE} chunk tag) to help with readibility and/or setup.
 
 \textbf{In the main Rmd file}
-
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# This chunk ensures that the thesisdown package is}
+\CommentTok{# installed and loaded. This thesisdown package includes}
+\CommentTok{# the template files for the thesis.}
+\ControlFlowTok{if}\NormalTok{ (}\OperatorTok{!}\KeywordTok{require}\NormalTok{(remotes)) \{}
+  \ControlFlowTok{if}\NormalTok{ (params}\OperatorTok{$}\StringTok{`}\DataTypeTok{Install needed packages for \{thesisdown\}}\StringTok{`}\NormalTok{) \{}
+    \KeywordTok{install.packages}\NormalTok{(}\StringTok{"remotes"}\NormalTok{, }\DataTypeTok{repos =} \StringTok{"https://cran.rstudio.com"}\NormalTok{)}
+\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
+    \KeywordTok{stop}\NormalTok{(}
+      \KeywordTok{paste}\NormalTok{(}\StringTok{'You need to run install.packages("remotes")",}
+\StringTok{            "first in the Console.'}\NormalTok{)}
+\NormalTok{    )}
+\NormalTok{  \}}
+\NormalTok{\}}
+\ControlFlowTok{if}\NormalTok{ (}\OperatorTok{!}\KeywordTok{require}\NormalTok{(thesisdown)) \{}
+  \ControlFlowTok{if}\NormalTok{ (params}\OperatorTok{$}\StringTok{`}\DataTypeTok{Install needed packages for \{thesisdown\}}\StringTok{`}\NormalTok{) \{}
+\NormalTok{    remotes}\OperatorTok{::}\KeywordTok{install_github}\NormalTok{(}\StringTok{"ismayc/thesisdown"}\NormalTok{)}
+\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
+    \KeywordTok{stop}\NormalTok{(}
+      \KeywordTok{paste}\NormalTok{(}
+        \StringTok{"You need to run"}\NormalTok{,}
+        \StringTok{'remotes::install_github("ismayc/thesisdown")'}\NormalTok{,}
+        \StringTok{"first in the Console."}
+\NormalTok{      )}
+\NormalTok{    )}
+\NormalTok{  \}}
+\NormalTok{\}}
+\KeywordTok{library}\NormalTok{(thesisdown)}
+\CommentTok{# Set how wide the R output will go}
+\KeywordTok{options}\NormalTok{(}\DataTypeTok{width =} \DecValTok{70}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 \textbf{In Chapter \ref{ref-labels}:}
 
 \hypertarget{the-second-appendix-for-fun}{%
 \chapter{The Second Appendix, for Fun}\label{the-second-appendix-for-fun}}
 
+\backmatter
+
 \hypertarget{references}{%
 \chapter*{References}\label{references}}
 \addcontentsline{toc}{chapter}{References}
 
-Placeholder
+\markboth{References}{References}
+
+\noindent
+
+\setlength{\parindent}{-0.20in}
+\setlength{\leftskip}{0.20in}
+\setlength{\parskip}{8pt}
+
+\hypertarget{refs}{}
+\leavevmode\hypertarget{ref-angel2000}{}%
+Angel, E. (2000). \emph{Interactive computer graphics : A top-down approach with opengl}. Boston, MA: Addison Wesley Longman.
+
+\leavevmode\hypertarget{ref-angel2001}{}%
+Angel, E. (2001a). \emph{Batch-file computer graphics : A bottom-up approach with quicktime}. Boston, MA: Wesley Addison Longman.
+
+\leavevmode\hypertarget{ref-angel2002a}{}%
+Angel, E. (2001b). \emph{Test second book by angel}. Boston, MA: Wesley Addison Longman.
 
 
 % Index?

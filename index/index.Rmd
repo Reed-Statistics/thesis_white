@@ -4,9 +4,7 @@ author: 'Grayson White'
 date: 'May 2021'
 institution: 'Reed College'
 division: 'Mathematics and Natural Sciences'
-advisor: 'Kelly McConville'
-# If you have more two advisors, un-silence line 7
-#altadvisor: 'Your Other Advisor'
+advisor: 'Kelly McConville' 
 department: 'Mathematics'
 degree: 'Bachelor of Arts'
 knit: bookdown::render_book
