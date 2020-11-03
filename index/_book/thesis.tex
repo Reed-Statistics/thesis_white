@@ -180,6 +180,10 @@ The preface pretty much says it all.
 Second paragraph of abstract starts here.
 }
 
+	\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{longtable}
 % End of CII addition
 %%
 %% End Preamble
@@ -589,174 +593,114 @@ Many of the symbols you will need can be found on the math page \url{https://web
 
 You will probably find the resources at \url{https://www.lecb.ncifcrf.gov/~toms/latex.html} helpful, particularly the links to bsts for various journals. You may also be interested in TeXShade for nucleotide typesetting (\url{https://homepages.uni-tuebingen.de/beitz/txe.html}). Be sure to read the proceeding chapter on graphics and tables.
 
-\hypertarget{ref-labels}{%
-\chapter{Tables, Graphics, References, and Labels}\label{ref-labels}}
+\hypertarget{data}{%
+\chapter{Data}\label{data}}
 
-\hypertarget{tables}{%
-\section{Tables}\label{tables}}
+\hypertarget{the-forest-inventory-analysis-program}{%
+\section{The Forest Inventory \& Analysis Program}\label{the-forest-inventory-analysis-program}}
 
-In addition to the tables that can be automatically generated from a data frame in \textbf{R} that you saw in \protect\hyperlink{rmd-basics}{R Markdown Basics} using the \texttt{kable()} function, you can also create tables using \emph{pandoc}. (More information is available at \url{https://pandoc.org/README.html\#tables}.) This might be useful if you don't have values specifically stored in \textbf{R}, but you'd like to display them in table form. Below is an example. Pay careful attention to the alignment in the table and hyphens to create the rows and columns.
-\begin{longtable}[]{@{}ccc@{}}
-\caption{\label{tab:inher} Correlation of Inheritance Factors for Parents and Child}\tabularnewline
+The Forest Inventory \& Analysis Program (FIA) is a program within the United States Forest Service which aims to collect information and data in order to assess the country's forests. The FIA has been continuously operating since 1930 and their official mission is to ``make and keep current a comprehensive inventory and analysis of the present and prospective conditions of and requirements for the renewable resources of the forest and rangelands of the US.'' (Source: \url{https://www.fia.fs.fed.us/about/about_us/}).
+
+The FIA collects data all throughout the United States by completing a survey each year of many plots of land. The units measured by the FIA and their ground crews are approximately 30 m by 30 m hexagonal units. Due to the vast size of the United States and immense amount of forested land, it would be nearly impossible for the FIA to attain population data for the country, so they use sampling instead. The FIA samples from the population of 30 m by 30 m hexagonal units by using a geographically-based systematic sampling design (Source: McConville et al, 2020). The FIA chooses these samples by first overlaying a hexagonal grid over the United States where each hexagon contains approximately 6000 acres of land. Then, they fill these hexagons with much smaller hexagons and randomly sample from the population of small hexagons. Then, ground crews go to these sampled small hexagons and collect variables such as basal area, trees per acre, etc. This plot level data is what we are working with throughout the duration of the thesis.
+
+\hypertarget{the-interior-west}{%
+\section{The Interior West}\label{the-interior-west}}
+
+While the FIA collects data in all regions of the United States, the analyses done in this thesis uses data from the Interior West Forest Inventory and Analysis Unit (IW-FIA). Data from this unit will henceforth be refered to as data from ``the Interior West''. The Interior West is defined as a broad region of the United States, covering the states of Arizona, Colorado, Idaho, Montana, Nevada, New Mexico, Utah, and Wyoming. For reference we have provided the Interior West colored green on a map of the continental United States:
+\begin{center}\includegraphics[width=29.17in]{figure/interior-west-on-usa} \end{center}
+
+The IW-FIA collects annual inventories of the Interior West, with the goal of covering 10\% of the region each year, so every decade the IW-FIA should have measurement of 100\% of each Interior West state's forests.
+
+The Interior West region itself contains the states which encompass the Rocky Mountains along with some other smaller mountain ranges. The Interior West contains 855,767 square miles of land which has an extremely diverse landscape ranging from the high mountain peaks of the Rockies to flat desert plains in Nevada and other Interior West states. Along with desert and mountains, the Interior West also includes parts of the Great Plains.
+
+\hypertarget{our-data-specifics}{%
+\section{Our Data: Specifics}\label{our-data-specifics}}
+
+The data used in this thesis was collected by the Forest Inventory and Analysis Program (FIA) in the span of 10 years from 2007 to 2017. While this data was collected over this 10 year period, the analyses done throughout this thesis are under the assumption that this is a ``snapshot'' of the Interior West at some moment in time. Thus we do not consider any temporal features of this dataset, however the inventory year information is available to us. The data we have is plot-level data for the Interior West region of the United States, where the data for each plot is collected by FIA and its crew members.
+
+The dataframe used in this thesis is a joined dataframe derived from two FIA datasets of the Interior West, \texttt{spatial} and \texttt{response}. The \texttt{spatial} dataframe contains 89444 observations and 70 variables, most notably two remotely sensed predictor variables (\texttt{forprob} and \texttt{forbio}), location information, and ecosubsection. The \texttt{response} dataframe contains 86085 observations and 67 variables, most notably four predictor variables collected by FIA crew members (\texttt{BALIVE\_TPA}, \texttt{CNTLIVE\_TPA}, \texttt{BIOLIVE\_TPA}, and \texttt{VOLNLIVE\_TPA}), location information, and ecosubsection. We join these dataframes by their unique plot number, and subset the number of variables significantly to 19 variables which contain plot information, longitude \& lattitude, elevation, predictor variables, response variables, ecosubsection, ecosection, and province. The resulting joined dataframe has 86085 rows as these are the rows which share the same plots between the \texttt{response} and \texttt{spatial} dataframes. We can see the first few rows of the dataframe with relevant columns selected:
+
+\captionsetup[table]{labelformat=empty,skip=1pt}
+\begin{longtable}{rrrrrrrrr}
 \toprule
-\begin{minipage}[b]{0.29\columnwidth}\centering
-Factors\strut
-\end{minipage} & \begin{minipage}[b]{0.46\columnwidth}\centering
-Correlation between Parents \& Child\strut
-\end{minipage} & \begin{minipage}[b]{0.16\columnwidth}\centering
-Inherited\strut
-\end{minipage}\tabularnewline
+PLOT & LON & LAT & ELEV & forgrp & forprob & demLF & forbio & BALIVE\_TPA \\ 
 \midrule
-\endfirsthead
-\toprule
-\begin{minipage}[b]{0.29\columnwidth}\centering
-Factors\strut
-\end{minipage} & \begin{minipage}[b]{0.46\columnwidth}\centering
-Correlation between Parents \& Child\strut
-\end{minipage} & \begin{minipage}[b]{0.16\columnwidth}\centering
-Inherited\strut
-\end{minipage}\tabularnewline
-\midrule
-\endhead
-\begin{minipage}[t]{0.29\columnwidth}\centering
-Education\strut
-\end{minipage} & \begin{minipage}[t]{0.46\columnwidth}\centering
--0.49\strut
-\end{minipage} & \begin{minipage}[t]{0.16\columnwidth}\centering
-Yes\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.29\columnwidth}\centering
-Socio-Economic Status\strut
-\end{minipage} & \begin{minipage}[t]{0.46\columnwidth}\centering
-0.28\strut
-\end{minipage} & \begin{minipage}[t]{0.16\columnwidth}\centering
-Slight\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.29\columnwidth}\centering
-Income\strut
-\end{minipage} & \begin{minipage}[t]{0.46\columnwidth}\centering
-0.08\strut
-\end{minipage} & \begin{minipage}[t]{0.16\columnwidth}\centering
-No\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.29\columnwidth}\centering
-Family Size\strut
-\end{minipage} & \begin{minipage}[t]{0.46\columnwidth}\centering
-0.18\strut
-\end{minipage} & \begin{minipage}[t]{0.16\columnwidth}\centering
-Slight\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.29\columnwidth}\centering
-Occupational Prestige\strut
-\end{minipage} & \begin{minipage}[t]{0.46\columnwidth}\centering
-0.21\strut
-\end{minipage} & \begin{minipage}[t]{0.16\columnwidth}\centering
-Slight\strut
-\end{minipage}\tabularnewline
+83657 & -111.3261 & 35.02106 & 6680 & 180 & 1 & 2080 & 12.67684 & 236.1169 \\ 
+87963 & -109.9398 & 36.59399 & 5550 & 0 & 0 & 1700 & 0.00000 & 0.0000 \\ 
+84186 & -109.9925 & 36.27860 & 7510 & 180 & 1 & 2305 & 10.57715 & 105.3212 \\ 
+87499 & -109.9058 & 35.32838 & 5630 & 0 & 0 & 1717 & 0.00000 & 0.0000 \\ 
+88091 & -109.9024 & 34.83752 & 5510 & 0 & 0 & 1672 & 0.00000 & 0.0000 \\ 
+80842 & -109.9774 & 33.52990 & 5920 & 180 & 1 & 1828 & 14.46534 & 149.7189 \\ 
 \bottomrule
 \end{longtable}
-We can also create a link to the table by doing the following: Table \ref{tab:inher}. If you go back to \protect\hyperlink{loading-and-exploring-data}{Loading and exploring data} and look at the \texttt{kable} table, we can create a reference to this max delays table too: Table \ref{tab:maxdelays}. The addition of the \texttt{(\textbackslash{}\#tab:inher)} option to the end of the table caption allows us to then make a reference to Table \texttt{\textbackslash{}@ref(tab:label)}. Note that this reference could appear anywhere throughout the document after the table has appeared.
+\captionsetup[table]{labelformat=empty,skip=1pt}
+\begin{longtable}{rrrlll}
+\toprule
+CNTLIVE\_TPA & BIOLIVE\_TPA & VOLNLIVE\_TPA & subsection & section & province \\ 
+\midrule
+555.3678 & 43.08024 & 2066.3352 & M313Ak & M313A & M313 \\ 
+0.0000 & 0.00000 & 0.0000 & 313Ac & 313A & 313 \\ 
+108.3248 & 18.02096 & 988.9084 & 313Ap & 313A & 313 \\ 
+0.0000 & 0.00000 & 0.0000 & 313Db & 313D & 313 \\ 
+0.0000 & 0.00000 & 0.0000 & 313Db & 313D & 313 \\ 
+273.5608 & 21.76656 & 1381.8511 & 313Cd & 313C & 313 \\ 
+\bottomrule
+\end{longtable}
+While the data covers the Interior West as a whole, we have very granular information, as each row represents a plot sampled by the FIA. The data also includes variables that subset the Interior West into provinces which contain ecosections, and these ecosections contain ecosubsections. In our data, on average, each ecosection contains approximately 7.06 ecosubsections, and each province contains an average of 4.86 ecosections. So, an average province then contains just over 34 ecosubsections. The data we have covers a total of 14 provinces, 68 ecosections, and 480 ecosubsections. The hierarchical struture of the data and nestedness of the ecosubsections within ecosections within provinces lends itself to be able to create hierarchical models which borrow strength from surrounding areas.
 
-\clearpage
+While this data contains a multitude of variables, the analyses done in this thesis focus on four key response variables and two explanatory variables. The response variables used are basal area (square-foot), trees per acre, above-ground biomass (lbs), and net volume (ft\^{}3). These variables are coded as \texttt{BALIVE\_TPA}, \texttt{CNTLIVE\_TPA}, \texttt{BIOLIVE\_TPA}, and \texttt{VOLNLIVE\_TPA}, respectively. We can look at the average of these variables across the Interior West region by ecosubsection in the four following maps of the interior west.
+\begin{center}\includegraphics[width=0.65\linewidth,height=0.65\textheight]{figure/basal} \end{center}
+\begin{center}\includegraphics[width=0.65\linewidth,height=0.65\textheight]{figure/biomass} \end{center}
+\begin{center}\includegraphics[width=0.65\linewidth,height=0.65\textheight]{figure/count} \end{center}
+\begin{center}\includegraphics[width=0.65\linewidth,height=0.65\textheight]{figure/voln} \end{center}
 
-\hypertarget{figures}{%
-\section{Figures}\label{figures}}
+While we have four variables which we will model as response variables throughout the analyses, we also have two predictor variables which will be of much use to us. In particular, forest probability and forest biomass (coded as \texttt{forprob} and \texttt{forbio}.) These variables which we will treat as predictors are remotely sensed variables, meaning that they were not collected by FIA crew members, but rather with aerial photography and/or satellite imagery. However, we will be using these variables to attempt to predict our response variables in order to understand how good of estimates we can make with this remote data that does not require as much effort to collect. While it may seem unnatural to attempt to predict forest biomass (\texttt{BIOLIVE\_TPA}) with forest biomass (\texttt{forbio}), the differences in the data collection process between the ground level data and remotely sensed data are quite different.
 
-If your thesis has a lot of figures, \emph{R Markdown} might behave better for you than that other word processor. One perk is that it will automatically number the figures accordingly in each chapter. You'll also be able to create a label for each figure, add a caption, and then reference the figure in a way similar to what we saw with tables earlier. If you label your figures, you can move the figures around and \emph{R Markdown} will automatically adjust the numbering for you. No need for you to remember! So that you don't have to get too far into LaTeX to do this, a couple \textbf{R} functions have been created for you to assist. You'll see their use below.
+These variables are almost all right-skewed, and all take value zero quite often. To get a good sense of the distributions of the six key variables, we can look at histograms of each variable:
+\begin{center}\includegraphics[width=432px]{thesis_files/figure-latex/unnamed-chunk-6-1} \end{center}
 
-In the \textbf{R} chunk below, we will load in a picture stored as \texttt{reed.jpg} in our main directory. We then give it the caption of ``Reed logo'', the label of ``reedlogo'', and specify that this is a figure. Make note of the different \textbf{R} chunk options that are given in the R Markdown file (not shown in the knitted document).
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{include_graphics}\NormalTok{(}\DataTypeTok{path =} \StringTok{"figure/reed.jpg"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-\begin{figure}
-\includegraphics[width=3.47in]{figure/reed} \caption{Reed logo}\label{fig:reedlogo}
-\end{figure}
-Here is a reference to the Reed logo: Figure \ref{fig:reedlogo}. Note the use of the \texttt{fig:} code here. By naming the \textbf{R} chunk that contains the figure, we can then reference that figure later as done in the first sentence here. We can also specify the caption for the figure via the R chunk option \texttt{fig.cap}.
+It is notable that the \texttt{forprob} variable is bimodal and modes zero and one, while all other variables are extremely right-skewed. This is likely because when \texttt{forprob} is decided from the remotely sensed data, there are likely areas that are either very clearly forest or very clearly not forest (residential areas, for example).
 
-\clearpage
+Apart from making histograms of our data, we can also summarize the data to see some summary statistics of our six key variables:
 
-Below we will investigate how to save the output of an \textbf{R} plot and label it in a way similar to that done above. Recall the \texttt{flights} dataset from Chapter \ref{rmd-basics}. (Note that we've shown a different way to reference a section or chapter here.) We will next explore a bar graph with the mean flight departure delays by airline from Portland for 2014.
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{mean_delay_by_carrier <-}\StringTok{ }\NormalTok{flights }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{group_by}\NormalTok{(carrier) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{summarize}\NormalTok{(}\DataTypeTok{mean_dep_delay =} \KeywordTok{mean}\NormalTok{(dep_delay))}
-\end{Highlighting}
-\end{Shaded}
-\begin{verbatim}
-`summarise()` ungrouping output (override with `.groups` argument)
-\end{verbatim}
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{ggplot}\NormalTok{(mean_delay_by_carrier, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ carrier, }\DataTypeTok{y =}\NormalTok{ mean_dep_delay)) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{geom_bar}\NormalTok{(}\DataTypeTok{position =} \StringTok{"identity"}\NormalTok{, }\DataTypeTok{stat =} \StringTok{"identity"}\NormalTok{, }\DataTypeTok{fill =} \StringTok{"red"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-\begin{figure}
-\centering
-\includegraphics{thesis_files/figure-latex/delaysboxplot-1.pdf}
-\caption{\label{fig:delaysboxplot}Mean Delays by Airline}
-\end{figure}
-Here is a reference to this image: Figure \ref{fig:delaysboxplot}.
+\captionsetup[table]{labelformat=empty,skip=1pt}
+\begin{longtable}{lrrrrrrr}
+\toprule
+variable & mean & quantile\_25 & median & quantile\_75 & min & max & na\_count \\ 
+\midrule
+forbio & 6.66 & 0 & 0.00 & 0.00 & 0 & 118.00 & 0 \\ 
+forprob & 0.27 & 0 & 0.07 & 0.56 & 0 & 1.00 & 1 \\ 
+BIOLIVE\_TPA & 6.23 & 0 & 0.00 & 1.98 & 0 & 244.35 & 0 \\ 
+BALIVE\_TPA & 22.75 & 0 & 0.00 & 14.75 & 0 & 469.39 & 0 \\ 
+CNTLIVE\_TPA & 98.60 & 0 & 0.00 & 30.09 & 0 & 6677.93 & 0 \\ 
+VOLNLIVE\_TPA & 342.32 & 0 & 0.00 & 74.69 & 0 & 16435.55 & 0 \\ 
+\bottomrule
+\end{longtable}
+From this table, we can see how heavily skewed these key variables are, with over 25\% of the observations for each variable being zero. This does not stop us from doing meaningful analyses though, as the sample size of this dataset is so large (\(n = 86085\)) and thus we have plenty of data to create models with.
 
-A table linking these carrier codes to airline names is available at \url{https://github.com/ismayc/pnwflights14/blob/master/data/airlines.csv}.
+\hypertarget{data-structure-hierarchy}{%
+\section{Data Structure \& Hierarchy}\label{data-structure-hierarchy}}
 
-\clearpage
+As hinted at throughout earlier parts of the chapter, the data used in this thesis has a hierarchical structure, where ecosubsections are nested within ecosections which are in turn nested within provinces. Every plot has each level of granularity of location data recorded and this is what allows us to choose how far to borrow strength from other plots.
 
-Next, we will explore the use of the \texttt{out.extra} chunk option, which can be used to shrink or expand an image loaded from a file by specifying \texttt{"scale=\ "}. Here we use the mathematical graph stored in the ``subdivision.pdf'' file.
-\begin{figure}
-\includegraphics[scale=0.75]{figure/subdivision} \caption{Subdiv. graph}\label{fig:subd}
-\end{figure}
-Here is a reference to this image: Figure \ref{fig:subd}. Note that \texttt{echo=FALSE} is specified so that the \textbf{R} code is hidden in the document.
+The largest motivation for hierarchical modeling in this particular application is that observations are more similar within the hierarchies which we split them into. To understand if this is true, we can do a preliminary analysis on the data by performing three-way ANOVAs for each key variable with predictors \texttt{province}, \texttt{section}, and \texttt{subsection}. By just looking at the MSE of the ANOVA results, we can see that we should expect more homogeneity within ecosubsections:
 
-\textbf{More Figure Stuff}
+\captionsetup[table]{labelformat=empty,skip=1pt}
+\begin{longtable}{lrrr}
+\toprule
+variable & province\_MSE & ecosection\_MSE & ecosubsection\_MSE \\ 
+\midrule
+forbio & 614761.0 & 21713.4 & 6163.8 \\ 
+forprob & 362.2 & 15.1 & 4.2 \\ 
+BIOLIVE\_TPA & 500958.2 & 17910.5 & 5456.2 \\ 
+BALIVE\_TPA & 3568986.3 & 118683.2 & 47835.7 \\ 
+CNTLIVE\_TPA & 85365657.9 & 2512475.9 & 1287922.7 \\ 
+VOLNLIVE\_TPA & 1559809302.3 & 60049667.7 & 18445636.8 \\ 
+\bottomrule
+\end{longtable}
+(* Need a better way to output this table and show province level model is significant)
 
-Lastly, we will explore how to rotate and enlarge figures using the \texttt{out.extra} chunk option. (Currently this only works in the PDF version of the book.)
-\begin{figure}
-\includegraphics[angle=180, scale=1.1]{figure/subdivision} \caption{A Larger Figure, Flipped Upside Down}\label{fig:subd2}
-\end{figure}
-As another example, here is a reference: Figure \ref{fig:subd2}.
-
-\hypertarget{footnotes-and-endnotes}{%
-\section{Footnotes and Endnotes}\label{footnotes-and-endnotes}}
-
-You might want to footnote something.\footnote{footnote text} The footnote will be in a smaller font and placed appropriately. Endnotes work in much the same way. More information can be found about both on the CUS site or feel free to reach out to \href{mailto:data@reed.edu}{\nolinkurl{data@reed.edu}}.
-
-\hypertarget{bibliographies}{%
-\section{Bibliographies}\label{bibliographies}}
-
-Of course you will need to cite things, and you will probably accumulate an armful of sources. There are a variety of tools available for creating a bibliography database (stored with the .bib extension). In addition to BibTeX suggested below, you may want to consider using the free and easy-to-use tool called Zotero. The Reed librarians have created Zotero documentation at \url{https://libguides.reed.edu/citation/zotero}. In addition, a tutorial is available from Middlebury College at \url{https://sites.middlebury.edu/zoteromiddlebury/}.
-
-\emph{R Markdown} uses \emph{pandoc} (\url{https://pandoc.org/}) to build its bibliographies. One nice caveat of this is that you won't have to do a second compile to load in references as standard LaTeX requires. To cite references in your thesis (after creating your bibliography database), place the reference name inside square brackets and precede it by the ``at'' symbol. For example, here's a reference to a book about worrying: (Molina \& Borkovec, 1994). This \texttt{Molina1994} entry appears in a file called \texttt{thesis.bib} in the \texttt{bib} folder. This bibliography database file was created by a program called BibTeX. You can call this file something else if you like (look at the YAML header in the main .Rmd file) and, by default, is to placed in the \texttt{bib} folder.
-
-For more information about BibTeX and bibliographies, see our CUS site (\url{https://web.reed.edu/cis/help/latex/index.html})\footnote{Reed~College (2007)}. There are three pages on this topic: \emph{bibtex} (which talks about using BibTeX, at \url{https://web.reed.edu/cis/help/latex/bibtex.html}), \emph{bibtexstyles} (about how to find and use the bibliography style that best suits your needs, at \url{https://web.reed.edu/cis/help/latex/bibtexstyles.html}) and \emph{bibman} (which covers how to make and maintain a bibliography by hand, without BibTeX, at \url{https://web.reed.edu/cis/help/latex/bibman.html}). The last page will not be useful unless you have only a few sources.
-
-If you look at the YAML header at the top of the main .Rmd file you can see that we can specify the style of the bibliography by referencing the appropriate csl file. You can download a variety of different style files at \url{https://www.zotero.org/styles}. Make sure to download the file into the csl folder.
-
-\vfill
-
-\textbf{Tips for Bibliographies}
-\begin{itemize}
-\tightlist
-\item
-  Like with thesis formatting, the sooner you start compiling your bibliography for something as large as thesis, the better. Typing in source after source is mind-numbing enough; do you really want to do it for hours on end in late April? Think of it as procrastination.
-\item
-  The cite key (a citation's label) needs to be unique from the other entries.
-\item
-  When you have more than one author or editor, you need to separate each author's name by the word ``and'' e.g. \texttt{Author\ =\ \{Noble,\ Sam\ and\ Youngberg,\ Jessica\},}.
-\item
-  Bibliographies made using BibTeX (whether manually or using a manager) accept LaTeX markup, so you can italicize and add symbols as necessary.
-\item
-  To force capitalization in an article title or where all lowercase is generally used, bracket the capital letter in curly braces.
-\item
-  You can add a Reed Thesis citation\footnote{Noble (2002)} option. The best way to do this is to use the phdthesis type of citation, and use the optional ``type'' field to enter ``Reed thesis'' or ``Undergraduate thesis.''
-\end{itemize}
-\hypertarget{anything-else}{%
-\section{Anything else?}\label{anything-else}}
-
-If you'd like to see examples of other things in this template, please contact the Data @ Reed team (email \href{mailto:data@reed.edu}{\nolinkurl{data@reed.edu}}) with your suggestions. We love to see people using \emph{R Markdown} for their theses, and are happy to help.
+These results allow us to conclude that it is reasonable to believe that observations within a given province are more homogeneous than observations throughout the Interior West. Thus, if we want ecosubsection level estimates of variables, it makes sense to borrow information from other ecosubsections within the same province as each other. This data structure and homogeneity within provinces is what drives the analyses done henceforth in this thesis.
 
 \hypertarget{conclusion}{%
 \chapter*{Conclusion}\label{conclusion}}
@@ -810,80 +754,7 @@ This first appendix includes all of the R chunks of code that were hidden throug
 \end{Highlighting}
 \end{Shaded}
 \textbf{In Chapter \ref{ref-labels}:}
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# This chunk ensures that the thesisdown package is}
-\CommentTok{# installed and loaded. This thesisdown package includes}
-\CommentTok{# the template files for the thesis and also two functions}
-\CommentTok{# used for labeling and referencing}
-\ControlFlowTok{if}\NormalTok{ (}\OperatorTok{!}\KeywordTok{require}\NormalTok{(remotes)) \{}
-  \ControlFlowTok{if}\NormalTok{ (params}\OperatorTok{$}\StringTok{`}\DataTypeTok{Install needed packages for \{thesisdown\}}\StringTok{`}\NormalTok{) \{}
-    \KeywordTok{install.packages}\NormalTok{(}\StringTok{"remotes"}\NormalTok{, }\DataTypeTok{repos =} \StringTok{"https://cran.rstudio.com"}\NormalTok{)}
-\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
-    \KeywordTok{stop}\NormalTok{(}
-      \KeywordTok{paste}\NormalTok{(}
-        \StringTok{'You need to run install.packages("remotes")'}\NormalTok{,}
-        \StringTok{"first in the Console."}
-\NormalTok{      )}
-\NormalTok{    )}
-\NormalTok{  \}}
-\NormalTok{\}}
-\ControlFlowTok{if}\NormalTok{ (}\OperatorTok{!}\KeywordTok{require}\NormalTok{(dplyr)) \{}
-  \ControlFlowTok{if}\NormalTok{ (params}\OperatorTok{$}\StringTok{`}\DataTypeTok{Install needed packages for \{thesisdown\}}\StringTok{`}\NormalTok{) \{}
-    \KeywordTok{install.packages}\NormalTok{(}\StringTok{"dplyr"}\NormalTok{, }\DataTypeTok{repos =} \StringTok{"https://cran.rstudio.com"}\NormalTok{)}
-\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
-    \KeywordTok{stop}\NormalTok{(}
-      \KeywordTok{paste}\NormalTok{(}
-        \StringTok{'You need to run install.packages("dplyr")'}\NormalTok{,}
-        \StringTok{"first in the Console."}
-\NormalTok{      )}
-\NormalTok{    )}
-\NormalTok{  \}}
-\NormalTok{\}}
-\ControlFlowTok{if}\NormalTok{ (}\OperatorTok{!}\KeywordTok{require}\NormalTok{(ggplot2)) \{}
-  \ControlFlowTok{if}\NormalTok{ (params}\OperatorTok{$}\StringTok{`}\DataTypeTok{Install needed packages for \{thesisdown\}}\StringTok{`}\NormalTok{) \{}
-    \KeywordTok{install.packages}\NormalTok{(}\StringTok{"ggplot2"}\NormalTok{, }\DataTypeTok{repos =} \StringTok{"https://cran.rstudio.com"}\NormalTok{)}
-\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
-    \KeywordTok{stop}\NormalTok{(}
-      \KeywordTok{paste}\NormalTok{(}
-        \StringTok{'You need to run install.packages("ggplot2")'}\NormalTok{,}
-        \StringTok{"first in the Console."}
-\NormalTok{      )}
-\NormalTok{    )}
-\NormalTok{  \}}
-\NormalTok{\}}
-\ControlFlowTok{if}\NormalTok{ (}\OperatorTok{!}\KeywordTok{require}\NormalTok{(bookdown)) \{}
-  \ControlFlowTok{if}\NormalTok{ (params}\OperatorTok{$}\StringTok{`}\DataTypeTok{Install needed packages for \{thesisdown\}}\StringTok{`}\NormalTok{) \{}
-    \KeywordTok{install.packages}\NormalTok{(}\StringTok{"bookdown"}\NormalTok{, }\DataTypeTok{repos =} \StringTok{"https://cran.rstudio.com"}\NormalTok{)}
-\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
-    \KeywordTok{stop}\NormalTok{(}
-      \KeywordTok{paste}\NormalTok{(}
-        \StringTok{'You need to run install.packages("bookdown")'}\NormalTok{,}
-        \StringTok{"first in the Console."}
-\NormalTok{      )}
-\NormalTok{    )}
-\NormalTok{  \}}
-\NormalTok{\}}
-\ControlFlowTok{if}\NormalTok{ (}\OperatorTok{!}\KeywordTok{require}\NormalTok{(thesisdown)) \{}
-  \ControlFlowTok{if}\NormalTok{ (params}\OperatorTok{$}\StringTok{`}\DataTypeTok{Install needed packages for \{thesisdown\}}\StringTok{`}\NormalTok{) \{}
-\NormalTok{    remotes}\OperatorTok{::}\KeywordTok{install_github}\NormalTok{(}\StringTok{"ismayc/thesisdown"}\NormalTok{)}
-\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
-    \KeywordTok{stop}\NormalTok{(}
-      \KeywordTok{paste}\NormalTok{(}
-        \StringTok{"You need to run"}\NormalTok{,}
-        \StringTok{'remotes::install_github("ismayc/thesisdown")'}\NormalTok{,}
-        \StringTok{"first in the Console."}
-\NormalTok{      )}
-\NormalTok{    )}
-\NormalTok{  \}}
-\NormalTok{\}}
-\KeywordTok{library}\NormalTok{(thesisdown)}
-\KeywordTok{library}\NormalTok{(dplyr)}
-\KeywordTok{library}\NormalTok{(ggplot2)}
-\KeywordTok{library}\NormalTok{(knitr)}
-\NormalTok{flights <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"data/flights.csv"}\NormalTok{, }\DataTypeTok{stringsAsFactors =} \OtherTok{FALSE}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
+
 \hypertarget{the-second-appendix-for-fun}{%
 \chapter{The Second Appendix, for Fun}\label{the-second-appendix-for-fun}}
 
@@ -910,15 +781,6 @@ Angel, E. (2001a). \emph{Batch-file computer graphics : A bottom-up approach wit
 
 \leavevmode\hypertarget{ref-angel2002a}{}%
 Angel, E. (2001b). \emph{Test second book by angel}. Boston, MA: Wesley Addison Longman.
-
-\leavevmode\hypertarget{ref-Molina1994}{}%
-Molina, S. T., \& Borkovec, T. D. (1994). The Penn State worry questionnaire: Psychometric properties and associated characteristics. In G. C. L. Davey \& F. Tallis (Eds.), \emph{Worrying: Perspectives on theory, assessment and treatment} (pp. 265--283). New York: Wiley.
-
-\leavevmode\hypertarget{ref-noble2002}{}%
-Noble, S. G. (2002). \emph{Turning images into simple line-art} (Undergraduate thesis). Reed College.
-
-\leavevmode\hypertarget{ref-reedweb2007}{}%
-Reed~College. (2007). LaTeX your document. Retrieved from \url{https://web.reed.edu/cis/help/LaTeX/index.html}
 
 
 % Index?

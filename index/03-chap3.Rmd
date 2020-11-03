@@ -1,193 +1,142 @@
-```{r include_packages_2, include = FALSE}
-# This chunk ensures that the thesisdown package is
-# installed and loaded. This thesisdown package includes
-# the template files for the thesis and also two functions
-# used for labeling and referencing
-if (!require(remotes)) {
-  if (params$`Install needed packages for {thesisdown}`) {
-    install.packages("remotes", repos = "https://cran.rstudio.com")
-  } else {
-    stop(
-      paste(
-        'You need to run install.packages("remotes")',
-        "first in the Console."
-      )
-    )
-  }
-}
-if (!require(dplyr)) {
-  if (params$`Install needed packages for {thesisdown}`) {
-    install.packages("dplyr", repos = "https://cran.rstudio.com")
-  } else {
-    stop(
-      paste(
-        'You need to run install.packages("dplyr")',
-        "first in the Console."
-      )
-    )
-  }
-}
-if (!require(ggplot2)) {
-  if (params$`Install needed packages for {thesisdown}`) {
-    install.packages("ggplot2", repos = "https://cran.rstudio.com")
-  } else {
-    stop(
-      paste(
-        'You need to run install.packages("ggplot2")',
-        "first in the Console."
-      )
-    )
-  }
-}
-if (!require(bookdown)) {
-  if (params$`Install needed packages for {thesisdown}`) {
-    install.packages("bookdown", repos = "https://cran.rstudio.com")
-  } else {
-    stop(
-      paste(
-        'You need to run install.packages("bookdown")',
-        "first in the Console."
-      )
-    )
-  }
-}
-if (!require(thesisdown)) {
-  if (params$`Install needed packages for {thesisdown}`) {
-    remotes::install_github("ismayc/thesisdown")
-  } else {
-    stop(
-      paste(
-        "You need to run",
-        'remotes::install_github("ismayc/thesisdown")',
-        "first in the Console."
-      )
-    )
-  }
-}
-library(thesisdown)
-library(dplyr)
-library(ggplot2)
-library(knitr)
-flights <- read.csv("data/flights.csv", stringsAsFactors = FALSE)
+```{r data_setup, include = FALSE}
+library(tidyverse)
+library(sf)
+library(USAboundaries)
+library(patchwork)
+
+`%ni%` <- Negate(`%in%`)
+
+interior_west <- c("AZ", "CO", "ID", "MT", "NV", "NM", "UT", "WY")
+
+states <- data.frame(state.abb) %>%
+  filter(state.abb %ni% interior_west & state.abb %ni% c("AK", "HI")) %>%
+  pull()
+
+dat_small <- read_csv("data/subsets/dat_small.csv")
 ```
 
 
-# Tables, Graphics, References, and Labels {#ref-labels}
+# Data {#data}
 
-## Tables
+## The Forest Inventory & Analysis Program
 
-In addition to the tables that can be automatically generated from a data frame in **R** that you saw in [R Markdown Basics] using the `kable()` function, you can also create tables using _pandoc_. (More information is available at <https://pandoc.org/README.html#tables>.)  This might be useful if you don't have values specifically stored in **R**, but you'd like to display them in table form.  Below is an example.  Pay careful attention to the alignment in the table and hyphens to create the rows and columns.
+The Forest Inventory & Analysis Program (FIA) is a program within the United States Forest Service which aims to collect information and data in order to assess the country's forests. The FIA has been continuously operating since 1930 and their official mission is to "make and keep current a comprehensive inventory and analysis of the present and prospective conditions of and requirements for the renewable resources of the forest and rangelands of the US." (Source: https://www.fia.fs.fed.us/about/about_us/). 
 
-----------------------------------------------------------------------------------
-  Factors                    Correlation between Parents & Child      Inherited
-------------------------- ----------------------------------------- --------------
-  Education                                -0.49                         Yes
-  
-  Socio-Economic Status                     0.28                        Slight   
-  
-  Income                                    0.08                          No
-  
-  Family Size                               0.18                        Slight
-  
-  Occupational Prestige                     0.21                        Slight
-------------------------- ----------------------------------------- --------------
-Table: (\#tab:inher) Correlation of Inheritance Factors for Parents and Child 
+The FIA collects data all throughout the United States by completing a survey each year of many plots of land. The units measured by the FIA and their ground crews are approximately 30 m by 30 m hexagonal units. Due to the vast size of the United States and immense amount of forested land, it would be nearly impossible for the FIA to attain population data for the country, so they use sampling instead. The FIA samples from the population of 30 m by 30 m hexagonal units by using a geographically-based systematic sampling design (Source: McConville et al, 2020). The FIA chooses these samples by first overlaying a hexagonal grid over the United States where each hexagon contains approximately 6000 acres of land. Then, they fill these hexagons with much smaller hexagons and randomly sample from the population of small hexagons. Then, ground crews go to these sampled small hexagons and collect variables such as basal area, trees per acre, etc. This plot level data is what we are working with throughout the duration of the thesis.
 
-We can also create a link to the table by doing the following: Table \@ref(tab:inher).  If you go back to [Loading and exploring data] and look at the `kable` table, we can create a reference to this max delays table too: Table \@ref(tab:maxdelays). The addition of the `(\#tab:inher)` option to the end of the table caption allows us to then make a reference to Table `\@ref(tab:label)`. Note that this reference could appear anywhere throughout the document after the table has appeared.  
+## The Interior West
 
-<!-- We will next explore ways to create this label-ref link using figures. -->
+While the FIA collects data in all regions of the United States, the analyses done in this thesis uses data from the Interior West Forest Inventory and Analysis Unit (IW-FIA). Data from this unit will henceforth be refered to as data from "the Interior West". The Interior West is defined as a broad region of the United States, covering the states of Arizona, Colorado, Idaho, Montana, Nevada, New Mexico, Utah, and Wyoming. For reference we have provided the Interior West colored green on a map of the continental United States:
 
-\clearpage
-
-<!-- clearpage ends the page, and also dumps out all floats.
-  Floats are things like tables and figures. -->
-
-
-## Figures
-
-If your thesis has a lot of figures, _R Markdown_ might behave better for you than that other word processor.  One perk is that it will automatically number the figures accordingly in each chapter.    You'll also be able to create a label for each figure, add a caption, and then reference the figure in a way similar to what we saw with tables earlier.  If you label your figures, you can move the figures around and _R Markdown_ will automatically adjust the numbering for you.  No need for you to remember!  So that you don't have to get too far into LaTeX to do this, a couple **R** functions have been created for you to assist.  You'll see their use below.
-
-<!--
-One thing that may be annoying is the way _R Markdown_ handles "floats" like tables and figures (it's really \LaTeX's fault). \LaTeX\ will try to find the best place to put your object based on the text around it and until you're really, truly done writing you should just leave it where it lies. There are some optional arguments specified in the options parameter of the `label` function.  If you need to shift your figure around, it might be good to look here on tweaking the options argument:  <https://en.wikibooks.org/wiki/LaTeX/Floats,_Figures_and_Captions>
-
-If you need a graphic or tabular material to be part of the text, you can just put it inline. If you need it to appear in the list of figures or tables, it should be placed in a code chunk.
--->
-
-
-In the **R** chunk below, we will load in a picture stored as `reed.jpg` in our main directory.  We then give it the caption of "Reed logo", the label of "reedlogo", and specify that this is a figure.  Make note of the different **R** chunk options that are given in the R Markdown file (not shown in the knitted document).
-
-```{r reedlogo, fig.cap="Reed logo"}
-include_graphics(path = "figure/reed.jpg")
+```{r, fig.align="center", echo = FALSE}
+knitr::include_graphics("figure/interior-west-on-usa.png")
 ```
 
-Here is a reference to the Reed logo: Figure \@ref(fig:reedlogo).  Note the use of the `fig:` code here.  By naming the **R** chunk that contains the figure, we can then reference that figure later as done in the first sentence here.  We can also specify the caption for the figure via the R chunk option `fig.cap`.
+The IW-FIA collects annual inventories of the Interior West, with the goal of covering 10% of the region each year, so every decade the IW-FIA should have measurement of 100% of each Interior West state's forests.
 
-\clearpage 
+The Interior West region itself contains the states which encompass the Rocky Mountains along with some other smaller mountain ranges. The Interior West contains 855,767 square miles of land which has an extremely diverse landscape ranging from the high mountain peaks of the Rockies to flat desert plains in Nevada and other Interior West states. Along with desert and mountains, the Interior West also includes parts of the Great Plains. 
 
-<!-- starts a new page and stops trying to place floats such as tables and figures -->
+## Our Data: Specifics
 
-Below we will investigate how to save the output of an **R** plot and label it in a way similar to that done above.  Recall the `flights` dataset from Chapter \@ref(rmd-basics).  (Note that we've shown a different way to reference a section or chapter here.)  We will next explore a bar graph with the mean flight departure delays by airline from Portland for 2014.
+The data used in this thesis was collected by the Forest Inventory and Analysis Program (FIA) in the span of 10 years from 2007 to 2017. While this data was collected over this 10 year period, the analyses done throughout this thesis are under the assumption that this is a "snapshot" of the Interior West at some moment in time. Thus we do not consider any temporal features of this dataset, however the inventory year information is available to us. The data we have is plot-level data for the Interior West region of the United States, where the data for each plot is collected by FIA and its crew members.
 
-```{r delaysboxplot, warnings=FALSE, messages=FALSE, fig.cap="Mean Delays by Airline", fig.width=6}
-mean_delay_by_carrier <- flights %>%
-  group_by(carrier) %>%
-  summarize(mean_dep_delay = mean(dep_delay))
-ggplot(mean_delay_by_carrier, aes(x = carrier, y = mean_dep_delay)) +
-  geom_bar(position = "identity", stat = "identity", fill = "red")
+The dataframe used in this thesis is a joined dataframe derived from two FIA datasets of the Interior West, `spatial` and `response`. The `spatial` dataframe contains 89444 observations and 70 variables, most notably two remotely sensed predictor variables (`forprob` and `forbio`), location information, and ecosubsection. The `response` dataframe contains 86085 observations and 67 variables, most notably four predictor variables collected by FIA crew members (`BALIVE_TPA`, `CNTLIVE_TPA`, `BIOLIVE_TPA`, and `VOLNLIVE_TPA`), location information, and ecosubsection. We join these dataframes by their unique plot number, and subset the number of variables significantly to 19 variables which contain plot information, longitude & lattitude, elevation, predictor variables, response variables, ecosubsection, ecosection, and province. The resulting joined dataframe has 86085 rows as these are the rows which share the same plots between the `response` and `spatial` dataframes. We can see the first few rows of the dataframe with relevant columns selected:
+
+```{r, echo = FALSE}
+library(gt)
+dat_small %>%
+  rename(LON = LON_PUBLIC, LAT = LAT_PUBLIC, ELEV = ELEV_PUBLIC) %>%
+  select(PLOT, LON, LAT, ELEV, forgrp, forprob, demLF, forbio, BALIVE_TPA) %>%
+  slice(30:35) %>%
+  gt()
+
+dat_small %>%
+  select(CNTLIVE_TPA, BIOLIVE_TPA, VOLNLIVE_TPA, subsection, section, province) %>%
+  slice(30:35) %>%
+  gt()
 ```
 
-Here is a reference to this image: Figure \@ref(fig:delaysboxplot).
+While the data covers the Interior West as a whole, we have very granular information, as each row represents a plot sampled by the FIA. The data also includes variables that subset the Interior West into provinces which contain ecosections, and these ecosections contain ecosubsections. In our data, on average, each ecosection contains approximately 7.06 ecosubsections, and each province contains an average of 4.86 ecosections. So, an average province then contains just over 34 ecosubsections. The data we have covers a total of 14 provinces, 68 ecosections, and 480 ecosubsections. The hierarchical struture of the data and nestedness of the ecosubsections within ecosections within provinces lends itself to be able to create hierarchical models which borrow strength from surrounding areas. 
 
-A table linking these carrier codes to airline names is available at <https://github.com/ismayc/pnwflights14/blob/master/data/airlines.csv>.
+While this data contains a multitude of variables, the analyses done in this thesis focus on four key response variables and two explanatory variables. The response variables used are basal area (square-foot), trees per acre, above-ground biomass (lbs), and net volume (ft^3). These variables are coded as `BALIVE_TPA`, `CNTLIVE_TPA`, `BIOLIVE_TPA`, and `VOLNLIVE_TPA`, respectively. We can look at the average of these variables across the Interior West region by ecosubsection in the four following maps of the interior west. 
 
-\clearpage
-
-Next, we will explore the use of the `out.extra` chunk option, which can be used to shrink or expand an image loaded from a file by specifying `"scale= "`. Here we use the mathematical graph stored in the "subdivision.pdf" file.
-
-```{r subd, results="asis", echo=FALSE, fig.cap="Subdiv. graph", out.extra="scale=0.75"}
-include_graphics("figure/subdivision.pdf")
+```{r, fig.align="center", out.height= '65%', out.width='65%', echo = FALSE}
+knitr::include_graphics("figure/basal.png")
+knitr::include_graphics("figure/biomass.png")
+knitr::include_graphics("figure/count.png")
+knitr::include_graphics("figure/voln.png")
 ```
 
-Here is a reference to this image: Figure \@ref(fig:subd).  Note that `echo=FALSE` is specified so that the **R** code is hidden in the document.
+While we have four variables which we will model as response variables throughout the analyses, we also have two predictor variables which will be of much use to us. In particular, forest probability and forest biomass (coded as `forprob` and `forbio`.) These variables which we will treat as predictors are remotely sensed variables, meaning that they were not collected by FIA crew members, but rather with aerial photography and/or satellite imagery. However, we will be using these variables to attempt to predict our response variables in order to understand how good of estimates we can make with this remote data that does not require as much effort to collect. While it may seem unnatural to attempt to predict forest biomass (`BIOLIVE_TPA`) with forest biomass (`forbio`), the differences in the data collection process between the ground level data and remotely sensed data are quite different. 
 
-**More Figure Stuff**
+These variables are almost all right-skewed, and all take value zero quite often. To get a good sense of the distributions of the six key variables, we can look at histograms of each variable:
 
-Lastly, we will explore how to rotate and enlarge figures using the `out.extra` chunk option.  (Currently this only works in the PDF version of the book.)
-
-```{r subd2, results="asis", echo=FALSE, out.extra="angle=180, scale=1.1", fig.cap="A Larger Figure, Flipped Upside Down"}
-include_graphics("figure/subdivision.pdf")
+```{r, message = FALSE, warning=FALSE, echo = FALSE, fig.align="center", fig.retina=4, fig.height=4, fig.width=6}
+hist1 <- ggplot(dat_small) +
+  geom_histogram(mapping = aes(x = forprob, y = ..count.. / 1000), color = "black", fill = "steelblue") +
+  theme_bw() +
+  labs(y = "count (1000's)")
+hist2 <- ggplot(dat_small) +
+  geom_histogram(mapping = aes(x = forbio, y = ..count.. / 1000), color = "black", fill = "steelblue") +
+  theme_bw() +
+  labs(y = "count (1000's)")
+hist3 <- ggplot(dat_small) +
+  geom_histogram(mapping = aes(x = VOLNLIVE_TPA, y = ..count.. / 1000), color = "black", fill = "steelblue") +
+  theme_bw() +
+  labs(y = "count (1000's)")
+hist4 <- ggplot(dat_small) +
+  geom_histogram(mapping = aes(x = CNTLIVE_TPA, y = ..count.. / 1000), color = "black", fill = "steelblue") +
+  theme_bw() +
+  labs(y = "count (1000's)")
+hist5 <- ggplot(dat_small) +
+  geom_histogram(mapping = aes(x = BALIVE_TPA, y = ..count.. / 1000), color = "black", fill = "steelblue") +
+  theme_bw() +
+  labs(y = "count (1000's)")
+hist6 <- ggplot(dat_small) +
+  geom_histogram(mapping = aes(x = BIOLIVE_TPA, y = ..count.. / 1000), color = "black", fill = "steelblue") +
+  theme_bw() +
+  labs(y = "count (1000's)")
+(hist1 + hist2 + hist3) / (hist4 + hist5 + hist6)
 ```
 
-As another example, here is a reference: Figure \@ref(fig:subd2).  
+It is notable that the `forprob` variable is bimodal and modes zero and one, while all other variables are extremely right-skewed. This is likely because when `forprob` is decided from the remotely sensed data, there are likely areas that are either very clearly forest or very clearly not forest (residential areas, for example).
 
-## Footnotes and Endnotes
+Apart from making histograms of our data, we can also summarize the data to see some summary statistics of our six key variables:
 
-You might want to footnote something. ^[footnote text] The footnote will be in a smaller font and placed appropriately. Endnotes work in much the same way. More information can be found about both on the CUS site or feel free to reach out to <data@reed.edu>.
+```{r, message = FALSE, warning=FALSE, echo = FALSE, fig.align="center", fig.retina=4}
+library(swfscMisc)
+vars <- list(dat_small$forbio, dat_small$forprob, dat_small$BIOLIVE_TPA,
+             dat_small$BALIVE_TPA, dat_small$CNTLIVE_TPA, dat_small$VOLNLIVE_TPA)
+dat_small %>%
+  summarize(
+    variable = c("forbio", "forprob", "BIOLIVE_TPA", "BALIVE_TPA", "CNTLIVE_TPA", "VOLNLIVE_TPA"),
+    mean = unlist(lapply(vars, mean, na.rm = T)),
+    quantile_25 = unlist(lapply(vars, quantile, na.rm = T, probs = 0.25)),
+    median = unlist(lapply(vars, median, na.rm = T)),
+    quantile_75 = unlist(lapply(vars, quantile, na.rm = T, probs = 0.75)),
+    min = unlist(lapply(vars, min, na.rm = T)),
+    max = unlist(lapply(vars, max, na.rm = T)),
+    na_count = unlist(lapply(vars, FUN = na.count))
+  ) %>% 
+  round(digits = 2) %>%
+  gt()
+```
 
-## Bibliographies
+From this table, we can see how heavily skewed these key variables are, with over 25% of the observations for each variable being zero. This does not stop us from doing meaningful analyses though, as the sample size of this dataset is so large ($n = 86085$) and thus we have plenty of data to create models with. 
 
-Of course you will need to cite things, and you will probably accumulate an armful of sources. There are a variety of tools available for creating a bibliography database (stored with the .bib extension).  In addition to BibTeX suggested below, you may want to consider using the free and easy-to-use tool called Zotero.  The Reed librarians have created Zotero documentation at <https://libguides.reed.edu/citation/zotero>.  In addition, a tutorial is available from Middlebury College at <https://sites.middlebury.edu/zoteromiddlebury/>.
+## Data Structure & Hierarchy
 
-_R Markdown_ uses _pandoc_ (<https://pandoc.org/>) to build its bibliographies.  One nice caveat of this is that you won't have to do a second compile to load in references as standard LaTeX requires. To cite references in your thesis (after creating your bibliography database), place the reference name inside square brackets and precede it by the "at" symbol.  For example, here's a reference to a book about worrying:  [@Molina1994].  This `Molina1994` entry appears in a file called `thesis.bib` in the `bib` folder.  This bibliography database file was created by a program called BibTeX.  You can call this file something else if you like (look at the YAML header in the main .Rmd file) and, by default, is to placed in the `bib` folder.  
+As hinted at throughout earlier parts of the chapter, the data used in this thesis has a hierarchical structure, where ecosubsections are nested within ecosections which are in turn nested within provinces. Every plot has each level of granularity of location data recorded and this is what allows us to choose how far to borrow strength from other plots. 
 
-For more information about BibTeX and bibliographies, see our CUS site (<https://web.reed.edu/cis/help/latex/index.html>)^[@reedweb2007]. There are three pages on this topic:  _bibtex_ (which talks about using BibTeX, at <https://web.reed.edu/cis/help/latex/bibtex.html>), _bibtexstyles_ (about how to find and use the bibliography style that best suits your needs, at <https://web.reed.edu/cis/help/latex/bibtexstyles.html>) and _bibman_ (which covers how to make and maintain a bibliography by hand, without BibTeX, at <https://web.reed.edu/cis/help/latex/bibman.html>). The last page will not be useful unless you have only a few sources.
+The largest motivation for hierarchical modeling in this particular application is that observations are more similar within the hierarchies which we split them into. To understand if this is true, we can do a preliminary analysis on the data by performing three-way ANOVAs for each key variable with predictors `province`, `section`, and `subsection`. By just looking at the MSE of the ANOVA results, we can see that we should expect more homogeneity within ecosubsections:
 
-If you look at the YAML header at the top of the main .Rmd file you can see that we can specify the style of the bibliography by referencing the appropriate csl file.  You can download a variety of different style files at <https://www.zotero.org/styles>.  Make sure to download the file into the csl folder.  
+```{r, echo=F, message=F, warning=F}
+anova <- read_csv("data/anova.csv")
+anova %>%
+  select(-X1) %>%
+  gt()
+```
+(* Need a better way to output this table and show province level model is significant)
 
-<!-- Fill the rest of the page with the content below for the PDF version. -->
-
-\vfill
-
-**Tips for Bibliographies**
-
-- Like with thesis formatting, the sooner you start compiling your bibliography for something as large as thesis, the better. Typing in source after source is mind-numbing enough; do you really want to do it for hours on end in late April? Think of it as procrastination.
-- The cite key (a citation's label) needs to be unique from the other entries.
-- When you have more than one author or editor, you need to separate each author's name by the word "and" e.g. `Author = {Noble, Sam and Youngberg, Jessica},`.
-- Bibliographies made using BibTeX (whether manually or using a manager) accept LaTeX markup, so you can italicize and add symbols as necessary.
-- To force capitalization in an article title or where all lowercase is generally used, bracket the capital letter in curly braces.
-- You can add a Reed Thesis citation^[@noble2002] option. The best way to do this is to use the phdthesis type of citation, and use the optional "type" field to enter "Reed thesis" or "Undergraduate thesis." 
-
-## Anything else?
-
-If you'd like to see examples of other things in this template, please contact the Data @ Reed team (email <data@reed.edu>) with your suggestions. We love to see people using _R Markdown_ for their theses, and are happy to help.
+These results allow us to conclude that it is reasonable to believe that observations within a given province are more homogeneous than observations throughout the Interior West. Thus, if we want ecosubsection level estimates of variables, it makes sense to borrow information from other ecosubsections within the same province as each other. This data structure and homogeneity within provinces is what drives the analyses done henceforth in this thesis. 
 
