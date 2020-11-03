@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.10.10)  3 NOV 2020 11:10
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.10.10)  3 NOV 2020 11:38
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -734,8 +734,8 @@ LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 8870 strings out of 481886
- 139748 string characters out of 5930719
+ 8866 strings out of 481886
+ 139704 string characters out of 5930719
  438598 words of memory out of 5000000
  24872 multiletter control sequences out of 15000+600000
  574998 words of font info for 61 fonts, out of 8000000 for 9000
@@ -753,10 +753,10 @@ ro12.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/
 lmtk10.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1/public/l
 m/lmtt12.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1/public
 /lm/lmtti10.pfb>
-Output written on thesis.pdf (41 pages, 3425784 bytes).
+Output written on thesis.pdf (41 pages, 3419724 bytes).
 PDF statistics:
- 348 PDF objects out of 1000 (max. 8388607)
- 282 compressed objects within 3 object streams
- 79 named destinations out of 1000 (max. 500000)
+ 343 PDF objects out of 1000 (max. 8388607)
+ 277 compressed objects within 3 object streams
+ 75 named destinations out of 1000 (max. 500000)
  135 words of extra memory for PDF output out of 10000 (max. 10000000)
 
