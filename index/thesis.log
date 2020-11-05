@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.10.10)  3 NOV 2020 12:40
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.10.10)  5 NOV 2020 14:59
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -618,7 +618,7 @@ Chapter 2.
 
 ]
 Chapter 3.
-<figure/interior-west-on-usa.png, id=201, 2107.875pt x 1167.36125pt>
+<figure/interior-west-on-usa.png, id=211, 2107.875pt x 1167.36125pt>
 File: figure/interior-west-on-usa.png Graphic file (type png)
 <use figure/interior-west-on-usa.png>
 Package pdftex.def Info: figure/interior-west-on-usa.png  used on input line 26
@@ -647,18 +647,18 @@ Overfull \hbox (37.419pt too wide) in alignment at lines 302--313
 Underfull \vbox (badness 10000) detected at line 313
  []
 
-<figure/basal.png, id=219, 2107.875pt x 2107.875pt>
+<figure/basal.png, id=229, 2107.875pt x 2107.875pt>
 File: figure/basal.png Graphic file (type png)
 <use figure/basal.png>
 Package pdftex.def Info: figure/basal.png  used on input line 319.
 (pdftex.def)             Requested size: 281.85034pt x 281.8491pt.
 [9]
-<figure/biomass.png, id=226, 2107.875pt x 2107.875pt>
+<figure/biomass.png, id=236, 2107.875pt x 2107.875pt>
 File: figure/biomass.png Graphic file (type png)
 <use figure/biomass.png>
 Package pdftex.def Info: figure/biomass.png  used on input line 327.
 (pdftex.def)             Requested size: 281.85034pt x 281.8491pt.
-<figure/count.png, id=227, 2107.875pt x 2107.875pt>
+<figure/count.png, id=237, 2107.875pt x 2107.875pt>
 File: figure/count.png Graphic file (type png)
 <use figure/count.png>
 Package pdftex.def Info: figure/count.png  used on input line 335.
@@ -667,13 +667,13 @@ Package pdftex.def Info: figure/count.png  used on input line 335.
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [10 <./figure/basal.png>]
-<figure/voln.png, id=233, 2107.875pt x 2107.875pt>
+<figure/voln.png, id=243, 2107.875pt x 2107.875pt>
 File: figure/voln.png Graphic file (type png)
 <use figure/voln.png>
 Package pdftex.def Info: figure/voln.png  used on input line 343.
 (pdftex.def)             Requested size: 281.85034pt x 281.8491pt.
 [11 <./figure/biomass.png> <./figure/count.png>]
-<thesis_files/figure-latex/unnamed-chunk-9-1.pdf, id=240, 433.62pt x 289.08pt>
+<thesis_files/figure-latex/unnamed-chunk-9-1.pdf, id=250, 433.62pt x 289.08pt>
 File: thesis_files/figure-latex/unnamed-chunk-9-1.pdf Graphic file (type pdf)
 <use thesis_files/figure-latex/unnamed-chunk-9-1.pdf>
 Package pdftex.def Info: thesis_files/figure-latex/unnamed-chunk-9-1.pdf  used 
@@ -706,64 +706,99 @@ Chapter 4.
 
 ]
 Chapter 5.
-[17] [18
+<thesis_files/figure-latex/unnamed-chunk-13-1.pdf, id=285, 469.755pt x 325.215p
+t>
+File: thesis_files/figure-latex/unnamed-chunk-13-1.pdf Graphic file (type pdf)
+<use thesis_files/figure-latex/unnamed-chunk-13-1.pdf>
+Package pdftex.def Info: thesis_files/figure-latex/unnamed-chunk-13-1.pdf  used
+ on input line 408.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+<thesis_files/figure-latex/unnamed-chunk-13-2.pdf, id=286, 469.755pt x 325.215p
+t>
+File: thesis_files/figure-latex/unnamed-chunk-13-2.pdf Graphic file (type pdf)
+<use thesis_files/figure-latex/unnamed-chunk-13-2.pdf>
+Package pdftex.def Info: thesis_files/figure-latex/unnamed-chunk-13-2.pdf  used
+ on input line 408.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
-]
+Overfull \hbox (53.75868pt too wide) in paragraph at lines 408--409
+[][]
+ []
+
+
+Overfull \hbox (36.13387pt too wide) in paragraph at lines 408--409
+[] 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[17]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[18 <./thesis_files/figure-latex/unnamed-chunk-13-1.pdf>] [19 <./thesis_files/f
+igure-latex/unnamed-chunk-13-2.pdf>] [20]
 Chapter 6.
-[19] [20
+[21
+
+] [22
 
 ]
 Appendix A.
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <12> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 425.
-[21]
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 449.
+[23]
 
-LaTeX Warning: Reference `ref-labels' on page 22 undefined on input line 453.
+LaTeX Warning: Reference `ref-labels' on page 24 undefined on input line 477.
 
-[22]
+[24]
 Appendix B.
-[23
+[25
 
-] [24
+] [26
 
 ]
 
 Package caption Warning: Unused \captionsetup[table] on input line 288.
 See the caption package documentation for explanation.
 
-[25
+[27
 
 ] (./thesis.aux)
 Package rerunfilecheck Info: File `thesis.out' has not changed.
-(rerunfilecheck)             Checksum: C44F58409468A3F1B6BA23E523849112;956.
+(rerunfilecheck)             Checksum: 2FBFF2EC69AAB8D5AAB088952FB18FFA;1084.
 
 LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 8897 strings out of 481886
- 140217 string characters out of 5930719
- 439115 words of memory out of 5000000
- 24890 multiletter control sequences out of 15000+600000
+ 8919 strings out of 481886
+ 140961 string characters out of 5930719
+ 439209 words of memory out of 5000000
+ 24904 multiletter control sequences out of 15000+600000
  580995 words of font info for 63 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  60i,12n,66p,1244b,386s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}
-{/Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/
-Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}
-</Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pf
-b></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi12.
-pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12
-.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri
-12.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lm
-ro12.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/
-lmtk10.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1/public/l
-m/lmtt12.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1/public
-/lm/lmtti10.pfb>
-Output written on thesis.pdf (43 pages, 3425353 bytes).
+{/Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.en
+c}{/Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.
+enc}{/Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.en
+c}</Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.
+pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi1
+2.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmm
+i8.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lm
+r12.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/l
+mr8.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/l
+mri12.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1/public/lm
+/lmro12.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1/public/
+lm/lmsy10.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1/publi
+c/lm/lmtk10.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1/pub
+lic/lm/lmtt12.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1/p
+ublic/lm/lmtti10.pfb>
+Output written on thesis.pdf (45 pages, 3645021 bytes).
 PDF statistics:
- 378 PDF objects out of 1000 (max. 8388607)
- 309 compressed objects within 4 object streams
- 88 named destinations out of 1000 (max. 500000)
- 151 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 432 PDF objects out of 1000 (max. 8388607)
+ 354 compressed objects within 4 object streams
+ 94 named destinations out of 1000 (max. 500000)
+ 177 words of extra memory for PDF output out of 10000 (max. 10000000)
 

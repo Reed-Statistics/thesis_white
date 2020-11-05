@@ -400,6 +400,30 @@ These results allow us to conclude that it is reasonable to believe that observa
 \hypertarget{results}{%
 \chapter{Results}\label{results}}
 
+\hypertarget{modeling-overview}{%
+\section{Modeling Overview}\label{modeling-overview}}
+
+We explore both unit- and area-level models in this thesis, where unit-level models fit the model to the plot (unit) level data, and the area-level models fit to data which has been aggregated to the ecosubsection (area) level. These models types each have their own costs and benefits, and while we lose some data structure with the area-level estimates we gain a large amount of precision. We can see this when looking at the correlation between the predictor \texttt{ncld11} and one of our response variables, \texttt{BIOLIVE\_TPA}, at both the unit- and area-levels with ordinary least squares regression lines fit to the data:
+
+\includegraphics{thesis_files/figure-latex/unnamed-chunk-13-1.pdf} \includegraphics{thesis_files/figure-latex/unnamed-chunk-13-2.pdf}
+
+Notably, the \(R^2\) value for the area-level simple linear regression is much higher than the \(R^2\) value at the unit-level. This is of course compromised by the number of data points (\(n_{area} = 20, ~ n_{unit} = 3003\)). Also, fitting a polynomial regression curve to the unit level data hardly improves the fit (\(R^2 = 0.44\)).
+
+We, however, are not fitting simple linear regressions. In this chapter, we explore the benefits of Bayesian hierarchical models which use varying-slopes to lower the variance in our estimates at the cost of a small amount of bias.
+
+\hypertarget{unit-level-models}{%
+\section{Unit-level Models}\label{unit-level-models}}
+
+At the unit-level, the small area estimates for each ecosubsection are made by post-aggregation of the plot level output of our model. We fit these models using varying slopes model, which can be written as:
+\begin{align*}
+Y_i &\sim N(\alpha_j + \vec\beta\vec X_i,~ \sigma^2) \\
+\alpha_j &\sim N(\mu_\alpha,~ \sigma^2_\alpha) \\
+\mu_\alpha &\sim N(a,~b)
+\end{align*}
+Here, we have \(Y_i\), our response variable (\texttt{BIOLIVE\_TPA}), which is modeled to have a Gaussian posterior distribution with mean \(\alpha_j + \vec\beta\vec X_i\) which can change intercept based on the level that a given observation is in. Note that we are predicting \(Y\) at the unit-level, so we compute \(Y_i\) for every plot in the Northern Rocky Forest, and we allow \(\alpha_j\), the intercept, to vary over each of the 20 ecosubsections within the Northern Rocky Forest.
+
+have significantly smaller coefficients of variation in comparison to the direct estimator. However, the coefficients of variation are still outside of the range where
+
 \hypertarget{discussion-and-conclusion}{%
 \chapter{Discussion and Conclusion}\label{discussion-and-conclusion}}
 

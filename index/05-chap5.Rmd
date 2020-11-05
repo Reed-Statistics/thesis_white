@@ -1,1 +1,63 @@
-# Results
+```{r, include = F}
+library(tidyverse)
+library(rstan)
+library(rstanarm)
+library(ggpubr)
+library(patchwork)
+dat_small <- read_csv("data/subsets/dat_small.csv")
+
+dat_area <- dat_small %>%
+  group_by(subsection, section, province) %>%
+  summarize(mean_BIOLIVE = mean(BIOLIVE_TPA),
+            mean_BALIVE = mean(BALIVE_TPA),
+            mean_CNTLIVE = mean(CNTLIVE_TPA),
+            mean_VOLNLIVE = mean(VOLNLIVE_TPA),
+            var_BIOLIVE = var(BIOLIVE_TPA),
+            var_BALIVE = var(BALIVE_TPA),
+            var_CNTLIVE = var(CNTLIVE_TPA),
+            var_VOLNLIVE = var(VOLNLIVE_TPA),
+            mean_nlcd11 = mean(nlcd11),
+            var_nlcd11 = var(nlcd11)) 
+m333_area <- dat_area %>%
+  filter(province == "M333")
+m333 <- dat_small %>%
+  filter(province == "M333")
+```
+
+# Results {#results}
+## Modeling Overview
+We explore both unit- and area-level models in this thesis, where unit-level models fit the model to the plot (unit) level data, and the area-level models fit to data which has been aggregated to the ecosubsection (area) level. These models types each have their own costs and benefits, and while we lose some data structure with the area-level estimates we gain a large amount of precision. We can see this when looking at the correlation between the predictor `ncld11` and one of our response variables, `BIOLIVE_TPA`, at both the unit- and area-levels with ordinary least squares regression lines fit to the data:
+
+```{r, echo = F, message = F, warning = F}
+ggplot(m333, aes(x = nlcd11,
+                      y = BIOLIVE_TPA)) +
+  geom_point(alpha = 0.5,
+             position = "jitter") +
+  stat_cor(color = "steelblue", aes(label = ..rr.label..)) +
+  stat_smooth(method = "lm", se = F, color = "steelblue") +
+  stat_smooth(method = "lm", formula = y ~ poly(x,2), se = F, color = "maroon") +
+  theme_bw()
+
+ggplot(m333_area, aes(x = mean_nlcd11,
+                      y = mean_BIOLIVE)) +
+  geom_point() +
+  stat_cor(color = "steelblue", aes(label = ..rr.label..)) +
+  stat_smooth(method = "lm", se = F, color = "steelblue") +
+  theme_bw()
+```
+
+Notably, the $R^2$ value for the area-level simple linear regression is much higher than the $R^2$ value at the unit-level. This is of course compromised by the number of data points ($n_{area} = 20, ~ n_{unit} = 3003$). Also, fitting a polynomial regression curve to the unit level data hardly improves the fit ($R^2 = 0.44$). 
+
+We, however, are not fitting simple linear regressions. In this chapter, we explore the benefits of Bayesian hierarchical models which use varying-slopes to lower the variance in our estimates at the cost of a small amount of bias. 
+
+## Unit-level Models
+
+At the unit-level, the small area estimates for each ecosubsection are made by post-aggregation of the plot level output of our model. We fit these models using varying slopes model, which can be written as: 
+\begin{align*}
+Y_i &\sim N(\alpha_j + \vec\beta\vec X_i,~ \sigma^2) \\
+\alpha_j &\sim N(\mu_\alpha,~ \sigma^2_\alpha) \\
+\mu_\alpha &\sim N(a,~b)
+\end{align*}
+Here, we have $Y_i$, our response variable (`BIOLIVE_TPA`), which is modeled to have a Gaussian posterior distribution with mean $\alpha_j + \vec\beta\vec X_i$ which can change intercept based on the level that a given observation is in. Note that we are predicting $Y$ at the unit-level, so we compute $Y_i$ for every plot in the Northern Rocky Forest, and we allow $\alpha_j$, the intercept, to vary over each of the 20 ecosubsections within the Northern Rocky Forest. 
+
+have significantly smaller coefficients of variation in comparison to the direct estimator. However, the coefficients of variation are still outside of the range where 
