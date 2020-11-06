@@ -22,22 +22,23 @@ m333_area <- dat_area %>%
   filter(province == "M333")
 m333 <- dat_small %>%
   filter(province == "M333")
+load("data/models/unit1.rds")
 ```
 
 # Results {#results}
 ## Modeling Overview
 We explore both unit- and area-level models in this thesis, where unit-level models fit the model to the plot (unit) level data, and the area-level models fit to data which has been aggregated to the ecosubsection (area) level. These models types each have their own costs and benefits, and while we lose some data structure with the area-level estimates we gain a large amount of precision. We can see this when looking at the correlation between the predictor `ncld11` and one of our response variables, `BIOLIVE_TPA`, at both the unit- and area-levels with ordinary least squares regression lines fit to the data:
 
-```{r, echo = F, message = F, warning = F}
+```{r, echo = F, message = F, warning = F, fig.cap="Unit-level correlation", out.width = "90%", fig.align="center"}
 ggplot(m333, aes(x = nlcd11,
                       y = BIOLIVE_TPA)) +
   geom_point(alpha = 0.5,
              position = "jitter") +
   stat_cor(color = "steelblue", aes(label = ..rr.label..)) +
   stat_smooth(method = "lm", se = F, color = "steelblue") +
-  stat_smooth(method = "lm", formula = y ~ poly(x,2), se = F, color = "maroon") +
   theme_bw()
-
+```
+```{r, echo = F, message = F, warning = F, fig.cap="Area-level correlation", out.width = "90%", fig.align="center"}
 ggplot(m333_area, aes(x = mean_nlcd11,
                       y = mean_BIOLIVE)) +
   geom_point() +
@@ -45,6 +46,7 @@ ggplot(m333_area, aes(x = mean_nlcd11,
   stat_smooth(method = "lm", se = F, color = "steelblue") +
   theme_bw()
 ```
+
 
 Notably, the $R^2$ value for the area-level simple linear regression is much higher than the $R^2$ value at the unit-level. This is of course compromised by the number of data points ($n_{area} = 20, ~ n_{unit} = 3003$). Also, fitting a polynomial regression curve to the unit level data hardly improves the fit ($R^2 = 0.44$). 
 
@@ -58,6 +60,97 @@ Y_i &\sim N(\alpha_j + \vec\beta\vec X_i,~ \sigma^2) \\
 \alpha_j &\sim N(\mu_\alpha,~ \sigma^2_\alpha) \\
 \mu_\alpha &\sim N(a,~b)
 \end{align*}
-Here, we have $Y_i$, our response variable (`BIOLIVE_TPA`), which is modeled to have a Gaussian posterior distribution with mean $\alpha_j + \vec\beta\vec X_i$ which can change intercept based on the level that a given observation is in. Note that we are predicting $Y$ at the unit-level, so we compute $Y_i$ for every plot in the Northern Rocky Forest, and we allow $\alpha_j$, the intercept, to vary over each of the 20 ecosubsections within the Northern Rocky Forest. 
+Here, we have $Y_i$, our response variable (`BIOLIVE_TPA`), which is modeled to have a Gaussian posterior distribution with mean $\alpha_j + \vec\beta\vec X_i$ which can change intercept based on the level that a given observation is in. Note that we are predicting $Y$ at the unit-level, so we compute $Y_i$ for every plot in the Northern Rocky Forest, and we allow $\alpha_j$, the intercept, to vary over each of the 20 ecosubsections within the Northern Rocky Forest. After fitting this model, we can look at the estimates of the mean biomass predicted by the model compared to the direct estimator:
 
-have significantly smaller coefficients of variation in comparison to the direct estimator. However, the coefficients of variation are still outside of the range where 
+```{r, echo = FALSE, fig.cap="Direct and model-based estimates for the unit-level model", message = F, warning = F, out.width = "90%", fig.align="center"}
+mod_df <- data.frame(
+  fitted = mod$fitted.values,
+  subsection = m333 %>% dplyr::select(subsection),
+  true = mod$y
+)
+sub_mean <- mod_df %>%
+  group_by(subsection) %>%
+  summarize(mean_y = mean(true))
+bayes_cv <- mod_df %>%
+  group_by(subsection) %>%
+  yardstick::rmse(truth = true,
+                  estimate = fitted) %>%
+  left_join(sub_mean) %>%
+  group_by(subsection) %>%
+  summarize(cv = .estimate / mean_y)
+mod_df %>%
+  group_by(subsection) %>%
+  summarize(mean_direct = mean(true),
+            mean_bayes = mean(fitted)) %>%
+  mutate(subsection = fct_reorder(subsection, mean_direct)) %>%
+  ggplot(aes(x = subsection)) +
+  geom_point(aes(y = mean_bayes,
+                 color = "goldenrod"),
+             position = position_nudge(x = -0.1)) + 
+  geom_point(aes(y = mean_direct,
+                 color = "forestgreen"),
+             position = position_nudge(x = 0.1)) +
+  theme_bw() +
+  scale_color_manual(
+    name = 'Estimate Type',
+    values = c('goldenrod' = 'goldenrod',
+               'forestgreen' = 'forestgreen'),
+    labels = c('Direct (Mean)', 'Hierarchical Bayesian'),
+    guide = "legend"
+  ) +
+  theme(axis.text.x = element_text(
+    angle = 90,
+    vjust = 0.5,
+    hjust = 1
+  ),
+  legend.position = "bottom") +
+  labs(x = "Subsection",
+       y = "Estimate")
+```
+These estimates make sense in the context of hierarhical Bayesian modeling because we can see the shrinkage of the estimates towards the overall mean. We also see more shrinkage in ecosubsections which have less plots, particularly M333Cc ($n_j = 28$), M333Ai ($n_j = 38$), and M333Ad ($n_j = 26$). This is again consistent with our intuition as small areas with less data should rely more heavily on the overall province mean. 
+
+We can also begin to look at the increase in precision which is gained from this unit-level hierarchial Bayesian model by examining the coefficient of variation for the model and the direct estimator in each ecosubsection. For the direct estimator, the coefficient of variation is defined as the standard deviation of the response divided by the mean of the response, where for the model we take the root mean squared error rather than the standard deviation. We can visualize this statisitc for each ecosubsection:
+
+```{r, message = F, warning = F, echo = F, fig.cap = "Direct and model-based coefficients of variation for the unit-level model", out.width = "90%", fig.align="center"}
+mod_df %>%
+  group_by(subsection) %>%
+  summarize(direct_cv = sd(true) / mean(true)) %>%
+  left_join(bayes_cv) %>%
+  mutate(subsection = fct_reorder(subsection, direct_cv)) %>%
+  ggplot(aes(x = subsection)) +
+  geom_point(aes(y = cv, color = "goldenrod")) +
+  geom_point(aes(y = direct_cv, color = "forestgreen")) +
+  theme_bw() +
+  scale_color_manual(
+    name = 'Estimate Type',
+    values = c('goldenrod' = 'goldenrod',
+               'forestgreen' = 'forestgreen'),
+    labels = c('Direct (Mean)', 'Hierarchical Bayesian'),
+    guide = "legend"
+  ) +
+  theme(axis.text.x = element_text(
+    angle = 90,
+    vjust = 0.5,
+    hjust = 1
+  ),
+  legend.position = "bottom") +
+  labs(x = "Subsection",
+       y = "Coeffcient of Variation")
+```
+```{r, include = F, echo = F, warning = F, message=F}
+mean_prop <- mod_df %>%
+  group_by(subsection) %>%
+  summarize(direct_cv = sd(true) / mean(true)) %>%
+  left_join(bayes_cv) %>%
+  mutate(prop = (cv / direct_cv)) %>%
+  summarize(mean = mean(prop)) %>% pull()
+
+bayes_cv_overall <- mod_df %>%
+  yardstick::rmse(truth = true,
+                  estimate = fitted) %>%
+  summarize(cv = .estimate / mean(mod_df$true, na.rm = T)) %>%
+  pull()
+
+```
+We see reductions in every coefficient of variation from the direct estimator to our model-based approach, with an average reduction in of `r round(100*(1 - mean_prop), 2)`%. However, the variation we see is still much larger than wanted, with the ecosubsection with the lowest coefficent of variation just over 0.6 and the overall coefficient of variation of the model at a value of `r round(bayes_cv_overall, 2)`. These large coefficients of variation indicate that even though we were able to reduce the variance in the estimate by an average of `r round(100*(1 - mean_prop), 2)`%, the will not perform well enough to be used as a reliable predictor of average biomass. 
+
