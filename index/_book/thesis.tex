@@ -269,7 +269,9 @@ The Interior West region itself contains the states which encompass the Rocky Mo
 
 The data used in this thesis was collected by the Forest Inventory and Analysis Program (FIA) in the span of 10 years from 2007 to 2017. While this data was collected over this 10 year period, the analyses done throughout this thesis are under the assumption that this is a ``snapshot'' of the Interior West at some moment in time. Thus we do not consider any temporal features of this dataset, however the inventory year information is available to us. The data we have is plot-level data for the Interior West region of the United States, where the data for each plot consists of ground data collected by FIA and remotely sensed data.
 
-The dataframe used in this thesis is a joined dataframe derived from two FIA datasets of the Interior West, \texttt{spatial} and \texttt{response}. The \texttt{spatial} dataframe contains 89444 observations and 70 variables, most notably two remotely sensed predictor variables (\texttt{forprob} and \texttt{forbio}), location information, and ecosubsection. The \texttt{response} dataframe contains 86085 observations and 67 variables, most notably four predictor variables collected by FIA crew members (\texttt{BALIVE\_TPA}, \texttt{CNTLIVE\_TPA}, \texttt{BIOLIVE\_TPA}, and \texttt{VOLNLIVE\_TPA}), location information, and ecosubsection. We join these dataframes by their unique plot number, and subset the number of variables significantly to 19 variables which contain plot information, longitude \& lattitude, elevation, predictor variables, response variables, ecosubsection, ecosection, and province. The resulting joined dataframe has 86085 rows as these are the rows which share the same plots between the \texttt{response} and \texttt{spatial} dataframes. We can see the first few rows of the dataframe with relevant columns selected:
+The dataframe used in this thesis is a joined dataframe derived from two FIA datasets of the Interior West, \texttt{spatial} and \texttt{response}. The \texttt{spatial} dataframe contains 89444 observations and 70 variables, most notably three remotely sensed predictor variables (\texttt{forprob}, \texttt{forbio}, and \texttt{nlcd11}), location information, and ecosubsection. The \texttt{forprob} and \texttt{forbio} predictors were colleted by FIA (Blackard et al., 2008). The \texttt{nlcd11} variable was collected by the Environmental Protection Agency (``Completion of the 2011 national land cover database for the conterminous united states -- representing a decade of land cover change information,'' 2015).
+
+The \texttt{response} dataframe contains 86085 observations and 67 variables, most notably four predictor variables collected by FIA crew members (\texttt{BALIVE\_TPA}, \texttt{CNTLIVE\_TPA}, \texttt{BIOLIVE\_TPA}, and \texttt{VOLNLIVE\_TPA}), location information, and ecosubsection. We join these dataframes by their unique plot number, and subset the number of variables significantly to 19 variables which contain plot information, longitude \& lattitude, elevation, predictor variables, response variables, ecosubsection, ecosection, and province. The resulting joined dataframe has 86085 rows as these are the rows which share the same plots between the \texttt{response} and \texttt{spatial} dataframes. We can see the first few rows of the dataframe with relevant columns selected:
 
 \captionsetup[table]{labelformat=empty,skip=1pt}
 \begin{longtable}{rrrrrrrrr}
@@ -511,6 +513,12 @@ This first appendix includes all of the R chunks of code that were hidden throug
 \setlength{\parskip}{8pt}
 
 \hypertarget{refs}{}
+\leavevmode\hypertarget{ref-forbioforprob}{}%
+Blackard, J., Finco, M., Helmer, E., Holden, G., Hoppus, M., Jacobs, D., \ldots{} others. (2008). Mapping us forest biomass using nationwide forest inventory data and moderate resolution information. \emph{Remote Sensing of Environment}, \emph{112}(4), 1658--1677.
+
+\leavevmode\hypertarget{ref-nlcd11}{}%
+Completion of the 2011 national land cover database for the conterminous united states -- representing a decade of land cover change information. (2015, November). \emph{EPA}. Environmental Protection Agency. Retrieved from \url{https://cfpub.epa.gov/si/si_public_record_report.cfm?Lab=NERL\&dirEntryId=309950}
+
 \leavevmode\hypertarget{ref-whatisfia}{}%
 FIA. (2020). Forest inventory and analysis national program. \emph{What is FIA?} Retrieved from \url{https://www.fia.fs.fed.us/about/about_us/}
 
