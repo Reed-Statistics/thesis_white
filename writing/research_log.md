@@ -1,3 +1,23 @@
+Fall, Week 10
+----------------
+
+### This Week's Work
+
+This week, I have primarily been writing in the thesis document. I set up thesisdown and bibTeX and those seem to be working well. I added sections to the results chapter for unit-level models and an a section with a brief overview of modeling. I also have been working through edits on the data chapter. Outside of writing, I watched Cory Green's video (need to write on eblup... do this weekend), found a way to calculate effective sample size (`bayestestR::effective_sample()`).
+
+
+### Upcoming Work
+
+* Methods chapter: write on all the model types, benefits of bayes, etc.
+
+* Priors: still not set in stone yet, but I am understanding them better. Just frustrated with the lack of a gamma or inverse gamma prior in `rstanarm`. 
+
+* Any loose ends that I don't tie up this weekend. 
+
+### Points of confusion
+
+* Area level models. We spoke about confusion on what to vary our intercepts over however I think it would be good to talk more there and consider fitting the model on a larger scale. 
+
 Fall, Week 9
 ----------------
 
