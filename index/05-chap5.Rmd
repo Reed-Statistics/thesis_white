@@ -27,7 +27,7 @@ load("data/models/unit1.rds")
 
 # Results {#results}
 ## Modeling Overview
-We explore both unit- and area-level models in this thesis, where unit-level models fit the model to the plot (unit) level data, and the area-level models fit to data which has been aggregated to the ecosubsection (area) level. These models types each have their own costs and benefits, and while we lose some data structure with the area-level estimates we gain a large amount of precision. We can see this when looking at the correlation between the predictor `ncld11` and one of our response variables, `BIOLIVE_TPA`, at both the unit- and area-levels with ordinary least squares regression lines fit to the data:
+We explore both unit- and area-level models in this thesis, where unit-level models fit the model to the plot (unit) level data, and the area-level models fit to data which has been aggregated to the ecosubsection (area) level. These models types each have their own costs and benefits, and while we lose some data structure with the area-level estimates we gain a large amount of precision. We can see this when looking at the correlation between the predictor `nlcd11` and one of our response variables, `BIOLIVE_TPA`, at both the unit- and area-levels with ordinary least squares regression lines fit to the data:
 
 ```{r, echo = F, message = F, warning = F, fig.cap="Unit-level correlation", out.width = "90%", fig.align="center"}
 ggplot(m333, aes(x = nlcd11,
@@ -60,7 +60,7 @@ Y_i &\sim N(\alpha_j + \vec\beta\vec X_i,~ \sigma^2) \\
 \alpha_j &\sim N(\mu_\alpha,~ \sigma^2_\alpha) \\
 \mu_\alpha &\sim N(a,~b)
 \end{align*}
-Here, we have $Y_i$, our response variable (`BIOLIVE_TPA`), which is modeled to have a Gaussian posterior distribution with mean $\alpha_j + \vec\beta\vec X_i$ which can change intercept based on the level that a given observation is in. Note that we are predicting $Y$ at the unit-level, so we compute $Y_i$ for every plot in the Northern Rocky Forest, and we allow $\alpha_j$, the intercept, to vary over each of the 20 ecosubsections within the Northern Rocky Forest. After fitting this model, we can look at the estimates of the mean biomass predicted by the model compared to the direct estimator:
+Here, we have $Y_i$, our response variable (`BIOLIVE_TPA`), which is modeled to have a Gaussian posterior distribution with mean $\alpha_j + \vec\beta\vec X_i$ which can change intercept based on the level that a given observation is in. Note that we are predicting $Y$ at the unit-level, so we compute $Y_i$ for every plot in the Northern Rocky Forest, and we allow $\alpha_j$, the intercept, to vary over each of the 20 ecosubsections within the Northern Rocky Forest. Then, we must aggregate our result by taking the mean of our $Y_i$'s in each small area. After fitting this model and preforming the aggregation, we can look at the estimates of the mean biomass predicted by the model compared to the direct estimator:
 
 ```{r, echo = FALSE, fig.cap="Direct and model-based estimates for the unit-level model", message = F, warning = F, out.width = "90%", fig.align="center"}
 mod_df <- data.frame(
@@ -107,9 +107,17 @@ mod_df %>%
   labs(x = "Subsection",
        y = "Estimate")
 ```
-These estimates make sense in the context of hierarhical Bayesian modeling because we can see the shrinkage of the estimates towards the overall mean. We also see more shrinkage in ecosubsections which have less plots, particularly M333Cc ($n_j = 28$), M333Ai ($n_j = 38$), and M333Ad ($n_j = 26$). This is again consistent with our intuition as small areas with less data should rely more heavily on the overall province mean. 
+These estimates make sense in the context of hierarhical Bayesian modeling because we can see the shrinkage of the estimates towards the overall mean. We also see more shrinkage in ecosubsections which have less plots, particularly M333Cc ($n_j = 28$), M333Ai ($n_j = 38$), and M333Ad ($n_j = 26$). This is again consistent with our intuition as small areas with less data should rely more heavily on the overall mean biomass level of the Northern Rocky Forest. 
 
-We can also begin to look at the increase in precision which is gained from this unit-level hierarchial Bayesian model by examining the coefficient of variation for the model and the direct estimator in each ecosubsection. For the direct estimator, the coefficient of variation is defined as the standard deviation of the response divided by the mean of the response, where for the model we take the root mean squared error rather than the standard deviation. We can visualize this statisitc for each ecosubsection:
+We can also begin to look at the increase in precision which is gained from this unit-level hierarchial Bayesian model by examining the coefficient of variation for the model and the direct estimator in each ecosubsection. For the direct estimator, the coefficient of variation of a certain ecosubsection $j$ is defined as
+\begin{align}
+CV_{\text{direct}} = \frac{\sqrt{\text{var}(Y_{i,j})}}{\text{mean}(Y_{i,j})}
+\end{align}
+where $Y_{i,j}$ considers all $i = 1,\dots,n_j$ units in the $j$th ecosubsection. Similarly, for the model-based estimator we define the coefficient of variation as
+\begin{align}
+CV_{\text{model}} = \frac{\sqrt{\frac{1}{n}\sum_{i=1}^{n_j} (Y_{i,j} - \hat{Y}_{i,j})^2}}{\text{mean}(Y_{i,j})}
+\end{align}
+Note that the numerator is now the root mean squared error of the $j$th ecosubsection. This is equvalent to taking the square root of the variance as we did in the direct estimator's coefficent of variation, given that our model perfectly meets our modeling assumptions. Knowing that this will never perfectly be the case, we take the root mean squared error to get a more realistic estimate. Now, we can visualize this statisitc for each ecosubsection:
 
 ```{r, message = F, warning = F, echo = F, fig.cap = "Direct and model-based coefficients of variation for the unit-level model", out.width = "90%", fig.align="center"}
 mod_df %>%
