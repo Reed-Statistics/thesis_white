@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.10.10)  7 NOV 2020 10:08
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.10.10)  8 NOV 2020 13:35
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -435,8 +435,8 @@ Package: ltcaption 2020/05/30 v1.4b longtable captions (AR)
 Package caption Info: rotating package is loaded.
 )
 Package color Info: Redefining color shadecolor on input line 79.
-LaTeX Font Info:    Trying to load font information for T1+lmr on input line 19
-2.
+LaTeX Font Info:    Trying to load font information for T1+lmr on input line 18
+8.
 (/Users/graysonwhite/Library/TinyTeX/texmf-dist/tex/latex/lm/t1lmr.fd
 File: t1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
@@ -448,22 +448,22 @@ File: l3backend-pdftex.def 2020-09-24 L3 backend support: PDF output (pdfTeX)
 ) (./thesis.aux)
 \openout1 = `thesis.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 192.
-LaTeX Font Info:    ... okay on input line 192.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 192.
-LaTeX Font Info:    ... okay on input line 192.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 192.
-LaTeX Font Info:    ... okay on input line 192.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 192.
-LaTeX Font Info:    ... okay on input line 192.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 192.
-LaTeX Font Info:    ... okay on input line 192.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 192.
-LaTeX Font Info:    ... okay on input line 192.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 192.
-LaTeX Font Info:    ... okay on input line 192.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 192.
-LaTeX Font Info:    ... okay on input line 192.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 188.
+LaTeX Font Info:    ... okay on input line 188.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 188.
+LaTeX Font Info:    ... okay on input line 188.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 188.
+LaTeX Font Info:    ... okay on input line 188.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 188.
+LaTeX Font Info:    ... okay on input line 188.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 188.
+LaTeX Font Info:    ... okay on input line 188.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 188.
+LaTeX Font Info:    ... okay on input line 188.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 188.
+LaTeX Font Info:    ... okay on input line 188.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 188.
+LaTeX Font Info:    ... okay on input line 188.
 
 (/Users/graysonwhite/Library/TinyTeX/texmf-dist/tex/latex/epstopdf-pkg/epstopdf
 -base.sty
@@ -476,7 +476,7 @@ sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-Package hyperref Info: Link coloring OFF on input line 192.
+Package hyperref Info: Link coloring OFF on input line 188.
 (/Users/graysonwhite/Library/TinyTeX/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2019/09/16 v2.46 Cross-referencing by name of section
 
@@ -489,9 +489,9 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
 \c@section@level=\count289
 )
-LaTeX Info: Redefining \ref on input line 192.
-LaTeX Info: Redefining \pageref on input line 192.
-LaTeX Info: Redefining \nameref on input line 192.
+LaTeX Info: Redefining \ref on input line 188.
+LaTeX Info: Redefining \pageref on input line 188.
+LaTeX Info: Redefining \nameref on input line 188.
 (./thesis.out) (./thesis.out)
 \@outlinefile=\write4
 \openout4 = `thesis.out'.
@@ -499,42 +499,42 @@ LaTeX Info: Redefining \nameref on input line 192.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
 LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 1
-96.
+92.
 (/Users/graysonwhite/Library/TinyTeX/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OML+lmm on input line 1
-96.
+92.
 (/Users/graysonwhite/Library/TinyTeX/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-196.
+192.
 (/Users/graysonwhite/Library/TinyTeX/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-196.
+192.
 (/Users/graysonwhite/Library/TinyTeX/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 196.
+(Font)              <12> on input line 192.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 196.
+(Font)              <8> on input line 192.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 196.
+(Font)              <6> on input line 192.
 LaTeX Font Info:    Trying to load font information for U+lasy on input line 19
-6.
+2.
 (/Users/graysonwhite/Library/TinyTeX/texmf-dist/tex/latex/base/ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )
-LaTeX Font Info:    Trying to load font information for U+msa on input line 196
+LaTeX Font Info:    Trying to load font information for U+msa on input line 192
 .
 (/Users/graysonwhite/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 196
+LaTeX Font Info:    Trying to load font information for U+msb on input line 192
 .
 (/Users/graysonwhite/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -587,14 +587,14 @@ ap}] [2
  been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.233 \chapter{Context}\label{context}}
+l.229 \chapter{Context}\label{context}}
                                         [1
 
 ]pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has
  been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.233 \chapter{Context}\label{context}}
+l.229 \chapter{Context}\label{context}}
                                         [2
 
 ]
@@ -603,13 +603,13 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.3}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.236 \chapter{Overview}\label{overview}}
+l.232 \chapter{Overview}\label{overview}}
                                           [3]pdfTeX warning (ext4): destination
  with the same identifier (name{page.4}) has been already used, duplicate ignor
 ed
 <to be read again> 
                    \relax 
-l.236 \chapter{Overview}\label{overview}}
+l.232 \chapter{Overview}\label{overview}}
                                           [4
 
 ]
@@ -618,87 +618,59 @@ Chapter 2.
 
 ]
 Chapter 3.
-<figure/interior-west-on-usa.png, id=217, 2107.875pt x 1167.36125pt>
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 2
+42.
+(/Users/graysonwhite/Library/TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
+File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+<figure/interior-west-on-usa.png, id=223, 2107.875pt x 1167.36125pt>
 File: figure/interior-west-on-usa.png Graphic file (type png)
 <use figure/interior-west-on-usa.png>
 Package pdftex.def Info: figure/interior-west-on-usa.png  used on input line 25
-4.
+0.
 (pdftex.def)             Requested size: 433.62pt x 240.12997pt.
-[7]
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 2
-72.
-(/Users/graysonwhite/Library/TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
-File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
-) [8 <./figure/interior-west-on-usa.png>]
-Overfull \hbox (60.2855pt too wide) in alignment at lines 277--288
- [] [] [] [] [] [] [] [] [] 
- []
 
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Underfull \vbox (badness 10000) detected at line 288
- []
-
-
-Overfull \hbox (37.419pt too wide) in alignment at lines 290--301
- [] [] [] [] [] [] 
- []
-
-
-Underfull \vbox (badness 10000) detected at line 301
- []
-
-<figure/basal.png, id=235, 2107.875pt x 2107.875pt>
+[7] [8 <./figure/interior-west-on-usa.png>] [9]
+<figure/basal.png, id=245, 2107.875pt x 2107.875pt>
 File: figure/basal.png Graphic file (type png)
 <use figure/basal.png>
-Package pdftex.def Info: figure/basal.png  used on input line 307.
+Package pdftex.def Info: figure/basal.png  used on input line 292.
 (pdftex.def)             Requested size: 281.85034pt x 281.8491pt.
-[9]
-<figure/biomass.png, id=242, 2107.875pt x 2107.875pt>
+<figure/biomass.png, id=246, 2107.875pt x 2107.875pt>
 File: figure/biomass.png Graphic file (type png)
 <use figure/biomass.png>
-Package pdftex.def Info: figure/biomass.png  used on input line 315.
+Package pdftex.def Info: figure/biomass.png  used on input line 300.
 (pdftex.def)             Requested size: 281.85034pt x 281.8491pt.
-<figure/count.png, id=243, 2107.875pt x 2107.875pt>
+<figure/count.png, id=247, 2107.875pt x 2107.875pt>
 File: figure/count.png Graphic file (type png)
 <use figure/count.png>
-Package pdftex.def Info: figure/count.png  used on input line 323.
+Package pdftex.def Info: figure/count.png  used on input line 308.
 (pdftex.def)             Requested size: 281.85034pt x 281.8491pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [10 <./figure/basal.png>]
-<figure/voln.png, id=249, 2107.875pt x 2107.875pt>
+<figure/voln.png, id=253, 2107.875pt x 2107.875pt>
 File: figure/voln.png Graphic file (type png)
 <use figure/voln.png>
-Package pdftex.def Info: figure/voln.png  used on input line 331.
+Package pdftex.def Info: figure/voln.png  used on input line 316.
 (pdftex.def)             Requested size: 281.85034pt x 281.8491pt.
 [11 <./figure/biomass.png> <./figure/count.png>]
-<thesis_files/figure-latex/unnamed-chunk-9-1.pdf, id=256, 433.62pt x 289.08pt>
+<thesis_files/figure-latex/unnamed-chunk-9-1.pdf, id=260, 433.62pt x 289.08pt>
 File: thesis_files/figure-latex/unnamed-chunk-9-1.pdf Graphic file (type pdf)
 <use thesis_files/figure-latex/unnamed-chunk-9-1.pdf>
 Package pdftex.def Info: thesis_files/figure-latex/unnamed-chunk-9-1.pdf  used 
-on input line 340.
+on input line 325.
 (pdftex.def)             Requested size: 433.62158pt x 289.09692pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [12 <./figure/voln.png>]
-Overfull \hbox (64.4448pt too wide) in alignment at lines 347--358
- [] [] [] [] [] [] [] [] 
- []
-
-
-Underfull \vbox (badness 10000) detected at line 358
- []
-
-
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[13 <./thesis_files/figure-latex/unnamed-chunk-9-1.pdf>]
-Underfull \vbox (badness 10000) detected at line 380
- []
-
-[14]
+[13 <./thesis_files/figure-latex/unnamed-chunk-9-1.pdf>] [14]
 Chapter 4.
 [15
 
@@ -706,35 +678,35 @@ Chapter 4.
 
 ]
 Chapter 5.
-<thesis_files/figure-latex/unnamed-chunk-13-1.pdf, id=292, 469.755pt x 325.215p
+<thesis_files/figure-latex/unnamed-chunk-13-1.pdf, id=294, 469.755pt x 325.215p
 t>
 File: thesis_files/figure-latex/unnamed-chunk-13-1.pdf Graphic file (type pdf)
 <use thesis_files/figure-latex/unnamed-chunk-13-1.pdf>
 Package pdftex.def Info: thesis_files/figure-latex/unnamed-chunk-13-1.pdf  used
- on input line 397.
+ on input line 455.
 (pdftex.def)             Requested size: 390.25534pt x 270.1765pt.
-<thesis_files/figure-latex/unnamed-chunk-14-1.pdf, id=293, 469.755pt x 325.215p
+<thesis_files/figure-latex/unnamed-chunk-14-1.pdf, id=295, 469.755pt x 325.215p
 t>
 File: thesis_files/figure-latex/unnamed-chunk-14-1.pdf Graphic file (type pdf)
 <use thesis_files/figure-latex/unnamed-chunk-14-1.pdf>
 Package pdftex.def Info: thesis_files/figure-latex/unnamed-chunk-14-1.pdf  used
- on input line 405.
+ on input line 463.
 (pdftex.def)             Requested size: 390.25534pt x 270.1765pt.
 [17 <./thesis_files/figure-latex/unnamed-chunk-13-1.pdf>]
-<thesis_files/figure-latex/unnamed-chunk-15-1.pdf, id=310, 469.755pt x 325.215p
+<thesis_files/figure-latex/unnamed-chunk-15-1.pdf, id=312, 469.755pt x 325.215p
 t>
 File: thesis_files/figure-latex/unnamed-chunk-15-1.pdf Graphic file (type pdf)
 <use thesis_files/figure-latex/unnamed-chunk-15-1.pdf>
 Package pdftex.def Info: thesis_files/figure-latex/unnamed-chunk-15-1.pdf  used
- on input line 427.
+ on input line 485.
 (pdftex.def)             Requested size: 390.25534pt x 270.1765pt.
 [18 <./thesis_files/figure-latex/unnamed-chunk-14-1.pdf>]
-<thesis_files/figure-latex/unnamed-chunk-16-1.pdf, id=326, 469.755pt x 325.215p
+<thesis_files/figure-latex/unnamed-chunk-16-1.pdf, id=328, 469.755pt x 325.215p
 t>
 File: thesis_files/figure-latex/unnamed-chunk-16-1.pdf Graphic file (type pdf)
 <use thesis_files/figure-latex/unnamed-chunk-16-1.pdf>
 Package pdftex.def Info: thesis_files/figure-latex/unnamed-chunk-16-1.pdf  used
- on input line 446.
+ on input line 504.
 (pdftex.def)             Requested size: 390.25534pt x 270.1765pt.
 [19 <./thesis_files/figure-latex/unnamed-chunk-15-1.pdf>] [20 <./thesis_files/f
 igure-latex/unnamed-chunk-16-1.pdf>]
@@ -746,10 +718,10 @@ Chapter 6.
 ]
 Appendix A.
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <12> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 476.
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 534.
 [23]
 
-LaTeX Warning: Reference `ref-labels' on page 24 undefined on input line 504.
+LaTeX Warning: Reference `ref-labels' on page 24 undefined on input line 562.
 
 [24]
 Appendix B.
@@ -757,12 +729,7 @@ Appendix B.
 
 ] [26
 
-]
-
-Package caption Warning: Unused \captionsetup[table] on input line 276.
-See the caption package documentation for explanation.
-
-[27
+] [27
 
 ] (./thesis.aux)
 Package rerunfilecheck Info: File `thesis.out' has not changed.
@@ -772,13 +739,13 @@ LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 8952 strings out of 481886
- 142011 string characters out of 5930719
- 440523 words of memory out of 5000000
- 24925 multiletter control sequences out of 15000+600000
+ 8954 strings out of 481886
+ 142073 string characters out of 5930719
+ 436460 words of memory out of 5000000
+ 24927 multiletter control sequences out of 15000+600000
  586975 words of font info for 65 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 60i,12n,66p,1053b,386s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 60i,12n,66p,1783b,386s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}
 {/Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.en
 c}{/Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.
@@ -798,10 +765,10 @@ blic/lm/lmsy10.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1/
 public/lm/lmtk10.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type
 1/public/lm/lmtt12.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/ty
 pe1/public/lm/lmtti10.pfb>
-Output written on thesis.pdf (45 pages, 3671602 bytes).
+Output written on thesis.pdf (45 pages, 3672926 bytes).
 PDF statistics:
- 469 PDF objects out of 1000 (max. 8388607)
- 385 compressed objects within 4 object streams
+ 472 PDF objects out of 1000 (max. 8388607)
+ 388 compressed objects within 4 object streams
  102 named destinations out of 1000 (max. 500000)
  187 words of extra memory for PDF output out of 10000 (max. 10000000)
 

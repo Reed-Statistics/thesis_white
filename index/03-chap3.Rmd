@@ -20,9 +20,9 @@ dat_small <- read_csv("data/subsets/dat_small.csv")
 
 ## The Forest Inventory & Analysis Program
 
-The Forest Inventory & Analysis Program (FIA) is a program within the United States Forest Service which aims to collect information and data in order to assess the country's forests. The FIA has been continuously operating since 1930 and their official mission is to "make and keep current a comprehensive inventory and analysis of the present and prospective conditions of and requirements for the renewable resources of the forest and rangelands of the US." [@whatisfia]
+The Forest Inventory & Analysis Program (FIA) is a program within the United States Forest Service which aims to collect information and data in order to assess the country's forests. The FIA has been continuously operating since 1930 and their official mission is to "make and keep current a comprehensive inventory and analysis of the present and prospective conditions of and requirements for the renewable resources of the forest and rangelands of the US" [@whatisfia].
 
-The FIA collects data all throughout the United States by completing a survey each year of many plots of land. The units measured by the FIA and their ground crews are approximately 30 m by 30 m hexagonal units. Due to the vast size of the United States and immense amount of forested land, it would be nearly impossible for the FIA to attain population data for the country, so they use sampling instead. The FIA samples from the population of 30 m by 30 m hexagonal units by using a geographically-based systematic sampling design (Source: McConville et al, 2020). The FIA chooses these samples by first overlaying a hexagonal grid over the United States where each hexagon contains approximately 6000 acres of land. Then, they fill these hexagons with much smaller hexagons and randomly sample from the population of small hexagons. Then, ground crews go to these sampled small hexagons and collect variables such as basal area, trees per acre, etc. This plot level data is what we are working with throughout the duration of the thesis.
+The FIA collects data all throughout the United States by completing a survey each year of many plots of land. The units measured by the FIA and their ground crews are approximately 30 m by 30 m hexagonal units. Due to the vast size of the United States and immense amount of forested land, it would be nearly impossible for the FIA to attain population data for the country, so they use sampling instead. The FIA samples from the population of 30 m by 30 m hexagonal units by using a geographically-based systematic sampling design [@mcconville2020]. The FIA chooses these samples by first overlaying a hexagonal grid over the United States where each hexagon contains approximately 6000 acres of land. Then, they fill these hexagons with much smaller hexagons and randomly sample from the population of small hexagons. Then, ground crews go to these sampled small hexagons and collect variables such as basal area, trees per acre, etc. Along with this hand-collected data from FIA ground crews, the FIA also uses remotely sensed data to gain more information about the areas which they collect data. For example, the `nlcd11` variable, which measures total percent tree canopy cover of a plot, is collected via remote sensing by the Multi-Resolution Land Characteristics Consortium [@nlcd11]. Throughout the duration of the thesis, we will be working to predict ground-collected data with remotely sensed variables, such as `nlcd11`. Having remotely sensed variables like `nlcd11` is useful to us and FIA because if our models can predict ground-collected variables well, FIA can collect less data and have a larger effective sample size. 
 
 ## The Interior West
 
@@ -34,35 +34,36 @@ knitr::include_graphics("figure/interior-west-on-usa.png")
 
 The IW-FIA collects annual inventories of the Interior West, with the goal of covering 10% of the region each year, so every decade the IW-FIA should have measurement of 100% of each Interior West state's forests.
 
-The Interior West region itself contains the states which encompass the Rocky Mountains along with some other smaller mountain ranges. The Interior West contains 855,767 square miles of land which has an extremely diverse landscape ranging from the high mountain peaks of the Rockies to flat desert plains in Nevada and other Interior West states. Along with desert and mountains, the Interior West also includes parts of the Great Plains. 
+The Interior West region itself contains the states which encompass the Rocky Mountains along with some other smaller mountain ranges. The Interior West contains 855,767 square miles of land which has an extremely diverse landscape ranging from the high mountain peaks of the Rockies to flat desert plains in Nevada and other Interior West states. Along with desert and mountains, the Interior West also includes parts of the Great Plains. Throughout this diverse landscape, there is a similarly diverse range of forested areas. The forested areas range from areas that are humid and temperate to areas like the Northern Rocky Mountain Forest which is dry and considered a temperate desert. 
 
 ### The Northern Rocky Mountain Forest
+
+While 
 
 ## Our Data: Specifics
 
 The data used in this thesis was collected by the Forest Inventory and Analysis Program (FIA) in the span of 10 years from 2007 to 2017. While this data was collected over this 10 year period, the analyses done throughout this thesis are under the assumption that this is a "snapshot" of the Interior West at some moment in time. Thus we do not consider any temporal features of this dataset, however the inventory year information is available to us. The data we have is plot-level data for the Interior West region of the United States, where the data for each plot consists of ground data collected by FIA and remotely sensed data.
 
-The dataframe used in this thesis is a joined dataframe derived from two FIA datasets of the Interior West, `spatial` and `response`. The `spatial` dataframe contains 89444 observations and 70 variables, most notably three remotely sensed predictor variables (`forprob`, `forbio`, and `nlcd11`), location information, and ecosubsection. The `forprob` and `forbio` predictors were colleted by FIA [@forbioforprob]. The `nlcd11` variable was collected by the Environmental Protection Agency [@nlcd11].
+The dataframe used in this thesis is a joined dataframe derived from two FIA datasets of the Interior West, `spatial` and `response`. The `spatial` dataframe contains 89444 observations and 70 variables, most notably three remotely sensed predictor variables (`forprob`, `forbio`, and `nlcd11`), location information, and ecosubsection. The `forprob` and `forbio` predictors were colleted by researchers at FIA [@forbioforprob]. These variables measure the probability of forest in a given plot, and the remotely sensed above ground biomass in a given plot, respectively. The `nlcd11` variable was collected by the Multi-Resolution Land Characteristics Consortium [@nlcd11]. This variable measures percent tree canopy cover in a given plot. 
 
-The `response` dataframe contains 86085 observations and 67 variables, most notably four predictor variables collected by FIA crew members (`BALIVE_TPA`, `CNTLIVE_TPA`, `BIOLIVE_TPA`, and `VOLNLIVE_TPA`), location information, and ecosubsection. We join these dataframes by their unique plot number, and subset the number of variables significantly to 19 variables which contain plot information, longitude & lattitude, elevation, predictor variables, response variables, ecosubsection, ecosection, and province. The resulting joined dataframe has 86085 rows as these are the rows which share the same plots between the `response` and `spatial` dataframes. We can see the first few rows of the dataframe with relevant columns selected:
+The `response` dataframe contains 86085 observations and 67 variables, most notably four response variables collected by FIA crew members (`BALIVE_TPA`, `CNTLIVE_TPA`, `BIOLIVE_TPA`, and `VOLNLIVE_TPA`), location information, and ecosubsection. The response variables noted above measure basal area, tree count, biomass, and volume, respectively. We join these dataframes by their unique plot number, and subset the number of variables significantly to 19 variables which contain plot information, longitude & lattitude, elevation, predictor variables, response variables, ecosubsection, ecosection, and province. The resulting joined dataframe has 86085 rows as these are the rows which share the same plots between the `response` and `spatial` dataframes. We can see the first few rows of the dataframe with relevant columns selected and values rounded to the second decimal place:
 
-```{r, echo = FALSE}
-library(gt)
-dat_small %>%
-  rename(LON = LON_PUBLIC, LAT = LAT_PUBLIC, ELEV = ELEV_PUBLIC) %>%
-  select(PLOT, LON, LAT, ELEV, forgrp, forprob, demLF, forbio, BALIVE_TPA) %>%
-  slice(30:35) %>%
-  gt()
-
-dat_small %>%
-  select(CNTLIVE_TPA, BIOLIVE_TPA, VOLNLIVE_TPA, subsection, section, province) %>%
-  slice(30:35) %>%
-  gt()
+```{r, results="asis", message = F, warning = F, echo = F}
+library(knitr)
+kable(dat_small %>%
+        dplyr::select(PLOT, LON_PUBLIC, LAT_PUBLIC, nlcd11, BIOLIVE_TPA, subsection) %>%
+        dplyr::slice(1036:1041),
+      digits = 2,
+      col.names = c("Plot", "Latitude", "Longitude", "nlcd11", "BIOLIVE_TPA", "subsection"),
+      caption = "Relevant Glimpse of Data",
+      caption.short = "Relevant Glimpse of Data",
+      longtable = TRUE,
+      booktabs = TRUE)
 ```
 
 While the data covers the Interior West as a whole, we have very granular information, as each row represents a plot sampled by the FIA. The data also includes variables that subset the Interior West into provinces which contain ecosections, and these ecosections contain ecosubsections. In our data, on average, each ecosection contains approximately 7.06 ecosubsections, and each province contains an average of 4.86 ecosections. So, an average province then contains just over 34 ecosubsections. The data we have covers a total of 14 provinces, 68 ecosections, and 480 ecosubsections. The hierarchical struture of the data and nestedness of the ecosubsections within ecosections within provinces lends itself to be able to create hierarchical models which borrow strength from surrounding areas. 
 
-While this data contains a multitude of variables, the analyses done in this thesis focus on four key response variables and two explanatory variables. The response variables used are basal area (square-foot), trees per acre, above-ground biomass (lbs), and net volume (ft^3). These variables are coded as `BALIVE_TPA`, `CNTLIVE_TPA`, `BIOLIVE_TPA`, and `VOLNLIVE_TPA`, respectively. We can look at the average of these variables across the Interior West region by ecosubsection in the four following maps of the interior west. 
+While this data contains a multitude of variables, the analyses done in this thesis focus on four key response variables and three explanatory variables. The response variables used are basal area (square-foot), trees per acre, above-ground biomass (lbs), and net volume (ft^3). These variables are coded as `BALIVE_TPA`, `CNTLIVE_TPA`, `BIOLIVE_TPA`, and `VOLNLIVE_TPA`, respectively. We can look at the average of these variables across the Interior West region by ecosubsection in the four following maps of the interior west. 
 
 ```{r, fig.align="center", out.width='65%', echo = FALSE, fig.cap="Mean Basal Area in Interior West Ecosubsections"}
 knitr::include_graphics("figure/basal.png")
@@ -115,38 +116,41 @@ It is notable that the `forprob` variable is bimodal and modes zero and one, whi
 Apart from making histograms of our data, we can also summarize the data to see some summary statistics of our six key variables:
 
 ```{r, message = FALSE, warning=FALSE, echo = FALSE, fig.align="center", fig.retina=4}
-vars <- list(dat_small$forbio, dat_small$forprob, dat_small$BIOLIVE_TPA,
+vars <- list(dat_small$forbio, dat_small$forprob, dat_small$nlcd11, dat_small$BIOLIVE_TPA,
              dat_small$BALIVE_TPA, dat_small$CNTLIVE_TPA, dat_small$VOLNLIVE_TPA)
-dat_small %>%
+kable(dat_small %>%
   summarize(
-    variable = c("forbio", "forprob", "BIOLIVE_TPA", "BALIVE_TPA", "CNTLIVE_TPA", "VOLNLIVE_TPA"),
+    variable = c("forbio", "forprob", "nlcd11", "BIOLIVE_TPA", "BALIVE_TPA", "CNTLIVE_TPA", "VOLNLIVE_TPA"),
     mean = unlist(lapply(vars, mean, na.rm = T)),
-    quantile_25 = unlist(lapply(vars, quantile, na.rm = T, probs = 0.25)),
+    sd = unlist(lapply(vars, sd, na.rm = T)),
     median = unlist(lapply(vars, median, na.rm = T)),
     quantile_75 = unlist(lapply(vars, quantile, na.rm = T, probs = 0.75)),
     min = unlist(lapply(vars, min, na.rm = T)),
-    max = unlist(lapply(vars, max, na.rm = T)),
-    na_count = unlist(lapply(vars, FUN = swfscMisc::na.count))
-  ) %>% 
-  round(digits = 2) %>%
-  gt()
+    max = unlist(lapply(vars, max, na.rm = T))),
+   # na_count = unlist(lapply(vars, FUN = swfscMisc::na.count))),
+  digits = 2,
+  col.names = c("Variable", "Mean", "SD", "Median", "75th Percentile", "Min", "Max"),
+  caption = "Summary Statistics of Relevant Variables",
+  caption.short = "Summary Statistics of Relevant Variables",
+  longtable = TRUE,
+  booktabs = TRUE)
 ```
 
-From this table, we can see how heavily skewed these key variables are, with over 25% of the observations for each variable being zero. This does not stop us from doing meaningful analyses though, as the sample size of this dataset is so large ($n = 86085$) and thus we have plenty of data to create models with. 
+From this table, we can see how heavily skewed these key variables are, with all the variables besides `forprob` having median of zero. This does not stop us from doing meaningful analyses though, as the sample size of this dataset is so large ($n = 86085$) and thus we have plenty of data to create models with. 
 
 ## Data Structure & Hierarchy
 
 As hinted at throughout earlier parts of the chapter, the data used in this thesis has a hierarchical structure, where ecosubsections are nested within ecosections which are in turn nested within provinces. Every plot has each level of granularity of location data recorded and this is what allows us to choose how far to borrow strength from other plots. 
 
-The largest motivation for hierarchical modeling in this particular application is that observations are more similar within the hierarchies which we split them into. To understand if this is true, we can do a preliminary analysis on the data by performing three-way ANOVAs for each key variable with predictors `province`, `section`, and `subsection`. By just looking at the MSE of the ANOVA results, we can see that we should expect more homogeneity within ecosubsections:
+The largest motivation for hierarchical modeling in this particular application is that observations are more similar within the hierarchies which we split them into. To understand if this is true, we can do a preliminary analysis on the data by performing three-way ANOVAs for each key variable with predictors `province`, `section`, and `subsection`. For succintness, we can look at the ANOVA results for one of the repsonse variables, `BIOLIVE_TPA`, but the other variables tell a very similar story in terms of homogeneity. By just looking at the MSE of the ANOVA results, we can see that we should expect more homogeneity within ecosubsections:
 
 ```{r, echo=F, message=F, warning=F}
-anova <- read_csv("data/anova.csv")
-anova %>%
-  select(-X1) %>%
-  gt()
+load("data/anova_BIOLIVE_TPA.rds")
+pander::pander(summary(anova_BIOLIVE_TPA),
+               caption = "Analysis of Variance Model (Biomass Response)",
+               longtable = TRUE,
+               booktabs = TRUE)
 ```
-(* Need a better way to output this table and show province level model is significant)
 
 These results allow us to conclude that it is reasonable to believe that observations within a given province are more homogeneous than observations throughout the Interior West. Thus, if we want ecosubsection level estimates of variables, it makes sense to borrow information from other ecosubsections within the same province as each other. This data structure and homogeneity within provinces is what drives the analyses done henceforth in this thesis. 
 
