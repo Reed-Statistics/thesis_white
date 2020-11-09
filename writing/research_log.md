@@ -3,16 +3,29 @@ Fall, Week 10
 
 ### This Week's Work
 
-This week, I have primarily been writing in the thesis document. I set up thesisdown and bibTeX and those seem to be working well. I added sections to the results chapter for unit-level models and an a section with a brief overview of modeling. I also have been working through edits on the data chapter. Outside of writing, I watched Cory Green's video (need to write on eblup... do this weekend), found a way to calculate effective sample size (`bayestestR::effective_sample()`).
+This week, I have primarily been writing in the thesis document:
+
+* I set up thesisdown and bibTeX and those seem to be working well.
+* I added sections to the results chapter for unit-level models and an a section with a brief overview of modeling.
+* I went through (almost) all the edits in the Data chapter and I think it is really quite good shape now. 
+
+Besides writing, I also experimented with some modeling and watched videos from the FIA conference:
+
+* I watched Cory Green's video and began to understand the EBLUP a little better
+* I found a way to calculate effective sample size (`bayestestR::effective_sample()`).
+* I started using the `sae` package for frequentist models. Still need to do a writeup there but this package seems really useful for comparing Bayesian models to standard frequentist models and direct estimators.
+* I read through the Green Book's section on post-stratification. I think I understand it much better now in the context of forestry, but I could use help actually implementing it (which variable do we use to stratify?)
 
 
 ### Upcoming Work
 
-* Methods chapter: write on all the model types, benefits of bayes, etc.
+* Methods chapter: write on all the model types, benefits of bayes, currently used methods etc.
 
-* Priors: still not set in stone yet, but I am understanding them better. Just frustrated with the lack of a gamma or inverse gamma prior in `rstanarm`. 
+* Priors: still not set in stone yet, but I am understanding them better. Just frustrated with the lack of a gamma or inverse gamma prior in `rstanarm`. I think I need to come up with a different reguarlizing prior because `rstanarm` does not seem to support an inverse-gamma prior. 
 
-* Any loose ends that I don't tie up this weekend. 
+* Area-level results and methods. 
+
+* Use `sae` to compare EBLUP with our HB models.
 
 ### Points of confusion
 

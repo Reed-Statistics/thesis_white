@@ -418,14 +418,27 @@ summary {
 <h2>Fall, Week 10</h2>
 <div id="this-weeks-work" class="section level3">
 <h3>This Week’s Work</h3>
-<p>This week, I have primarily been writing in the thesis document. I set up thesisdown and bibTeX and those seem to be working well. I added sections to the results chapter for unit-level models and an a section with a brief overview of modeling. I also have been working through edits on the data chapter. Outside of writing, I watched Cory Green’s video (need to write on eblup… do this weekend), found a way to calculate effective sample size (<code>bayestestR::effective_sample()</code>).</p>
+<p>This week, I have primarily been writing in the thesis document:</p>
+<ul>
+<li>I set up thesisdown and bibTeX and those seem to be working well.</li>
+<li>I added sections to the results chapter for unit-level models and an a section with a brief overview of modeling.</li>
+<li>I went through (almost) all the edits in the Data chapter and I think it is really quite good shape now.</li>
+</ul>
+<p>Besides writing, I also experimented with some modeling and watched videos from the FIA conference:</p>
+<ul>
+<li>I watched Cory Green’s video and began to understand the EBLUP a little better</li>
+<li>I found a way to calculate effective sample size (<code>bayestestR::effective_sample()</code>).</li>
+<li>I started using the <code>sae</code> package for frequentist models. Still need to do a writeup there but this package seems really useful for comparing Bayesian models to standard frequentist models and direct estimators.</li>
+<li>I read through the Green Book’s section on post-stratification. I think I understand it much better now in the context of forestry, but I could use help actually implementing it (which variable do we use to stratify?)</li>
+</ul>
 </div>
 <div id="upcoming-work" class="section level3">
 <h3>Upcoming Work</h3>
 <ul>
-<li><p>Methods chapter: write on all the model types, benefits of bayes, etc.</p></li>
-<li><p>Priors: still not set in stone yet, but I am understanding them better. Just frustrated with the lack of a gamma or inverse gamma prior in <code>rstanarm</code>.</p></li>
-<li><p>Any loose ends that I don’t tie up this weekend.</p></li>
+<li><p>Methods chapter: write on all the model types, benefits of bayes, currently used methods etc.</p></li>
+<li><p>Priors: still not set in stone yet, but I am understanding them better. Just frustrated with the lack of a gamma or inverse gamma prior in <code>rstanarm</code>. I think I need to come up with a different reguarlizing prior because <code>rstanarm</code> does not seem to support an inverse-gamma prior.</p></li>
+<li><p>Area-level results and methods.</p></li>
+<li><p>Use <code>sae</code> to compare EBLUP with our HB models.</p></li>
 </ul>
 </div>
 <div id="points-of-confusion" class="section level3">
