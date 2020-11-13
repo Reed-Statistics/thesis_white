@@ -101,41 +101,41 @@ knitr::include_graphics("figure/voln.png")
 ```
 
 
-While we have four variables which we will model as response variables throughout the analyses, we also have two predictor variables which will be of much use to us. In particular, forest probability and forest biomass (coded as `forprob` and `forbio`.) These variables which we will treat as predictors are remotely sensed variables, meaning that they were not collected by FIA crew members, but rather with aerial photography and/or satellite imagery. However, we will be using these variables to attempt to predict our response variables in order to understand how good of estimates we can make with this remote data that does not require as much effort to collect. While it may seem unnatural to attempt to predict forest biomass (`BIOLIVE_TPA`) with forest biomass (`forbio`), the differences in the data collection process between the ground level data and remotely sensed data are quite different. 
+While we have four variables which we will model as response variables throughout the analyses, we also have three possible predictor variables which will be of much use to us. In particular, forest probability, forest biomass, and total tree canopy cover (coded as `forprob`, `forbio`, and `nlcd11`.) These variables which we will treat as predictors are remotely sensed variables, meaning that they were not collected by FIA crew members, but rather with aerial photography and/or satellite imagery. However, we will be using these variables to attempt to predict our response variables in order to understand how good of estimates we can make with this remote data that does not require as much effort to collect. While it may seem unnatural to attempt to predict forest biomass (`BIOLIVE_TPA`) with forest biomass (`forbio`), the differences in the data collection process between the ground level data and remotely sensed data are quite different. 
 
-These variables are almost all right-skewed, and all take value zero quite often. To get a good sense of the distributions of the six key variables, we can look at histograms of each variable:
-
-```{r, message = FALSE, warning=FALSE, echo = FALSE, fig.align="center", fig.retina=4, fig.height=4, fig.width=6}
-hist1 <- ggplot(dat_small) +
-  geom_histogram(mapping = aes(x = forprob, y = ..count.. / 1000), color = "black", fill = "steelblue") +
+To get a sense of a few of our predictor variables, we will look at their distributions in the Northern Rocky Forest subset of our data:
+```{r, message = FALSE, warning=FALSE, echo = FALSE, fig.align="center", fig.retina=4, fig.height=4, fig.width=6, fig.cap="Predictors in the M333 Province (Top) and the Entire Interior West (Bottom)"}
+m333 <- dat_small %>%
+  filter(province == "M333")
+hist1 <- ggplot(m333) +
+  geom_histogram(mapping = aes(x = forprob, y = ..count.. / 1000), color = "black", fill = "steelblue", bins = 30) +
   theme_bw() +
   labs(y = "count (1000's)")
-hist2 <- ggplot(dat_small) +
-  geom_histogram(mapping = aes(x = forbio, y = ..count.. / 1000), color = "black", fill = "steelblue") +
+hist2 <- ggplot(m333) +
+  geom_histogram(mapping = aes(x = forbio, y = ..count.. / 1000), color = "black", fill = "steelblue", bins = 30) +
   theme_bw() +
   labs(y = "count (1000's)")
-hist3 <- ggplot(dat_small) +
-  geom_histogram(mapping = aes(x = VOLNLIVE_TPA, y = ..count.. / 1000), color = "black", fill = "steelblue") +
+hist3 <- ggplot(m333) +
+  geom_histogram(mapping = aes(x = nlcd11, y = ..count.. / 1000), color = "black", fill = "steelblue", bins = 30) +
   theme_bw() +
   labs(y = "count (1000's)")
 hist4 <- ggplot(dat_small) +
-  geom_histogram(mapping = aes(x = CNTLIVE_TPA, y = ..count.. / 1000), color = "black", fill = "steelblue") +
+  geom_histogram(mapping = aes(x = forprob, y = ..count.. / 1000), color = "black", fill = "steelblue", bins = 30) +
   theme_bw() +
   labs(y = "count (1000's)")
 hist5 <- ggplot(dat_small) +
-  geom_histogram(mapping = aes(x = BALIVE_TPA, y = ..count.. / 1000), color = "black", fill = "steelblue") +
+  geom_histogram(mapping = aes(x = forbio, y = ..count.. / 1000), color = "black", fill = "steelblue", bins = 30) +
   theme_bw() +
   labs(y = "count (1000's)")
 hist6 <- ggplot(dat_small) +
-  geom_histogram(mapping = aes(x = BIOLIVE_TPA, y = ..count.. / 1000), color = "black", fill = "steelblue") +
+  geom_histogram(mapping = aes(x = nlcd11, y = ..count.. / 1000), color = "black", fill = "steelblue", bins = 30) +
   theme_bw() +
   labs(y = "count (1000's)")
+
 (hist1 + hist2 + hist3) / (hist4 + hist5 + hist6)
 ```
 
-It is notable that the `forprob` variable is bimodal and modes zero and one, while all other variables are extremely right-skewed. This is likely because when `forprob` is decided from the remotely sensed data, there are likely areas that are either very clearly forest or very clearly not forest (residential areas, for example).
-
-Apart from making histograms of our data, we can also summarize the data to see some summary statistics of our six key variables:
+Notably, the Northern Rocky Forest Province (M333) is much more forested than the Interior West, so we see much different distributions of forest-related variables in this subset of the data. Apart from making these histograms, we can also summarize the entire, unit-level data and see some summary statistics of our six key variables:
 
 ```{r, message = FALSE, warning=FALSE, echo = FALSE, fig.align="center", fig.retina=4}
 vars <- list(dat_small$forbio, dat_small$forprob, dat_small$nlcd11, dat_small$BIOLIVE_TPA,
@@ -162,7 +162,29 @@ From this table, we can see how heavily skewed these key variables are, with all
 
 ## Data Structure & Hierarchy
 
-As hinted at throughout earlier parts of the chapter, the data used in this thesis has a hierarchical structure, where ecosubsections are nested within ecosections which are in turn nested within provinces. Every plot has each level of granularity of location data recorded and this is what allows us to choose how far to borrow strength from other plots. 
+As hinted at throughout earlier parts of the chapter, the data used in this thesis has a hierarchical structure, where ecosubsections are nested within ecosections which are in turn nested within provinces. Every plot has each level of granularity of location data recorded and this is what allows us to choose how far to borrow strength from other plots. We can see this structure of nested data by looking at an example up close of Idaho's ecosubsections colored by their province, and then their ecosection: 
+
+```{r, echo = F, message = F, warning = F, fig.align="center", fig.cap="Idaho Colored by Province (Left) and Ecosection (Right)"}
+idaho <- us_boundaries(type = "state",
+                         states = "ID")
+
+id <- st_intersection(idaho, subsections)
+idsection <- ggplot() +
+  geom_sf(data = id,
+          mapping = aes(fill = SECTION)) +
+  scale_fill_viridis_d(option = "A") +
+  theme_void() +
+  theme(legend.position = "none")
+idprov <- ggplot() +
+  geom_sf(data = id,
+          mapping = aes(fill = PROVINC)) +
+  scale_fill_viridis_d(option = "A") +
+  theme_void() +
+  theme(legend.position = "none") 
+
+idprov + idsection
+```
+
 
 The largest motivation for hierarchical modeling in this particular application is that observations are more similar within the hierarchies which we split them into. To understand if this is true, we can do a preliminary analysis on the data by performing three-way ANOVAs for each key variable with predictors `province`, `section`, and `subsection`. For succintness, we can look at the ANOVA results for one of the repsonse variables, `BIOLIVE_TPA`, but the other variables tell a very similar story in terms of homogeneity. By just looking at the MSE of the ANOVA results, we can see that we should expect more homogeneity within ecosubsections:
 
