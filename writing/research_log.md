@@ -9,7 +9,7 @@ One notable thing about `hbsae` is that it uses integration rather than MCMC to 
 
 ### Upcoming Work
 
-* Methods chapter
+* Context chapter
 
 * Cleaning up modeling, doing more modeling, comparison to frequentist models, etc. 
 
@@ -38,7 +38,7 @@ Besides writing, I also experimented with some modeling and watched videos from 
 
 ### Upcoming Work
 
-* Methods chapter: write on all the model types, benefits of bayes, currently used methods etc.
+* Context chapter: write on all the model types, benefits of bayes, currently used methods etc.
 
 * Priors: still not set in stone yet, but I am understanding them better. Just frustrated with the lack of a gamma or inverse gamma prior in `rstanarm`. I think I need to come up with a different reguarlizing prior because `rstanarm` does not seem to support an inverse-gamma prior. 
 
