@@ -418,12 +418,21 @@ summary {
 <h2>Fall, Week 11</h2>
 <div id="this-weeks-work" class="section level3">
 <h3>This Week’s Work</h3>
+<p>This week, I initally tied up loose ends from last week by finishing my revisions to the Data chapter. I then read chapters from Small Area Estimation to try to see what was going wrong with the modeling. After not being able to figure out what (if anything) needed to change for the unit level model, I eventually took a deep dive back into <code>hbsae</code>, which was the package that I really thought didn’t work. However, I was eventually able to get an output that made sense and aligned with my results from <code>rstanarm</code>! The <code>hbsae</code> package also has a few built in features to asses model quality, and these functions yeild really, really, good results in terms of coefs of variation.</p>
+<p>One notable thing about <code>hbsae</code> is that it uses integration rather than MCMC to compute its estimates. This doesn’t seem to be a problem as the results align well with <code>rstanarm</code>. I think that I will try to use this package for our models as the model fitting is almost instant and it has those nice helper functions that would allow us to easily compare the models to those fit with a package like <code>sae</code>.</p>
 </div>
 <div id="upcoming-work" class="section level3">
 <h3>Upcoming Work</h3>
+<ul>
+<li><p>Methods chapter</p></li>
+<li><p>Cleaning up modeling, doing more modeling, comparison to frequentist models, etc.</p></li>
+</ul>
 </div>
 <div id="points-of-confusion" class="section level3">
 <h3>Points of confusion</h3>
+<ul>
+<li>Not a point of confusion, but I’d like to talk through the <code>hbsae</code> code to make sure you think everything looks good before I go all out in using it for the models.</li>
+</ul>
 </div>
 </div>
 <div id="fall-week-10" class="section level2">

@@ -3,12 +3,19 @@ Fall, Week 11
 
 ### This Week's Work
 
+This week, I initally tied up loose ends from last week by finishing my revisions to the Data chapter. I then read chapters from Small Area Estimation to try to see what was going wrong with the modeling. After not being able to figure out what (if anything) needed to change for the unit level model, I eventually took a deep dive back into `hbsae`, which was the package that I really thought didn't work. However, I was eventually able to get an output that made sense and aligned with my results from `rstanarm`! The `hbsae` package also has a few built in features to asses model quality, and these functions yeild really, really, good results in terms of coefs of variation. 
+
+One notable thing about `hbsae` is that it uses integration rather than MCMC to compute its estimates. This doesn't seem to be a problem as the results align well with `rstanarm`. I think that I will try to use this package for our models as the model fitting is almost instant and it has those nice helper functions that would allow us to easily compare the models to those fit with a package like `sae`. 
 
 ### Upcoming Work
 
+* Methods chapter
+
+* Cleaning up modeling, doing more modeling, comparison to frequentist models, etc. 
 
 ### Points of confusion
 
+* Not a point of confusion, but I'd like to talk through the `hbsae` code to make sure you think everything looks good before I go all out in using it for the models. 
 
 Fall, Week 10
 ----------------
