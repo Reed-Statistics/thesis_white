@@ -1,0 +1,84 @@
+---
+title: "Back to hbsae"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(hbsae)
+library(tidyverse)
+m333 <- read_csv("../data/subsets/dat_small.csv") %>%
+  filter(province == "M333")
+m333_area <- m333 %>%
+  group_by(subsection) %>%
+  summarize(meanbio = mean(BIOLIVE_TPA),
+            meannlcd11 = mean(nlcd11))
+```
+
+```{r}
+popdat <- m333 %>%
+  group_by(subsection) %>%
+  summarize(
+    `(Intercept)` = n(),
+    nlcd11 = mean(nlcd11))
+popdat <- as.data.frame(popdat)
+
+
+xpop <- m333 %>%
+  group_by(subsection) %>%
+  summarize(
+    nlcd11 = mean(nlcd11)
+  ) %>%
+  as.data.frame()
+
+rownames(xpop) <- xpop$subsection
+
+xpop <- xpop %>% select(nlcd11)
+
+unit_mod <- fSAE.Unit(y = m333$BIOLIVE_TPA,
+                      X = m333 %>% dplyr::select(nlcd11),
+                      area = m333$subsection,
+                      Narea = popdat$`(Intercept)`,
+                      Xpop = xpop,
+                      fpc = FALSE,
+                      nu0 = 2,
+                      s20 = 10)
+
+SE(unit_mod) / m333_area$meanbio
+
+dat <- data.frame(
+  mean = m333_area$meanbio,
+  est = EST(unit_mod),
+  subsection = m333_area$subsection
+)
+
+dat %>%
+  mutate(subsection = fct_reorder(subsection, mean)) %>%
+  ggplot(aes(x = subsection)) +
+  geom_point(aes(y = est,
+                 color = "goldenrod"),
+             position = position_nudge(x = -0.1)) + 
+  geom_point(aes(y = mean,
+                 color = "forestgreen"),
+             position = position_nudge(x = 0.1)) +
+  theme_bw() +
+  scale_color_manual(
+    name = 'Estimate Type',
+    values = c('goldenrod' = 'goldenrod',
+               'forestgreen' = 'forestgreen'),
+    labels = c('Direct (Mean)', 'Hierarchical Bayesian'),
+    guide = "legend"
+  ) +
+  theme(axis.text.x = element_text(
+    angle = 90,
+    vjust = 0.5,
+    hjust = 1
+  ),
+  legend.position = "bottom") +
+  labs(x = "Subsection",
+       y = "Estimate")
+
+```
+
+
+
