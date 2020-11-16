@@ -35,6 +35,9 @@ rownames(xpop) <- xpop$subsection
 
 xpop <- xpop %>% select(nlcd11)
 
+anova <- aov(BIOLIVE_TPA ~ subsection, data = m333)
+lambda <- summary(anova)[[1]]["subsection", "F value"]
+
 unit_mod <- fSAE.Unit(y = m333$BIOLIVE_TPA,
                       X = m333 %>% dplyr::select(nlcd11),
                       area = m333$subsection,
@@ -42,12 +45,8 @@ unit_mod <- fSAE.Unit(y = m333$BIOLIVE_TPA,
                       Xpop = xpop,
                       fpc = FALSE,
                       nu0 = 2,
-                      s20 = 10)
-
-anova <- aov(BIOLIVE_TPA ~ subsection, data = m333)
-summary <- summary(anova)
-
-lambda <- summary(anova)[[1]]["subsection", "F value"]
+                      s20 = 10,
+                      lambda0 = lambda)
 
 freq_mod <- fSAE.Unit(y = m333$BIOLIVE_TPA,
                       X = m333 %>% dplyr::select(nlcd11),
