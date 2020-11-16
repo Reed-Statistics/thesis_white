@@ -44,12 +44,22 @@ unit_mod <- fSAE.Unit(y = m333$BIOLIVE_TPA,
                       nu0 = 2,
                       s20 = 10)
 
+freq_mod <- fSAE.Unit(y = m333$BIOLIVE_TPA,
+                      X = m333 %>% dplyr::select(nlcd11),
+                      area = m333$subsection,
+                      Narea = popdat$`(Intercept)`,
+                      Xpop = xpop,
+                      fpc = FALSE,
+                      method = "BLUP",
+                      lambda0 = .5)
+
 SE(unit_mod) / m333_area$meanbio
 
 dat <- data.frame(
   mean = m333_area$meanbio,
   est = EST(unit_mod),
-  subsection = m333_area$subsection
+  subsection = m333_area$subsection,
+  freq = EST(freq_mod)
 )
 
 dat %>%
@@ -57,16 +67,20 @@ dat %>%
   ggplot(aes(x = subsection)) +
   geom_point(aes(y = est,
                  color = "goldenrod"),
-             position = position_nudge(x = -0.1)) + 
+             position = position_nudge(x = -0.1)) +
   geom_point(aes(y = mean,
                  color = "forestgreen"),
              position = position_nudge(x = 0.1)) +
+  geom_point(aes(y = freq,
+                 color = "steelblue"),
+             position = position_nudge(x = 0.2)) +
   theme_bw() +
   scale_color_manual(
     name = 'Estimate Type',
     values = c('goldenrod' = 'goldenrod',
-               'forestgreen' = 'forestgreen'),
-    labels = c('Direct (Mean)', 'Hierarchical Bayesian'),
+               'forestgreen' = 'forestgreen',
+               "steelblue" = "steelblue"),
+    labels = c('Direct (Mean)', 'Hierarchical Bayesian', "BLUP"),
     guide = "legend"
   ) +
   theme(axis.text.x = element_text(
