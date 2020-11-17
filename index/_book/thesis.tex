@@ -239,7 +239,7 @@ This is the introduction to my thesis.
 
 The Forest Inventory \& Analysis Program (FIA) is a program within the United States Forest Service which aims to collect information and data in order to assess the country's forests. The FIA has been continuously operating since 1930 and their official mission is to ``make and keep current a comprehensive inventory and analysis of the present and prospective conditions of and requirements for the renewable resources of the forest and rangelands of the US'' (FIA, 2020).
 
-The FIA collects data all throughout the United States by completing a survey each year of many plots of land. The units measured by the FIA and their ground crews are approximately 30 m by 30 m hexagonal units. Due to the vast size of the United States and immense amount of forested land, it would be nearly impossible for the FIA to attain population data for the country, so they use sampling instead. The FIA samples from the population of 30 m by 30 m hexagonal units by using a geographically-based systematic sampling design (McConville, Moisen, \& Frescino, 2020). The FIA chooses these samples by first overlaying a hexagonal grid over the United States where each hexagon contains approximately 6000 acres of land. Then, they fill these hexagons with much smaller hexagons and randomly sample from the population of small hexagons. Then, ground crews go to these sampled small hexagons and collect variables such as basal area, trees per acre, etc. Along with this hand-collected data from FIA ground crews, the FIA also uses remotely sensed data to gain more information about the areas which they collect data. For example, the \texttt{nlcd11} variable, which measures total percent tree canopy cover of a plot, is collected via remote sensing by the Multi-Resolution Land Characteristics Consortium (Homer, 2015). Throughout the duration of the thesis, we will be working to predict ground-collected data with remotely sensed variables, such as \texttt{nlcd11}. Having remotely sensed variables like \texttt{nlcd11} is useful to us and FIA because if our models can predict ground-collected variables well, FIA can collect less data and have a larger effective sample size.
+The FIA collects data all throughout the United States by completing a survey each year of many plots of land. The units measured by the FIA and their ground crews are approximately 30 meter by 30 meter hexagonal units. Due to the vast size of the United States and immense amount of forested land, it would be nearly impossible for the FIA to attain population data for the country, so they use sampling instead. The FIA samples from the population of 30 meter by 30 meter hexagonal units by using a geographically-based systematic sampling design (McConville, Moisen, \& Frescino, 2020). The FIA chooses these samples by first overlaying a hexagonal grid over the United States where each hexagon contains approximately 6000 acres of land. Then, they fill these hexagons with much smaller hexagons and randomly sample from the population of small hexagons. Then, ground crews go to these sampled small hexagons and collect variables such as basal area, trees per acre, etc. Along with this hand-collected data from FIA ground crews, the FIA also uses remotely sensed data to gain more information about the areas which they collect data. For example, the \texttt{nlcd11} variable, which measures total percent tree canopy cover of a plot, is collected via remote sensing by the Multi-Resolution Land Characteristics Consortium (Homer, 2015). Throughout the duration of the thesis, we will be working to predict ground-collected data with remotely sensed variables, such as \texttt{nlcd11}. Having remotely sensed variables like \texttt{nlcd11} is useful to us and FIA because if our models can predict ground-collected variables well, FIA can collect less data and have a larger effective sample size.
 
 \hypertarget{the-interior-west}{%
 \section{The Interior West}\label{the-interior-west}}
@@ -262,7 +262,7 @@ The Interior West region itself contains the states which encompass the Rocky Mo
 
 The data used in this thesis was collected by the Forest Inventory and Analysis Program (FIA) in the span of 10 years from 2007 to 2017. While this data was collected over this 10 year period, the analyses done throughout this thesis are under the assumption that this is a ``snapshot'' of the Interior West at some moment in time. Thus we do not consider any temporal features of this dataset, however the inventory year information is available to us. The data we have is plot-level data for the Interior West region of the United States, where the data for each plot consists of ground data collected by FIA and remotely sensed data.
 
-The dataframe used in this thesis is a joined dataframe derived from two FIA datasets of the Interior West, \texttt{spatial} and \texttt{response}. The \texttt{spatial} dataframe contains 89444 observations and 70 variables, most notably three remotely sensed predictor variables (\texttt{forprob}, \texttt{forbio}, and \texttt{nlcd11}), location information, and ecosubsection. The \texttt{forprob} and \texttt{forbio} predictors were colleted by researchers at FIA (Blackard et al., 2008). These variables measure the probability of forest in a given plot, and the remotely sensed above ground biomass in a given plot, respectively. The \texttt{nlcd11} variable was collected by the Multi-Resolution Land Characteristics Consortium (Homer, 2015). This variable measures percent tree canopy cover in a given plot.
+The dataframe used in this thesis is a joined dataframe derived from two FIA datasets of the Interior West, \texttt{spatial} and \texttt{response}. The \texttt{spatial} dataframe contains 89444 observations and 70 variables, most notably our remotely sensed predictor variable (\texttt{nlcd11}), location information, and ecosubsection. The \texttt{nlcd11} variable was collected by the Multi-Resolution Land Characteristics Consortium (Homer, 2015). This variable measures percent tree canopy cover in a given plot.
 
 The \texttt{response} dataframe contains 86085 observations and 67 variables, most notably four response variables collected by FIA crew members (\texttt{BALIVE\_TPA}, \texttt{CNTLIVE\_TPA}, \texttt{BIOLIVE\_TPA}, and \texttt{VOLNLIVE\_TPA}), location information, and ecosubsection. The response variables noted above measure basal area, tree count, biomass, and volume, respectively. We join these dataframes by their unique plot number, and subset the number of variables significantly to 19 variables which contain plot information, longitude \& lattitude, elevation, predictor variables, response variables, ecosubsection, ecosection, and province. The resulting joined dataframe has 86085 rows as these are the rows which share the same plots between the \texttt{response} and \texttt{spatial} dataframes. We can see the first few rows of the dataframe with relevant columns selected and values rounded to the second decimal place:
 \begin{longtable}[t]{rrrrrl}
@@ -290,7 +290,7 @@ While the data covers the Interior West as a whole, we have very granular inform
 \end{figure}
 The data we have covers a total of 14 provinces, 68 ecosections, and 480 ecosubsections. The hierarchical struture of the data and nestedness of the ecosubsections within ecosections within provinces lends itself to be able to create hierarchical models which borrow strength from surrounding areas.
 
-While this data contains a multitude of variables, the analyses done in this thesis focus on four key response variables and three explanatory variables. The response variables used are basal area (square-foot), trees per acre, above-ground biomass (lbs), and net volume (ft\^{}3). These variables are coded as \texttt{BALIVE\_TPA}, \texttt{CNTLIVE\_TPA}, \texttt{BIOLIVE\_TPA}, and \texttt{VOLNLIVE\_TPA}, respectively. We can look at the average of these variables across the Interior West region by ecosubsection in the four following maps of the interior west.
+While this data contains a multitude of variables, the analyses done in this thesis focus on four key response variables and one explanatory variable. The response variables used are basal area (square-foot), trees per acre, above-ground biomass (lbs), and net volume (ft\^{}3). These variables are coded as \texttt{BALIVE\_TPA}, \texttt{CNTLIVE\_TPA}, \texttt{BIOLIVE\_TPA}, and \texttt{VOLNLIVE\_TPA}, respectively. We can look at the average of these variables across the Interior West region by ecosubsection in the four following maps of the interior west.
 \begin{figure}
 
 {\centering \includegraphics[width=0.65\linewidth]{figure/basal} 
@@ -323,34 +323,31 @@ While this data contains a multitude of variables, the analyses done in this the
 
 \caption{Mean Net Volume in Interior West Ecosubsections}\label{fig:unnamed-chunk-9}
 \end{figure}
-While we have four variables which we will model as response variables throughout the analyses, we also have three possible predictor variables which will be of much use to us. In particular, forest probability, forest biomass, and total tree canopy cover (coded as \texttt{forprob}, \texttt{forbio}, and \texttt{nlcd11}.) These variables which we will treat as predictors are remotely sensed variables, meaning that they were not collected by FIA crew members, but rather with aerial photography and/or satellite imagery. However, we will be using these variables to attempt to predict our response variables in order to understand how good of estimates we can make with this remote data that does not require as much effort to collect. While it may seem unnatural to attempt to predict forest biomass (\texttt{BIOLIVE\_TPA}) with forest biomass (\texttt{forbio}), the differences in the data collection process between the ground level data and remotely sensed data are quite different.
+While we have four variables which we will model as response variables throughout the analyses, we also have one predictor variables which will be of much use to us. In particular, total tree canopy cover (coded as \texttt{nlcd11}.) This variable is remotely sensed, meaning that they were not collected by FIA crew members, but rather with aerial photography and/or satellite imagery. However, we will be using these variables to attempt to predict our response variables in order to understand how good of estimates we can make with this remote data that does not require as much effort to collect.
 
-To get a sense of a few of our predictor variables, we will look at their distributions in the Northern Rocky Forest subset of our data:
+To get a sense of a few of our predictor variable, we will look at its distributions in the Northern Rocky Forest subset of our data compared to its distribution across the entire Interior West:
 \begin{figure}
 
 {\centering \includegraphics[width=432px]{thesis_files/figure-latex/unnamed-chunk-10-1} 
 
 }
 
-\caption{Predictors in the M333 Province (Top) and the Entire Interior West (Bottom)}\label{fig:unnamed-chunk-10}
+\caption{Distribution of Total Canopy Cover in the M333 Province (Top) and the Entire Interior West (Bottom)}\label{fig:unnamed-chunk-10}
 \end{figure}
-Notably, the Northern Rocky Forest Province (M333) is much more forested than the Interior West, so we see much different distributions of forest-related variables in this subset of the data. Apart from making these histograms, we can also summarize the entire, unit-level data and see some summary statistics of our six key variables:
+Notably, the Northern Rocky Forest Province (M333) is much more forested than the Interior West, so we see much different distributions of total canopy cover in this subset of the data. Apart from making these histograms, we can also summarize the entire, unit-level data and see some summary statistics of our five key variables:
 \begin{longtable}[t]{lrrrrrr}
 \caption[Summary Statistics of Relevant Variables]{\label{tab:unnamed-chunk-11}Summary Statistics of Relevant Variables}\\
 \toprule
 Variable & Mean & SD & Median & 75th Percentile & Min & Max\\
 \midrule
-forbio & 6.66 & 14.93 & 0.00 & 0.00 & 0 & 118.00\\
-forprob & 0.27 & 0.37 & 0.07 & 0.56 & 0 & 1.00\\
-nlcd11 & 8.73 & 18.57 & 0.00 & 0.00 & 0 & 95.00\\
-BIOLIVE\_TPA & 6.23 & 16.84 & 0.00 & 1.98 & 0 & 244.35\\
-BALIVE\_TPA & 22.75 & 48.06 & 0.00 & 14.75 & 0 & 469.39\\
-\addlinespace
-CNTLIVE\_TPA & 98.60 & 283.09 & 0.00 & 30.09 & 0 & 6677.93\\
-VOLNLIVE\_TPA & 342.32 & 972.78 & 0.00 & 74.69 & 0 & 16435.55\\
+nlcd11 & 8.73 & 18.57 & 0 & 0.00 & 0 & 95.00\\
+BIOLIVE\_TPA & 6.23 & 16.84 & 0 & 1.98 & 0 & 244.35\\
+BALIVE\_TPA & 22.75 & 48.06 & 0 & 14.75 & 0 & 469.39\\
+CNTLIVE\_TPA & 98.60 & 283.09 & 0 & 30.09 & 0 & 6677.93\\
+VOLNLIVE\_TPA & 342.32 & 972.78 & 0 & 74.69 & 0 & 16435.55\\
 \bottomrule
 \end{longtable}
-From this table, we can see how heavily skewed these key variables are, with all the variables besides \texttt{forprob} having median of zero. This does not stop us from doing meaningful analyses though, as the sample size of this dataset is so large (\(n = 86085\)) and thus we have plenty of data to create models with.
+From this table, we can see how heavily skewed these key variables are, with all the variables having median of zero. This does not stop us from doing meaningful analyses though, as the sample size of this dataset is so large (\(n = 86085\)) and thus we have plenty of data to create models with.
 
 \hypertarget{data-structure-hierarchy}{%
 \section{Data Structure \& Hierarchy}\label{data-structure-hierarchy}}
@@ -368,87 +365,87 @@ The largest motivation for hierarchical modeling in this particular application 
 \begin{longtable}[]{@{}cccccc@{}}
 \caption{Analysis of Variance Model (Biomass Response)}\tabularnewline
 \toprule
-\begin{minipage}[b]{0.20\columnwidth}\centering
-~\strut
+\begin{minipage}[b]{0.15\columnwidth}\centering
+term\strut
 \end{minipage} & \begin{minipage}[b]{0.09\columnwidth}\centering
-Df\strut
+df\strut
 \end{minipage} & \begin{minipage}[b]{0.13\columnwidth}\centering
-Sum Sq\strut
-\end{minipage} & \begin{minipage}[b]{0.12\columnwidth}\centering
-Mean Sq\strut
-\end{minipage} & \begin{minipage}[b]{0.12\columnwidth}\centering
-F value\strut
-\end{minipage} & \begin{minipage}[b]{0.12\columnwidth}\centering
-Pr(\textgreater{}F)\strut
+sumsq\strut
+\end{minipage} & \begin{minipage}[b]{0.10\columnwidth}\centering
+meansq\strut
+\end{minipage} & \begin{minipage}[b]{0.14\columnwidth}\centering
+statistic\strut
+\end{minipage} & \begin{minipage}[b]{0.14\columnwidth}\centering
+p.value\strut
 \end{minipage}\tabularnewline
 \midrule
 \endfirsthead
 \toprule
-\begin{minipage}[b]{0.20\columnwidth}\centering
-~\strut
+\begin{minipage}[b]{0.15\columnwidth}\centering
+term\strut
 \end{minipage} & \begin{minipage}[b]{0.09\columnwidth}\centering
-Df\strut
+df\strut
 \end{minipage} & \begin{minipage}[b]{0.13\columnwidth}\centering
-Sum Sq\strut
-\end{minipage} & \begin{minipage}[b]{0.12\columnwidth}\centering
-Mean Sq\strut
-\end{minipage} & \begin{minipage}[b]{0.12\columnwidth}\centering
-F value\strut
-\end{minipage} & \begin{minipage}[b]{0.12\columnwidth}\centering
-Pr(\textgreater{}F)\strut
+sumsq\strut
+\end{minipage} & \begin{minipage}[b]{0.10\columnwidth}\centering
+meansq\strut
+\end{minipage} & \begin{minipage}[b]{0.14\columnwidth}\centering
+statistic\strut
+\end{minipage} & \begin{minipage}[b]{0.14\columnwidth}\centering
+p.value\strut
 \end{minipage}\tabularnewline
 \midrule
 \endhead
-\begin{minipage}[t]{0.20\columnwidth}\centering
-\textbf{province}\strut
+\begin{minipage}[t]{0.15\columnwidth}\centering
+province\strut
 \end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\centering
 13\strut
 \end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\centering
 6512457\strut
-\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\centering
 500958\strut
-\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering
 2921\strut
-\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering
 0\strut
 \end{minipage}\tabularnewline
-\begin{minipage}[t]{0.20\columnwidth}\centering
-\textbf{section}\strut
+\begin{minipage}[t]{0.15\columnwidth}\centering
+section\strut
 \end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\centering
 54\strut
 \end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\centering
 967169\strut
-\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\centering
 17911\strut
-\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering
 104.4\strut
-\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering
 0\strut
 \end{minipage}\tabularnewline
-\begin{minipage}[t]{0.20\columnwidth}\centering
-\textbf{subsection}\strut
+\begin{minipage}[t]{0.15\columnwidth}\centering
+subsection\strut
 \end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\centering
 412\strut
 \end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\centering
 2247965\strut
-\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\centering
 5456\strut
-\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering
 31.82\strut
-\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering
 0\strut
 \end{minipage}\tabularnewline
-\begin{minipage}[t]{0.20\columnwidth}\centering
-\textbf{Residuals}\strut
+\begin{minipage}[t]{0.15\columnwidth}\centering
+Residuals\strut
 \end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\centering
 85605\strut
 \end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\centering
 14679154\strut
-\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering
+\end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\centering
 171.5\strut
-\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering
 NA\strut
-\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering
 NA\strut
 \end{minipage}\tabularnewline
 \bottomrule
@@ -594,9 +591,6 @@ This first appendix includes all of the R chunks of code that were hidden throug
 \setlength{\parskip}{8pt}
 
 \hypertarget{refs}{}
-\leavevmode\hypertarget{ref-forbioforprob}{}%
-Blackard, J., Finco, M., Helmer, E., Holden, G., Hoppus, M., Jacobs, D., \ldots{} others. (2008). Mapping us forest biomass using nationwide forest inventory data and moderate resolution information. \emph{Remote Sensing of Environment}, \emph{112}(4), 1658--1677.
-
 \leavevmode\hypertarget{ref-whatisfia}{}%
 FIA. (2020). Forest inventory and analysis national program. \emph{What is FIA?} Retrieved from \url{https://www.fia.fs.fed.us/about/about_us/}
 
