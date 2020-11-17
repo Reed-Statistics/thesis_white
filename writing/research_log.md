@@ -1,3 +1,19 @@
+Fall, Week 12
+----------------
+
+### This Week's Work
+
+* Revise Data chapter once more for any adjustments to just talk about `nlcd11` and the entire Interior West (rather than any large specific details about M333)
+
+### Upcoming Work
+
+
+
+### Points of confusion
+
+
+
+
 Fall, Week 11
 ----------------
 
