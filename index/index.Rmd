@@ -34,7 +34,7 @@ abstract: '`r if(knitr:::is_latex_output()) paste(readLines(here::here("prelims"
 acknowledgements: |
   I want to thank a few people.
 dedication: |
-  You can have a dedication here if you wish. 
+  To my family. 
 preface: |
   This is an example of a thesis setup to use the reed thesis document class 
   (for LaTeX) and the R bookdown package, in general.

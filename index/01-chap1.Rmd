@@ -1,1 +1,9 @@
 # Context {#context}
+
+Addresses what the research problem is, motivates why it is important, provides background material on the topic and other approaches, and identifies what is added by this thesis
+
+It is of interest of government organizations such as the Forest Inventory and Analysis Program (FIA) to be able to have reliable estimates of forest attributes in small domains such as ecological subsections (often refered to as ecosubsections) or counties. In particular, the FIA would like to have estimates with low variance in ecological subsections, however, the FIA only samples a small numbers of plots in these small areas. The research goal of this thesis is to address this problem by using techniques which seek to minimize variance of estimates while only introducing a small amount of bias. 
+
+It is important for the FIA to 
+
+In statistics, the group of techniques which address problems of estimation in small sub-populations is called small area estimation. 

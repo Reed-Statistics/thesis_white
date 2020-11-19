@@ -1,1 +1,5 @@
 # Methods {#methods}
+
+Gives an overview of the current main approaches to the problem.
+Points out flaws in existing approaches and addresses how the current work mitigates these problems
+
