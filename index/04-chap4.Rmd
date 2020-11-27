@@ -1,13 +1,32 @@
 # Methods {#methods}
 
-Gives an overview of the current main approaches to the problem.
-Points out flaws in existing approaches and addresses how the current work mitigates these problems
+<!-- Gives an overview of the current main approaches to the problem. -->
+<!-- Points out flaws in existing approaches and addresses how the current work mitigates these problems -->
 
-These are models which are often fit by maximum likelihood estimation and other methods of maximizing the likelihood function such are restricted maximum likelihood estimation. The likelihood can be written as
-$$
-P(X ~\vert ~ \theta)
-$$
-where $X$ is the data and $\theta$ is the parameter of interest. Note that the likelihood function allows the value of $X$ to vary while the parameter, $\theta$, is considered a fixed value. The other school of statistical thought, Bayesian statistics, considers the parameter of interest as varying while the considering the data as fixed. We call this the posterior distribution of $\theta$, and Bayes' theorem gives us the following relation
-$$
-P(\theta ~\vert ~ X) = \frac{P(X ~\vert ~ \theta) P(\theta)}{P(X)}
-$$
+## Current Approaches
+
+### Direct Estimation
+
+### Indirect Estimation
+
+### Model-Based Estimation
+
+#### At the Unit-Level
+
+#### At the Area-Level
+
+## A Hierarchical Bayesian Approach
+
+### The Unit-Level
+
+### The Area-Level
+
+
+<!-- These are models which are often fit by maximum likelihood estimation and other methods of maximizing the likelihood function such are restricted maximum likelihood estimation. The likelihood can be written as -->
+<!-- $$ -->
+<!-- P(X ~\vert ~ \theta) -->
+<!-- $$ -->
+<!-- where $X$ is the data and $\theta$ is the parameter of interest. Note that the likelihood function allows the value of $X$ to vary while the parameter, $\theta$, is considered a fixed value. The other school of statistical thought, Bayesian statistics, considers the parameter of interest as varying while the considering the data as fixed. We call this the posterior distribution of $\theta$, and Bayes' theorem gives us the following relation -->
+<!-- $$ -->
+<!-- P(\theta ~\vert ~ X) = \frac{P(X ~\vert ~ \theta) P(\theta)}{P(X)} -->
+<!-- $$ -->
