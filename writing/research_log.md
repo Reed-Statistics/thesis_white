@@ -1,17 +1,36 @@
-Fall, Week 12
+Fall, Week 13
 ----------------
 
 ### This Week's Work
 
-* Revise Data chapter once more for any adjustments to just talk about `nlcd11` and the entire Interior West (rather than any large specific details about M333)
 
 ### Upcoming Work
-
 
 
 ### Points of confusion
 
 
+Fall, Week 12
+----------------
+
+### This Week's Work
+
+* Revised Data chapter once more for any adjustments to just talk about `nlcd11` and the entire Interior West (rather than any large specific details about M333)
+
+* Wrote content for the context chapter
+
+* Sketched the methods chapter
+
+### Upcoming Work
+
+* (Once we get the population level data) set up all the models, run them, and save as R data object for analysis.
+
+* More writing in methods
+
+
+### Points of confusion
+
+* I had a lot of trouble making the context chapter longer. I wrote over it a few times and often changed things significantly, but whenever I would end up writing more than a few pages it would get "off topic" in the sense that I would be diving into things that are more suited for a methods chapter. 
 
 
 Fall, Week 11
