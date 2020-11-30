@@ -5,21 +5,46 @@
 
 ## Current Approaches
 
-### Direct Estimation
+Currently, there are three main types of estimators used to estimate the value of forest attributes: direct, indirect, and model-based estimators. Direct estimators are commonly thought of as the simplest estimators as they do not borrow strength nor do they use auxilary variables for estimation. Direct estimators are hence easy to use and interpret, but we often do not get precise enough estimates with these estimators. Indirect and model-based estimators, such as the EBLUP estimastor, aim to reduce variance in estimates by using data from surrounding areas and (in the case of the model-based estimator) using auxilary data. 
 
-### Indirect Estimation
+### Direct and Indirect Estimation
+
+Direct and indirect estimation when auxilary data is not available or information from auxilary datasets is not wanted. One of the most common direct estimators is the mean:
+\begin{align}
+\overline{Y_j} = \frac{\sum_{i=1}^{n_j} Y_{i, j}}{n_j}
+\end{align}
+where $\overline{Y_j}$ is the mean of the variable of interest, $i$ indexes over each observation in the small area $j$, $Y_{i,j}$ is the $i$th value of $\theta$ in the $j$th small area, and $n_j$ is the total number of observations in that small area. 
+
+Another commonly used estimator which belongs to the family of direct estimators is the post-stratified estimator:
+
+(PS EQN)
+
+The post-stratified estimator is similar to the mean, however it includes a term which corrects for over or under sampling of forests in a given small area. If we have over or under sampled forests within our small area, the mean will actually be a biased estimator, while the post-stratified estimator is provenly unbiased. While it is not always practical to use the post-stratified estimator due to its need for population information on the forested vs. not-forested variable. However, we do have this population data for the entire interior west region of the United States, so we will be comparing our model based estimators to the baseline post-stratified direct estimator. 
+
+(indirect estimator examples, ask kelly abt this)
 
 ### Model-Based Estimation
 
-#### At the Unit-Level
-
-#### At the Area-Level
+Model-based estimators are extremely useful when auxilary data is available and correlated with the response variables of interest. Most commonly, the estimator used is the EBLUP estimator, which, similarly to the post-stratified estimator, provenly unbiased. This is a random effects model which we can see specified below:
+\begin{align}
+Y_{i,j} = \vec X_{i,j}^{T}\vec\beta + \nu_j + \epsilon_{i,j}
+\end{align}
+where $Y_{i,j}$ is the response variable, $\vec\beta$ is the vector of coefficients of fixed-effect predictors, $\vec X_{i,j}^{T}$ is the vector of fixed-effect predictors, $\nu_j$ is the random-effects term. Note that this is a varying intercepts model where the intercept can change based on the group that the observation is in, however the coefficient estimates do not vary between groups. Another important aspect of the model is the assumption of normally distributed errors and random effects:
+\begin{align}
+\nu &\sim \text{N}(0, \sigma^2_{\nu}), \\
+\epsilon &\sim \text{N}(0, \sigma^2_{\epsilon})
+\end{align}
 
 ## A Hierarchical Bayesian Approach
 
-### The Unit-Level
-
-### The Area-Level
+While we have explored the frequentist version of a hierarchical model, this thesis primarily studies *Bayesian* hierarhical models and compares their performance to their frequentist counterparts. With a Bayesian hierarhical model, we derive the posterior distribution of our variable of interest with either Markov Chain Monte Carlo (MCMC) methods, or through numerical integration. We do this by considering both the data (likelihood) and prior distributions. This allows us to use Bayes' Theorem in order to get our posterior. Similarly to the frequentist counterpart, we can specify the varying-intercepts hierarchical Bayesian model as follows:
+\begin{align}
+Y_{i,j} &\sim \text{N}(\nu_j + \vec\beta\vec X_i,~ \sigma^2) \\
+\nu_j &\sim \text{N}(\mu_\nu,~ \sigma^2_\nu) \\
+\mu_\nu &\sim \text{N}(a,~b) \\
+\sigma &\sim \text{Inv-Gamma}(c,~d)
+\end{align}
+In this model, we have the response variable, $Y$, which is modeled to have a Gaussian posterior distribution with mean $\nu_j + \vec\beta\vec X_i$ which can change intercept based on the level that a given observation is in. Note that $\mu_\nu$ is given a hyperprior distribution where $a$ and $b$ are numbers that often specify a weakly informative or uninformative prior. Often we will set $a=0$ and $b$ equal to some large number to specify a very small amount of prior information. Also, we give the within-area variance a regularizing prior with the Inverse Gamma. 
 
 
 <!-- These are models which are often fit by maximum likelihood estimation and other methods of maximizing the likelihood function such are restricted maximum likelihood estimation. The likelihood can be written as -->
