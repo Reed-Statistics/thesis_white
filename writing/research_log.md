@@ -19,18 +19,20 @@ Fall, Week 12
 
 * Wrote content for the context chapter
 
-* Sketched the methods chapter
+* Wrote content for the methods chapter
 
 ### Upcoming Work
 
 * (Once we get the population level data) set up all the models, run them, and save as R data object for analysis.
 
-* More writing in methods
+* More writing in methods. Maybe extensions to context? Really curious to hear what I should be trying to expand on there.
 
 
 ### Points of confusion
 
 * I had a lot of trouble making the context chapter longer. I wrote over it a few times and often changed things significantly, but whenever I would end up writing more than a few pages it would get "off topic" in the sense that I would be diving into things that are more suited for a methods chapter. 
+
+* I have a few logistical questions as well. 
 
 
 Fall, Week 11
