@@ -23,7 +23,8 @@ hb_unit <- function(data, formula, small_area) {
   xpop <- model_frame %>%
     group_by(small_area) %>%
     summarize(
-      x = mean(x)
+      x = mean(x),
+      y = mean(y)
     ) %>%
     column_to_rownames("small_area")
   
@@ -44,16 +45,26 @@ hb_unit <- function(data, formula, small_area) {
     summarize(scale = sum(var) / nrow(.)) %>%
     pull()
   
-  # Run the model
-  fSAE.Unit(y = model.frame(formula, data = data)[, 1],
-            X = data.frame(X = model.frame(formula, data = data)[, -1]),
-            area = data[[small_area]],
-            Narea = pop_size$pop_size,
-            Xpop = pop_means,
-            fpc = FALSE,
-            nu0 = shape,
-            s20 = scale,
-            lambda0 = l)
+  # Fit the model
+  mod <- fSAE.Unit(
+    y = model.frame(formula, data = data)[, 1],
+    X = data.frame(X = model.frame(formula, data = data)[,-1]),
+    area = data[[small_area]],
+    Narea = pop_size$pop_size,
+    Xpop = pop_means,
+    fpc = FALSE,
+    nu0 = shape,
+    s20 = scale,
+    lambda0 = l
+  )
+  
+  # Calculate CoV
+  CoV <- hbsae::SE(mod) / xpop$y
+  ## Add to model object
+  mod$CoV <- CoV
+  
+  # Print model
+  mod
 }
 
 # Example model specification:

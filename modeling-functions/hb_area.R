@@ -17,12 +17,18 @@ hb_area <- function(data, formula, small_area) {
     )
   head(model_frame)
   
-  # Run the model
-  fSAE.Area(est.init = model_frame$mean_y,
+  # Fit the model
+  mod <- fSAE.Area(est.init = model_frame$mean_y,
             var.init = model_frame$var_y,
-            X = model_frame %>% dplyr::select(mean_x),
-            nu0 = 2000,
-            s20 = 20000)
+            X = model_frame %>% dplyr::select(mean_x))
+  
+  # Calculate CoV
+  CoV <- hbsae::SE(mod) / model_frame$mean_y
+  ## Add to model object
+  mod$CoV <- CoV
+  
+  # Print model
+  mod
 }
 
 # Example model specification:
