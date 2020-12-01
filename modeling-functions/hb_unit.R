@@ -58,6 +58,6 @@ hb_unit <- function(data, formula, small_area) {
 
 # Example model specification:
 
-# mod <- hb_unit(data = m333,
-#         formula = BALIVE_TPA ~ nlcd11,
-#         small_area = "subsection")
+# mod_unit <- hb_unit(data = m333,
+#                     formula = BIOLIVE_TPA ~ nlcd11,
+#                     small_area = "subsection")
