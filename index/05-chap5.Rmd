@@ -1,7 +1,5 @@
 ```{r, include = F}
 library(tidyverse)
-library(rstan)
-library(rstanarm)
 library(ggpubr)
 library(patchwork)
 dat_small <- read_csv("data/subsets/dat_small.csv")
