@@ -1,4 +1,8 @@
 freq_area_CoV <- function(data, formula, small_area, B = 100) {
+  # Load packages
+  library(tidyverse)
+  library(sae)
+  
   # Create empty items for looping
   boots <- list()
   fit <- list()

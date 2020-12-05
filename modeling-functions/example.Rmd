@@ -1,0 +1,116 @@
+---
+title: "Example of Using Modeling Functions"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+df <- readr::read_csv("../data/subsets/dat_small.csv")
+library(tidyverse)
+```
+
+First, you need to load the functions in the this folder:
+```{r}
+source("direct_CoV.R")
+source("direct_estimate.R")
+source("freq_area.R")
+source("freq_area_CoV.R")
+source("freq_unit.R")
+source("freq_unit_CoV.R")
+source("hb_area.R")
+source("hb_CoV.R")
+source("hb_unit.R")
+```
+
+
+Now, let's pick a province
+```{r}
+m333 <- df %>%
+  dplyr::filter(province == "M333")
+```
+
+Let's fit the 5 models:
+```{r}
+# Direct
+direct <- direct_estimate(m333, "BIOLIVE_TPA", "subsection")
+
+# Frequentist models
+freq_unit_mod <- freq_unit(m333, BIOLIVE_TPA ~ nlcd11, "subsection")
+freq_area_mod <- freq_area(m333, BIOLIVE_TPA ~ nlcd11, "subsection")
+
+# Hierarchical Bayesian models
+bayes_unit <- hb_unit(m333, BIOLIVE_TPA ~ nlcd11, "subsection")
+bayes_area <- hb_area(m333, BIOLIVE_TPA ~ nlcd11, "subsection")
+```
+
+Let's get their CoV's:
+```{r}
+# Direct
+dicov <- direct_CoV(direct)
+
+# Freq
+fucov <- freq_unit_CoV(m333, BIOLIVE_TPA ~ nlcd11, "subsection")
+facov <- freq_area_CoV(m333, BIOLIVE_TPA ~ nlcd11, "subsection")
+
+# Bayes
+bucov <- hb_CoV(bayes_unit)
+bacov <- hb_CoV(bayes_area)
+```
+
+Summarize CoV's:
+```{r}
+mean(dicov)
+mean(fucov)
+mean(facov)
+mean(bucov)
+mean(bacov)
+```
+
+Let's plot them:
+```{r}
+cov_df <- data.frame(unitbayes = bucov,
+                     areabayes = bacov,
+                     unitfreq = fucov,
+                     areafreq = facov,
+                     direct = dicov)
+cov_df <- cov_df %>%
+  mutate(subsection = rownames(cov_df))
+
+cov_df %>%
+  mutate(subsection = fct_reorder(subsection, direct)) %>%
+  ggplot(aes(x = subsection)) +
+  geom_point(aes(y = unitbayes,
+                 color = "goldenrod")) +
+  geom_point(aes(y = areabayes,
+                 color = "forestgreen")) +
+  geom_point(aes(y = unitfreq,
+                 color = "steelblue")) +
+  geom_point(aes(y = areafreq,
+                 color = "maroon")) +
+  geom_point(aes(y = direct,
+                 color = "deeppink")) +
+  theme_bw() +
+  scale_color_manual(
+    name = 'Estimate Type',
+    values = c('goldenrod' = 'goldenrod',
+               'forestgreen' = 'forestgreen',
+               "steelblue" = "steelblue",
+               "maroon" = "maroon",
+               "deeppink" = "deeppink"),
+    labels = c('Direct (Mean)', 'HB Area', "HB Unit", "Freq Area", "Freq Unit"),
+    guide = "legend"
+  ) +
+  theme(axis.text.x = element_text(
+    angle = 90,
+    vjust = 0.5,
+    hjust = 1
+  ),
+  legend.position = "bottom") +
+  labs(x = "Subsection",
+       y = "Estimate")
+```
+
+
+
+
+

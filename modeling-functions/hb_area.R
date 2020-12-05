@@ -35,6 +35,6 @@ hb_area <- function(data, formula, small_area) {
 
 # Example model specification:
 
-mod_area <- hb_area(data = m333,
-                    formula = BIOLIVE_TPA ~ nlcd11,
-                    small_area = "subsection")
+# mod_area <- hb_area(data = m333,
+#                     formula = BIOLIVE_TPA ~ nlcd11,
+#                     small_area = "subsection")
