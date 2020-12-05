@@ -35,7 +35,7 @@ dat <- dat %>%
 
 # Select small subset of columns to work with for this EDA
 dat_small <- dat %>%
-  select(PLT_CN, INVYR, PLOT.x, LON_PUBLIC.x, LAT_PUBLIC.x, LON_PUBLIC.y, LAT_PUBLIC.y,
+  dplyr::select(PLT_CN, INVYR, PLOT.x, LON_PUBLIC.x, LAT_PUBLIC.x, LON_PUBLIC.y, LAT_PUBLIC.y,
          ELEV_PUBLIC.x, ELEV_PUBLIC.y, forgrp, forprob, nlcd11, demLF, evtLF, forbio,
          BALIVE_TPA, CNTLIVE_TPA, BIOLIVE_TPA, VOLNLIVE_TPA, subsection, section, province)
 
@@ -46,7 +46,7 @@ all.equal(dat_small$ELEV_PUBLIC.x, dat_small$ELEV_PUBLIC.y)
 
 # Remove redundent columns, rename columns for ease of use
 dat_small <- dat_small %>%
-  select(-LON_PUBLIC.y, -LAT_PUBLIC.y, -ELEV_PUBLIC.y) %>%
+  dplyr::select(-LON_PUBLIC.y, -LAT_PUBLIC.y, -ELEV_PUBLIC.y) %>%
   rename(PLOT = PLOT.x,
          LON_PUBLIC = LON_PUBLIC.x,
          LAT_PUBLIC = LAT_PUBLIC.x,

@@ -54,7 +54,7 @@ freq_mod <- fSAE.Unit(y = m333$BIOLIVE_TPA,
                       Narea = popdat$`(Intercept)`,
                       Xpop = xpop,
                       fpc = FALSE,
-                      method = "BLUP",
+                      method = "hybrid",
                       lambda0 = lambda)
 
 SE(unit_mod) / m333_area$meanbio
