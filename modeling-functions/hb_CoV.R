@@ -1,4 +1,4 @@
-CoV <- function(data) {
+hb_CoV <- function(data) {
   # Load packages
   library(tidyverse)
   library(hbsae)

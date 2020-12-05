@@ -29,4 +29,4 @@ freq_area <- function(data, formula, small_area) {
 
 # Example
 
-# freq_area(m333, BIOLIVE_TPA ~ nlcd11, "subsection")
+# mod <- freq_area(m333, BIOLIVE_TPA ~ nlcd11, "subsection")
