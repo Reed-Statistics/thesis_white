@@ -3,11 +3,21 @@ Fall, Week 13
 
 ### This Week's Work
 
+This week, I wrote functions for modeling. I wrote five main modeling functions: `hb_unit()`, `hb_area()`, `freq_unit()`, `freq_area()`, and `direct_estimate()`. I also wrote functions to grab the coefficient of variation from each function. Each of the modeling functions take in the same three basic arguments (data, formula, small_area) and none of the functions require any data pre-processing. There `hb_*()` functions use `hbsae` while the `freq_*()` functions use `sae`. To get the CoV's for the frequentist models, I had to bootstrap, but that worked pretty seamlessly.
+
+I also made an rmd that uses these functions on M333 and plots their CoV at the end. 
+
 
 ### Upcoming Work
 
+* Implementing these over the entire Interior West!
+
 
 ### Points of confusion
+
+* I had a few errors when I tried to `map()` these over the whole interior west. I think it is how I am specifying one of my priors that is causing this error, but I did not have enough time to debug that yet. 
+
+* I am not sure which column to use for weights for post-stratification, so currently the `direct_estimate()` function is just the mean. 
 
 
 Fall, Week 12

@@ -211,7 +211,6 @@ color: #d14;
 a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
 a.anchor-section::before {content: '#';}
 .hasAnchor:hover a.anchor-section {visibility: visible;}
-ul > li > .anchor-section {display: none;}
 </style>
 <script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
 document.addEventListener('DOMContentLoaded', function() {
@@ -236,7 +235,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Add anchors
   h.forEach(function(x) {
     const id = x.id || section_id(x.parentElement);
-    if (id === '' || x.matches(':empty')) {
+    if (id === '') {
       return null;
     }
     let anchor = document.createElement('a');
@@ -418,12 +417,21 @@ summary {
 <h2>Fall, Week 13</h2>
 <div id="this-weeks-work" class="section level3">
 <h3>This Week’s Work</h3>
+<p>This week, I wrote functions for modeling. I wrote five main modeling functions: <code>hb_unit()</code>, <code>hb_area()</code>, <code>freq_unit()</code>, <code>freq_area()</code>, and <code>direct_estimate()</code>. I also wrote functions to grab the coefficient of variation from each function. Each of the modeling functions take in the same three basic arguments (data, formula, small_area) and none of the functions require any data pre-processing. There <code>hb_*()</code> functions use <code>hbsae</code> while the <code>freq_*()</code> functions use <code>sae</code>. To get the CoV’s for the frequentist models, I had to bootstrap, but that worked pretty seamlessly.</p>
+<p>I also made an rmd that uses these functions on M333 and plots their CoV at the end.</p>
 </div>
 <div id="upcoming-work" class="section level3">
 <h3>Upcoming Work</h3>
+<ul>
+<li>Implementing these over the entire Interior West!</li>
+</ul>
 </div>
 <div id="points-of-confusion" class="section level3">
 <h3>Points of confusion</h3>
+<ul>
+<li><p>I had a few errors when I tried to <code>map()</code> these over the whole interior west. I think it is how I am specifying one of my priors that is causing this error, but I did not have enough time to debug that yet.</p></li>
+<li><p>I am not sure which column to use for weights for post-stratification, so currently the <code>direct_estimate()</code> function is just the mean.</p></li>
+</ul>
 </div>
 </div>
 <div id="fall-week-12" class="section level2">
@@ -591,7 +599,7 @@ summary {
 <h3>Upcoming Work</h3>
 <ul>
 <li><p>Fit better models in <code>hbsae</code></p></li>
-<li>Start data chapter? (Due Oct 23 on thesis repo)
+<li><p>Start data chapter? (Due Oct 23 on thesis repo)</p>
 <ul>
 <li>Start <code>thesisdown</code> document?</li>
 </ul></li>
@@ -614,7 +622,7 @@ summary {
 <h3>Upcoming Work</h3>
 <ul>
 <li><p>Pick software to use</p></li>
-<li>Watch the recorded videos
+<li><p>Watch the recorded videos</p>
 <ul>
 <li>Only got to the introductory one this week.</li>
 </ul></li>
@@ -669,7 +677,7 @@ summary {
 <h3>Upcoming Work</h3>
 <ul>
 <li><p>Read, source, and summarize more relevant papers</p></li>
-<li>Figure out best software to do the analysis (eventually, might not be pressing now?)
+<li><p>Figure out best software to do the analysis (eventually, might not be pressing now?)</p>
 <ul>
 <li>STAN, JAGS, <code>rstan</code> in <code>tidymodels</code>, <code>hbsae</code>, etc.
 <ul>
@@ -684,7 +692,7 @@ summary {
 <h3>Points of confusion</h3>
 <ul>
 <li><p>Can I post scripts that use the data on github or does that uses/visualizes the data in any way need to stay local on my computer?</p></li>
-<li>I am trying to better understand the data and it is going to be used in the models. I think I would really benefit from getting a bit more of a concrete understanding of the process.
+<li><p>I am trying to better understand the data and it is going to be used in the models. I think I would really benefit from getting a bit more of a concrete understanding of the process.</p>
 <ul>
 <li>In my mind, the large overview of the project looks like: 1) gain significant domain knowledge and a fuller understanding of HB modeling. 2) Implement models on multiple small areas. 3) Compare model performance across models I specified and frequentist models in existing literature by looking at things like MSE, bias, etc. 4) Understand benefits and costs of using the HB framework for trying to answer SAE questions. Does this seem reasonable? Are there significant missing steps/analyses that are needed?
 <ul>
