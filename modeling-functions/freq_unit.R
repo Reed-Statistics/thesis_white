@@ -1,4 +1,4 @@
-freq_unit <- function(data, formula, small_area) {
+freq_unit <- function(data, formula, small_area, pop_data) {
   # Load packages
   library(tidyverse)
   library(sae)
@@ -9,18 +9,18 @@ freq_unit <- function(data, formula, small_area) {
   colnames(model_frame) <- c("y", "x", "small_area")
   
   # Area population sizes
-  pop_size <- model_frame %>%
-    dplyr::group_by(small_area) %>%
-    dplyr::summarize(
-      pop_size = n()
-    ) 
+  pop_size <- pop_data %>%
+    dplyr::filter(zoneid %in% model_frame$small_area) %>%
+    dplyr::select(zoneid, sum) %>%
+    dplyr::rename(pop_size = sum,
+                  small_area = zoneid)
   
   # Create population means matrix
-  meanxpop <- model_frame %>%
-    group_by(small_area) %>%
-    summarize(
-      x = mean(x)
-    ) 
+  meanxpop <- pop_data %>%
+    dplyr::filter(zoneid %in% model_frame$small_area) %>%
+    dplyr::select(zoneid, mean) %>%
+    dplyr::rename(x = mean,
+                  small_area = zoneid)
   
   # Fit the model
   mod <- eblupBHF(

@@ -1,4 +1,4 @@
-freq_unit_CoV <- function(data, formula, small_area, B = 100) {
+freq_unit_CoV <- function(data, formula, small_area, pop_data, B = 100) {
   # Load packages
   library(tidyverse)
   library(sae)
@@ -31,7 +31,7 @@ freq_unit_CoV <- function(data, formula, small_area, B = 100) {
       boots_df <- bind_rows(boots) 
     }
     
-    fit[[i]] <- freq_unit(boots_df, y ~ x, "id")
+    fit[[i]] <- freq_unit(boots_df, y ~ x, "id", pop_data)
     
     mean_df[[i]] <- data.frame(fitted = fit[[i]]$eblup$eblup,
                                subsection = fit[[i]]$eblup$domain)
@@ -45,7 +45,7 @@ freq_unit_CoV <- function(data, formula, small_area, B = 100) {
     group_by(subsection) %>%
     summarize(sd = sd(fitted))
   
-  freq_mod <- freq_unit(model_frame, y ~ x, "small_area")
+  freq_mod <- freq_unit(model_frame, y ~ x, "small_area", pop_data)
   
   COV <- final$sd / freq_mod$eblup$eblup
   
