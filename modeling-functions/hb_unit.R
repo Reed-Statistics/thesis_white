@@ -1,7 +1,7 @@
 # This function produces the hierachical Bayesian unit-level small area estimation model.
 # Currently, this function has not been generalized for more than one predictor. 
 
-hb_unit <- function(data, formula, small_area) {
+hb_unit <- function(data, formula, small_area, pop_data) {
   # Load packages
   library(tidyverse)
   library(hbsae)
@@ -12,23 +12,18 @@ hb_unit <- function(data, formula, small_area) {
   colnames(model_frame) <- c("y", "x", "small_area")
   
   # Area population sizes
-  pop_size <- model_frame %>%
-    dplyr::group_by(small_area) %>%
-    dplyr::summarize(
-      pop_size = n()
-    ) %>%
-    dplyr::select(pop_size) 
+  pop_size <- pop_data %>%
+    dplyr::filter(zoneid %in% model_frame$small_area) %>%
+    dplyr::select(zoneid, sum) %>%
+    dplyr::rename(pop_size = sum) %>%
+    dplyr::select(pop_size)
   
   # Create population means matrix
-  xpop <- model_frame %>%
-    group_by(small_area) %>%
-    summarize(
-      x = mean(x),
-      y = mean(y)
-    ) %>%
-    column_to_rownames("small_area")
-  
-  pop_means <- xpop %>% dplyr::select(x)
+  pop_means <- pop_data %>%
+    dplyr::filter(zoneid %in% model_frame$small_area) %>%
+    dplyr::select(zoneid, mean) %>%
+    dplyr::rename(x = mean) %>%
+    column_to_rownames("zoneid")
   
   # Create lambda
   anova <- aov(y ~ small_area, data = model_frame)
@@ -36,14 +31,17 @@ hb_unit <- function(data, formula, small_area) {
   
   # Create scale and shape hyperparameters
   ## these are chosen from Ver Planck et al 
-  shape <- 2
-  scale <- model_frame %>%
+  alpha <- 2
+  beta <- model_frame %>%
     group_by(small_area) %>%
     summarize(
       var = var(y)
     ) %>%
     summarize(scale = sum(var) / nrow(.)) %>%
     pull()
+
+  df <- 2 * alpha
+  scale <- beta / alpha
   
   # Fit the model
   mod <- fSAE.Unit(
@@ -52,23 +50,23 @@ hb_unit <- function(data, formula, small_area) {
     area = data[[small_area]],
     Narea = pop_size$pop_size,
     Xpop = pop_means,
-    fpc = FALSE,
-    nu0 = shape,
+    fpc = TRUE,
+    nu0 = df,
     s20 = scale,
     lambda0 = l
   )
-  
+
   # Calculate CoV
-  CoV <- hbsae::SE(mod) / xpop$y
+  mean_y <- model_frame %>%
+    dplyr::group_by(small_area) %>%
+    dplyr::summarise(mean_y = mean(y))
+  CoV <- hbsae::SE(mod) / mean_y$mean_y
   ## Add to model object
   mod$CoV <- CoV
-  
+  # Add IG prior params to model object
+  mod$df <- df
+  mod$scale <- scale
+
   # Print model
   mod
 }
-
-# Example model specification:
-
-# mod_unit <- hb_unit(data = m333,
-#                     formula = BIOLIVE_TPA ~ nlcd11,
-#                     small_area = "subsection")
