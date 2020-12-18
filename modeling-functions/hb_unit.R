@@ -37,7 +37,7 @@ hb_unit <- function(data, formula, small_area, pop_data) {
     summarize(
       var = var(y)
     ) %>%
-    summarize(scale = sum(var) / nrow(.)) %>%
+    summarize(scale = sum(var, na.rm = TRUE) / nrow(.)) %>%
     pull()
 
   df <- 2 * alpha

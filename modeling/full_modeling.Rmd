@@ -32,4 +32,66 @@ source("../modeling-functions/hb_CoV.R")
 source("../modeling-functions/hb_unit.R")
 ```
 
+## Data setup
+
+Initial data changes to avoid horrific errors:
+```{r}
+no0_subsections <- intwest %>%
+  group_by(subsection) %>%
+  summarize(mean_y = mean(BIOLIVE_TPA),
+            mean_x = mean(nlcd11)) %>%
+  filter(mean_y > 0 & mean_x > 0) %>% # remove subsections that only contain 0 
+  dplyr::select(subsection) %>%
+  pull()
+
+intwest_no0 <- intwest %>%
+  filter(subsection %in% no0_subsections)
+```
+
+List of dataframes:
+```{r}
+iw <- split(intwest_no0, f = intwest_no0$province)
+iw <- iw[-13] # This province only has two subsections and causes divergent integrals
+iw <- iw[-8] # This province only has two subsections and causes divergent integrals
+```
+
+## Modeling
+
+```{r}
+# HB Unit
+bayes_unit <- list()
+bayes_unit[1:12] <- lapply(iw, hb_unit, formula = BIOLIVE_TPA ~ nlcd11, small_area = "subsection", pop_data = tccpop)
+bayes_unit[13:24] <- lapply(iw, hb_unit, formula = BALIVE_TPA ~ nlcd11, small_area = "subsection", pop_data = tccpop)
+bayes_unit[25:36] <- lapply(iw, hb_unit, formula = CNTLIVE_TPA ~ nlcd11, small_area = "subsection", pop_data = tccpop)
+bayes_unit[37:48] <- lapply(iw, hb_unit, formula = VOLNLIVE_TPA ~ nlcd11, small_area = "subsection", pop_data = tccpop)
+
+cov <- lapply(bayes_unit, hb_CoV)
+
+median(unlist(cov))
+
+hist(unlist(lapply(cov, median)))
+```
+
+```{r}
+# Freq Unit
+freqcov <- c(
+freq_unit_CoV(iw[[1]], BIOLIVE_TPA ~ nlcd11, "subsection", tccpop),
+freq_unit_CoV(iw[[2]], BIOLIVE_TPA ~ nlcd11, "subsection", tccpop),
+freq_unit_CoV(iw[[3]], BIOLIVE_TPA ~ nlcd11, "subsection", tccpop),
+freq_unit_CoV(iw[[4]], BIOLIVE_TPA ~ nlcd11, "subsection", tccpop),
+freq_unit_CoV(iw[[5]], BIOLIVE_TPA ~ nlcd11, "subsection", tccpop),
+freq_unit_CoV(iw[[6]], BIOLIVE_TPA ~ nlcd11, "subsection", tccpop),
+freq_unit_CoV(iw[[7]], BIOLIVE_TPA ~ nlcd11, "subsection", tccpop),
+freq_unit_CoV(iw[[8]], BIOLIVE_TPA ~ nlcd11, "subsection", tccpop),
+freq_unit_CoV(iw[[9]], BIOLIVE_TPA ~ nlcd11, "subsection", tccpop),
+freq_unit_CoV(iw[[10]], BIOLIVE_TPA ~ nlcd11, "subsection", tccpop),
+freq_unit_CoV(iw[[11]], BIOLIVE_TPA ~ nlcd11, "subsection", tccpop),
+freq_unit_CoV(iw[[12]], BIOLIVE_TPA ~ nlcd11, "subsection", tccpop)
+)
+
+median(freqcov)
+```
+
+
+
 
