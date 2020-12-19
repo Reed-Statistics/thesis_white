@@ -33,7 +33,8 @@ freq_area_CoV <- function(data, formula, small_area, B = 100) {
     
     fit[[i]] <- freq_area(boots_df, y ~ x, "id")
 
-    mean_df[[i]] <- data.frame(fitted = fit[[i]]$eblup[,1],
+    mean_df[[i]] <- data.frame(# fitted = fit[[i]]$eblup[,1],
+      fitted = as.numeric(fit[[i]]$eblup),
                                subsection = sort(unique(model_frame$small_area)))
     if (i %% 50 == 1) {
       print(i)

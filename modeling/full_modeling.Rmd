@@ -76,16 +76,6 @@ results <- data.frame(
   est_hb_unit = unlist(lapply(bayes_unit, EST)),
   cov_hb_unit = unlist(lapply(bayes_unit, hb_CoV))
 )
-
-
-# lapply(bayes_unit, hb_CoV)
-# names(unlist(lapply(bayes_unit, EST)))
-# 
-# unlist(lapply(cov, mean))
-# 
-# median(unlist(cov))
-# 
-# hist(unlist(lapply(cov, median)))
 ```
 
 ```{r}
@@ -149,58 +139,124 @@ frequnit_df <- frequnit_list %>%
   dplyr::select(-sampsize)
 
 # Coef of variation
-freqcov <- c(
-freq_unit_CoV(iw[[1]], BIOLIVE_TPA ~ nlcd11, "subsection", tccpop),
-freq_unit_CoV(iw[[2]], BIOLIVE_TPA ~ nlcd11, "subsection", tccpop),
-freq_unit_CoV(iw[[3]], BIOLIVE_TPA ~ nlcd11, "subsection", tccpop),
-freq_unit_CoV(iw[[4]], BIOLIVE_TPA ~ nlcd11, "subsection", tccpop),
-freq_unit_CoV(iw[[5]], BIOLIVE_TPA ~ nlcd11, "subsection", tccpop),
-freq_unit_CoV(iw[[6]], BIOLIVE_TPA ~ nlcd11, "subsection", tccpop),
-freq_unit_CoV(iw[[7]], BIOLIVE_TPA ~ nlcd11, "subsection", tccpop),
-freq_unit_CoV(iw[[8]], BIOLIVE_TPA ~ nlcd11, "subsection", tccpop),
-freq_unit_CoV(iw[[9]], BIOLIVE_TPA ~ nlcd11, "subsection", tccpop),
-freq_unit_CoV(iw[[10]], BIOLIVE_TPA ~ nlcd11, "subsection", tccpop),
-freq_unit_CoV(iw[[11]], BIOLIVE_TPA ~ nlcd11, "subsection", tccpop),
-freq_unit_CoV(iw[[12]], BIOLIVE_TPA ~ nlcd11, "subsection", tccpop)
+frequnitcov <- c()
+frequnitcov <- c(
+  Reduce(c,
+       lapply(iw,
+       freq_unit_CoV,
+       formula = BIOLIVE_TPA ~ nlcd11,
+       small_area = "subsection",
+       pop_data = tccpop,
+       B = 200)),
+  Reduce(c,
+       lapply(iw,
+       freq_unit_CoV,
+       formula = BALIVE_TPA ~ nlcd11,
+       small_area = "subsection",
+       pop_data = tccpop,
+       B = 200)),
+  Reduce(c,
+       lapply(iw,
+       freq_unit_CoV,
+       formula = CNTLIVE_TPA ~ nlcd11,
+       small_area = "subsection",
+       pop_data = tccpop,
+       B = 200)),
+  Reduce(c,
+       lapply(iw,
+       freq_unit_CoV,
+       formula = VOLNLIVE_TPA ~ nlcd11,
+       small_area = "subsection",
+       pop_data = tccpop,
+       B = 200))
 )
+
+frequnitcov_df <- data.frame(
+  cov_freq_unit = frequnitcov,
+  subsection = names(frequnitcov),
+  response = c(
+    rep("BIOLIVE_TPA", 428),
+    rep("BALIVE_TPA", 428),
+    rep("CNTLIVE_TPA", 428),
+    rep("VOLNLIVE_TPA", 428)
+  )
+)
+
+frequnit_df <- frequnit_df %>%
+  left_join(frequnitcov_df, by = c("subsection" = "subsection",
+                                   "response" = "response"))
+
+results <- results %>%
+  left_join(frequnit_df, by = c("subsection" = "subsection",
+                                   "response" = "response"))
 ```
 
 
 ```{r}
 # Freq Area
-fareacov <- c(
-freq_area_CoV(iw[[1]], BIOLIVE_TPA ~ nlcd11, "subsection"),
-freq_area_CoV(iw[[2]], BIOLIVE_TPA ~ nlcd11, "subsection"),
-freq_area_CoV(iw[[3]], BIOLIVE_TPA ~ nlcd11, "subsection"),
-freq_area_CoV(iw[[4]], BIOLIVE_TPA ~ nlcd11, "subsection"),
-freq_area_CoV(iw[[5]], BIOLIVE_TPA ~ nlcd11, "subsection"),
-freq_area_CoV(iw[[6]], BIOLIVE_TPA ~ nlcd11, "subsection"),
-freq_area_CoV(iw[[7]], BIOLIVE_TPA ~ nlcd11, "subsection"),
-freq_area_CoV(iw[[8]], BIOLIVE_TPA ~ nlcd11, "subsection"),
-freq_area_CoV(iw[[9]], BIOLIVE_TPA ~ nlcd11, "subsection"),
-freq_area_CoV(iw[[10]], BIOLIVE_TPA ~ nlcd11, "subsection"),
-freq_area_CoV(iw[[11]], BIOLIVE_TPA ~ nlcd11, "subsection"),
-freq_area_CoV(iw[[12]], BIOLIVE_TPA ~ nlcd11, "subsection")
+freqarea <- list()
+freqarea[1:12] <- lapply(iw, freq_area, formula = BIOLIVE_TPA ~ nlcd11, "subsection")
+freqarea[13:24] <- lapply(iw, freq_area, formula = BALIVE_TPA ~ nlcd11, "subsection")
+freqarea[25:36] <- lapply(iw, freq_area, formula = CNTLIVE_TPA ~ nlcd11, "subsection")
+freqarea[37:48] <- lapply(iw, freq_area, formula = VOLNLIVE_TPA ~ nlcd11, "subsection")
+
+freqarea_list <- list()
+  for(i in 1:48) {
+    freqarea_list[[i]] <- freqarea[[i]]$eblup
+  }
+
+# saveRDS(freqarea, "freq_area.rds")
+freq_area_res <- data.frame(
+  subsection = rep(unique(aranged_df$subsection), 4),
+  est_freq_area = unlist(freqarea_list),
+    response = c(rep("BIOLIVE_TPA", 428),
+               rep("BALIVE_TPA", 428),
+               rep("CNTLIVE_TPA", 428), 
+               rep("VOLNLIVE_TPA", 428))
+)
+results <- results %>%
+  left_join(freq_area_res,
+            by = c("subsection" = "subsection",
+                   "response" = "response"))
+
+## coef of var
+freqareacov <- c()
+freqareacov <- c(
+Reduce(c, lapply(
+  iw,
+  freq_area_CoV,
+  formula = BIOLIVE_TPA ~ nlcd11,
+  small_area = "subsection",
+  B = 200)),
+Reduce(c, lapply(
+  iw,
+  freq_area_CoV,
+  formula = BALIVE_TPA ~ nlcd11,
+  small_area = "subsection",
+  B = 200)),
+Reduce(c, lapply(
+  iw,
+  freq_area_CoV,
+  formula = CNTLIVE_TPA ~ nlcd11,
+  small_area = "subsection",
+  B = 200)),
+Reduce(c, lapply(
+  iw,
+  freq_area_CoV,
+  formula = VOLNLIVE_TPA ~ nlcd11,
+  small_area = "subsection",
+  B = 200))
 )
 
-  bop <- c()
-  bop <- sapply(iw, freq_area_CoV,
-                formula = BIOLIVE_TPA ~ nlcd11,
-                small_area = "subsection")
-  median(unlist(bop))
-
-median(fareacov)
-
-areaf <- data.frame(fareacov = unlist(bop))
-areaf <- areaf %>%
+freq_area_res <- freq_area_res %>%
   mutate(
-    prop = case_when(fareacov > 0.15 ~ 0,
-                     fareacov <= 0.15 ~ 1)
+    cov_freq_area = freqareacov
   )
-mean(areaf$prop)
+
+area_join <- freq_area_res %>%
+  dplyr::select(-est_freq_area)
+
+results <- results %>%
+  left_join(area_join, by = c("subsection" = "subsection",
+                   "response" = "response"))
 ```
-
-
-
-
-
