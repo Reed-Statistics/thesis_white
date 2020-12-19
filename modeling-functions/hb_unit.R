@@ -53,7 +53,8 @@ hb_unit <- function(data, formula, small_area, pop_data) {
     fpc = TRUE,
     nu0 = df,
     s20 = scale,
-    lambda0 = l
+    lambda0 = l,
+    silent = T
   )
 
   # Calculate CoV

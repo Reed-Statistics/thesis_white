@@ -48,6 +48,7 @@ freq_unit_CoV <- function(data, formula, small_area, pop_data, B = 100) {
   freq_mod <- freq_unit(model_frame, y ~ x, "small_area", pop_data)
   
   COV <- final$sd / freq_mod$eblup$eblup
+  names(COV) <- final$subsection
   
   COV
 }
