@@ -260,3 +260,30 @@ results <- results %>%
   left_join(area_join, by = c("subsection" = "subsection",
                    "response" = "response"))
 ```
+
+```{r}
+# Direct estimates
+strata <- read_csv("../data/population/strata.csv")
+
+dirmean <- list()
+dirmean[1:12] <- lapply(iw, direct_estimate, response = "BIOLIVE_TPA", "subsection")
+dirmean[13:24] <- lapply(iw, direct_estimate, response = "BALIVE_TPA", "subsection")
+dirmean[25:36] <- lapply(iw, direct_estimate, response = "CNTLIVE_TPA", "subsection")
+dirmean[37:48] <- lapply(iw, direct_estimate, response = "VOLNLIVE_TPA", "subsection")
+
+dir <- bind_rows(dirmean) %>%
+  dplyr::select(Domain, Direct, CV) %>%
+  mutate(cov_dirmean = CV / 100) %>%
+  rename(est_dirmean = Direct) %>%
+  dplyr::select(-CV) %>%
+  mutate(response = c(
+    rep("BIOLIVE_TPA", 428),
+    rep("BALIVE_TPA", 428),
+    rep("CNTLIVE_TPA", 428),
+    rep("VOLNLIVE_TPA", 428)))
+
+results <- results %>%
+  left_join(dir, by = c("subsection" = "Domain",
+                        "response" = "response"))
+```
+
