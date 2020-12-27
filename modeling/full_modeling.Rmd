@@ -59,6 +59,7 @@ iw <- iw[-8] # This province only has two subsections and causes divergent integ
 
 ```{r}
 # HB Unit
+set.seed(1)
 bayes_unit <- list()
 bayes_unit[1:12] <- lapply(iw, hb_unit, formula = BIOLIVE_TPA ~ nlcd11, small_area = "subsection", pop_data = tccpop)
 bayes_unit[13:24] <- lapply(iw, hb_unit, formula = BALIVE_TPA ~ nlcd11, small_area = "subsection", pop_data = tccpop)
@@ -80,6 +81,7 @@ results <- data.frame(
 
 ```{r}
 # HB Area
+set.seed(1)
 bayes_area <- list()
 bayes_area[1:12] <- lapply(iw, hb_area, formula = BIOLIVE_TPA ~ nlcd11, small_area = "subsection", pop_data = tccpop)
 bayes_area[13:24] <- lapply(iw, hb_area, formula = BALIVE_TPA ~ nlcd11, small_area = "subsection", pop_data = tccpop)
@@ -111,6 +113,7 @@ results <- results %>%
 
 ```{r}
 # Freq Unit
+set.seed(1)
 frequnit <- list()
 frequnit[1:12] <- lapply(iw, freq_unit, formula = BIOLIVE_TPA ~ nlcd11, "subsection", tccpop)
 frequnit[13:24] <- lapply(iw, freq_unit, formula = BALIVE_TPA ~ nlcd11, "subsection", tccpop)
@@ -147,28 +150,28 @@ frequnitcov <- c(
        formula = BIOLIVE_TPA ~ nlcd11,
        small_area = "subsection",
        pop_data = tccpop,
-       B = 200)),
+       B = 100)),
   Reduce(c,
        lapply(iw,
        freq_unit_CoV,
        formula = BALIVE_TPA ~ nlcd11,
        small_area = "subsection",
        pop_data = tccpop,
-       B = 200)),
+       B = 100)),
   Reduce(c,
        lapply(iw,
        freq_unit_CoV,
        formula = CNTLIVE_TPA ~ nlcd11,
        small_area = "subsection",
        pop_data = tccpop,
-       B = 200)),
+       B = 100)),
   Reduce(c,
        lapply(iw,
        freq_unit_CoV,
        formula = VOLNLIVE_TPA ~ nlcd11,
        small_area = "subsection",
        pop_data = tccpop,
-       B = 200))
+       B = 100))
 )
 
 frequnitcov_df <- data.frame(
@@ -194,6 +197,7 @@ results <- results %>%
 
 ```{r}
 # Freq Area
+set.seed(1)
 freqarea <- list()
 freqarea[1:12] <- lapply(iw, freq_area, formula = BIOLIVE_TPA ~ nlcd11, "subsection")
 freqarea[13:24] <- lapply(iw, freq_area, formula = BALIVE_TPA ~ nlcd11, "subsection")
@@ -227,25 +231,25 @@ Reduce(c, lapply(
   freq_area_CoV,
   formula = BIOLIVE_TPA ~ nlcd11,
   small_area = "subsection",
-  B = 200)),
+  B = 100)),
 Reduce(c, lapply(
   iw,
   freq_area_CoV,
   formula = BALIVE_TPA ~ nlcd11,
   small_area = "subsection",
-  B = 200)),
+  B = 100)),
 Reduce(c, lapply(
   iw,
   freq_area_CoV,
   formula = CNTLIVE_TPA ~ nlcd11,
   small_area = "subsection",
-  B = 200)),
+  B = 100)),
 Reduce(c, lapply(
   iw,
   freq_area_CoV,
   formula = VOLNLIVE_TPA ~ nlcd11,
   small_area = "subsection",
-  B = 200))
+  B = 100))
 )
 
 freq_area_res <- freq_area_res %>%
@@ -263,6 +267,7 @@ results <- results %>%
 
 ```{r}
 # Direct estimates
+set.seed(1)
 strata <- read_csv("../data/population/strata.csv")
 
 dirmean <- list()

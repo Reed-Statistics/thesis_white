@@ -44,7 +44,7 @@ freq_area_CoV <- function(data, formula, small_area, B = 100) {
   # Create final output
   final <- bind_rows(mean_df) %>%
     group_by(subsection) %>%
-    summarize(sd = sd(fitted))
+    summarize(sd = sd(fitted, na.rm = TRUE))
   
   freq_mod <- freq_area(model_frame, y ~ x, "small_area")
   
