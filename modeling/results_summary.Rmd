@@ -1,0 +1,48 @@
+---
+title: "Untitled"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+results <- readRDS("results.rds")
+library(tidyverse)
+```
+
+## Make data into long format
+```{r}
+estimates_long <- results %>%
+  pivot_longer(cols = c("est_hb_unit", "est_hb_area", "est_freq_unit", "est_freq_area", "est_dirmean"),
+               names_to = "estimator",
+               values_to = "estimate") %>%
+  dplyr::select(-cov_hb_unit, -cov_hb_area, -cov_freq_unit, -cov_freq_area, -cov_dirmean) %>%
+  mutate(estimator = stringr::str_sub(estimator, start = 5))
+
+cov_long <- results %>%
+  pivot_longer(cols = c("cov_hb_unit", "cov_hb_area", "cov_freq_unit", "cov_freq_area", "cov_dirmean"),
+               names_to = "estimator",
+               values_to = "cov") %>%
+  dplyr::select(-est_hb_unit, -est_hb_area, -est_freq_unit, -est_freq_area, -est_dirmean) %>%
+  mutate(estimator = stringr::str_sub(estimator, start = 5))
+
+results_long <- estimates_long %>%
+  full_join(cov_long) %>%
+  mutate(
+    section = str_remove_all(subsection, "[:lower:]"),
+    province = str_sub(section, end = -2)
+  )
+
+```
+
+## Plot some results
+```{r}
+results_long %>%
+  filter(province == "M332") %>%
+  ggplot(aes(x = subsection,
+             y = cov,
+             color = estimator)) +
+  geom_point() +
+  scale_color_manual(values = c("goldenrod", "maroon", "red", "steelblue", "navyblue"))
+```
+
+
