@@ -43,11 +43,15 @@ freq_unit_CoV <- function(data, formula, small_area, pop_data, B = 100) {
   # Create final output
   final <- bind_rows(mean_df) %>%
     group_by(subsection) %>%
-    summarize(sd = sd(fitted))
+    summarize(sd = sd(fitted, na.rm = TRUE))
+  mean_y <- model_frame %>%
+    dplyr::group_by(small_area) %>%
+    dplyr::summarise(mean_y = mean(y, na.rm = TRUE))
   
-  freq_mod <- freq_unit(model_frame, y ~ x, "small_area", pop_data)
+  # freq_mod <- freq_unit(model_frame, y ~ x, "small_area", pop_data)
   
-  COV <- final$sd / freq_mod$eblup$eblup
+  # COV <- final$sd / freq_mod$eblup$eblup
+  COV <- final$sd / mean_y$mean_y
   names(COV) <- final$subsection
   
   COV
