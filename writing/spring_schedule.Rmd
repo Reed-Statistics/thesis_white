@@ -1,0 +1,50 @@
+---
+title: "Schedule for Spring 2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Chapters
+
+  -Abstract (Not started)    
+  -Context (Short but done or close... may need to add more)    
+  -Overview (Not started)    
+  -Data (Done)    
+  -Methods (In the works, good progress)    
+  -Results (Barely started, needs some revisions)    
+  -Discussion and Conclusion (Not started)     
+  -Code and data appendix (Not started)
+  
+## Schedule
+
+Below is my tentative schedule for the spring. I hope to complete these tasks before the deadlines I have set for myself, but we will see. 
+
+### Weeks 1-3
+
+  -Check with Kelly about context chapter    
+  -Finish methods chapter    
+  -Check with Kelly about going through my results and verifying all is well/we have everything we need
+
+### Weeks 4 +
+
+  -Write the results chapter
+
+### Weeks 9-11
+
+  -Two weeks: write discussion, overview, and abstract.     
+  -One week: appendix      
+  -(End of week 11) April 9th: Full rough draft to Kelly for review and feedback
+
+### Spring break
+
+### Weeks 12-13
+
+Revisions, revisions
+
+### End of week 13 (Fri, Apr 30, 3pm)
+
+Thesis due in registrar's office
