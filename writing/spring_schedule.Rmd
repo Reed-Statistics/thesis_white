@@ -8,7 +8,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-## Chapters!
+## Chapters
 
   -Abstract (Not started)    
   -Context (Short but done or close... may need to add more)    
