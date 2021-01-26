@@ -7,6 +7,7 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 results <- readRDS("results.rds")
 library(tidyverse)
+dat <- read_csv("../data/subsets/dat_small.csv")
 ```
 
 ## Make data into long format
@@ -32,17 +33,148 @@ results_long <- estimates_long %>%
     province = str_sub(section, end = -2)
   )
 
+dat_summary <- dat %>%
+  group_by(subsection) %>%
+  summarize(mean_forprob = mean(forprob, na.rm = T))
+
+results_long <- results_long %>%
+  full_join(dat_summary)
+
+results <- results %>%
+  full_join(dat_summary)
 ```
+
+
+```{r}
+ggplot(results, aes(x = cov_hb_unit,
+                    y = mean_forprob)) +
+  geom_point() +
+  xlim(0,100)
+ggplot(results, aes(x = cov_hb_area,
+                    y = mean_forprob)) +
+  geom_point() +
+  xlim(0,100)
+ggplot(results, aes(x = cov_freq_unit,
+                    y = mean_forprob)) +
+  geom_point() +
+  xlim(0,100)
+ggplot(results, aes(x = cov_freq_area,
+                    y = mean_forprob)) +
+  geom_point() +
+  xlim(0,100)
+
+
+results_long %>%
+  # filter(mean_forprob >= 0.25) %>%
+  group_by(estimator) %>%
+  summarize(mean = mean(cov),
+            median = median(cov))
+
+median((results$est_hb_unit - results$est_freq_unit) / results$est_freq_unit, na.rm = T)
+
+median((results$est_hb_area - results$est_freq_area) / results$est_freq_area, na.rm = T)
+```
+
 
 ## Plot some results
 ```{r}
-results_long %>%
-  filter(province == "M332") %>%
-  ggplot(aes(x = subsection,
-             y = cov,
-             color = estimator)) +
+m333_long_basal <- results_long %>%
+  filter(province == "M333",
+         response == "BALIVE_TPA")
+
+m333_basal <- results %>%
+    filter(subsection %in% m333_long_basal$subsection,
+         response == "BALIVE_TPA")
+
+m333_long_basal <- m333_basal %>%
+  dplyr::select("subsection", "est_dirmean") %>%
+  full_join(m333_long_basal, by = "subsection") %>%
+  mutate(sd = cov * estimate)
+
+m333_long_basal_hbarea <- m333_long_basal %>%
+  filter(estimator == "hb_area")
+
+p1 <- ggplot(m333_long_basal,
+       aes(
+         x = stringr::str_sub(subsection, 5),
+         y = cov,
+         color = estimator
+       )) +
   geom_point() +
-  scale_color_manual(values = c("goldenrod", "maroon", "red", "steelblue", "navyblue"))
+  scale_color_manual(
+    values = c("goldenrod", "maroon", "red", "navyblue", "steelblue"),
+    labels = c(
+      "Mean",
+      "Freq. Area-level",
+      "Freq. Unit-level",
+      "Bayesian Area-level",
+      "Bayesian Unit-level"
+    )
+  ) +
+  theme_bw() +
+  theme(legend.position = "bottom") +
+  labs(
+    y = "Coefficient of Variation",
+    x = "Ecological Subsection",
+    color = "Estimator:",
+    title = "Coefficent of Variation of Estimators in the Northern Rocky Forest (M333)"
+  )
+
+
+p2 <- ggplot(m333_long_basal,
+       aes(
+         x = stringr::str_sub(subsection, 5),
+         y = estimate,
+         color = estimator
+       )) +
+  geom_point() +
+  scale_color_manual(
+    values = c("goldenrod", "maroon", "red", "navyblue", "steelblue"),
+    labels = c(
+      "Mean",
+      "Freq. Area-level",
+      "Freq. Unit-level",
+      "Bayesian Area-level",
+      "Bayesian Unit-level"
+    )
+  ) +
+  theme_bw() +
+  theme(legend.position = "bottom") +
+  labs(
+    y = "Basal Area (sq ft)",
+    x = "Ecological Subsection",
+    color = "Estimator:",
+    title = "Basal Area Model Results in the Northern Rocky Forest (M333)"
+  )
+
+p3 <- ggplot(m333_long_basal,
+       aes(
+         x = stringr::str_sub(subsection, 5),
+         y = estimate,
+         color = estimator
+       )) +
+  geom_point() +
+  geom_errorbar(data = m333_long_basal_hbarea,
+                aes(ymin = estimate - 2*sd, ymax = estimate + 2*sd)) +
+  scale_color_manual(
+    values = c("goldenrod", "maroon", "red", "navyblue", "steelblue"),
+    labels = c(
+      "Mean",
+      "Freq. Area-level",
+      "Freq. Unit-level",
+      "Bayesian Area-level",
+      "Bayesian Unit-level"
+    )
+  ) +
+  theme_bw() +
+  theme(legend.position = "bottom") +
+  labs(
+    y = "Basal Area (sq ft)",
+    x = "Ecological Subsection",
+    color = "Estimator:",
+    title = "Basal Area Model Results in the Northern Rocky Forest (M333)"
+  )
+
 ```
 
 
