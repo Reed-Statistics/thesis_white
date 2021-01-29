@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.12.17)  31 DEC 2020 16:55
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.12.17)  29 JAN 2021 10:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -638,18 +638,13 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [8 <./figure/interior-west-on-usa.png>]
-<thesis_files/figure-latex/unnamed-chunk-5-1.pdf, id=266, 469.755pt x 325.215pt
->
+<thesis_files/figure-latex/unnamed-chunk-5-1.pdf, id=266, 305.14pt x 312.16624p
+t>
 File: thesis_files/figure-latex/unnamed-chunk-5-1.pdf Graphic file (type pdf)
 <use thesis_files/figure-latex/unnamed-chunk-5-1.pdf>
 Package pdftex.def Info: thesis_files/figure-latex/unnamed-chunk-5-1.pdf  used 
 on input line 299.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-
-Overfull \hbox (36.13387pt too wide) in paragraph at lines 299--300
- [][] 
- []
-
+(pdftex.def)             Requested size: 305.13924pt x 312.16548pt.
 [9]
 <figure/basal.png, id=271, 2107.875pt x 2107.875pt>
 File: figure/basal.png Graphic file (type png)
@@ -665,38 +660,33 @@ Package pdftex.def Info: figure/biomass.png  used on input line 318.
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [10 <./thesis_files/figure-latex/unnamed-chunk-5-1.pdf>]
-<figure/count.png, id=282, 2107.875pt x 2107.875pt>
+<figure/count.png, id=284, 2107.875pt x 2107.875pt>
 File: figure/count.png Graphic file (type png)
 <use figure/count.png>
 Package pdftex.def Info: figure/count.png  used on input line 326.
 (pdftex.def)             Requested size: 281.85034pt x 281.8491pt.
-<figure/voln.png, id=283, 2107.875pt x 2107.875pt>
+<figure/voln.png, id=285, 2107.875pt x 2107.875pt>
 File: figure/voln.png Graphic file (type png)
 <use figure/voln.png>
 Package pdftex.def Info: figure/voln.png  used on input line 334.
 (pdftex.def)             Requested size: 281.85034pt x 281.8491pt.
 [11 <./figure/basal.png> <./figure/biomass.png>] [12 <./figure/count.png> <./fi
 gure/voln.png>]
-<thesis_files/figure-latex/unnamed-chunk-10-1.pdf, id=296, 433.62pt x 289.08pt>
-
+<thesis_files/figure-latex/unnamed-chunk-10-1.pdf, id=298, 420.57124pt x 265.99
+374pt>
 File: thesis_files/figure-latex/unnamed-chunk-10-1.pdf Graphic file (type pdf)
 <use thesis_files/figure-latex/unnamed-chunk-10-1.pdf>
 Package pdftex.def Info: thesis_files/figure-latex/unnamed-chunk-10-1.pdf  used
  on input line 345.
-(pdftex.def)             Requested size: 433.62158pt x 289.09692pt.
+(pdftex.def)             Requested size: 433.62158pt x 274.24854pt.
 [13 <./thesis_files/figure-latex/unnamed-chunk-10-1.pdf>]
-<thesis_files/figure-latex/unnamed-chunk-12-1.pdf, id=308, 469.755pt x 325.215p
-t>
+<thesis_files/figure-latex/unnamed-chunk-12-1.pdf, id=312, 373.395pt x 287.0725
+pt>
 File: thesis_files/figure-latex/unnamed-chunk-12-1.pdf Graphic file (type pdf)
 <use thesis_files/figure-latex/unnamed-chunk-12-1.pdf>
 Package pdftex.def Info: thesis_files/figure-latex/unnamed-chunk-12-1.pdf  used
  on input line 372.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-
-Overfull \hbox (36.13387pt too wide) in paragraph at lines 372--373
- [][] 
- []
-
+(pdftex.def)             Requested size: 373.39409pt x 287.0718pt.
 [14 <./thesis_files/figure-latex/unnamed-chunk-12-1.pdf>] [15] [16
 
 ]
@@ -705,36 +695,39 @@ Chapter 4.
 
 ]
 Chapter 5.
-<thesis_files/figure-latex/unnamed-chunk-15-1.pdf, id=360, 469.755pt x 325.215p
-t>
+<thesis_files/figure-latex/unnamed-chunk-15-1.pdf, id=366, 464.73625pt x 313.17
+pt>
 File: thesis_files/figure-latex/unnamed-chunk-15-1.pdf Graphic file (type pdf)
 <use thesis_files/figure-latex/unnamed-chunk-15-1.pdf>
 Package pdftex.def Info: thesis_files/figure-latex/unnamed-chunk-15-1.pdf  used
  on input line 527.
-(pdftex.def)             Requested size: 390.25534pt x 270.1765pt.
-<thesis_files/figure-latex/unnamed-chunk-16-1.pdf, id=361, 469.755pt x 325.215p
-t>
+(pdftex.def)             Requested size: 390.25534pt x 262.98453pt.
+<thesis_files/figure-latex/unnamed-chunk-16-1.pdf, id=367, 459.7175pt x 315.177
+5pt>
 File: thesis_files/figure-latex/unnamed-chunk-16-1.pdf Graphic file (type pdf)
 <use thesis_files/figure-latex/unnamed-chunk-16-1.pdf>
 Package pdftex.def Info: thesis_files/figure-latex/unnamed-chunk-16-1.pdf  used
  on input line 535.
-(pdftex.def)             Requested size: 390.25534pt x 270.1765pt.
+(pdftex.def)             Requested size: 390.25534pt x 267.5703pt.
+
+Underfull \vbox (badness 3240) has occurred while \output is active []
+
 [21 <./thesis_files/figure-latex/unnamed-chunk-15-1.pdf>]
-<thesis_files/figure-latex/unnamed-chunk-17-1.pdf, id=378, 469.755pt x 325.215p
-t>
+<thesis_files/figure-latex/unnamed-chunk-17-1.pdf, id=386, 459.7175pt x 308.151
+25pt>
 File: thesis_files/figure-latex/unnamed-chunk-17-1.pdf Graphic file (type pdf)
 <use thesis_files/figure-latex/unnamed-chunk-17-1.pdf>
 Package pdftex.def Info: thesis_files/figure-latex/unnamed-chunk-17-1.pdf  used
  on input line 557.
-(pdftex.def)             Requested size: 390.25534pt x 270.1765pt.
+(pdftex.def)             Requested size: 390.25534pt x 261.60535pt.
 [22 <./thesis_files/figure-latex/unnamed-chunk-16-1.pdf>]
-<thesis_files/figure-latex/unnamed-chunk-18-1.pdf, id=391, 469.755pt x 325.215p
-t>
+<thesis_files/figure-latex/unnamed-chunk-18-1.pdf, id=401, 463.7325pt x 308.151
+25pt>
 File: thesis_files/figure-latex/unnamed-chunk-18-1.pdf Graphic file (type pdf)
 <use thesis_files/figure-latex/unnamed-chunk-18-1.pdf>
 Package pdftex.def Info: thesis_files/figure-latex/unnamed-chunk-18-1.pdf  used
  on input line 576.
-(pdftex.def)             Requested size: 390.25534pt x 270.1765pt.
+(pdftex.def)             Requested size: 390.25534pt x 259.32957pt.
 [23 <./thesis_files/figure-latex/unnamed-chunk-17-1.pdf>] [24 <./thesis_files/f
 igure-latex/unnamed-chunk-18-1.pdf>]
 Chapter 6.
@@ -792,10 +785,10 @@ blic/lm/lmsy10.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1/
 public/lm/lmtk10.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type
 1/public/lm/lmtt12.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/ty
 pe1/public/lm/lmtti10.pfb>
-Output written on thesis.pdf (49 pages, 4223259 bytes).
+Output written on thesis.pdf (49 pages, 4226133 bytes).
 PDF statistics:
- 538 PDF objects out of 1000 (max. 8388607)
- 445 compressed objects within 5 object streams
+ 552 PDF objects out of 1000 (max. 8388607)
+ 452 compressed objects within 5 object streams
  123 named destinations out of 1000 (max. 500000)
  221 words of extra memory for PDF output out of 10000 (max. 10000000)
 
