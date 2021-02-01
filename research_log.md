@@ -1,10 +1,24 @@
+Spring, Week 1
+----------------
+
+### This Week's Work
+
+* I made many diagrams in Keynote for the Context chapter    
+* Applied edits to the Context chapter, implemented diagrams, change some phrasing, add more motivation, etc.      
+* (Need to) start working on the Methods chapter and edits there
+
+
+### Upcoming Work
+
+
+### Points of confusion
+
 Spring, Week 0
 ----------------
 
 ### This Week's Work
 
 Over break I implemented the models over the entire interior west for all four response variables and saved the results in a dataframe. I also have made some summaries of these results. 
-
 
 
 Fall, Week 13
