@@ -4,7 +4,8 @@ Spring, Week 1
 ### This Week's Work
 
 * I made many diagrams in Keynote for the Context chapter    
-* Full restructure of the Context chapter: applied edits, implemented diagrams, restruture/add more details, change phrasing, add more motivation, etc.      
+* Full restructure of the Context chapter: applied edits, implemented diagrams, restruture/add more details, change phrasing, add more motivation, etc.     
+* I made quick edits to the data chapter to align better with the writing I did in the Context chapter (phrasing, abbreviations, formatting titles)
 
 
 ### Upcoming Work

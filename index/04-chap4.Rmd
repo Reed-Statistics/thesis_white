@@ -9,15 +9,17 @@ Currently, there are three main types of estimators used to estimate the value o
 
 ### Direct and Indirect Estimation
 
-Direct and indirect estimation when auxilary data is not available or information from auxilary datasets is not wanted. One of the most common direct estimators is the mean:
+Direct and indirect estimation when auxiliary data is not available or information from auxilary datasets is not wanted. One of the most common direct estimators is the mean:
 \begin{align}
-\overline{Y_j} = \frac{\sum_{i=1}^{n_j} Y_{i, j}}{n_j}
+\overline{y_j} = \frac{\sum_{i=1}^{n_j} y_{i, j}}{n_j}
 \end{align}
-where $\overline{Y_j}$ is the mean of the variable of interest, $i$ indexes over each observation in the small area $j$, $Y_{i,j}$ is the $i$th value of $\theta$ in the $j$th small area, and $n_j$ is the total number of observations in that small area. 
+where $\overline{y_j}$ is the mean of the variable of interest, $i$ indexes over each observation in the small area $j$, $y_{i,j}$ is the $i$th value of $\theta$ in the $j$th small area, and $n_j$ is the total number of observations in that small area. 
 
 Another commonly used estimator which belongs to the family of direct estimators is the post-stratified estimator:
 
-(PS EQN)
+\begin{align}
+\overline{y_j} = \frac{1}{n} \sum_{i=1}^{n_j} \sum_{k \in \{1,2\}} w_k \overline{y_{j,k}}
+\end{align}
 
 The post-stratified estimator is similar to the mean, however it includes a term which corrects for over or under sampling of forests in a given small area. If we have over or under sampled forests within our small area, the mean will actually be a biased estimator, while the post-stratified estimator is provenly unbiased. While it is not always practical to use the post-stratified estimator due to its need for population information on the forested vs. not-forested variable. However, we do have this population data for the entire interior west region of the United States, so we will be comparing our model based estimators to the baseline post-stratified direct estimator. 
 
