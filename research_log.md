@@ -4,14 +4,16 @@ Spring, Week 1
 ### This Week's Work
 
 * I made many diagrams in Keynote for the Context chapter    
-* Applied edits to the Context chapter, implemented diagrams, change some phrasing, add more motivation, etc.      
-* (Need to) start working on the Methods chapter and edits there
+* Full restructure of the Context chapter: applied edits, implemented diagrams, restruture/add more details, change phrasing, add more motivation, etc.      
 
 
 ### Upcoming Work
 
+* Similar operation to the Methods chapter as I did to the Context chapter. Will need to add more significant contently likely, but won't need to spend hours in Keynote.
 
 ### Points of confusion
+
+* I'd like to talk about pacing of the these in the `writing/spring_schedule.Rmd` document. I am hoping to end up turning in a bit early to give myself a breather between the paper and thesis, but I want to think about how practical the timeline I laid out is. 
 
 Spring, Week 0
 ----------------
