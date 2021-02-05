@@ -108,11 +108,11 @@ To get a sense of a few of our predictor variable, we will look at its distribut
 m333 <- dat_small %>%
   filter(province == "M333")
 hist1 <- ggplot(m333) +
-  geom_histogram(mapping = aes(x = nlcd11, y = ..count.. / 1000), color = "black", fill = "steelblue", bins = 30) +
+  geom_histogram(mapping = aes(x = nlcd11, y = ..count.. / 1000), color = "black", fill = "#80BCA2", bins = 30) +
   theme_bw() +
   labs(y = "count (1000's)")
 hist2 <- ggplot(dat_small) +
-  geom_histogram(mapping = aes(x = nlcd11, y = ..count.. / 1000), color = "black", fill = "steelblue", bins = 30) +
+  geom_histogram(mapping = aes(x = nlcd11, y = ..count.. / 1000), color = "black", fill = "#80BCA2", bins = 30) +
   theme_bw() +
   labs(y = "count (1000's)")
 

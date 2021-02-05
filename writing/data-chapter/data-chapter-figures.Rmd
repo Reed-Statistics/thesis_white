@@ -19,7 +19,7 @@ states <- data.frame(state.abb) %>%
   filter(state.abb %ni% interior_west & state.abb %ni% c("AK", "HI")) %>%
   pull()
 
-dat_small <- read_csv("../data/subsets/dat_small.csv")
+dat_small <- read_csv("../../data/subsets/dat_small.csv")
 ```
 
 This document includes the R code needed to create the figures in the data chapter. 
@@ -29,11 +29,11 @@ This document includes the R code needed to create the figures in the data chapt
 ggplot() +
   geom_sf(data = us_boundaries(type = "state",
                                states = interior_west),
-          fill = "#597058",
+          fill = "#2A5043",
           color = "black") +
   geom_sf(data = us_boundaries(type = "state",
                                states = states),
-          fill = "grey",
+          fill = "#A9A9A9",
           color = "black") +
   theme_void()
 ```

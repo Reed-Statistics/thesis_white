@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.12.17)  5 FEB 2021 12:39
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.12.17)  5 FEB 2021 12:56
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -660,12 +660,12 @@ LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 3
 (/Users/graysonwhite/Library/TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-<figure/interior-west-on-usa.png, id=296, 2107.875pt x 1167.36125pt>
+<figure/interior-west-on-usa.png, id=296, 2050.66125pt x 1177.39874pt>
 File: figure/interior-west-on-usa.png Graphic file (type png)
 <use figure/interior-west-on-usa.png>
 Package pdftex.def Info: figure/interior-west-on-usa.png  used on input line 31
 1.
-(pdftex.def)             Requested size: 433.62pt x 240.12997pt.
+(pdftex.def)             Requested size: 433.62pt x 248.9498pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
@@ -735,13 +735,13 @@ Chapter 4.
 
 ]
 Chapter 5.
-<thesis_files/figure-latex/unnamed-chunk-15-1.pdf, id=410, 464.73625pt x 313.17
-pt>
+<thesis_files/figure-latex/unnamed-chunk-15-1.pdf, id=410, 459.7175pt x 313.17p
+t>
 File: thesis_files/figure-latex/unnamed-chunk-15-1.pdf Graphic file (type pdf)
 <use thesis_files/figure-latex/unnamed-chunk-15-1.pdf>
 Package pdftex.def Info: thesis_files/figure-latex/unnamed-chunk-15-1.pdf  used
  on input line 574.
-(pdftex.def)             Requested size: 390.25534pt x 262.98453pt.
+(pdftex.def)             Requested size: 390.25534pt x 265.86601pt.
 <thesis_files/figure-latex/unnamed-chunk-16-1.pdf, id=411, 459.7175pt x 315.177
 5pt>
 File: thesis_files/figure-latex/unnamed-chunk-16-1.pdf Graphic file (type pdf)
@@ -750,7 +750,7 @@ Package pdftex.def Info: thesis_files/figure-latex/unnamed-chunk-16-1.pdf  used
  on input line 582.
 (pdftex.def)             Requested size: 390.25534pt x 267.5703pt.
 
-Underfull \vbox (badness 3240) has occurred while \output is active []
+Underfull \vbox (badness 1789) has occurred while \output is active []
 
 [25 <./thesis_files/figure-latex/unnamed-chunk-15-1.pdf>]
 <thesis_files/figure-latex/unnamed-chunk-17-1.pdf, id=432, 459.7175pt x 308.151
@@ -826,7 +826,7 @@ public/lm/lmsy8.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1
 /public/lm/lmtk10.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/typ
 e1/public/lm/lmtt12.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/t
 ype1/public/lm/lmtti10.pfb>
-Output written on thesis.pdf (53 pages, 4556096 bytes).
+Output written on thesis.pdf (53 pages, 4550448 bytes).
 PDF statistics:
  601 PDF objects out of 1000 (max. 8388607)
  486 compressed objects within 5 object streams
