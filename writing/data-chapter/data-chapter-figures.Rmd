@@ -40,7 +40,7 @@ ggplot() +
 
 ```{r, message = FALSE, warning = FALSE, fig.retina = 4, fig.align = 'center', fig.height=4, fig.width=6}
 # R Code for creating the summary stat maps
-subsections <- st_read("../data/SA_eco_subsection/SA_eco_subsection.shp", quiet = TRUE)
+subsections <- st_read("../../data/SA_eco_subsection/SA_eco_subsection.shp", quiet = TRUE)
 
 subsections1 <- subsections %>%
   filter(SUBSECT %in% dat_small$subsection)
@@ -67,7 +67,10 @@ plot1 <- ggplot() +
           color = "black",
           alpha = 0,
           size = 0.25) +
-  scale_fill_viridis_c() +
+  scale_fill_gradient2(high = "#2A5043",
+                       mid = "#80BCA2",
+                       low = "#FBE1BB",
+                       midpoint = 30) +
   theme_void() +
   labs(fill = "Average Biomass")
 
@@ -79,7 +82,10 @@ plot2 <- ggplot() +
           color = "black",
           alpha = 0,
           size = 0.25) +
-  scale_fill_viridis_c() +
+  scale_fill_gradient2(high = "#2A5043",
+                       mid = "#80BCA2",
+                       low = "#FBE1BB",
+                       midpoint = 400) +
   theme_void() +
   labs(fill = "Average Tree Count")
 
@@ -91,7 +97,10 @@ plot3 <- ggplot() +
           color = "black",
           alpha = 0,
           size = 0.25) +
-  scale_fill_viridis_c() +
+  scale_fill_gradient2(high = "#2A5043",
+                       mid = "#80BCA2",
+                       low = "#FBE1BB",
+                       midpoint = 1750) +
   theme_void() +
   labs(fill = "Average Volume")
 
@@ -103,9 +112,16 @@ plot4 <- ggplot() +
           color = "black",
           alpha = 0,
           size = 0.25) +
-  scale_fill_viridis_c() +
+  scale_fill_gradient2(high = "#2A5043",
+                       mid = "#80BCA2",
+                       low = "#FBE1BB",
+                       midpoint = 77) +
   theme_void() +
   labs(fill = "Average Basal Area")
+# ggsave("biomass_new.png", plot1)
+# ggsave("count_new.png", plot2)
+# ggsave("voln_new.png", plot3)
+# ggsave("basal_new.png", plot4)
 ```
 
 
