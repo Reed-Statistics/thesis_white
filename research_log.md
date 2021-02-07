@@ -1,3 +1,26 @@
+Spring, Week 2
+----------------
+
+### This Week's Work
+
+* Major edits to diagrams for Context chapter.     
+* Aligned existing work in Data chapter to color palette of diagrams in Context chapter. Attempting to stay with these colors throughout thesis for aesthetics.     
+* Added informative Figure captions in Context chapter.     
+
+(WANT TO DO BY WEDS):     
+* Major edits to Methods chapter.     
+* Finish aligning existing work to color palette.
+
+
+### Upcoming Work
+
+
+### Points of confusion
+* Should I include diagrams for the EBLUP unit and area models? Based on their derivations and intuition behind the models, I think it would be hard to make elegantly.     
+* I need help with the PS direct estimate. I haven't been able to get it to work out and have been using the mean. So, to really finalize the results dataframe we need to have that. 
+
+
+
 Spring, Week 1
 ----------------
 
