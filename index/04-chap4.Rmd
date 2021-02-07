@@ -5,11 +5,11 @@
 
 ## Current Approaches
 
-Currently, there are three main types of estimators used to estimate the value of forest attributes: direct, indirect, and model-based estimators. Direct estimators are commonly thought of as the simplest estimators as they do not borrow strength nor do they use auxilary variables for estimation. Direct estimators are hence easy to use and interpret, but we often do not get precise enough estimates with these estimators. Indirect and model-based estimators, such as the EBLUP estimastor, aim to reduce variance in estimates by using data from surrounding areas and (in the case of the model-based estimator) using auxilary data. 
+Currently, there are three main types of estimators used to estimate the value of forest attributes: direct, indirect with implicit models, and indirect with explicit models.. Direct estimators are commonly thought of as the simplest estimators as they do not borrow strength nor do they use auxiliary variables for estimation. Direct estimators are hence easy to use and interpret, but we often do not get precise enough estimates with these estimators. Indirect and model-based estimators, such as the EBLUP estimator, aim to reduce variance in estimates by using data from surrounding areas and (in the case of the model-based estimator) using auxiliary data. 
 
 ### Direct and Indirect Estimation
 
-Direct and indirect estimation when auxiliary data is not available or information from auxilary datasets is not wanted. One of the most common direct estimators is the mean:
+Direct and indirect estimation when auxiliary data is not available or information from auxiliary datasets is not wanted. One of the most common direct estimators is the mean:
 \begin{align}
 \overline{y_j} = \frac{\sum_{i=1}^{n_j} y_{i, j}}{n_j}
 \end{align}
@@ -27,7 +27,7 @@ The post-stratified estimator is similar to the mean, however it includes a term
 
 ### Model-Based Estimation
 
-Model-based estimators are extremely useful when auxilary data is available and correlated with the response variables of interest. Most commonly, the estimator used is the EBLUP estimator, which, similarly to the post-stratified estimator, provenly unbiased. This is a random effects model which we can see specified below:
+Model-based estimators are extremely useful when auxiliary data is available and correlated with the response variables of interest. Most commonly, the estimator used is the EBLUP estimator, which, similarly to the post-stratified estimator, provenly unbiased. This is a random effects model which we can see specified below:
 \begin{align}
 Y_{i,j} = \vec X_{i,j}^{T}\vec\beta + \nu_j + \epsilon_{i,j}
 \end{align}
