@@ -351,7 +351,7 @@ While the data covers the Interior West as a whole, we have very granular inform
 
 }
 
-\caption{The Northern Rocky Forest, colored By eco-section}\label{fig:unnamed-chunk-5}
+\caption{The Northern Rocky Forest colored by eco-section}\label{fig:unnamed-chunk-5}
 \end{figure}
 The data we have covers a total of 14 provinces, 68 eco-sections, and 480 eco-subsections. The hierarchical structure of the data and nested nature of the eco-subsections within eco-sections within eco-provinces lends itself to be able to create hierarchical models which borrow strength from surrounding areas.
 
@@ -397,7 +397,7 @@ To get a sense of a few of our predictor variable, we will look at its distribut
 
 }
 
-\caption{Distribution of total canopy cover in the M333 eco-province (left) and the entire Interior West (right)}\label{fig:unnamed-chunk-10}
+\caption[Total canopy cover in the M333 eco-province and Interior West]{Distribution of total canopy cover in the M333 eco-province (left) and the entire Interior West (right)}\label{fig:unnamed-chunk-10}
 \end{figure}
 Notably, the Northern Rocky Forest Province (M333) is much more forested than the Interior West, so we see much different distributions of total canopy cover in this subset of the data. Apart from making these histograms, we can also summarize the entire, unit-level data and see some summary statistics of our five key variables:
 \begin{longtable}[t]{lrrrrrr}
@@ -417,14 +417,14 @@ From this table, we can see how heavily skewed these key variables are, with all
 \hypertarget{data-structure-hierarchy}{%
 \section{Data Structure \& Hierarchy}\label{data-structure-hierarchy}}
 
-As hinted at throughout earlier parts of the chapter, the data used in this thesis has a hierarchical structure, where eco-subsections are nested within eco-sections which are in turn nested within eco-provinces. Every plot has each level of granularity of location data recorded and this is what allows us to choose how far to borrow strength from other plots. We can see this structure of nested data by looking at an example up close of Idaho's eco-subsections colored by their province, and then their eco-sections:
+As hinted at throughout earlier parts of the chapter, the data used in this thesis has a hierarchical structure, where eco-subsections are nested within eco-sections which are in turn nested within eco-provinces. Every plot has each level of granularity of location data recorded and this is what allows us to choose how far to borrow strength from other plots. We can see this structure of nested data by looking at a diagram depicting this data structure:
 \begin{figure}
 
-{\centering \includegraphics{thesis_files/figure-latex/unnamed-chunk-12-1} 
+{\centering \includegraphics[width=1\linewidth]{figure/data-structure} 
 
 }
 
-\caption{Idaho colored by eco-province (left) and eco-section (right)}\label{fig:unnamed-chunk-12}
+\caption[The nested data structure of the Interior West]{The nested data structure of the Interior West. The green area is the eco-province which is divided into eco-sections (red area) which is in turn divided into eco-subsections (beige area).}\label{fig:unnamed-chunk-12}
 \end{figure}
 The largest motivation for hierarchical modeling in this particular application is that observations are more similar within the hierarchies which we split them into. To understand if this is true, we can do a preliminary analysis on the data by performing three-way ANOVAs for each key variable with predictors \texttt{province}, \texttt{section}, and \texttt{subsection}. For succinctness, we can look at the ANOVA results for one of the response variables, \texttt{BIOLIVE\_TPA}, but the other variables tell a very similar story in terms of homogeneity. By just looking at the MSE of the ANOVA results, we can see that we should expect more homogeneity within eco-subsections:
 \begin{longtable}[]{@{}cccccc@{}}

@@ -59,7 +59,7 @@ kable(dat_small %>%
 
 While the data covers the Interior West as a whole, we have very granular information, as each row represents a plot sampled by the FIA. The data also includes variables that subset the Interior West into provinces which contain eco-sections, and these eco-sections contain eco-subsections. In our data, on average, each eco-section contains approximately 7.06 eco-subsections, and each province contains an average of 4.86 eco-sections. So, an average province then contains just over 34 eco-subsections. We can take a look at the Northern Rocky Forest province, colored by eco-section, with lines dividing each eco-subsection to see this structure in action:
 
-```{r, echo = F, message = F, warning = F, fig.align="center", fig.cap="The Northern Rocky Forest, colored By eco-section"}
+```{r, echo = F, message = F, warning = F, fig.align="center", fig.cap="The Northern Rocky Forest colored by eco-section"}
 subsections <- st_read("../data/SA_eco_subsection/SA_eco_subsection.shp", quiet = TRUE)
 m333_sub <- subsections %>%
   filter(PROVINC == "M333")
@@ -104,7 +104,7 @@ knitr::include_graphics("figure/voln.png")
 While we have four variables which we will model as response variables throughout the analyses, we also have one predictor variables which will be of much use to us. In particular, total tree canopy cover (coded as `nlcd11`.) This variable is remotely sensed, meaning that they were not collected by FIA crew members, but rather with aerial photography and/or satellite imagery. However, we will be using these variables to attempt to predict our response variables in order to understand how good of estimates we can make with this remote data that does not require as much effort to collect.  
 
 To get a sense of a few of our predictor variable, we will look at its distributions in the Northern Rocky Forest subset of our data compared to its distribution across the entire Interior West:
-```{r, message = FALSE, warning=FALSE, echo = FALSE, fig.align="center", fig.retina=4, fig.height=4, fig.width=6, fig.cap="Distribution of total canopy cover in the M333 eco-province (left) and the entire Interior West (right)"}
+```{r, message = FALSE, warning=FALSE, echo = FALSE, fig.align="center", fig.retina=4, fig.height=4, fig.width=6, fig.cap="Distribution of total canopy cover in the M333 eco-province (left) and the entire Interior West (right)", fig.scap="Total canopy cover in the M333 eco-province and Interior West"}
 m333 <- dat_small %>%
   filter(province == "M333")
 hist1 <- ggplot(m333) +
@@ -146,27 +146,30 @@ From this table, we can see how heavily skewed these key variables are, with all
 
 ## Data Structure & Hierarchy
 
-As hinted at throughout earlier parts of the chapter, the data used in this thesis has a hierarchical structure, where eco-subsections are nested within eco-sections which are in turn nested within eco-provinces. Every plot has each level of granularity of location data recorded and this is what allows us to choose how far to borrow strength from other plots. We can see this structure of nested data by looking at an example up close of Idaho's eco-subsections colored by their province, and then their eco-sections: 
+As hinted at throughout earlier parts of the chapter, the data used in this thesis has a hierarchical structure, where eco-subsections are nested within eco-sections which are in turn nested within eco-provinces. Every plot has each level of granularity of location data recorded and this is what allows us to choose how far to borrow strength from other plots. We can see this structure of nested data by looking at a diagram depicting this data structure:
+<!-- looking at an example up close of Idaho's eco-subsections colored by their province, and then their eco-sections: -->
 
-```{r, echo = F, message = F, warning = F, fig.align="center", fig.cap="Idaho colored by eco-province (left) and eco-section (right)"}
-idaho <- us_boundaries(type = "state",
-                         states = "ID")
+```{r, fig.align="center", out.width='100%', echo = FALSE, fig.cap="The nested data structure of the Interior West. The green area is the eco-province which is divided into eco-sections (red area) which is in turn divided into eco-subsections (beige area).", fig.scap="The nested data structure of the Interior West"}
+knitr::include_graphics("figure/data-structure.png")
+# idaho <- us_boundaries(type = "state",
+#                          states = "ID")
+# 
+# id <- st_intersection(idaho, subsections)
+# idsection <- ggplot() +
+#   geom_sf(data = id,
+#           mapping = aes(fill = SECTION)) +
+#   scale_fill_viridis_d(option = "A") +
+#   theme_void() +
+#   theme(legend.position = "none")
+# idprov <- ggplot() +
+#   geom_sf(data = id,
+#           mapping = aes(fill = PROVINC)) +
+#   scale_fill_viridis_d(option = "A") +
+#   theme_void() +
+#   theme(legend.position = "none") 
+# 
+# idprov + idsection
 
-id <- st_intersection(idaho, subsections)
-idsection <- ggplot() +
-  geom_sf(data = id,
-          mapping = aes(fill = SECTION)) +
-  scale_fill_viridis_d(option = "A") +
-  theme_void() +
-  theme(legend.position = "none")
-idprov <- ggplot() +
-  geom_sf(data = id,
-          mapping = aes(fill = PROVINC)) +
-  scale_fill_viridis_d(option = "A") +
-  theme_void() +
-  theme(legend.position = "none") 
-
-idprov + idsection
 ```
 
 
