@@ -9,7 +9,6 @@ Spring, Week 2
 
 (WANT TO DO BY WEDS):     
 * Major edits to Methods chapter.     
-* Finish aligning existing work to color palette.
 
 
 ### Upcoming Work
