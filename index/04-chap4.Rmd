@@ -5,9 +5,9 @@
 
 ## Current Approaches
 
-(set-up intro here better)
-
 Currently, there are three main types of estimators used to estimate the value of forest attributes: direct, indirect with implicit models, and indirect with explicit models. Direct estimators are commonly thought of as the simplest estimators as they do not borrow strength across small areas for estimation. Direct estimators are hence easy to use and interpret, but we often do not get precise enough estimates with these estimators. Indirect estimators with implicit models borrow strength across small areas and produce estimates with implicit use of a model. Finally, indirect estimators that make explicit use of a model, model-based estimators, such as the EBLUP estimator, aim to reduce variance in estimates by using data from surrounding areas, using auxiliary data, and the explicit use of a model. 
+
+This thesis explores the application of two uncommonly used model-based estimators, the hierarchical Bayesian unit-level model and the hierarchical Bayesian area-level model to the frequentist EBLUP unit- and area-level models and a common direct estimator, post-stratification. To compare these estimators, we will apply them over the entire Interior West and study four response variables with one explanatory variable. 
 
 ### Direct and Indirect Estimation
 
