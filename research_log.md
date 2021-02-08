@@ -6,6 +6,7 @@ Spring, Week 2
 * Major edits to diagrams for Context chapter.     
 * Aligned existing work in Data chapter to color palette of diagrams in Context chapter. Attempting to stay with these colors throughout thesis for aesthetics.     
 * Added informative Figure captions in Context chapter.     
+* Tried to post-stratify with `mase` and `sae` unsuccessfully. 
 
 (WANT TO DO BY WEDS):     
 * Major edits to Methods chapter.     
