@@ -8,11 +8,11 @@ Spring, Week 2
 * Added informative Figure captions in Context chapter.     
 * Tried to post-stratify with `mase` and `sae` unsuccessfully. 
 
-(WANT TO DO BY WEDS):     
-* Major edits to Methods chapter.     
-
 
 ### Upcoming Work
+
+* Major edits to Methods chapter.   
+* finalize results -- have dataframe but need to base estimates off PS and do a larger bootstrap
 
 
 ### Points of confusion
