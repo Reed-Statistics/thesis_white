@@ -1,0 +1,115 @@
+---
+title: "Thesis Results"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(mase)
+library(hbsae)
+library(sae)
+```
+
+## Data
+### Loading
+```{r load_data, message = FALSE, warning = FALSE}
+intwest <- read_csv("../data/subsets/df.csv")
+tccpop <- read_csv("../data/population/tcc_pop.csv")
+strata <- read_csv("../data/population/strata.csv")
+```
+
+### Cleaning
+
+Set up strata:
+```{r clean_data, message = FALSE, warning = FALSE}
+intwest <- intwest %>%
+  mutate(FIAstrat = case_when(
+    FIAstrat == "1" ~ "Sampled-Forest",
+    FIAstrat == "2" ~ "Sampled-Nonforest",
+    FIAstrat == "0" ~ "Sampled-Nonforest",
+    FIAstrat == "3" ~ "Sampled-Nonforest",
+  )) 
+```
+
+Initial data changes to avoid horrific errors:
+```{r}
+no0_subsections <- intwest %>%
+  group_by(subsection) %>%
+  summarize(mean_y = mean(BIOLIVE_TPA),
+            mean_x = mean(nlcd11)) %>%
+  filter(mean_y > 0 & mean_x > 0) %>% # remove subsections that only contain 0 
+  dplyr::select(subsection) %>%
+  pull()
+
+intwest_no0 <- intwest %>%
+  filter(subsection %in% no0_subsections)
+```
+
+List of dataframes:
+```{r}
+iw <- split(intwest_no0, f = intwest_no0$province)
+iw <- iw[-13] # This province only has two subsections and causes divergent integrals
+iw <- iw[-8] # This province only has two subsections and causes divergent integrals
+```
+
+## Modeling
+
+### Post-stratification
+
+```{r postStrat}
+strata <- strata %>%
+  filter(zoneid %in% unique(intwest_no0$subsection)) %>%
+  mutate(
+    fnf_no_water = case_when(
+      fnf_no_water == 1 ~ "Sampled-Forest",
+      fnf_no_water == 2 ~ "Sampled-Nonforest"
+    )
+  )
+strata <- strata %>%
+  dplyr::select(-zoneprop)
+
+# split strata into list and drop column split by
+strata_list <- lapply(split(strata, f = strata$zoneid), function(strata) { strata$zoneid <- NULL; strata})
+
+# split subsections into list
+subsection_list <- split(intwest_no0, intwest_no0$subsection)
+
+postStrat2_bio <- function(data, strata) {
+  mase::postStrat(y = data[["BIOLIVE_TPA"]],
+                  x_sample = data[["FIAstrat"]],
+                  x_pop = strata,
+                  data_type = "totals",
+                  var_est = T)
+}
+postStrat2_ba <- function(data, strata) {
+  mase::postStrat(y = data[["BALIVE_TPA"]],
+                  x_sample = data[["FIAstrat"]],
+                  x_pop = strata,
+                  data_type = "totals",
+                  var_est = T)
+}
+
+postStrat2_voln <- function(data, strata) {
+  mase::postStrat(y = data[["VOLNLIVE_TPA"]],
+                  x_sample = data[["FIAstrat"]],
+                  x_pop = strata,
+                  data_type = "totals",
+                  var_est = T)
+}
+
+postStrat2_cnt <- function(data, strata) {
+  mase::postStrat(y = data[["CNTLIVE_TPA"]],
+                  x_sample = data[["FIAstrat"]],
+                  x_pop = strata,
+                  data_type = "totals",
+                  var_est = T)
+}
+
+post_strat_bio <- map2(.x = subsection_list, .y = strata_list, .f = postStrat2_bio)
+post_strat_ba <- map2(.x = subsection_list, .y = strata_list, .f = postStrat2_ba)
+post_strat_voln <- map2(.x = subsection_list, .y = strata_list, .f = postStrat2_voln)
+post_strat_cnt <- map2(.x = subsection_list, .y = strata_list, .f = postStrat2_cnt)
+```
+
+

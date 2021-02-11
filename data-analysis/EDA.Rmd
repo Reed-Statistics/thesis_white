@@ -38,7 +38,7 @@ dat_small <- dat %>%
   dplyr::select(PLT_CN, INVYR, PLOT.x, LON_PUBLIC.x, LAT_PUBLIC.x, LON_PUBLIC.y, LAT_PUBLIC.y,
          ELEV_PUBLIC.x, ELEV_PUBLIC.y, forgrp, forprob, nlcd11, demLF, evtLF, forbio,
          BALIVE_TPA, CNTLIVE_TPA, BIOLIVE_TPA, VOLNLIVE_TPA, subsection, section, province,
-         FORNONSAMP.x)
+         FORNONSAMP.x, FIAstrat)
 
 # Check if a couple of columns are the same
 all.equal(dat_small$LON_PUBLIC.x, dat_small$LON_PUBLIC.y)
@@ -53,6 +53,7 @@ dat_small <- dat_small %>%
          LAT_PUBLIC = LAT_PUBLIC.x,
          ELEV_PUBLIC = ELEV_PUBLIC.x,
          FORNONSAMP = FORNONSAMP.x)
+ # write.csv(dat_small, "../data/subsets/df.csv")
 ```
 
 
