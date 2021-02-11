@@ -1,3 +1,15 @@
+Spring, Week 3
+----------------
+
+### This Week's Work
+
+
+### Upcoming Work
+
+
+### Points of confusion
+
+
 Spring, Week 2
 ----------------
 
