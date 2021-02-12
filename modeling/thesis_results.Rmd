@@ -76,40 +76,56 @@ strata_list <- lapply(split(strata, f = strata$zoneid), function(strata) { strat
 subsection_list <- split(intwest_no0, intwest_no0$subsection)
 
 postStrat2_bio <- function(data, strata) {
-  mase::postStrat(y = data[["BIOLIVE_TPA"]],
+  est <- mase::postStrat(y = data[["BIOLIVE_TPA"]],
                   x_sample = data[["FIAstrat"]],
                   x_pop = strata,
                   data_type = "totals",
                   var_est = T)
+  return(data.frame(ps_est = est$pop_mean, sd = sqrt(est$pop_mean_var)))
 }
 postStrat2_ba <- function(data, strata) {
-  mase::postStrat(y = data[["BALIVE_TPA"]],
+  est <- mase::postStrat(y = data[["BALIVE_TPA"]],
                   x_sample = data[["FIAstrat"]],
                   x_pop = strata,
                   data_type = "totals",
                   var_est = T)
+  return(data.frame(ps_est = est$pop_mean, sd = sqrt(est$pop_mean_var)))
 }
 
 postStrat2_voln <- function(data, strata) {
-  mase::postStrat(y = data[["VOLNLIVE_TPA"]],
+  est <- mase::postStrat(y = data[["VOLNLIVE_TPA"]],
                   x_sample = data[["FIAstrat"]],
                   x_pop = strata,
                   data_type = "totals",
                   var_est = T)
+  return(data.frame(ps_est = est$pop_mean, sd = sqrt(est$pop_mean_var)))
 }
 
 postStrat2_cnt <- function(data, strata) {
-  mase::postStrat(y = data[["CNTLIVE_TPA"]],
+  est <- mase::postStrat(y = data[["CNTLIVE_TPA"]],
                   x_sample = data[["FIAstrat"]],
                   x_pop = strata,
                   data_type = "totals",
                   var_est = T)
+  return(data.frame(ps_est = est$pop_mean, sd = sqrt(est$pop_mean_var)))
 }
 
 post_strat_bio <- map2(.x = subsection_list, .y = strata_list, .f = postStrat2_bio)
 post_strat_ba <- map2(.x = subsection_list, .y = strata_list, .f = postStrat2_ba)
 post_strat_voln <- map2(.x = subsection_list, .y = strata_list, .f = postStrat2_voln)
 post_strat_cnt <- map2(.x = subsection_list, .y = strata_list, .f = postStrat2_cnt)
+
+results <- data.frame(
+  ps_est = c(bind_rows(post_strat_bio)$ps_est,
+             bind_rows(post_strat_ba)$ps_est,
+             bind_rows(post_strat_cnt)$ps_est,
+             bind_rows(post_strat_voln)$ps_est),
+  ps_sd = c(bind_rows(post_strat_bio)$sd,
+             bind_rows(post_strat_ba)$sd,
+             bind_rows(post_strat_cnt)$sd,
+             bind_rows(post_strat_voln)$sd),
+  subsection = rep(names(post_strat_bio), 4)
+)
 ```
 
 
