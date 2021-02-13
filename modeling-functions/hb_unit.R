@@ -61,8 +61,8 @@ hb_unit <- function(data, formula, small_area, pop_data) {
   mean_y <- model_frame %>%
     dplyr::group_by(small_area) %>%
     dplyr::summarise(mean_y = mean(y))
-  # CoV <- hbsae::SE(mod) / mean_y$mean_y
-  CoV <- hbsae::relSE(mod)
+  CoV <- hbsae::SE(mod) / mean_y$mean_y
+  # CoV <- hbsae::relSE(mod)
   ## Add to model object
   mod$CoV <- CoV
   # Add IG prior params to model object
