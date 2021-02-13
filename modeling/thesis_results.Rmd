@@ -185,6 +185,19 @@ results <- results %>%
   relocate("subsection", "response", "est_dirps", "cov_dirps")
 ```
 
+```{r}
+# set up list for area level models
+ps_dat <- results %>%
+  dplyr::select(est_dirps, sd_dirps, subsection, response) %>%
+  dplyr::mutate(var = sd_dirps^2) %>%
+  dplyr::rename(est = est_dirps) %>%
+  dplyr::select(est, var, subsection, response) %>%
+  dplyr::mutate(province = str_sub(results$subsection, 1, -3))
+
+ps_l <- split(ps_dat, list(ps_dat$response, ps_dat$province))
+```
+
+
 
 ### Hierarchical Bayesian Modeling
 
