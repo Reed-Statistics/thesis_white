@@ -63,7 +63,6 @@ iw <- split(intwest_no0, f = intwest_no0$province)
 source("../modeling-functions/direct_CoV.R")
 source("../modeling-functions/direct_estimate.R")
 source("../modeling-functions/freq_area.R")
-source("../modeling-functions/freq_area_CoV.R")
 source("../modeling-functions/freq_unit.R")
 source("../modeling-functions/freq_unit_CoV.R")
 source("../modeling-functions/hb_area.R")
@@ -312,28 +311,28 @@ frequnitcov <- c(
        formula = BIOLIVE_TPA ~ nlcd11,
        small_area = "subsection",
        pop_data = tccpop,
-       B = 100)),
+       B = 500)),
   Reduce(c,
        lapply(iw,
        freq_unit_CoV,
        formula = BALIVE_TPA ~ nlcd11,
        small_area = "subsection",
        pop_data = tccpop,
-       B = 100)),
+       B = 500)),
   Reduce(c,
        lapply(iw,
        freq_unit_CoV,
        formula = CNTLIVE_TPA ~ nlcd11,
        small_area = "subsection",
        pop_data = tccpop,
-       B = 100)),
+       B = 500)),
   Reduce(c,
        lapply(iw,
        freq_unit_CoV,
        formula = VOLNLIVE_TPA ~ nlcd11,
        small_area = "subsection",
        pop_data = tccpop,
-       B = 100))
+       B = 500))
 )
 
 frequnitcov_df <- data.frame(
