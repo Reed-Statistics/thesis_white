@@ -393,6 +393,10 @@ results <- results %>%
 ```
 
 
+```{r}
+write.csv(results, "final_results.csv")
+saveRDS(results, file = "final_results.rds")
+```
 
 
 
