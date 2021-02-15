@@ -1,4 +1,4 @@
-freq_area <- function(data, formula, small_area) {
+freq_area <- function(data, formula, small_area, pop_data) {
   # Load packages
   library(tidyverse)
   library(sae)
@@ -9,19 +9,29 @@ freq_area <- function(data, formula, small_area) {
   colnames(model_frame) <- c("y", "x", "small_area")
   model_frame
   
-  # Data wrangle to area level
-  diry <- direct_estimate(model_frame,
-                         "y",
-                         "small_area") %>%
-    mutate(var = SD ^ 2)
+  mf <- model.frame(formula, data)
   
-  dirx <- direct_estimate(model_frame,
-                          "x",
-                          "small_area")
-  dat <- left_join(dirx, diry, by = c("Domain" = "Domain"))
+  dir <- ps_dat %>% # need to have the ps_dat object in global env...
+    filter(response %in% colnames(mf)[1],
+           province %in% unique(data$province)) %>%
+    arrange(subsection)
+  
+  # Direct X
+  X <- pop_data %>%
+    dplyr::filter(zoneid %in% model_frame$small_area) %>%
+    dplyr::select(zoneid, mean) %>%
+    dplyr::rename(mean_x = mean,
+                  small_area = zoneid) %>%
+    dplyr::arrange(small_area)
+  
+  # Join pop and dir
+  dat <- dir %>%
+    left_join(X, by = c("subsection" = "small_area"))
 
   # Fit the model
-  mod <- sae::eblupFH(formula = dat$Direct.y ~ dat$Direct.x,
+  # mod <- sae::eblupFH(formula = dat$Direct.y ~ dat$Direct.x,
+  #                     vardir = dat$var)
+  mod <- sae::mseFH(formula = dat$est ~ dat$mean_x,
                       vardir = dat$var)
   mod
   

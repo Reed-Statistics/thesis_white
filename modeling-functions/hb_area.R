@@ -3,6 +3,9 @@ hb_area <- function(data, formula, small_area, pop_data) {
   library(tidyverse)
   library(hbsae)
   
+  # Create unnamed model frame (to call correct y var in a filter)
+  mf <- model.frame(formula, data)
+  
   # Create model frame
   model_frame <- model.frame(formula, data) %>%
     dplyr::mutate(small_area = data[[small_area]])
@@ -15,20 +18,16 @@ hb_area <- function(data, formula, small_area, pop_data) {
     dplyr::rename(mean_x = mean,
                   small_area = zoneid) %>%
     dplyr::arrange(small_area)
-  
-  # Auxilary info (should I include this?)
-  # x <- model_frame %>%
-  #   group_by(small_area) %>%
-  #   dplyr::summarize(
-  #     mean_x = mean(x)
-  #   ) %>%
-  #   dplyr::arrange(small_area)
 
   # Compute direct estimate
-  dir <- direct_estimate(model_frame, "y", "small_area") %>%
+  mean <- direct_estimate(model_frame, "y", "small_area") %>%
     dplyr::mutate(var = SD^2)
   
-  # These do not change the estimates... why?
+  dir <- ps_dat %>%
+    filter(response %in% colnames(mf)[1],
+           province %in% unique(data$province)) %>%
+    arrange(subsection)
+  
   # Create scale and shape hyperparameters
   ## these are chosen from Ver Planck et al 
   alpha <- 2
@@ -42,21 +41,24 @@ hb_area <- function(data, formula, small_area, pop_data) {
 
   df <- 2 * alpha
   scale <- beta / alpha
+  
+  # Create lambda
+  anova <- aov(y ~ small_area, data = model_frame)
+  l <- summary(anova)[[1]]["small_area", "F value"]
 
   # Fit the model
   mod <- fSAE.Area(
-    est.init = dir$Direct,
+    est.init = dir$est,
     var.init = dir$var,
     X = X %>% dplyr::select(mean_x),
     nu0 = df,
-    s20 = scale
+    s20 = scale,
+    lambda0 = l
   )
 
   # Calculate CoV
-  # CoV <- hbsae::SE(mod) / dir$Direct
-  CoV <- hbsae::relSE(mod)
-  ## Add to model object
-  mod$CoV <- CoV
+   CoV <- hbsae::SE(mod) / mean$Direct
+   mod$CoV <- CoV
 
   # Print model
   mod

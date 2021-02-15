@@ -1,4 +1,4 @@
-freq_area_CoV <- function(data, formula, small_area, B = 100) {
+freq_area_CoV <- function(data, formula, small_area, pop_data, B = 100) {
   # Load packages
   library(tidyverse)
   library(sae)
@@ -8,6 +8,13 @@ freq_area_CoV <- function(data, formula, small_area, B = 100) {
   fit <- list()
   mean_df <- list()
   final <- data.frame()
+  
+  mf <- model.frame(formula, data)
+  
+  dir <- ps_dat %>% # need to have the ps_dat object in global env...
+    filter(response %in% colnames(mf)[1],
+           province %in% unique(data$province)) %>%
+    arrange(subsection)
   
   # Create model frame
   model_frame <- model.frame(formula, data) %>%
@@ -20,6 +27,14 @@ freq_area_CoV <- function(data, formula, small_area, B = 100) {
     group_by(small_area) %>%
     nest()
   
+  # Direct X
+  X <- pop_data %>%
+    dplyr::filter(zoneid %in% model_frame$small_area) %>%
+    dplyr::select(zoneid, mean) %>%
+    dplyr::rename(mean_x = mean,
+                  small_area = zoneid) %>%
+    dplyr::arrange(small_area)
+  
   # Bootstrap
   for(i in 1:B){
     for(j in 1:length(unique(model_frame$small_area))) {
@@ -28,13 +43,14 @@ freq_area_CoV <- function(data, formula, small_area, B = 100) {
         size = length(data_nested[[2]][[j]]$y),
         replace = TRUE
       )
-      boots_df <- bind_rows(boots) 
+      boots_df <- bind_rows(boots) %>%
+        left_join(X, by = c("id" = "small_area"))
     }
     
-    fit[[i]] <- freq_area(boots_df, y ~ x, "id")
+    # fit[[i]] <- freq_area(boots_df, y ~ mean_x, "id", pop_data)
+    fit[[i]] <- sae::eblupFH(dir$est ~ X$mean_x, dir$var)
 
-    mean_df[[i]] <- data.frame(# fitted = fit[[i]]$eblup[,1],
-      fitted = as.numeric(fit[[i]]$eblup),
+    mean_df[[i]] <- data.frame(fitted = as.numeric(fit[[i]]$eblup), # fitted = fit[[i]]$eblup[,1],
                                subsection = sort(unique(model_frame$small_area)))
     if (i %% 50 == 1) {
       print(i)
