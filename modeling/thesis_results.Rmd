@@ -392,6 +392,158 @@ results <- results %>%
   mutate(cov_freq_area = se_freq_area / est_dirmean)
 ```
 
+```{r}
+# Freq Area CoV (Bootstrap rather than MSE)
+## Bootstrapping the post-strat estimates
+set.seed(1)
+boots <- list()
+ps_resamp_list <- list()
+
+for(j in 1:500){
+  for(i in 1:length(subsection_list)) {
+    boots[[i]] <- sample_n(tbl = subsection_list[[i]],
+                           size = length(subsection_list[[i]]$BIOLIVE_TPA), 
+                           replace = TRUE)
+  }
+  ps_resamp_list[[j]] <- boots
+}
+
+
+post_strat_bio_rs <- list()
+post_strat_ba_rs <- list()
+post_strat_voln_rs <- list()
+post_strat_cnt_rs <- list()
+res <- list()
+for(i in 1:length(ps_resamp_list)) {
+  post_strat_bio_rs[[i]] <- map2(.x = ps_resamp_list[[i]], .y = strata_list, .f = postStrat2_bio)
+  post_strat_ba_rs[[i]] <- map2(.x = ps_resamp_list[[i]], .y = strata_list, .f = postStrat2_ba)
+  post_strat_voln_rs[[i]] <- map2(.x = ps_resamp_list[[i]], .y = strata_list, .f = postStrat2_voln)
+  post_strat_cnt_rs[[i]] <- map2(.x = ps_resamp_list[[i]], .y = strata_list, .f = postStrat2_cnt)
+}
+
+post_strat_bio_rs_df <- bind_rows(post_strat_bio_rs) %>%
+  mutate(subsection = rep(names(subsection_list), 500)) %>%
+  mutate(rep = unlist(lapply(1:500, rep, 297))) %>%
+  mutate(response = rep("BIOLIVE_TPA", 500 * 297),
+         var = sd^2,
+         section = str_remove_all(subsection, "[:lower:]"),
+         province = str_sub(section, end = -2))
+
+post_strat_ba_rs_df <- bind_rows(post_strat_ba_rs) %>%
+  mutate(subsection = rep(names(subsection_list), 500)) %>%
+  mutate(rep = unlist(lapply(1:500, rep, 297))) %>%
+  mutate(response = rep("BALIVE_TPA", 500 * 297),
+         var = sd^2,
+         section = str_remove_all(subsection, "[:lower:]"),
+         province = str_sub(section, end = -2))
+
+post_strat_cnt_rs_df <- bind_rows(post_strat_cnt_rs) %>%
+  mutate(subsection = rep(names(subsection_list), 500)) %>%
+  mutate(rep = unlist(lapply(1:500, rep, 297))) %>%
+  mutate(response = rep("CNTLIVE_TPA", 500 * 297),
+         var = sd^2,
+         section = str_remove_all(subsection, "[:lower:]"),
+         province = str_sub(section, end = -2))
+
+post_strat_voln_rs_df <- bind_rows(post_strat_voln_rs) %>%
+  mutate(subsection = rep(names(subsection_list), 500)) %>%
+  mutate(rep = unlist(lapply(1:500, rep, 297))) %>%
+  mutate(response = rep("VOLNLIVE_TPA", 500 * 297),
+         var = sd^2,
+         section = str_remove_all(subsection, "[:lower:]"),
+         province = str_sub(section, end = -2))
+
+write.csv(post_strat_bio_rs_df, "post_strat_bio_rs_df.csv")
+write.csv(post_strat_ba_rs_df, "post_strat_ba_rs_df.csv")
+write.csv(post_strat_cnt_rs_df, "post_strat_cnt_rs_df.csv")
+write.csv(post_strat_voln_rs_df, "post_strat_voln_rs_df.csv")
+
+# test <- split(post_strat_voln_rs_df, f = post_strat_voln_rs_df$province)
+```
+
+```{r}
+tcc <- tccpop %>%
+  dplyr::select(zoneid, mean)
+
+
+## basal
+ba_df <- post_strat_ba_rs_df %>%
+  inner_join(tcc, by = c("subsection" = "zoneid")) 
+
+ba_l <- split(ba_df, ba_df$rep)
+
+basal <- data.frame()
+for(i in 1:500) {
+  basal[i,1:297] <- eblupFH(ba_l[[i]]$ps_est ~ ba_l[[i]]$mean, ba_l[[i]]$var)$eblup
+}
+colnames(basal) <- paste0("a",ba_l[[1]]$subsection)
+
+
+## bio
+bio_df <- post_strat_bio_rs_df %>%
+  inner_join(tcc, by = c("subsection" = "zoneid")) 
+
+bio_l <- split(bio_df, bio_df$rep)
+
+biolive <- data.frame()
+for(i in 1:500) {
+  biolive[i,1:297] <- eblupFH(bio_l[[i]]$ps_est ~ bio_l[[i]]$mean, bio_l[[i]]$var)$eblup
+}
+colnames(biolive) <- paste0("a",bio_l[[1]]$subsection)
+
+
+## cnt
+cnt_df <- post_strat_cnt_rs_df %>%
+  inner_join(tcc, by = c("subsection" = "zoneid")) 
+
+cnt_l <- split(cnt_df, cnt_df$rep)
+
+cnt <- data.frame()
+for(i in 1:500) {
+  cnt[i,1:297] <- eblupFH(cnt_l[[i]]$ps_est ~ cnt_l[[i]]$mean, cnt_l[[i]]$var)$eblup
+}
+colnames(cnt) <- paste0("a",cnt_l[[1]]$subsection)
+
+
+## voln
+voln_df <- post_strat_voln_rs_df %>%
+  inner_join(tcc, by = c("subsection" = "zoneid")) 
+
+voln_l <- split(voln_df, voln_df$rep)
+
+voln <- data.frame()
+for(i in 1:500) {
+  voln[i,1:297] <- eblupFH(voln_l[[i]]$ps_est ~ voln_l[[i]]$mean, voln_l[[i]]$var)$eblup
+}
+colnames(voln) <- paste0("a",voln_l[[1]]$subsection)
+
+
+## compute sds
+bio_sd <- apply(biolive, 2, sd)
+ba_sd <- apply(basal, 2, sd)
+cnt_sd <- apply(cnt, 2, sd)
+voln_sd <- apply(voln, 2, sd)
+
+### sd dataframe
+sd_dataframe <- data.frame(
+  sd = c(bio_sd, ba_sd, cnt_sd, voln_sd),
+  response = c(rep("BIOLIVE_TPA", 297),
+               rep("BALIVE_TPA", 297),
+               rep("CNTLIVE_TPA", 297),
+               rep("VOLNLIVE_TPA", 297)),
+  subsection = rep(substr(names(bio_sd), 2, 10), 4)
+)
+
+results <- results %>%
+  left_join(sd_dataframe, by = c("response" = "response",
+                                 "subsection" = "subsection"))
+results <- results %>%
+  mutate(cov_freq_area_boot = sd / est_dirmean)
+results <- results %>%
+  rename(sd_freq_area_boot = sd)
+```
+
+
 
 ```{r}
 write.csv(results, "final_results.csv")
