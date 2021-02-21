@@ -523,9 +523,9 @@ These results allow us to conclude that it is reasonable to believe that observa
 \hypertarget{current-approaches}{%
 \section{Current Approaches}\label{current-approaches}}
 
-Currently, there are three main types of estimators used to estimate the value of forest attributes: direct, indirect with implicit models, and indirect with explicit models. Direct estimators are commonly thought of as the simplest estimators as they do not borrow strength across small areas for estimation. Direct estimators are hence easy to use and interpret, but we often do not get precise enough estimates with these estimators. Indirect estimators with implicit models borrow strength across small areas and produce estimates with implicit use of a model. Finally, indirect estimators that make explicit use of a model, model-based estimators, such as the EBLUP estimator, aim to reduce variance in estimates by using data from surrounding areas, using auxiliary data, and the explicit use of a model.
+Currently, there are three main types of estimators used to estimate the value of forest attributes: direct, indirect with implicit models, and indirect with explicit models. Direct estimators are commonly thought of as the simplest estimators as they do not borrow strength across small areas for estimation. Direct estimators are hence easy to use and interpret, but we often do not get precise enough estimates with these estimators, in other words, they have high variance. Indirect estimators with implicit models borrow strength across small areas and produce estimates with implicit use of a model. These estimators decrease variance by providing a link to related small areas through supplementary data (Rao, 2014). Finally, indirect estimators that make explicit use of a model, or ``model-based estimators'', aim to reduce variance in estimates by using auxiliary data and making specific allowance for between area variation. As explained in Rao (2014), these model-based estimators have significant advantages over direct estimators and implicit indirect estimators. Notably, model diagnostics can be used, small area-specific measures of precision can be attained (in our case, we compare the coefficient of variation between estimators), and we can used mixed or hierarchical models.
 
-This thesis explores the application of two uncommonly used model-based estimators, the hierarchical Bayesian unit-level model and the hierarchical Bayesian area-level model to the frequentist EBLUP unit- and area-level models and a common direct estimator, post-stratification. To compare these estimators, we will apply them over the entire Interior West and study four response variables with one explanatory variable.
+This thesis explores the application of two less commonly applied model-based estimators, the hierarchical Bayesian unit-level model and the hierarchical Bayesian area-level model. We compare these novel Bayesian models to the frequentist EBLUP unit- and area-level models and a common direct estimator, the post-stratified estimator. To compare these estimators, we will apply them over many ecological provinces in the Interior West and study their performance when considering four response variables with one explanatory variable.
 
 \hypertarget{direct-and-indirect-estimation}{%
 \subsection{Direct and Indirect Estimation}\label{direct-and-indirect-estimation}}
@@ -712,6 +712,9 @@ Homer, C. (2015, November). Completion of the 2011 national land cover database 
 
 \leavevmode\hypertarget{ref-mcconville2020}{}%
 McConville, K. S., Moisen, G. G., \& Frescino, T. S. (2020). A tutorial on model-assisted estimation with application to forest inventory. \emph{Forests}, \emph{11}(2), 244.
+
+\leavevmode\hypertarget{ref-rao2014}{}%
+Rao, J. N. (2014). Small-area estimation. \emph{Wiley StatsRef: Statistics Reference Online}, 1--8.
 
 \leavevmode\hypertarget{ref-ver2017}{}%
 Ver Planck, N. R., Finley, A. O., \& Huff, E. S. (2017). Hierarchical bayesian models for small area estimation of county-level private forest landowner population. \emph{Canadian Journal of Forest Research}, \emph{47}(12), 1577--1589.
