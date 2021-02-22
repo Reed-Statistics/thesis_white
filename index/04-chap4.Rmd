@@ -3,13 +3,38 @@
 <!-- Gives an overview of the current main approaches to the problem. -->
 <!-- Points out flaws in existing approaches and addresses how the current work mitigates these problems -->
 
-## Current Approaches
-
 Currently, there are three main types of estimators used to estimate the value of forest attributes: direct, indirect with implicit models, and indirect with explicit models. Direct estimators are commonly thought of as the simplest estimators as they do not borrow strength across small areas for estimation. Direct estimators are hence easy to use and interpret, but we often do not get precise enough estimates with these estimators, in other words, they have high variance. Indirect estimators with implicit models borrow strength across small areas and produce estimates with implicit use of a model. These estimators decrease variance by providing a link to related small areas through supplementary data [@rao2014]. Finally, indirect estimators that make explicit use of a model, or "model-based estimators", aim to reduce variance in estimates by using auxiliary data and making specific allowance for between area variation. As explained in Rao (2014), these model-based estimators have significant advantages over direct estimators and implicit indirect estimators. Notably, model diagnostics can be used, small area-specific measures of precision can be attained (in our case, we compare the coefficient of variation between estimators), and we can used mixed or hierarchical models. 
 
-This thesis explores the application of two less commonly applied model-based estimators, the hierarchical Bayesian unit-level model and the hierarchical Bayesian area-level model. We compare these novel Bayesian models to the frequentist EBLUP unit- and area-level models and a common direct estimator, the post-stratified estimator. To compare these estimators, we will apply them over many ecological provinces in the Interior West and study their performance when considering four response variables with one explanatory variable. 
+This thesis explores the application of two less commonly applied model-based estimators, the hierarchical Bayesian unit-level model and the hierarchical Bayesian area-level model. We compare these novel Bayesian models to the frequentist EBLUP unit- and area-level models and two common direct estimators, the mean and the post-stratified estimator. To compare these estimators, we will apply them over many ecological provinces in the Interior West and study their performance when considering four response variables with one explanatory variable. 
 
-### Direct and Indirect Estimation
+In order to explore these estimators in depth, we must introduce notation relevant to them. First of all, our indices will work as follows: $i$ indexes over units sampled; $j$ indexes over eco-subsections or "small areas"; and $k$ indexes over strata. Now, we are interested in estimating the mean of some study variable $y$, such as trees per acre or biomass, in a small area. So, let $\mu_{y_j}$ be the population mean of the study variable in eco-subsection $j$ in the Interior West. To denote the estimate produced of $\mu_{y_j}$ we will use $\overline y_j$ with a superscript denoting which estimator is being used. In summary, each of our estimators aims to estimate $\mu_{y_j}$, the population mean of some study variable in the $j$th eco-subsection and our estimated value is denoted by $\overline y_j$. We also must introduce $s_j$, which is a set. The set $s_j$ includes all units sampled within eco-subsection $j$. We also introduce $U_j$, the set of all the area in subsection $j$. The "$U$" is chosen as it stands for "universe." Also, we introduce $n_j$, this denotes the number of sampled units within an eco-subsection $j$, i.e. the cardinality of $s_j$. 
+
+
+## Direct Estimation
+
+There are two direct estimators that we will explore throughout this thesis: the sample mean (a.k.a. the Horvitz-Thompson estimator) and the post-stratified estimator. While the sample mean is an intuitive choice for estimating the population mean of a variable of interest $y$, the post-stratified estimator helps correct for over- and under-sampling of forested areas. We will now explore both of these estimators in depth. 
+
+### The Horvitz-Thompson Estimator
+
+What might be the most intuitive approach to estimating the population mean $\mu_j$ is taking the sample mean, i.e. using the "Horvitz-Thompson estimator" as foresters like to say. This estimator can be expressed as follows:
+\begin{align}
+\overline y_j^{HT} = \frac{1}{n_j} \sum_{i \in s_j} y_i 
+\end{align}
+Recall that this estimator is just taking the mean of the study variable of interest, $y$. Note that $y_i$ represents the value of the study variable in the $i$th unit sampled of eco-subsection $j$. This estimator is useful as it is easy to compute and does not require any auxiliary information. However, the Horvitz-Thompson estimator high variance relative to other estimators we will discuss and it is biased unless we have sampled the correct proportion of forested areas. The post-stratified estimator begins to address both the bias and variance of the Horvitz-Thompson estimator.
+
+### The Post-Stratified Estimator
+
+The post-stratified estimator is very similar to the Horvitz-Thompson estimator however, as stated above, it addresses bias and variance that occurred from using the Horvitz-Thompson estimator. While decreasing bias and variance seems like a no cost solution to some of our problems, the post-stratified estimator requires auxiliary information in order to be used. The post-stratified estimator is a weighted sum of two Horvitz-Thompson estimators: one Horvitz-Thompson estimator giving the estimate of the mean in sampled units which are forested and the other Horvitz-Thompson estimator in non-forested areas. We then weight these estimates by the true proportion of area in the eco-subsection of interest that is forested. Note that while we are using auxiliary information such as the true proportion of forested area in the eco-subsection of interest and whether or not the sampled units were forested areas or not, both of these pieces of information only consider the eco-subsection of interest. Therefore, since information is not used from outside of the eco-subsection of interest, the post-stratified estimator is still within the family of direct estimators. We can represent the post-stratified estimator as follows:
+\begin{align}
+\overline y_j^{PS} = \sum_{k=1}^{2} w_k \cdot \overline y_{j,k}^{HT}
+\end{align}
+Recall that $k$ indexes over our strata, which in this case is forested and non-forested sampled units. We also have $w_k$, which is a survey weight entirely decided by the true proportion of eco-subsection $j$ which is forested. For example, if eco-subsection $j$ was 80% forested, we would have $w_1 = 0.8$ and $w_2 = 0.2$. Therefore if we had under-sampled forests at only 60% of our samples, we correct this under-sampling with our survey weights and this results in a design-unbiased estimate of $\mu_{y_j}$. 
+
+## Implicit Model Based Indirect Estimation
+
+## Explicit Model Based Indirect Estimation
+
+## Direct and Indirect Estimation
 
 Direct and indirect estimation when auxiliary data is not available or information from auxiliary datasets is not wanted. One of the most common direct estimators is the mean:
 \begin{align}
