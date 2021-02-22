@@ -549,31 +549,15 @@ The post-stratified estimator is very similar to the Horvitz-Thompson estimator 
 \end{align}
 Recall that \(k\) indexes over our strata, which in this case is forested and non-forested sampled units. We also have \(w_k\), which is a survey weight entirely decided by the true proportion of eco-subsection \(j\) which is forested. For example, if eco-subsection \(j\) was 80\% forested, we would have \(w_1 = 0.8\) and \(w_2 = 0.2\). Therefore if we had under-sampled forests at only 60\% of our samples, we correct this under-sampling with our survey weights and this results in a design-unbiased estimate of \(\mu_{y_j}\).
 
+The post-stratified estimator is a great alternative to the Horvitz-Thompson estimator when auxiliary information is available, and in that situation there is not a justifiable reason to pick the Horvitz-Thompson estimator over the post-stratified estimator as the direct estimator of choice. We have access to the information needed to compute the post-stratified estimate in the Interior West so we will primarily be comparing our indirect estimators to the post-stratified estimator in our results. Also, our area-level indirect model-based estimators will be based on the post-stratified estimate.
+
 \hypertarget{implicit-model-based-indirect-estimation}{%
 \section{Implicit Model Based Indirect Estimation}\label{implicit-model-based-indirect-estimation}}
 
 \hypertarget{explicit-model-based-indirect-estimation}{%
 \section{Explicit Model Based Indirect Estimation}\label{explicit-model-based-indirect-estimation}}
 
-\hypertarget{direct-and-indirect-estimation}{%
-\section{Direct and Indirect Estimation}\label{direct-and-indirect-estimation}}
-
-Direct and indirect estimation when auxiliary data is not available or information from auxiliary datasets is not wanted. One of the most common direct estimators is the mean:
-\begin{align}
-\overline{y_j} = \frac{\sum_{i=1}^{n_j} y_{i, j}}{n_j}
-\end{align}
-where \(\overline{y_j}\) is the mean of the variable of interest, \(i\) indexes over each observation in the small area \(j\), \(y_{i,j}\) is the \(i\)th value of \(\theta\) in the \(j\)th small area, and \(n_j\) is the total number of observations in that small area.
-
-Another commonly used estimator which belongs to the family of direct estimators is the post-stratified estimator:
-\begin{align}
-\overline{y_j} = \frac{1}{n} \sum_{i=1}^{n_j} \sum_{k \in \{1,2\}} w_k \overline{y_{j,k}}
-\end{align}
-The post-stratified estimator is similar to the mean, however it includes a term which corrects for over or under sampling of forests in a given small area. If we have over or under sampled forests within our small area, the mean will actually be a biased estimator, while the post-stratified estimator is provenly unbiased. While it is not always practical to use the post-stratified estimator due to its need for population information on the forested vs.~not-forested variable. However, we do have this population data for the entire interior west region of the United States, so we will be comparing our model based estimators to the baseline post-stratified direct estimator.
-
-(indirect estimator examples, ask kelly abt this)
-
-\hypertarget{model-based-estimation}{%
-\subsection{Model-Based Estimation}\label{model-based-estimation}}
+(this all needs significant revisions and expansion from Rao)
 
 Model-based estimators are extremely useful when auxiliary data is available and correlated with the response variables of interest. Most commonly, the estimator used is the EBLUP estimator, which, similarly to the post-stratified estimator, provenly unbiased. This is a random effects model which we can see specified below:
 \begin{align}
@@ -585,7 +569,9 @@ where \(Y_{i,j}\) is the response variable, \(\vec\beta\) is the vector of coeff
 \epsilon &\sim \text{N}(0, \sigma^2_{\epsilon})
 \end{align}
 \hypertarget{a-hierarchical-bayesian-approach}{%
-\section{A Hierarchical Bayesian Approach}\label{a-hierarchical-bayesian-approach}}
+\chapter{A Hierarchical Bayesian Approach}\label{a-hierarchical-bayesian-approach}}
+
+(still needs revised and expanded)
 
 While we have explored the frequentist version of a hierarchical model, this thesis primarily studies \emph{Bayesian} hierarhical models and compares their performance to their frequentist counterparts. With a Bayesian hierarhical model, we derive the posterior distribution of our variable of interest with either Markov Chain Monte Carlo (MCMC) methods, or through numerical integration. We do this by considering both the data (likelihood) and prior distributions. This allows us to use Bayes' Theorem in order to get our posterior. Similarly to the frequentist counterpart, we can specify the varying-intercepts hierarchical Bayesian model as follows:
 \begin{align}
