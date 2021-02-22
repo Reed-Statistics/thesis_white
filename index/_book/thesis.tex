@@ -554,6 +554,8 @@ The post-stratified estimator is a great alternative to the Horvitz-Thompson est
 \hypertarget{implicit-model-based-indirect-estimation}{%
 \section{Implicit Model Based Indirect Estimation}\label{implicit-model-based-indirect-estimation}}
 
+Often times it is the case that direct estimation techniques do not provide sufficient standard errors to be able to make informative inferences at the small area level. That is the case in our situation, as the FIA's survey design was based around making inferences at larger levels than eco-subsections. One relatively simple approach to decreasing variance of estimates at a small area level is to use the data of the variable of interest from surrounding areas to help attain the estimate in the small area of interest. This process is called ``borrowing strength.'' It is very similar to the borrowing of strength outlined in Figures \ref{fig:hbu-diagram} and \ref{fig:hba-diagram}, however, we are only borrowing strength from the variable of interest (the \(y\) variable) rather than explicitly modeling explanatory variables.
+
 \hypertarget{explicit-model-based-indirect-estimation}{%
 \section{Explicit Model Based Indirect Estimation}\label{explicit-model-based-indirect-estimation}}
 
@@ -569,7 +571,7 @@ where \(Y_{i,j}\) is the response variable, \(\vec\beta\) is the vector of coeff
 \epsilon &\sim \text{N}(0, \sigma^2_{\epsilon})
 \end{align}
 \hypertarget{a-hierarchical-bayesian-approach}{%
-\chapter{A Hierarchical Bayesian Approach}\label{a-hierarchical-bayesian-approach}}
+\section{A Hierarchical Bayesian Approach}\label{a-hierarchical-bayesian-approach}}
 
 (still needs revised and expanded)
 
