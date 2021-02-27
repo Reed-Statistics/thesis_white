@@ -172,7 +172,8 @@ plot4 <- res %>%
   ggplot(aes(x = est_dirps,
              y = est_hb_area)) +
   geom_point() +
-  geom_smooth(method = "lm", se = F, color = "#80BBA2") +
+  geom_abline(slope = 1, intercept = 0) +
+  # geom_smooth(method = "lm", se = F, color = "#80BBA2") +
   theme_bw() +
   labs(x = "Direct (Post-Strat) Estimate",
        y = "Hierarchical Bayesian Area Level Estimate",
