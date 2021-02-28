@@ -34,7 +34,21 @@ The post-stratified estimator is a great alternative to the Horvitz-Thompson est
 
 ## Implicit Model Based Indirect Estimation
 
-Often times it is the case that direct estimation techniques do not provide sufficient standard errors to be able to make informative inferences at the small area level. That is the case in our situation, as the FIA's survey design was based around making inferences at larger levels than eco-subsections. One relatively simple approach to decreasing variance of estimates at a small area level is to use the data of the variable of interest from surrounding areas to help attain the estimate in the small area of interest. This process is called "borrowing strength." It is very similar to the borrowing of strength outlined in Figures \@ref(fig:hbu-diagram) and \@ref(fig:hba-diagram), however, we are only borrowing strength from the variable of interest (the $y$ variable) rather than explicitly modeling explanatory variables. 
+Often times it is the case that direct estimation techniques do not provide sufficiently small standard errors to be able to make informative inferences at the small area level. That is the case in our situation, as the FIA's survey design was based around making inferences at larger levels than eco-subsections. One relatively simple approach to decreasing variance of estimates at a small area level is to use auxiliary data from surrounding areas to help attain the estimate in the small area of interest. This process is called borrowing strength. It is very similar to the borrowing of strength outlined in Figures \@ref(fig:hbu-diagram) and \@ref(fig:hba-diagram), however, in the case of implicit model based indirect estimation we do not allow for between-area variation of explanatory variables. That is, we may borrow strength across small areas by using auxiliary data, but this auxiliary data must be aggregated and have the same effect on each small area within a designated area (in our case, this is the ecological province). 
+
+We introduce two implicit model based indirect estimators commonly used when auxiliary data is available at the unit- and area-levels. These estimators are not used in the final analyses done in this thesis. However, they are crucial building blocks for understanding the frequentist EBLUP models we discuss and implement. First we discuss a common estimator used when area-level auxiliary data is available and then a common estimator for unit-level auxiliary data.
+
+### Using Area-level Auxiliary Data
+
+When we choose to use area-level auxiliary data and implicit model based indirect estimation, Rao (2014) suggests the regression-synthetic estimator. Here, in order to estimate our parameter of interest, $\mu_{y_j}$, we fit an ordinary least squares linear regression on our $p$ auxiliary variables over each small area in our large domain:
+\begin{align}
+\overline y_j^{REG} = \hat\beta_0 + \hat\beta_1 x_{j,1} + \cdots + \hat\beta_p x_{j,p}
+\end{align}
+We denote this estimator with $REG$ rather than a seemingly more sensible notation of $RSE$ in order to avoid confusion with the residual standard errors of a model. We note that the $\hat \beta$'s are calculated through standard methods of ordinary least squares and in the case of our analysis $p=1$. Further, it is important to recognize that in the case of the regression-synthetic estimator each small area receives the same $\hat\beta$'s. This is the realization of the requirement that the auxiliary information must have the same effect on each small area. 
+
+### Using Unit-level Auxiliary Data
+
+
 
 ## Explicit Model Based Indirect Estimation
 
