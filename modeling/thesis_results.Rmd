@@ -44,8 +44,8 @@ no0_subsections <- intwest %>%
 
 intwest_no0 <- intwest %>%
   filter(subsection %in% no0_subsections) %>%
-  filter(!(province %in% c("M261", "M334", # two eco-subs each, divergent integrals
-                           "331", "341", "342"))) # tiny amount of forests, error in area-level
+  filter(!(province %in% c("M261", "M334"))) # two eco-subs each, divergent integrals
+                          # "331", "341", "342"))) # tiny amount of forests, error in area-level
 ```
 
 List of dataframes:
@@ -54,6 +54,38 @@ iw <- split(intwest_no0, f = intwest_no0$province)
 ## we deal with the below in the above chunk
 # iw <- iw[-13] # This province only has two subsections and causes divergent integrals
 # iw <- iw[-8] # This province only has two subsections and causes divergent integrals
+
+# iw5_subsections <- iw[[5]] %>%
+#   group_by(subsection) %>%
+#   summarize(mean = mean(BIOLIVE_TPA)) %>%
+#   filter(mean > 0.5) %>%
+#   dplyr::select(subsection) %>%
+#   pull()
+# 
+# iw[[5]] <- iw[[5]] %>%
+#   filter(subsection %in% iw5_subsections)
+# 
+# iw6_subsections <- iw[[6]] %>%
+#   group_by(subsection) %>%
+#   summarize(mean = mean(BIOLIVE_TPA)) %>%
+#   filter(mean > 0.5) %>%
+#   dplyr::select(subsection) %>%
+#   pull()
+# 
+# iw[[6]] <- iw[[6]] %>%
+#   filter(subsection %in% iw6_subsections)
+# 
+# iw7_subsections <- iw[[7]] %>%
+#   group_by(subsection) %>%
+#   summarize(mean = mean(BIOLIVE_TPA)) %>%
+#   filter(mean > 0.5) %>%
+#   dplyr::select(subsection) %>%
+#   pull()
+# 
+# iw[[7]] <- iw[[7]] %>%
+#   filter(subsection %in% iw7_subsections)
+# 
+# intwest_no0 <- bind_rows(iw)
 ```
 
 ## Modeling
@@ -152,19 +184,31 @@ results <- data.frame(
              bind_rows(post_strat_voln)$sd),
   subsection = rep(names(post_strat_bio), 4),
   response = c(
-    rep("BIOLIVE_TPA", 297),
-    rep("BALIVE_TPA", 297),
-    rep("CNTLIVE_TPA", 297),
-    rep("VOLNLIVE_TPA", 297))
+    rep("BIOLIVE_TPA", length(post_strat_bio)),
+    rep("BALIVE_TPA", length(post_strat_ba)),
+    rep("CNTLIVE_TPA", length(post_strat_cnt)),
+    rep("VOLNLIVE_TPA", length(post_strat_voln)))
 )
 ```
 
 ```{r mean}
 dirmean <- list()
-dirmean[1:9] <- lapply(iw, direct_estimate, response = "BIOLIVE_TPA", "subsection")
-dirmean[10:18] <- lapply(iw, direct_estimate, response = "BALIVE_TPA", "subsection")
-dirmean[19:27] <- lapply(iw, direct_estimate, response = "CNTLIVE_TPA", "subsection")
-dirmean[28:36] <- lapply(iw, direct_estimate, response = "VOLNLIVE_TPA", "subsection")
+dirmean[1:length(iw)] <- lapply(iw,
+                                direct_estimate,
+                                response = "BIOLIVE_TPA", 
+                                "subsection")
+dirmean[(length(iw)+1):(2*length(iw))] <- lapply(iw,
+                                                 direct_estimate,
+                                                 response = "BALIVE_TPA",
+                                                 "subsection")
+dirmean[(2*length(iw) + 1):(3*length(iw))] <- lapply(iw,
+                                                     direct_estimate,
+                                                     response = "CNTLIVE_TPA",
+                                                     "subsection")
+dirmean[(3*length(iw) + 1):(4*length(iw))] <- lapply(iw,
+                                                     direct_estimate,
+                                                     response = "VOLNLIVE_TPA",
+                                                     "subsection")
 
 dir <- bind_rows(dirmean) %>%
   dplyr::select(Domain, Direct, CV) %>%
@@ -172,10 +216,10 @@ dir <- bind_rows(dirmean) %>%
   rename(est_dirmean = Direct) %>%
   dplyr::select(-CV) %>%
   mutate(response = c(
-    rep("BIOLIVE_TPA", 297),
-    rep("BALIVE_TPA", 297),
-    rep("CNTLIVE_TPA", 297),
-    rep("VOLNLIVE_TPA", 297)))
+    rep("BIOLIVE_TPA", length(post_strat_bio)),
+    rep("BALIVE_TPA", length(post_strat_ba)),
+    rep("CNTLIVE_TPA", length(post_strat_cnt)),
+    rep("VOLNLIVE_TPA", length(post_strat_voln))))
 
 results <- results %>%
   left_join(dir, by = c("subsection" = "Domain",
@@ -217,19 +261,47 @@ ps_l <- split(ps_dat, list(ps_dat$province))
 # HB Unit
 set.seed(1)
 bayes_unit <- list()
-bayes_unit[1:9] <- lapply(iw, hb_unit, formula = BIOLIVE_TPA ~ nlcd11, small_area = "subsection", pop_data = tccpop)
-bayes_unit[10:18] <- lapply(iw, hb_unit, formula = BALIVE_TPA ~ nlcd11, small_area = "subsection", pop_data = tccpop)
-bayes_unit[19:27] <- lapply(iw, hb_unit, formula = CNTLIVE_TPA ~ nlcd11, small_area = "subsection", pop_data = tccpop)
-bayes_unit[28:36] <- lapply(iw, hb_unit, formula = VOLNLIVE_TPA ~ nlcd11, small_area = "subsection", pop_data = tccpop)
+bayes_unit[1:length(iw)] <- lapply(
+  iw,
+  hb_unit,
+  formula = BIOLIVE_TPA ~ nlcd11,
+  small_area = "subsection",
+  pop_data = tccpop
+)
+bayes_unit[(length(iw) + 1):(2 * length(iw))] <-
+  lapply(
+    iw,
+    hb_unit,
+    formula = BALIVE_TPA ~ nlcd11,
+    small_area = "subsection",
+    pop_data = tccpop
+  )
+bayes_unit[(2 * length(iw) + 1):(3 * length(iw))] <-
+  lapply(
+    iw,
+    hb_unit,
+    formula = CNTLIVE_TPA ~ nlcd11,
+    small_area = "subsection",
+    pop_data = tccpop
+  )
+bayes_unit[(3 * length(iw) + 1):(4 * length(iw))] <-
+  lapply(
+    iw,
+    hb_unit,
+    formula = VOLNLIVE_TPA ~ nlcd11,
+    small_area = "subsection",
+    pop_data = tccpop
+  )
 
 # saveRDS(bayes_unit, "bayes_unit.rds")
 
 res_hbu <- data.frame(
   subsection = names(unlist(lapply(bayes_unit, EST))),
-  response = c(rep("BIOLIVE_TPA", 297),
-               rep("BALIVE_TPA", 297),
-               rep("CNTLIVE_TPA", 297), 
-               rep("VOLNLIVE_TPA", 297)),
+response = c(
+    rep("BIOLIVE_TPA", length(post_strat_bio)),
+    rep("BALIVE_TPA", length(post_strat_ba)),
+    rep("CNTLIVE_TPA", length(post_strat_cnt)),
+    rep("VOLNLIVE_TPA", length(post_strat_voln))),
   est_hb_unit = unlist(lapply(bayes_unit, EST)),
   cov_hb_unit = unlist(lapply(bayes_unit, hb_CoV))
 )
@@ -243,10 +315,38 @@ results <- results %>%
 # HB Area
 set.seed(1)
 bayes_area <- list()
-bayes_area[1:9] <- lapply(iw, hb_area, formula = BIOLIVE_TPA ~ nlcd11, small_area = "subsection", pop_data = tccpop)
-bayes_area[10:18] <- lapply(iw, hb_area, formula = BALIVE_TPA ~ nlcd11, small_area = "subsection", pop_data = tccpop)
-bayes_area[19:27] <- lapply(iw, hb_area, formula = CNTLIVE_TPA ~ nlcd11, small_area = "subsection", pop_data = tccpop)
-bayes_area[28:36] <- lapply(iw, hb_area, formula = VOLNLIVE_TPA ~ nlcd11, small_area = "subsection", pop_data = tccpop)
+bayes_area[1:length(iw)] <-
+  lapply(
+    iw,
+    hb_area,
+    formula = BIOLIVE_TPA ~ nlcd11,
+    small_area = "subsection",
+    pop_data = tccpop
+  )
+bayes_area[(length(iw) + 1):(2 * length(iw))] <-
+  lapply(
+    iw,
+    hb_area,
+    formula = BALIVE_TPA ~ nlcd11,
+    small_area = "subsection",
+    pop_data = tccpop
+  )
+bayes_area[(2 * length(iw) + 1):(3 * length(iw))] <-
+  lapply(
+    iw,
+    hb_area,
+    formula = CNTLIVE_TPA ~ nlcd11,
+    small_area = "subsection",
+    pop_data = tccpop
+  )
+bayes_area[(3 * length(iw) + 1):(4 * length(iw))] <-
+  lapply(
+    iw,
+    hb_area,
+    formula = VOLNLIVE_TPA ~ nlcd11,
+    small_area = "subsection",
+    pop_data = tccpop
+  )
 
 # saveRDS(bayes_area, "bayes_area.rds")
 
@@ -258,10 +358,12 @@ hb_area_res <- data.frame(
   subsection = rep(unique(aranged_df$subsection), 4),
   est_hb_area = unlist(lapply(bayes_area, EST)),
   cov_hb_area = unlist(lapply(bayes_area, hb_CoV)),
-    response = c(rep("BIOLIVE_TPA", 297),
-               rep("BALIVE_TPA", 297),
-               rep("CNTLIVE_TPA", 297), 
-               rep("VOLNLIVE_TPA", 297))
+  response = c(
+    rep("BIOLIVE_TPA", length(post_strat_bio)),
+    rep("BALIVE_TPA", length(post_strat_ba)),
+    rep("CNTLIVE_TPA", length(post_strat_cnt)),
+    rep("VOLNLIVE_TPA", length(post_strat_voln))
+  )
 )
 
 results <- results %>%
@@ -276,26 +378,29 @@ results <- results %>%
 # Freq Unit
 set.seed(1)
 frequnit <- list()
-frequnit[1:9] <- lapply(iw, freq_unit, formula = BIOLIVE_TPA ~ nlcd11, "subsection", tccpop)
-frequnit[10:18] <- lapply(iw, freq_unit, formula = BALIVE_TPA ~ nlcd11, "subsection", tccpop)
-frequnit[19:27] <- lapply(iw, freq_unit, formula = CNTLIVE_TPA ~ nlcd11, "subsection", tccpop)
-frequnit[28:36] <- lapply(iw, freq_unit, formula = VOLNLIVE_TPA ~ nlcd11, "subsection", tccpop)
+frequnit[1:length(iw)] <-
+  lapply(iw, freq_unit, formula = BIOLIVE_TPA ~ nlcd11, "subsection", tccpop)
+frequnit[(length(iw) + 1):(2 * length(iw))] <-
+  lapply(iw, freq_unit, formula = BALIVE_TPA ~ nlcd11, "subsection", tccpop)
+frequnit[(2 * length(iw) + 1):(3 * length(iw))] <-
+  lapply(iw, freq_unit, formula = CNTLIVE_TPA ~ nlcd11, "subsection", tccpop)
+frequnit[(3 * length(iw) + 1):(4 * length(iw))] <-
+  lapply(iw, freq_unit, formula = VOLNLIVE_TPA ~ nlcd11, "subsection", tccpop)
 
 # saveRDS(frequnit, "freq_unit.rds")
 
 frequnit_list <- list()
-  for(i in 1:36) {
+  for(i in 1:(4 * length(iw))) {
     frequnit_list[[i]] <- frequnit[[i]]$eblup
   }
 
 frequnit_df <- frequnit_list %>%
   bind_rows() %>%
   mutate(response = c(
-    rep("BIOLIVE_TPA", 297),
-    rep("BALIVE_TPA", 297),
-    rep("CNTLIVE_TPA", 297),
-    rep("VOLNLIVE_TPA", 297)
-  )) %>%
+    rep("BIOLIVE_TPA", length(post_strat_bio)),
+    rep("BALIVE_TPA", length(post_strat_ba)),
+    rep("CNTLIVE_TPA", length(post_strat_cnt)),
+    rep("VOLNLIVE_TPA", length(post_strat_voln)))) %>%
   rename(
     subsection = domain,
     est_freq_unit = eblup
@@ -339,10 +444,10 @@ frequnitcov_df <- data.frame(
   cov_freq_unit = frequnitcov,
   subsection = names(frequnitcov),
   response = c(
-    rep("BIOLIVE_TPA", 297),
-    rep("BALIVE_TPA", 297),
-    rep("CNTLIVE_TPA", 297),
-    rep("VOLNLIVE_TPA", 297)
+    rep("BIOLIVE_TPA", length(post_strat_bio)),
+    rep("BALIVE_TPA", length(post_strat_ba)),
+    rep("CNTLIVE_TPA", length(post_strat_cnt)),
+    rep("VOLNLIVE_TPA", length(post_strat_voln))
   )
 )
 
@@ -360,17 +465,17 @@ results <- results %>%
 # Freq Area
 set.seed(1)
 freqarea <- list()
-freqarea[1:9] <- lapply(iw, freq_area, formula = BIOLIVE_TPA ~ nlcd11, "subsection", tccpop)
-freqarea[10:18] <- lapply(iw, freq_area, formula = BALIVE_TPA ~ nlcd11, "subsection", tccpop)
-freqarea[19:27] <- lapply(iw, freq_area, formula = CNTLIVE_TPA ~ nlcd11, "subsection", tccpop)
-freqarea[28:36] <- lapply(iw, freq_area, formula = VOLNLIVE_TPA ~ nlcd11, "subsection", tccpop)
+freqarea[1:length(iw)] <- lapply(iw, freq_area, formula = BIOLIVE_TPA ~ nlcd11, "subsection", tccpop)
+freqarea[(length(iw) + 1):(2 * length(iw))] <- lapply(iw, freq_area, formula = BALIVE_TPA ~ nlcd11, "subsection", tccpop)
+freqarea[(2 * length(iw) + 1):(3 * length(iw))] <- lapply(iw, freq_area, formula = CNTLIVE_TPA ~ nlcd11, "subsection", tccpop)
+freqarea[(3 * length(iw) + 1):(4 * length(iw))] <- lapply(iw, freq_area, formula = VOLNLIVE_TPA ~ nlcd11, "subsection", tccpop)
 
 freqarea_list <- list()
-  for(i in 1:36) {
+  for(i in 1:(4 * length(iw))) {
     freqarea_list[[i]] <- freqarea[[i]]$est$eblup
   }
 freqarea_cov_list <- list()
-  for(i in 1:36) {
+  for(i in 1:(4 * length(iw))) {
     freqarea_cov_list[[i]] <- sqrt(freqarea[[i]]$mse)
   }
 
@@ -379,10 +484,12 @@ freq_area_res <- data.frame(
   subsection = rep(unique(aranged_df$subsection), 4),
   est_freq_area = unlist(freqarea_list),
   se_freq_area = unlist(freqarea_cov_list),
-    response = c(rep("BIOLIVE_TPA", 297),
-               rep("BALIVE_TPA", 297),
-               rep("CNTLIVE_TPA", 297), 
-               rep("VOLNLIVE_TPA", 297))
+  response = c(
+    rep("BIOLIVE_TPA", length(post_strat_bio)),
+    rep("BALIVE_TPA", length(post_strat_ba)),
+    rep("CNTLIVE_TPA", length(post_strat_cnt)),
+    rep("VOLNLIVE_TPA", length(post_strat_voln))
+  )
 )
 results <- results %>%
   left_join(freq_area_res,
@@ -423,32 +530,32 @@ for(i in 1:length(ps_resamp_list)) {
 
 post_strat_bio_rs_df <- bind_rows(post_strat_bio_rs) %>%
   mutate(subsection = rep(names(subsection_list), 500)) %>%
-  mutate(rep = unlist(lapply(1:500, rep, 297))) %>%
-  mutate(response = rep("BIOLIVE_TPA", 500 * 297),
+  mutate(rep = unlist(lapply(1:500, rep, length(post_strat_bio)))) %>%
+  mutate(response = rep("BIOLIVE_TPA", 500 * length(post_strat_bio)),
          var = sd^2,
          section = str_remove_all(subsection, "[:lower:]"),
          province = str_sub(section, end = -2))
 
 post_strat_ba_rs_df <- bind_rows(post_strat_ba_rs) %>%
   mutate(subsection = rep(names(subsection_list), 500)) %>%
-  mutate(rep = unlist(lapply(1:500, rep, 297))) %>%
-  mutate(response = rep("BALIVE_TPA", 500 * 297),
+  mutate(rep = unlist(lapply(1:500, rep, length(post_strat_ba)))) %>%
+  mutate(response = rep("BALIVE_TPA", 500 * length(post_strat_ba)),
          var = sd^2,
          section = str_remove_all(subsection, "[:lower:]"),
          province = str_sub(section, end = -2))
 
 post_strat_cnt_rs_df <- bind_rows(post_strat_cnt_rs) %>%
   mutate(subsection = rep(names(subsection_list), 500)) %>%
-  mutate(rep = unlist(lapply(1:500, rep, 297))) %>%
-  mutate(response = rep("CNTLIVE_TPA", 500 * 297),
+  mutate(rep = unlist(lapply(1:500, rep, length(post_strat_cnt)))) %>%
+  mutate(response = rep("CNTLIVE_TPA", 500 * length(post_strat_cnt)),
          var = sd^2,
          section = str_remove_all(subsection, "[:lower:]"),
          province = str_sub(section, end = -2))
 
 post_strat_voln_rs_df <- bind_rows(post_strat_voln_rs) %>%
   mutate(subsection = rep(names(subsection_list), 500)) %>%
-  mutate(rep = unlist(lapply(1:500, rep, 297))) %>%
-  mutate(response = rep("VOLNLIVE_TPA", 500 * 297),
+  mutate(rep = unlist(lapply(1:500, rep, length(post_strat_voln)))) %>%
+  mutate(response = rep("VOLNLIVE_TPA", 500 * length(post_strat_voln)),
          var = sd^2,
          section = str_remove_all(subsection, "[:lower:]"),
          province = str_sub(section, end = -2))
@@ -474,7 +581,7 @@ ba_l <- split(ba_df, ba_df$rep)
 
 basal <- data.frame()
 for(i in 1:500) {
-  basal[i,1:297] <- eblupFH(ba_l[[i]]$ps_est ~ ba_l[[i]]$mean, ba_l[[i]]$var)$eblup
+  basal[i,1:length(post_strat_ba)] <- eblupFH(ba_l[[i]]$ps_est ~ ba_l[[i]]$mean, ba_l[[i]]$var)$eblup
 }
 colnames(basal) <- paste0("a",ba_l[[1]]$subsection)
 
@@ -487,7 +594,7 @@ bio_l <- split(bio_df, bio_df$rep)
 
 biolive <- data.frame()
 for(i in 1:500) {
-  biolive[i,1:297] <- eblupFH(bio_l[[i]]$ps_est ~ bio_l[[i]]$mean, bio_l[[i]]$var)$eblup
+  biolive[i,1:length(post_strat_bio)] <- eblupFH(bio_l[[i]]$ps_est ~ bio_l[[i]]$mean, bio_l[[i]]$var)$eblup
 }
 colnames(biolive) <- paste0("a",bio_l[[1]]$subsection)
 
@@ -500,7 +607,7 @@ cnt_l <- split(cnt_df, cnt_df$rep)
 
 cnt <- data.frame()
 for(i in 1:500) {
-  cnt[i,1:297] <- eblupFH(cnt_l[[i]]$ps_est ~ cnt_l[[i]]$mean, cnt_l[[i]]$var)$eblup
+  cnt[i,1:length(post_strat_cnt)] <- eblupFH(cnt_l[[i]]$ps_est ~ cnt_l[[i]]$mean, cnt_l[[i]]$var)$eblup
 }
 colnames(cnt) <- paste0("a",cnt_l[[1]]$subsection)
 
@@ -513,7 +620,7 @@ voln_l <- split(voln_df, voln_df$rep)
 
 voln <- data.frame()
 for(i in 1:500) {
-  voln[i,1:297] <- eblupFH(voln_l[[i]]$ps_est ~ voln_l[[i]]$mean, voln_l[[i]]$var)$eblup
+  voln[i,1:length(post_strat_voln)] <- eblupFH(voln_l[[i]]$ps_est ~ voln_l[[i]]$mean, voln_l[[i]]$var)$eblup
 }
 colnames(voln) <- paste0("a",voln_l[[1]]$subsection)
 
@@ -527,10 +634,10 @@ voln_sd <- apply(voln, 2, sd)
 ### sd dataframe
 sd_dataframe <- data.frame(
   sd = c(bio_sd, ba_sd, cnt_sd, voln_sd),
-  response = c(rep("BIOLIVE_TPA", 297),
-               rep("BALIVE_TPA", 297),
-               rep("CNTLIVE_TPA", 297),
-               rep("VOLNLIVE_TPA", 297)),
+  response = c(rep("BIOLIVE_TPA", length(post_strat_bio)),
+               rep("BALIVE_TPA", length(post_strat_ba)),
+               rep("CNTLIVE_TPA", length(post_strat_cnt)),
+               rep("VOLNLIVE_TPA", length(post_strat_voln))),
   subsection = rep(substr(names(bio_sd), 2, 10), 4)
 )
 
