@@ -375,21 +375,51 @@ summary {
 </div>
 
 
-<div id="spring-week-3" class="section level2">
-<h2>Spring, Week 3</h2>
+<div id="spring-week-5" class="section level2">
+<h2>Spring, Week 5</h2>
 <div id="this-weeks-work" class="section level3">
 <h3>This Week’s Work</h3>
+<ul>
+<li>I made some grammatical and aesthetic changes to the Context chapter.<br />
+</li>
+<li>I added a good amount to the Methods chapter: intro done, direct estimates done, indirect implicit estimates started<br />
+</li>
+<li>I spent time refactoring code for my results. I made the code generalizable to any number of provinces and unsuccessfully troubleshooted the provinces that I have not been able to include.</li>
+</ul>
 </div>
 <div id="upcoming-work" class="section level3">
 <h3>Upcoming Work</h3>
+<ul>
+<li>Methods: unit-level aux info for indirect implicit models, frequentist and bayesian explicit models.<br />
+</li>
+<li>Troubleshoot code to include more provinces in analysis? Or leave for summer?</li>
+</ul>
 </div>
 <div id="points-of-confusion" class="section level3">
 <h3>Points of confusion</h3>
 </div>
 </div>
+<div id="spring-week-4" class="section level2">
+<h2>Spring, Week 4</h2>
+<div id="this-weeks-work-1" class="section level3">
+<h3>This Week’s Work</h3>
+<ul>
+<li>This week was working on Methods chapter</li>
+</ul>
+</div>
+</div>
+<div id="spring-week-3" class="section level2">
+<h2>Spring, Week 3</h2>
+<div id="this-weeks-work-2" class="section level3">
+<h3>This Week’s Work</h3>
+<ul>
+<li>This week was getting all the code to work out</li>
+</ul>
+</div>
+</div>
 <div id="spring-week-2" class="section level2">
 <h2>Spring, Week 2</h2>
-<div id="this-weeks-work-1" class="section level3">
+<div id="this-weeks-work-3" class="section level3">
 <h3>This Week’s Work</h3>
 <ul>
 <li>Major edits to diagrams for Context chapter.<br />
@@ -420,7 +450,7 @@ summary {
 </div>
 <div id="spring-week-1" class="section level2">
 <h2>Spring, Week 1</h2>
-<div id="this-weeks-work-2" class="section level3">
+<div id="this-weeks-work-4" class="section level3">
 <h3>This Week’s Work</h3>
 <ul>
 <li>I made many diagrams in Keynote for the Context chapter<br />
@@ -445,14 +475,14 @@ summary {
 </div>
 <div id="spring-week-0" class="section level2">
 <h2>Spring, Week 0</h2>
-<div id="this-weeks-work-3" class="section level3">
+<div id="this-weeks-work-5" class="section level3">
 <h3>This Week’s Work</h3>
 <p>Over break I implemented the models over the entire interior west for all four response variables and saved the results in a dataframe. I also have made some summaries of these results.</p>
 </div>
 </div>
 <div id="fall-week-13" class="section level2">
 <h2>Fall, Week 13</h2>
-<div id="this-weeks-work-4" class="section level3">
+<div id="this-weeks-work-6" class="section level3">
 <h3>This Week’s Work</h3>
 <p>This week, I wrote functions for modeling. I wrote five main modeling functions: <code>hb_unit()</code>, <code>hb_area()</code>, <code>freq_unit()</code>, <code>freq_area()</code>, and <code>direct_estimate()</code>. I also wrote functions to grab the coefficient of variation from each function. Each of the modeling functions take in the same three basic arguments (data, formula, small_area) and none of the functions require any data pre-processing. There <code>hb_*()</code> functions use <code>hbsae</code> while the <code>freq_*()</code> functions use <code>sae</code>. To get the CoV’s for the frequentist models, I had to bootstrap, but that worked pretty seamlessly.</p>
 <p>I also made an rmd that uses these functions on M333 and plots their CoV at the end.</p>
@@ -473,7 +503,7 @@ summary {
 </div>
 <div id="fall-week-12" class="section level2">
 <h2>Fall, Week 12</h2>
-<div id="this-weeks-work-5" class="section level3">
+<div id="this-weeks-work-7" class="section level3">
 <h3>This Week’s Work</h3>
 <ul>
 <li><p>Revised Data chapter once more for any adjustments to just talk about <code>nlcd11</code> and the entire Interior West (rather than any large specific details about M333)</p></li>
@@ -498,7 +528,7 @@ summary {
 </div>
 <div id="fall-week-11" class="section level2">
 <h2>Fall, Week 11</h2>
-<div id="this-weeks-work-6" class="section level3">
+<div id="this-weeks-work-8" class="section level3">
 <h3>This Week’s Work</h3>
 <p>This week, I initally tied up loose ends from last week by finishing my revisions to the Data chapter. I then read chapters from Small Area Estimation to try to see what was going wrong with the modeling. After not being able to figure out what (if anything) needed to change for the unit level model, I eventually took a deep dive back into <code>hbsae</code>, which was the package that I really thought didn’t work. However, I was eventually able to get an output that made sense and aligned with my results from <code>rstanarm</code>! The <code>hbsae</code> package also has a few built in features to asses model quality, and these functions yeild really, really, good results in terms of coefs of variation.</p>
 <p>One notable thing about <code>hbsae</code> is that it uses integration rather than MCMC to compute its estimates. This doesn’t seem to be a problem as the results align well with <code>rstanarm</code>. I think that I will try to use this package for our models as the model fitting is almost instant and it has those nice helper functions that would allow us to easily compare the models to those fit with a package like <code>sae</code>.</p>
@@ -519,7 +549,7 @@ summary {
 </div>
 <div id="fall-week-10" class="section level2">
 <h2>Fall, Week 10</h2>
-<div id="this-weeks-work-7" class="section level3">
+<div id="this-weeks-work-9" class="section level3">
 <h3>This Week’s Work</h3>
 <p>This week, I have primarily been writing in the thesis document:</p>
 <ul>
@@ -553,7 +583,7 @@ summary {
 </div>
 <div id="fall-week-9" class="section level2">
 <h2>Fall, Week 9</h2>
-<div id="this-weeks-work-8" class="section level3">
+<div id="this-weeks-work-10" class="section level3">
 <h3>This Week’s Work</h3>
 <p>This week, I have been working on quantifying uncertainty of our Bayesian estimates, looking at comparisons between relationships of predictors and response at unit/area level, watching FIA videos, and learning a tad about post-stratification. In particular, I have found that the area level models seem to do much better on a variety of metrics, and with the unit level models where they are at now I am not sure how viable they are. I also watched the FIA video from Radke which was informative in terms of talking about things like the coefficient of variation. When looking at relationships between the predictors and response variables, I found much stronger linear relationships at the area level. Currently, I am feeling somewhat lost in terms of whether or not the unit level models I created are salvagable due to their seemingly large confidence intervals/coefs of variation.</p>
 </div>
@@ -573,7 +603,7 @@ summary {
 </div>
 <div id="fall-week-8" class="section level2">
 <h2>Fall, Week 8</h2>
-<div id="this-weeks-work-9" class="section level3">
+<div id="this-weeks-work-11" class="section level3">
 <h3>This Week’s Work</h3>
 <p>This week, I worked mainly on two things: writing the rough draft of the Data chapter, and quantifying the uncertainty in the mean estimates of the model. Writing the data chapter took a good deal of time, along with creating the figures that I wanted to include in it. However, I think its in a pretty good spot now, and with some finetuning will be a really nice chapter.</p>
 <p>To quantify uncertainty, rather than finding an exact mathematical formula for the standard errors of the estimates, I bootstrapped the results for both the direct mean estimate and the hierarchial bayesian model. The direct mean bootstrap loop takes just a few minutes to run, but the HB model took overnight (approx 11-12 hours) to get 1000 bootstrap estimates.</p>
@@ -598,7 +628,7 @@ summary {
 </div>
 <div id="fall-week-7" class="section level2">
 <h2>Fall, Week 7</h2>
-<div id="this-weeks-work-10" class="section level3">
+<div id="this-weeks-work-12" class="section level3">
 <h3>This Week’s Work</h3>
 <p>This week, I spent a large amount of time figuring out how to make the modeling work. Initially, I used <code>hbsae</code>, but found that when I inputted data into the model, the output was perfectly correlated with the input data. Next, I tried to use <code>tidymodels</code> but was not getting the output I wanted. So, I found Finley’s code from the LiDAR paper and tried to use it. However, I eventually went back to <code>tidymodels</code> and found a few errors in my code which had made me think that I was not creating a good model when in fact it was working as it should. However, now I think I have a model that is (almost) there! I have some questions, but I think the output is really, really close!</p>
 <p>I have also started working on the data chapter. I think that I need to add a bit to it to make it a bit more descriptive, but the outline is getting there pretty well.</p>
@@ -621,7 +651,7 @@ summary {
 </div>
 <div id="fall-week-6" class="section level2">
 <h2>Fall, Week 6</h2>
-<div id="this-weeks-work-11" class="section level3">
+<div id="this-weeks-work-13" class="section level3">
 <h3>This Week’s Work</h3>
 <p>This week, I did a few things:</p>
 <ul>
@@ -651,7 +681,7 @@ summary {
 </div>
 <div id="fall-week-5" class="section level2">
 <h2>Fall, Week 5</h2>
-<div id="this-weeks-work-12" class="section level3">
+<div id="this-weeks-work-14" class="section level3">
 <h3>This Week’s Work</h3>
 <p>This week, I primarily worked on two things: (1) data analysis that helped (a) understand the structure of ecosubsections within ecosections, and ecosections within provinces and (b) quantified how much key variables changed within sections and within provinces vs. within the interior west. (2) Completed the writing goal for this week. I wrote about what hierarchial bayesian modeling is, why someone might want to use it, and created an example of hierarchical bayesian modeling and explained what specific benefits that model would have in that setting. This writing goal took suprisingly longer than expected, when I began writing about the model it really made me realize what I did and didn’t know. Writing down exact model forms really helped me solidify my understanding.</p>
 </div>
@@ -678,7 +708,7 @@ summary {
 </div>
 <div id="fall-week-4" class="section level2">
 <h2>Fall, Week 4</h2>
-<div id="this-weeks-work-13" class="section level3">
+<div id="this-weeks-work-15" class="section level3">
 <h3>This Week’s Work</h3>
 <p>This week, I have been primarily doing three things: exploratory data analysis, gaining knowledge about hierarchical bayesian modeling, and looking into software.</p>
 <p>In terms of exploratory data analysis, I have created the EDA folder which include an <code>.Rmd</code> with the work I have done there. I looked into a particular province and tried to see how much I could learn about it through data visualization and summary statistics. While the findings are not extremely exciting, working with the data has given me a much better grasp of the variables that we have along with just an overall good sense of the data.</p>
@@ -703,7 +733,7 @@ summary {
 </div>
 <div id="fall-week-3" class="section level2">
 <h2>Fall, Week 3</h2>
-<div id="this-weeks-work-14" class="section level3">
+<div id="this-weeks-work-16" class="section level3">
 <h3>This Week’s Work</h3>
 <p>This week, I have been reviewing relevant literature on both Hierarchical Bayesian modeling and forestry research, along with familiarizing myself with the data. I wrote summaries of the papers I read in the literature review document. I also read through a good portion of the selected chapters of Monika’s book.</p>
 <p>I was able to source a few more papers, and one that seemed extremely relevant was a draft version of Finley’s LiDAR paper. This paper gave some great background on forestry data and SAE along with nice reporting of results. They did a simulation study to understand how well their (FH and FHCAR) models performed.</p>

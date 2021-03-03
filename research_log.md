@@ -1,13 +1,36 @@
+Spring, Week 5
+----------------
+
+### This Week's Work
+
+* I made some grammatical and aesthetic changes to the Context chapter.    
+* I added a good amount to the Methods chapter: intro done, direct estimates done, indirect implicit estimates started     
+* I spent time refactoring code for my results. I made the code generalizable to any number of provinces and unsuccessfully troubleshooted the provinces that I have not been able to include.
+
+
+### Upcoming Work
+
+* Methods: unit-level aux info for indirect implicit models, frequentist and bayesian explicit models.     
+* Troubleshoot code to include more provinces in analysis? Or leave for summer?
+
+
+### Points of confusion
+
+
+Spring, Week 4
+----------------
+
+### This Week's Work
+
+* This week was working on Methods chapter
+
+
 Spring, Week 3
 ----------------
 
 ### This Week's Work
 
-
-### Upcoming Work
-
-
-### Points of confusion
+* This week was getting all the code to work out
 
 
 Spring, Week 2
