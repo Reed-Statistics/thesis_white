@@ -538,7 +538,11 @@ What might be the most intuitive approach to estimating the population mean \(\m
 \begin{align}
 \overline y_j^{HT} = \frac{1}{n_j} \sum_{i \in s_j} y_i 
 \end{align}
-Recall that this estimator is just taking the mean of the study variable of interest, \(y\). Note that \(y_i\) represents the value of the study variable in the \(i\)th unit sampled of eco-subsection \(j\). This estimator is useful as it is easy to compute and does not require any auxiliary information. However, the Horvitz-Thompson estimator high variance relative to other estimators we will discuss and it is biased unless we have sampled the correct proportion of forested areas. The post-stratified estimator begins to address both the bias and variance of the Horvitz-Thompson estimator.
+The variance estimate, \(S\), for Horvitz-Thompson estimator is calculated by:
+\begin{align}
+S_j^{2} = \frac{1}{n_j-1} \sum_{i \in s_j} \Big(y_i - \overline y^{HT}_j\Big)^2
+\end{align}
+Recall that the Horvitz-Thompson estimator is just taking the mean of the study variable of interest, \(y\). Note that \(y_i\) represents the value of the study variable in the \(i\)th unit sampled of eco-subsection \(j\). This estimator is useful as it is easy to compute and does not require any auxiliary information. However, the Horvitz-Thompson estimator high variance relative to other estimators we will discuss and it is biased unless we have sampled the correct proportion of forested areas. The post-stratified estimator begins to address both the bias and variance of the Horvitz-Thompson estimator.
 
 \hypertarget{the-post-stratified-estimator}{%
 \subsection{The Post-Stratified Estimator}\label{the-post-stratified-estimator}}
