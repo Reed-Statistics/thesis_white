@@ -52,6 +52,8 @@ We denote this estimator with $REG$ rather than a seemingly more sensible notati
 
 ### Using Unit-level Auxiliary Data
 
+An approach to implicit model based indirect estimation when unit-level auxiliary information is available is to use the  
+
 
 
 ## Explicit Model Based Indirect Estimation
