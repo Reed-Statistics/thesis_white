@@ -111,7 +111,7 @@
   \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 
 % To pass between YAML and LaTeX the dollar signs are added by CII
-\title{A Hierarchical Bayesian Approach to Small Area Estimation of Forest Attributes}
+\title{A Bayesian Hierarchical Approach to Small Area Estimation of Forest Attributes}
 \author{Grayson White}
 % The month and year that you submit your FINAL draft TO THE LIBRARY (May or December)
 \date{May 2021}
@@ -579,9 +579,15 @@ An approach to implicit model based indirect estimation when unit-level auxiliar
 \hypertarget{explicit-model-based-indirect-estimation}{%
 \section{Explicit Model Based Indirect Estimation}\label{explicit-model-based-indirect-estimation}}
 
-(this all needs significant revisions and expansion from Rao)
+Often times, implicit model based indirect estimators still do not reduce variance enough to give us estimates with reasonable standard errors. However, we can turn to explicit model based indirect estimation in order to combat this issue further. Explicit model based indirect estimators are extremely useful when relevant auxiliary data is available and we would like to allow for between-area variation of these auxiliary variables. By allowing for this between-area variation our models should fit to the data better given that there is truly between-area variation in the population. In the case of forests across a large portion of the United States, this assumption is very reasonable and one could attribute this variation to a number of factors such as temperature, humidity, or even elevation. Rather than attempting the daunting and nonsensical task of collecting data to fully explain this between-area variation, we fit a mixed model.
 
-Model-based estimators are extremely useful when auxiliary data is available and correlated with the response variables of interest. Most commonly, the estimator used is the EBLUP estimator, which, similarly to the post-stratified estimator, provenly unbiased. This is a random effects model which we can see specified below:
+In small area estimation it is most common that the mixed model estimator used is one of the EBLUP estimators: either the unit- or area-level variant depending on the resolution of auxiliary data preferred. The EBLUP estimators are unbiased given the modeling assumptions are met, similar to the post-stratified estimator. We will now explore the model specifications of these EBLUP estimators at the unit- and area-level
+
+\hypertarget{the-unit-level-eblup}{%
+\subsection{The Unit-level EBLUP}\label{the-unit-level-eblup}}
+
+\hypertarget{the-area-level-eblup}{%
+\subsection{The Area-level EBLUP}\label{the-area-level-eblup}}
 \begin{align}
 Y_{i,j} = \vec X_{i,j}^{T}\vec\beta + \nu_j + \epsilon_{i,j}
 \end{align}
