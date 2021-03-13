@@ -51,8 +51,8 @@ hb_unit <- function(data, formula, small_area, pop_data) {
     Narea = pop_size$pop_size,
     Xpop = pop_means,
     fpc = TRUE,
-    nu0 = df,
-    s20 = scale,
+    # nu0 = df,
+    # s20 = scale,
     lambda0 = l,
     silent = T
   )

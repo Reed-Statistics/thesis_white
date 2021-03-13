@@ -51,8 +51,8 @@ hb_area <- function(data, formula, small_area, pop_data) {
     est.init = dir$est,
     var.init = dir$var,
     X = X %>% dplyr::select(mean_x),
-    nu0 = df,
-    s20 = scale,
+    # nu0 = df,
+    # s20 = scale,
     lambda0 = l
   )
 
