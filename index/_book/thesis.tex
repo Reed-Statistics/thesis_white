@@ -583,34 +583,42 @@ An approach to implicit model based indirect estimation when unit-level auxiliar
 
 Often times, implicit model based indirect estimators still do not reduce variance enough to give us estimates with reasonable standard errors. However, we can turn to explicit model based indirect estimation in order to combat this issue further. Explicit model based indirect estimators are extremely useful when relevant auxiliary data is available and we would like to allow for between-area variation of these auxiliary variables. By allowing for this between-area variation our models should fit to the data better given that there is truly between-area variation in the population. In the case of forests across a large portion of the United States, this assumption is very reasonable and one could attribute this variation to a number of factors such as temperature, humidity, or even elevation. Rather than attempting the daunting and nonsensical task of collecting data to fully explain this between-area variation, we fit a mixed model.
 
-In small area estimation it is most common that the mixed model estimator used is one of the EBLUP estimators: either the unit- or area-level variant depending on the resolution of auxiliary data preferred. The EBLUP estimators are unbiased given the modeling assumptions are met, similar to the post-stratified estimator. We will now explore the model specifications of these EBLUP estimators at the unit- and area-level
+In small area estimation it is most common that the mixed model estimator used is one of the EBLUP estimators: either the unit- or area-level variant depending on the resolution of auxiliary data preferred. The EBLUP estimators are unbiased given the modeling assumptions are met, similar to the post-stratified estimator. We will now explore the model specifications of these EBLUP estimators at the unit- and area-level.
 
 \hypertarget{the-unit-level-eblup}{%
 \subsection{The Unit-level EBLUP}\label{the-unit-level-eblup}}
 
 \hypertarget{the-area-level-eblup}{%
 \subsection{The Area-level EBLUP}\label{the-area-level-eblup}}
+
+The area-level EBLUP estimator is expressed by Rao (2014) as a weighted average of the direct estimator and the regression-synthetic estimator:
 \begin{align}
-Y_{i,j} = \vec X_{i,j}^{T}\vec\beta + \nu_j + \epsilon_{i,j}
+\hat \mu_j^{EBLUP-A} = \hat\gamma_j \hat\mu_j^{DIRECT} + (1 - \hat\gamma_j) z_i^T \hat\beta
 \end{align}
-where \(Y_{i,j}\) is the response variable, \(\vec\beta\) is the vector of coefficients of fixed-effect predictors, \(\vec X_{i,j}^{T}\) is the vector of fixed-effect predictors, \(\nu_j\) is the random-effects term. Note that this is a varying intercepts model where the intercept can change based on the group that the observation is in, however the coefficient estimates do not vary between groups. Another important aspect of the model is the assumption of normally distributed errors and random effects:
+where
 \begin{align}
-\nu &\sim \text{N}(0, \sigma^2_{\nu}), \\
-\epsilon &\sim \text{N}(0, \sigma^2_{\epsilon})
+\hat \gamma_j = \hat \sigma_\nu^2 b_j^2 / (\psi_j + \hat\sigma_\nu^2 b_j^2)
 \end{align}
 \hypertarget{a-hierarchical-bayesian-approach}{%
 \section{A Hierarchical Bayesian Approach}\label{a-hierarchical-bayesian-approach}}
 
-(still needs revised and expanded)
+So far in this chapter, we have explored common frequentist approaches to small area estimation. However, the research goal of this thesis is to study the performance of the hierarchical Bayesian model for small area estimation. With a hierarchical Bayesian model, we derive the posterior distribution of our variable of interest with either Markov Chain Monte Carlo (MCMC) methods or through numerical integration. We do this by considering both the data (likelihood) and prior distributions. This allows us to use Bayes' Theorem in order to attain our posterior.
 
-While we have explored the frequentist version of a hierarchical model, this thesis primarily studies \emph{Bayesian} hierarhical models and compares their performance to their frequentist counterparts. With a Bayesian hierarhical model, we derive the posterior distribution of our variable of interest with either Markov Chain Monte Carlo (MCMC) methods, or through numerical integration. We do this by considering both the data (likelihood) and prior distributions. This allows us to use Bayes' Theorem in order to get our posterior. Similarly to the frequentist counterpart, we can specify the varying-intercepts hierarchical Bayesian model as follows:
+Before we introduce the models used in this thesis, we must introduce some notation. Consider a set of model parameters \(\lambda\), the data \(y\), and the parameter of interest \(\mu\) for each eco-subsection. We would like to obtain the distribution of \(f(\mu ~\vert~ y)\), i.e.~the distribution of our parameter of interest, \(\mu\), given our data \(y\). Rao (2014) shows that we can obtain this desired posterior density by first obtaining the posterior density of \(\mu\) and \(\lambda ~\vert~ y\),
 \begin{align}
-Y_{i,j} &\sim \text{N}(\nu_j + \vec\beta\vec X_i,~ \sigma^2) \\
-\nu_j &\sim \text{N}(\mu_\nu,~ \sigma^2_\nu) \\
-\mu_\nu &\sim \text{N}(a,~b) \\
-\sigma &\sim \text{Inv-Gamma}(c,~d)
+f(\mu,~ \lambda ~\vert~ y) = \frac{f(y, \mu ~\vert~ \lambda) f(\lambda)}{f(y)}
 \end{align}
-In this model, we have the response variable, \(Y\), which is modeled to have a Gaussian posterior distribution with mean \(\nu_j + \vec\beta\vec X_i\) which can change intercept based on the level that a given observation is in. Note that \(\mu_\nu\) is given a hyperprior distribution where \(a\) and \(b\) are numbers that often specify a weakly informative or uninformative prior. Often we will set \(a=0\) and \(b\) equal to some large number to specify a very small amount of prior information. Also, we give the within-area variance a regularizing prior with the Inverse Gamma.
+and then integrating over \(\lambda\):
+\begin{align}
+f(\mu ~\vert~ y) = \int f(\mu,~ \lambda ~\vert~ y) \text{d}\lambda.
+\end{align}
+Depending on the functional form of the densities we must integrate to obtain our posterior, it is often easier to approximate the distribution with MCMC methods. However, in the case of this thesis, we use numerical integration to extract exact posterior densities from our likelihood and priors. We will now give the form of both the unit- and area-level hierarchical Bayesian models used in this thesis.
+
+\hypertarget{the-unit-level-hierarhcical-bayesian-model}{%
+\subsection{The Unit-level Hierarhcical Bayesian Model}\label{the-unit-level-hierarhcical-bayesian-model}}
+
+\hypertarget{the-area-level-hierarichical-bayesian-model}{%
+\subsection{The Area-level Hierarichical Bayesian Model}\label{the-area-level-hierarichical-bayesian-model}}
 
 \hypertarget{results}{%
 \chapter{Results}\label{results}}
