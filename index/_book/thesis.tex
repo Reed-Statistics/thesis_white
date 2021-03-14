@@ -623,7 +623,9 @@ Depending on the functional form of the densities we must integrate to obtain ou
 \hypertarget{results}{%
 \chapter{Results}\label{results}}
 
-This chapter addresses the performance of the six estimators fit in this thesis: the sample mean, the post-stratified estimator, the unit-level EBLUP, the area-level EBLUP, the unit-level hierarchical Bayesian estimator, and the area-level hierarchical Bayesian estimator. Our data spans the entire Interior West, however we were forced to exclude a few eco-provinces. Namely two eco-provinces with a very small number of eco-subsections which caused errors in producing the unit-level hierarchical Bayesian estimates and three eco-provinces which caused errors in producing the area-level hierarchical Bayesian estimates. While this is disappointing, we still were able to fit these estimators to much data.
+This chapter addresses the performance of the six estimators fit in this thesis: the sample mean, the post-stratified estimator, the unit-level EBLUP, the area-level EBLUP, the unit-level hierarchical Bayesian estimator, and the area-level hierarchical Bayesian estimator.
+
+We used the R statistical software to compute our results (R Core Team, 2020). The sample mean was computed using the \emph{tidyverse} (Wickham et al., 2019). The post-stratified estimates were computed using \emph{mase} (McConville, Tang, Zhu, Cheung, \& Li, 2018). The frequentist EBLUP estimates were computed using \emph{sae} (Molina \& Marhuenda, 2015). The hierarchical Bayesian estimates were computed using \emph{hbsae} (Boonstra, 2012). Our data spans the entire Interior West, however we were forced to exclude a few eco-provinces. Namely two eco-provinces with a very small number of eco-subsections which caused errors in producing the unit-level hierarchical Bayesian estimates and three eco-provinces which caused errors in producing the area-level hierarchical Bayesian estimates. While this is disappointing, we still were able to fit these estimators to much data.
 
 We are generally concerned with producing estimates that have both low variance and low bias. So, this chapter primarily aims to answers questions regarding these two quantities.
 
@@ -724,6 +726,9 @@ This first appendix includes all of the R chunks of code that were hidden throug
 \setlength{\parskip}{8pt}
 
 \hypertarget{refs}{}
+\leavevmode\hypertarget{ref-hbsae-package}{}%
+Boonstra, H. J. (2012). \emph{Hbsae: Hierarchical bayesian small area estimation}. Retrieved from \url{https://CRAN.R-project.org/package=hbsae}
+
 \leavevmode\hypertarget{ref-whatisfia}{}%
 FIA. (2020). Forest inventory and analysis national program. \emph{What is FIA?} Retrieved from \url{https://www.fia.fs.fed.us/about/about_us/}
 
@@ -733,11 +738,23 @@ Homer, C. (2015, November). Completion of the 2011 national land cover database 
 \leavevmode\hypertarget{ref-mcconville2020}{}%
 McConville, K. S., Moisen, G. G., \& Frescino, T. S. (2020). A tutorial on model-assisted estimation with application to forest inventory. \emph{Forests}, \emph{11}(2), 244.
 
+\leavevmode\hypertarget{ref-mase}{}%
+McConville, K., Tang, B., Zhu, G., Cheung, S., \& Li, S. (2018). \emph{Mase: Model-assisted survey estimation}. Retrieved from \url{https://cran.r-project.org/package=mase}
+
+\leavevmode\hypertarget{ref-sae-package}{}%
+Molina, I., \& Marhuenda, Y. (2015). sae: An R package for small area estimation. \emph{The R Journal}, \emph{7}(1), 81--98. Retrieved from \url{https://journal.r-project.org/archive/2015/RJ-2015-007/RJ-2015-007.pdf}
+
 \leavevmode\hypertarget{ref-rao2014}{}%
 Rao, J. N. (2014). Small-area estimation. \emph{Wiley StatsRef: Statistics Reference Online}, 1--8.
 
+\leavevmode\hypertarget{ref-r-software}{}%
+R Core Team. (2020). \emph{R: A language and environment for statistical computing}. Vienna, Austria: R Foundation for Statistical Computing. Retrieved from \url{https://www.R-project.org/}
+
 \leavevmode\hypertarget{ref-ver2017}{}%
 Ver Planck, N. R., Finley, A. O., \& Huff, E. S. (2017). Hierarchical bayesian models for small area estimation of county-level private forest landowner population. \emph{Canadian Journal of Forest Research}, \emph{47}(12), 1577--1589.
+
+\leavevmode\hypertarget{ref-tidyverse}{}%
+Wickham, H., Averick, M., Bryan, J., Chang, W., McGowan, L. D., François, R., \ldots{} Yutani, H. (2019). Welcome to the tidyverse. \emph{Journal of Open Source Software}, \emph{4}(43), 1686. \url{http://doi.org/10.21105/joss.01686}
 
 
 % Index?

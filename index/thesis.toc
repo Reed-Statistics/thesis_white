@@ -1,0 +1,27 @@
+\contentsline {chapter}{Introduction}{1}{chapter*.8}%
+\contentsline {chapter}{Chapter 1: Context}{3}{chapter.1}%
+\contentsline {chapter}{Chapter 2: Overview}{11}{chapter.2}%
+\contentsline {chapter}{Chapter 3: Data}{13}{chapter.3}%
+\contentsline {section}{\numberline {3.1}The Forest Inventory \& Analysis Program}{13}{section.3.1}%
+\contentsline {section}{\numberline {3.2}The Interior West}{14}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Our Data: Specifics}{15}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Data Structure \& Hierarchy}{20}{section.3.4}%
+\contentsline {chapter}{Chapter 4: Methods}{23}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Direct Estimation}{24}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}The Horvitz-Thompson Estimator}{24}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}The Post-Stratified Estimator}{24}{subsection.4.1.2}%
+\contentsline {section}{\numberline {4.2}Implicit Model Based Indirect Estimation}{25}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Using Area-level Auxiliary Data}{26}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Using Unit-level Auxiliary Data}{26}{subsection.4.2.2}%
+\contentsline {section}{\numberline {4.3}Explicit Model Based Indirect Estimation}{26}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}The Unit-level EBLUP}{27}{subsection.4.3.1}%
+\contentsline {subsection}{\numberline {4.3.2}The Area-level EBLUP}{27}{subsection.4.3.2}%
+\contentsline {section}{\numberline {4.4}A Hierarchical Bayesian Approach}{27}{section.4.4}%
+\contentsline {subsection}{\numberline {4.4.1}The Unit-level Hierarhcical Bayesian Model}{27}{subsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.4.2}The Area-level Hierarichical Bayesian Model}{27}{subsection.4.4.2}%
+\contentsline {chapter}{Chapter 5: Results}{29}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Overview}{29}{section.5.1}%
+\contentsline {chapter}{Chapter 6: Discussion and Conclusion}{31}{chapter.6}%
+\contentsline {chapter}{Appendix A: The First Appendix}{33}{appendix.A}%
+\contentsline {chapter}{Appendix B: The Second Appendix, for Fun}{35}{appendix.B}%
+\contentsline {chapter}{References}{37}{appendix*.23}%

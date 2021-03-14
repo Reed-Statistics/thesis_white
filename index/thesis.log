@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2021.3.12)  14 MAR 2021 12:32
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2021.3.12)  14 MAR 2021 13:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -752,11 +752,8 @@ Chapter 5.
 File: thesis_files/figure-latex/cov-violin-1.pdf Graphic file (type pdf)
 <use thesis_files/figure-latex/cov-violin-1.pdf>
 Package pdftex.def Info: thesis_files/figure-latex/cov-violin-1.pdf  used on in
-put line 640.
+put line 642.
 (pdftex.def)             Requested size: 433.62pt x 290.02534pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
 [29] [30 <./thesis_files/figure-latex/cov-violin-1.pdf>]
 Chapter 6.
 [31
@@ -766,10 +763,10 @@ Chapter 6.
 ]
 Appendix A.
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <12> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 679.
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 681.
 [33]
 
-LaTeX Warning: Reference `ref-labels' on page 34 undefined on input line 707.
+LaTeX Warning: Reference `ref-labels' on page 34 undefined on input line 709.
 
 [34]
 Appendix B.
@@ -787,10 +784,10 @@ Package rerunfilecheck Info: File `thesis.out' has not changed.
 (rerunfilecheck)             Checksum: 79D5E68A69010219C1F92275CAF5CEA2;5144.
  ) 
 Here is how much of TeX's memory you used:
- 11755 strings out of 480971
- 180197 string characters out of 5906519
+ 11761 strings out of 480971
+ 180279 string characters out of 5906519
  482025 words of memory out of 5000000
- 28584 multiletter control sequences out of 15000+600000
+ 28585 multiletter control sequences out of 15000+600000
  455317 words of font info for 63 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  71i,12n,74p,1935b,449s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -814,10 +811,10 @@ public/lm/lmsy8.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1
 /public/lm/lmtk10.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/typ
 e1/public/lm/lmtt12.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/t
 ype1/public/lm/lmtti10.pfb>
-Output written on thesis.pdf (55 pages, 4386162 bytes).
+Output written on thesis.pdf (55 pages, 4391238 bytes).
 PDF statistics:
- 621 PDF objects out of 1000 (max. 8388607)
- 513 compressed objects within 6 object streams
- 149 named destinations out of 1000 (max. 500000)
+ 634 PDF objects out of 1000 (max. 8388607)
+ 526 compressed objects within 6 object streams
+ 154 named destinations out of 1000 (max. 500000)
  287 words of extra memory for PDF output out of 10000 (max. 10000000)
 

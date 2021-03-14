@@ -10,7 +10,9 @@ dat <- read_csv("data/subsets/dat_small.csv") %>%
 
 # Results {#results}
 
-This chapter addresses the performance of the six estimators fit in this thesis: the sample mean, the post-stratified estimator, the unit-level EBLUP, the area-level EBLUP, the unit-level hierarchical Bayesian estimator, and the area-level hierarchical Bayesian estimator. Our data spans the entire Interior West, however we were forced to exclude a few eco-provinces. Namely two eco-provinces with a very small number of eco-subsections which caused errors in producing the unit-level hierarchical Bayesian estimates and three eco-provinces which caused errors in producing the area-level hierarchical Bayesian estimates. While this is disappointing, we still were able to fit these estimators to much data. 
+This chapter addresses the performance of the six estimators fit in this thesis: the sample mean, the post-stratified estimator, the unit-level EBLUP, the area-level EBLUP, the unit-level hierarchical Bayesian estimator, and the area-level hierarchical Bayesian estimator. 
+
+We used the R statistical software to compute our results [@r-software]. The sample mean was computed using the *tidyverse* [@tidyverse]. The post-stratified estimates were computed using *mase* [@mase]. The frequentist EBLUP estimates were computed using *sae* [@sae-package]. The hierarchical Bayesian estimates were computed using *hbsae* [@hbsae-package]. Our data spans the entire Interior West, however we were forced to exclude a few eco-provinces. Namely two eco-provinces with a very small number of eco-subsections which caused errors in producing the unit-level hierarchical Bayesian estimates and three eco-provinces which caused errors in producing the area-level hierarchical Bayesian estimates. While this is disappointing, we still were able to fit these estimators to much data. 
 
 We are generally concerned with producing estimates that have both low variance and low bias. So, this chapter primarily aims to answers questions regarding these two quantities.
 
@@ -49,7 +51,6 @@ res_long %>%
 ```
 
 While Figure \@ref(fig:cov-violin) gives us a good sense of the distribution, we must acknowledge that we truncated some values in order for viewing simplicity. Three estimators had coefficients of variation that exceeded 1. The below table shows the count and proportion of each:
-
 ```{r over-one, echo = FALSE, warning = F, message = F}
 over_one <- res_long %>%
   filter(cov > 1) %>%
@@ -69,5 +70,8 @@ knitr::kable(
   booktabs = TRUE
 )
 ```
+
+
+
 
 
