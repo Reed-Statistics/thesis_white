@@ -14,9 +14,79 @@ This chapter addresses the performance of the six estimators fit in this thesis:
 
 We used the R statistical software to compute our results [@r-software]. The sample mean was computed using the *tidyverse* [@tidyverse]. The post-stratified estimates were computed using *mase* [@mase]. The frequentist EBLUP estimates were computed using *sae* [@sae-package]. The hierarchical Bayesian estimates were computed using *hbsae* [@hbsae-package]. Our data spans the entire Interior West, however we were forced to exclude a few eco-provinces. Namely two eco-provinces with a very small number of eco-subsections which caused errors in producing the unit-level hierarchical Bayesian estimates and three eco-provinces which caused errors in producing the area-level hierarchical Bayesian estimates. While this is disappointing, we still were able to fit these estimators to much data. 
 
-We are generally concerned with producing estimates that have both low variance and low bias. So, this chapter primarily aims to answers questions regarding these two quantities.
+This thesis uses all six of these estimators to produce estimates for basal area (square-foot), tree count per acre, above-ground biomass (lbs), and net volume ($\text{ft}^3$). The EBLUP and hierarchical Bayesian estimators use one explanatory variable, total canopy cover, to produce estimates. Our estimation occurs at the eco-subsection level, and thus we have 7,128 estimates produced (six estimators, four response variables, and 297 eco-subsections). 
 
-## Overview
+We are generally concerned with producing estimates that have both low variance and low bias. So, this chapter primarily aims to answers questions regarding these two quantities. In order to do so, we will first summarize some findings with a case study in the Northern Rocky Forest. This case study allows us to dig in to results without much aggregation or overwhelming plots due to the large amount of results we have. Next, we will explore variation measures and visualizations across the interior west in order to quantify variance of our estimators. Finally, we will attempt to quantify bias of estimators across the interior west.
+
+## Basal Area in the Northern Rocky Forest: A Case Study
+
+
+```{r m333-cov}
+res_long %>%
+  filter(province == "M333",
+         response == "BALIVE_TPA") %>%
+  mutate(subsection = str_sub(subsection, 5)) %>%
+  ggplot(mapping = aes(x = subsection,
+                       y = cov,
+                       color = estimator)) +
+  geom_point() +
+  scale_color_manual(values = c("#A9A9A9", "#334F44", "#E7AB26",
+                                "#BF4C27",  "steelblue",  "#80BCA2"),
+                     labels = c("Sample Mean", "Post-Stratification", "Area EBLUP",
+                                "Unit EBLUP", "Area HB", "Unit HB")) +
+  theme_bw() +
+  theme(legend.position = "bottom")
+```
+
+```{r}
+means <- res_long %>%
+  filter(estimator == "dirmean") %>%
+  rename(mean = estimate) %>%
+  select(subsection, response, mean)
+res_long <- res_long %>%
+  full_join(means, by = c("subsection" = "subsection",
+                          "response" = "response"))
+res_long <- res_long %>%
+  mutate(se = mean * cov)
+
+
+res_long %>%
+  filter(province == "M333",
+         response == "BALIVE_TPA") %>%
+  mutate(subsection = str_sub(subsection, 5)) %>%
+  ggplot(mapping = aes(x = subsection,
+                       y = estimate,
+                       color = estimator)) +
+  geom_point() +
+  scale_color_manual(values = c("#A9A9A9", "#334F44", "#E7AB26",
+                                "#BF4C27",  "steelblue",  "#80BCA2"),
+                     labels = c("Sample Mean", "Post-Stratification", "Area EBLUP",
+                                "Unit EBLUP", "Area HB", "Unit HB")) +
+  theme_bw() +
+  theme(legend.position = "bottom")
+
+
+res_long %>%
+  filter(province == "M333",
+         response == "BALIVE_TPA") %>%
+  mutate(subsection = str_sub(subsection, 5)) %>%
+  filter(estimator %in% c("dirps", "hb_area")) %>%
+  ggplot(mapping = aes(x = subsection,
+                       y = estimate,
+                       color = estimator)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = estimate - se, ymax = estimate + se)) +
+  scale_color_manual(values = c("#334F44", "steelblue"),
+                     labels = c("Post-Stratification", "Area HB")) +
+  theme_bw() +
+  theme(legend.position = "bottom")
+```
+
+
+
+
+
+## Variance
 
 In order to explore variance, the primary metric we use is the coefficient of variation (CV). This metric, for each estimator, is defined as the standard deviation of our estimate divided by our sample mean. This allows us to normalize our variation across different response variables and areas that are more or less forested. We can express the coefficient of variation as follows:
 \begin{align}
@@ -64,14 +134,13 @@ over_one <- res_long %>%
 
 knitr::kable(
   over_one,
-  digits = 2,
+  digits = 3,
   caption = "Coefficient of variation estimates greater than one",
   longtable = TRUE,
   booktabs = TRUE
 )
 ```
 
-
-
+From Figure \@ref(fig:cov-violin), it is clear that the distribution of coefficient of variation for the area-level hierarchical Bayesian model is much lower than the others with a value of `r round(med$median_cov[5], 3)`. When we compare this value to the post-stratification median coefficient of variation (`r round(med$median_cov[2], 3)`) and the area-level EBLUP median coefficient of variation (`r round(med$median_cov[3], 3)`) we see an extremely large increase in variation in each case. 
 
 

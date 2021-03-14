@@ -349,11 +349,11 @@ Plot & Latitude & Longitude & nlcd11 & BIOLIVE\_TPA & subsection\\
 While the data covers the Interior West as a whole, we have very granular information, as each row represents a plot sampled by the FIA. The data also includes variables that subset the Interior West into provinces which contain eco-sections, and these eco-sections contain eco-subsections. In our data, on average, each eco-section contains approximately 7.06 eco-subsections, and each province contains an average of 4.86 eco-sections. So, an average province then contains just over 34 eco-subsections. We can take a look at the Northern Rocky Forest province, colored by eco-section, with lines dividing each eco-subsection to see this structure in action:
 \begin{figure}
 
-{\centering \includegraphics{thesis_files/figure-latex/unnamed-chunk-5-1} 
+{\centering \includegraphics{thesis_files/figure-latex/northern-rocky-1} 
 
 }
 
-\caption{The Northern Rocky Forest colored by eco-section}\label{fig:unnamed-chunk-5}
+\caption{The Northern Rocky Forest colored by eco-section}\label{fig:northern-rocky}
 \end{figure}
 The data we have covers a total of 14 provinces, 68 eco-sections, and 480 eco-subsections. The hierarchical structure of the data and nested nature of the eco-subsections within eco-sections within eco-provinces lends itself to be able to create hierarchical models which borrow strength from surrounding areas.
 
@@ -364,7 +364,7 @@ While this data contains a multitude of variables, the analyses done in this the
 
 }
 
-\caption{Mean basal area in Interior West eco-subsections}\label{fig:unnamed-chunk-6}
+\caption{Mean basal area in Interior West eco-subsections}\label{fig:unnamed-chunk-5}
 \end{figure}
 \begin{figure}
 
@@ -372,7 +372,7 @@ While this data contains a multitude of variables, the analyses done in this the
 
 }
 
-\caption{Mean biomass in Interior West eco-subsections}\label{fig:unnamed-chunk-7}
+\caption{Mean biomass in Interior West eco-subsections}\label{fig:unnamed-chunk-6}
 \end{figure}
 \begin{figure}
 
@@ -380,7 +380,7 @@ While this data contains a multitude of variables, the analyses done in this the
 
 }
 
-\caption{Mean tree count per acre in Interior West eco-subsections}\label{fig:unnamed-chunk-8}
+\caption{Mean tree count per acre in Interior West eco-subsections}\label{fig:unnamed-chunk-7}
 \end{figure}
 \begin{figure}
 
@@ -388,22 +388,22 @@ While this data contains a multitude of variables, the analyses done in this the
 
 }
 
-\caption{Mean net volume in Interior West eco-subsections}\label{fig:unnamed-chunk-9}
+\caption{Mean net volume in Interior West eco-subsections}\label{fig:unnamed-chunk-8}
 \end{figure}
 While we have four variables which we will model as response variables throughout the analyses, we also have one predictor variables which will be of much use to us. In particular, total tree canopy cover (coded as \texttt{nlcd11}.) This variable is remotely sensed, meaning that they were not collected by FIA crew members, but rather with aerial photography and/or satellite imagery. However, we will be using these variables to attempt to predict our response variables in order to understand how good of estimates we can make with this remote data that does not require as much effort to collect.
 
 To get a sense of a few of our predictor variable, we will look at its distributions in the Northern Rocky Forest subset of our data compared to its distribution across the entire Interior West:
 \begin{figure}
 
-{\centering \includegraphics[width=432px]{thesis_files/figure-latex/unnamed-chunk-10-1} 
+{\centering \includegraphics[width=432px]{thesis_files/figure-latex/unnamed-chunk-9-1} 
 
 }
 
-\caption[Total canopy cover in the M333 eco-province and Interior West]{Distribution of total canopy cover in the M333 eco-province (left) and the entire Interior West (right)}\label{fig:unnamed-chunk-10}
+\caption[Total canopy cover in the M333 eco-province and Interior West]{Distribution of total canopy cover in the M333 eco-province (left) and the entire Interior West (right)}\label{fig:unnamed-chunk-9}
 \end{figure}
 Notably, the Northern Rocky Forest Province (M333) is much more forested than the Interior West, so we see much different distributions of total canopy cover in this subset of the data. Apart from making these histograms, we can also summarize the entire, unit-level data and see some summary statistics of our five key variables:
 \begin{longtable}[t]{lrrrrrr}
-\caption[Summary Statistics of Relevant Variables]{\label{tab:unnamed-chunk-11}Summary Statistics of Relevant Variables}\\
+\caption[Summary Statistics of Relevant Variables]{\label{tab:unnamed-chunk-10}Summary Statistics of Relevant Variables}\\
 \toprule
 Variable & Mean & SD & Median & 75th Percentile & Min & Max\\
 \midrule
@@ -426,7 +426,7 @@ As hinted at throughout earlier parts of the chapter, the data used in this thes
 
 }
 
-\caption[The nested data structure of the Interior West]{The nested data structure of the Interior West. The green area is the eco-province which is divided into eco-sections (red area) which is in turn divided into eco-subsections (beige area).}\label{fig:unnamed-chunk-12}
+\caption[The nested data structure of the Interior West]{The nested data structure of the Interior West. The green area is the eco-province which is divided into eco-sections (red area) which is in turn divided into eco-subsections (beige area).}\label{fig:unnamed-chunk-11}
 \end{figure}
 The largest motivation for hierarchical modeling in this particular application is that observations are more similar within the hierarchies which we split them into. To understand if this is true, we can do a preliminary analysis on the data by performing three-way ANOVAs for each key variable with predictors \texttt{province}, \texttt{section}, and \texttt{subsection}. For succinctness, we can look at the ANOVA results for one of the response variables, \texttt{BIOLIVE\_TPA}, but the other variables tell a very similar story in terms of homogeneity. By just looking at the MSE of the ANOVA results, we can see that we should expect more homogeneity within eco-subsections:
 \begin{longtable}[]{@{}cccccc@{}}
@@ -627,10 +627,83 @@ This chapter addresses the performance of the six estimators fit in this thesis:
 
 We used the R statistical software to compute our results (R Core Team, 2020). The sample mean was computed using the \emph{tidyverse} (Wickham et al., 2019). The post-stratified estimates were computed using \emph{mase} (McConville, Tang, Zhu, Cheung, \& Li, 2018). The frequentist EBLUP estimates were computed using \emph{sae} (Molina \& Marhuenda, 2015). The hierarchical Bayesian estimates were computed using \emph{hbsae} (Boonstra, 2012). Our data spans the entire Interior West, however we were forced to exclude a few eco-provinces. Namely two eco-provinces with a very small number of eco-subsections which caused errors in producing the unit-level hierarchical Bayesian estimates and three eco-provinces which caused errors in producing the area-level hierarchical Bayesian estimates. While this is disappointing, we still were able to fit these estimators to much data.
 
-We are generally concerned with producing estimates that have both low variance and low bias. So, this chapter primarily aims to answers questions regarding these two quantities.
+This thesis uses all six of these estimators to produce estimates for basal area (square-foot), tree count per acre, above-ground biomass (lbs), and net volume (\(\text{ft}^3\)). The EBLUP and hierarchical Bayesian estimators use one explanatory variable, total canopy cover, to produce estimates. Our estimation occurs at the eco-subsection level, and thus we have 7,128 estimates produced (six estimators, four response variables, and 297 eco-subsections).
 
-\hypertarget{overview-1}{%
-\section{Overview}\label{overview-1}}
+We are generally concerned with producing estimates that have both low variance and low bias. So, this chapter primarily aims to answers questions regarding these two quantities. In order to do so, we will first summarize some findings with a case study in the Northern Rocky Forest. This case study allows us to dig in to results without much aggregation or overwhelming plots due to the large amount of results we have. Next, we will explore variation measures and visualizations across the interior west in order to quantify variance of our estimators. Finally, we will attempt to quantify bias of estimators across the interior west.
+
+\hypertarget{basal-area-in-the-northern-rocky-forest-a-case-study}{%
+\section{Basal Area in the Northern Rocky Forest: A Case Study}\label{basal-area-in-the-northern-rocky-forest-a-case-study}}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{res_long }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(province }\OperatorTok{==}\StringTok{ "M333"}\NormalTok{,}
+\NormalTok{         response }\OperatorTok{==}\StringTok{ "BALIVE_TPA"}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{subsection =} \KeywordTok{str_sub}\NormalTok{(subsection, }\DecValTok{5}\NormalTok{)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ subsection,}
+                       \DataTypeTok{y =}\NormalTok{ cov,}
+                       \DataTypeTok{color =}\NormalTok{ estimator)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_color_manual}\NormalTok{(}\DataTypeTok{values =} \KeywordTok{c}\NormalTok{(}\StringTok{"#A9A9A9"}\NormalTok{, }\StringTok{"#334F44"}\NormalTok{, }\StringTok{"#E7AB26"}\NormalTok{,}
+                                \StringTok{"#BF4C27"}\NormalTok{,  }\StringTok{"steelblue"}\NormalTok{,  }\StringTok{"#80BCA2"}\NormalTok{),}
+                     \DataTypeTok{labels =} \KeywordTok{c}\NormalTok{(}\StringTok{"Sample Mean"}\NormalTok{, }\StringTok{"Post-Stratification"}\NormalTok{, }\StringTok{"Area EBLUP"}\NormalTok{,}
+                                \StringTok{"Unit EBLUP"}\NormalTok{, }\StringTok{"Area HB"}\NormalTok{, }\StringTok{"Unit HB"}\NormalTok{)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \StringTok{"bottom"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+\includegraphics{thesis_files/figure-latex/m333-cov-1.pdf}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{means <-}\StringTok{ }\NormalTok{res_long }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(estimator }\OperatorTok{==}\StringTok{ "dirmean"}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{mean =}\NormalTok{ estimate) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(subsection, response, mean)}
+\NormalTok{res_long <-}\StringTok{ }\NormalTok{res_long }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{full_join}\NormalTok{(means, }\DataTypeTok{by =} \KeywordTok{c}\NormalTok{(}\StringTok{"subsection"}\NormalTok{ =}\StringTok{ "subsection"}\NormalTok{,}
+                          \StringTok{"response"}\NormalTok{ =}\StringTok{ "response"}\NormalTok{))}
+\NormalTok{res_long <-}\StringTok{ }\NormalTok{res_long }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{se =}\NormalTok{ mean }\OperatorTok{*}\StringTok{ }\NormalTok{cov)}
+
+
+\NormalTok{res_long }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(province }\OperatorTok{==}\StringTok{ "M333"}\NormalTok{,}
+\NormalTok{         response }\OperatorTok{==}\StringTok{ "BALIVE_TPA"}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{subsection =} \KeywordTok{str_sub}\NormalTok{(subsection, }\DecValTok{5}\NormalTok{)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ subsection,}
+                       \DataTypeTok{y =}\NormalTok{ estimate,}
+                       \DataTypeTok{color =}\NormalTok{ estimator)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_color_manual}\NormalTok{(}\DataTypeTok{values =} \KeywordTok{c}\NormalTok{(}\StringTok{"#A9A9A9"}\NormalTok{, }\StringTok{"#334F44"}\NormalTok{, }\StringTok{"#E7AB26"}\NormalTok{,}
+                                \StringTok{"#BF4C27"}\NormalTok{,  }\StringTok{"steelblue"}\NormalTok{,  }\StringTok{"#80BCA2"}\NormalTok{),}
+                     \DataTypeTok{labels =} \KeywordTok{c}\NormalTok{(}\StringTok{"Sample Mean"}\NormalTok{, }\StringTok{"Post-Stratification"}\NormalTok{, }\StringTok{"Area EBLUP"}\NormalTok{,}
+                                \StringTok{"Unit EBLUP"}\NormalTok{, }\StringTok{"Area HB"}\NormalTok{, }\StringTok{"Unit HB"}\NormalTok{)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \StringTok{"bottom"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+\includegraphics{thesis_files/figure-latex/unnamed-chunk-14-1.pdf}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{res_long }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(province }\OperatorTok{==}\StringTok{ "M333"}\NormalTok{,}
+\NormalTok{         response }\OperatorTok{==}\StringTok{ "BALIVE_TPA"}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{subsection =} \KeywordTok{str_sub}\NormalTok{(subsection, }\DecValTok{5}\NormalTok{)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(estimator }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"dirps"}\NormalTok{, }\StringTok{"hb_area"}\NormalTok{)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ subsection,}
+                       \DataTypeTok{y =}\NormalTok{ estimate,}
+                       \DataTypeTok{color =}\NormalTok{ estimator)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_errorbar}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{ymin =}\NormalTok{ estimate }\OperatorTok{-}\StringTok{ }\NormalTok{se, }\DataTypeTok{ymax =}\NormalTok{ estimate }\OperatorTok{+}\StringTok{ }\NormalTok{se)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_color_manual}\NormalTok{(}\DataTypeTok{values =} \KeywordTok{c}\NormalTok{(}\StringTok{"#334F44"}\NormalTok{, }\StringTok{"steelblue"}\NormalTok{),}
+                     \DataTypeTok{labels =} \KeywordTok{c}\NormalTok{(}\StringTok{"Post-Stratification"}\NormalTok{, }\StringTok{"Area HB"}\NormalTok{)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \StringTok{"bottom"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+\includegraphics{thesis_files/figure-latex/unnamed-chunk-14-2.pdf}
+
+\hypertarget{variance}{%
+\section{Variance}\label{variance}}
 
 In order to explore variance, the primary metric we use is the coefficient of variation (CV). This metric, for each estimator, is defined as the standard deviation of our estimate divided by our sample mean. This allows us to normalize our variation across different response variables and areas that are more or less forested. We can express the coefficient of variation as follows:
 \begin{align}
@@ -651,11 +724,13 @@ While Figure \ref{fig:cov-violin} gives us a good sense of the distribution, we 
 \toprule
 Estimator & Count & Proportion\\
 \midrule
-Unit EBLUP & 38 & 0.03\\
-Area HB & 56 & 0.05\\
-Unit HB & 142 & 0.12\\
+Unit EBLUP & 38 & 0.032\\
+Area HB & 56 & 0.047\\
+Unit HB & 142 & 0.120\\
 \bottomrule
 \end{longtable}
+From Figure \ref{fig:cov-violin}, it is clear that the distribution of coefficient of variation for the area-level hierarchical Bayesian model is much lower than the others with a value of 0.046. When we compare this value to the post-stratification median coefficient of variation (0.137) and the area-level EBLUP median coefficient of variation (0.114) we see an extremely large increase in variation in each case.
+
 \hypertarget{discussion-and-conclusion}{%
 \chapter{Discussion and Conclusion}\label{discussion-and-conclusion}}
 

@@ -59,7 +59,7 @@ kable(dat_small %>%
 
 While the data covers the Interior West as a whole, we have very granular information, as each row represents a plot sampled by the FIA. The data also includes variables that subset the Interior West into provinces which contain eco-sections, and these eco-sections contain eco-subsections. In our data, on average, each eco-section contains approximately 7.06 eco-subsections, and each province contains an average of 4.86 eco-sections. So, an average province then contains just over 34 eco-subsections. We can take a look at the Northern Rocky Forest province, colored by eco-section, with lines dividing each eco-subsection to see this structure in action:
 
-```{r, echo = F, message = F, warning = F, fig.align="center", fig.cap="The Northern Rocky Forest colored by eco-section"}
+```{r northern-rocky, echo = F, message = F, warning = F, fig.align="center", fig.cap="The Northern Rocky Forest colored by eco-section"}
 subsections <- st_read("../data/SA_eco_subsection/SA_eco_subsection.shp", quiet = TRUE)
 m333_sub <- subsections %>%
   filter(PROVINC == "M333")
