@@ -44,46 +44,13 @@ no0_subsections <- intwest %>%
 
 intwest_no0 <- intwest %>%
   filter(subsection %in% no0_subsections) %>%
-  filter(!(province %in% c("M261", "M334", # two & three eco-subs each, divergent integrals
-                           "331", "341", "342"))) # tiny amount of forests, error in area-level
+  filter(!(province %in% c("M261", "M334"))) %>% # two & three eco-subs each, divergent integrals
+  filter(!(subsection %in% c("342Fi", "331Kj", "342Dh", "341Dc"))) # tiny init var, error in area-level
 ```
 
 List of dataframes:
 ```{r}
 iw <- split(intwest_no0, f = intwest_no0$province)
-
-
-# iw5_subsections <- iw[[5]] %>%
-#   group_by(subsection) %>%
-#   summarize(mean = mean(BIOLIVE_TPA)) %>%
-#   filter(mean > 3) %>%
-#   dplyr::select(subsection) %>%
-#   pull()
-# 
-# iw[[5]] <- iw[[5]] %>%
-#   filter(subsection %in% iw5_subsections)
-# 
-# iw6_subsections <- iw[[6]] %>%
-#   group_by(subsection) %>%
-#   summarize(mean = mean(BIOLIVE_TPA)) %>%
-#   filter(mean > 3) %>%
-#   dplyr::select(subsection) %>%
-#   pull()
-# 
-# iw[[6]] <- iw[[6]] %>%
-#   filter(subsection %in% iw6_subsections)
-# 
-# iw7_subsections <- iw[[7]] %>%
-#   group_by(subsection) %>%
-#   summarize(mean = mean(BIOLIVE_TPA)) %>%
-#   filter(mean > 3) %>%
-#   dplyr::select(subsection) %>%
-#   pull()
-# 
-# iw[[7]] <- iw[[7]] %>%
-#   filter(subsection %in% iw7_subsections)
-# 
-# intwest_no0 <- bind_rows(iw)
 ```
 
 ## Modeling
