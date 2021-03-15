@@ -16,12 +16,14 @@ We used the R statistical software to compute our results [@r-software]. The sam
 
 This thesis uses all six of these estimators to produce estimates for basal area (square-foot), tree count per acre, above-ground biomass (lbs), and net volume ($\text{ft}^3$). The EBLUP and hierarchical Bayesian estimators use one explanatory variable, total canopy cover, to produce estimates. Our estimation occurs at the eco-subsection level, and thus we have 7,128 estimates produced (six estimators, four response variables, and 297 eco-subsections). 
 
-We are generally concerned with producing estimates that have both low variance and low bias. So, this chapter primarily aims to answers questions regarding these two quantities. In order to do so, we will first summarize some findings with a case study in the Northern Rocky Forest. This case study allows us to dig in to results without much aggregation or overwhelming plots due to the large amount of results we have. Next, we will explore variation measures and visualizations across the interior west in order to quantify variance of our estimators. Finally, we will attempt to quantify bias of estimators across the interior west.
+We are generally concerned with producing estimates that have both low variance and low bias. So, this chapter primarily aims to answers questions regarding these two quantities. In order to do so, we will first summarize some findings with a brief case study in the Northern Rocky Forest. This case study allows us to dig in to results without much aggregation or overwhelming plots due to the large amount of results we have. Next, we will explore both measures and visualizations of variance and bias across the interior west in order to understand the performance of our estimators more fully. 
+
 
 ## Basal Area in the Northern Rocky Forest: A Case Study
 
+The Northern Rocky Forest is a large eco-province spanning many states, and can be seen in Figure \@ref(fig:northern-rocky). 
 
-```{r m333-cov}
+```{r m333-cov, echo = F, warning = F, message = F}
 res_long %>%
   filter(province == "M333",
          response == "BALIVE_TPA") %>%
@@ -38,7 +40,7 @@ res_long %>%
   theme(legend.position = "bottom")
 ```
 
-```{r}
+```{r echo = F, warning = F, message = F}
 means <- res_long %>%
   filter(estimator == "dirmean") %>%
   rename(mean = estimate) %>%
@@ -83,10 +85,7 @@ res_long %>%
 ```
 
 
-
-
-
-## Variance
+## Results Across the Interior West
 
 In order to explore variance, the primary metric we use is the coefficient of variation (CV). This metric, for each estimator, is defined as the standard deviation of our estimate divided by our sample mean. This allows us to normalize our variation across different response variables and areas that are more or less forested. We can express the coefficient of variation as follows:
 \begin{align}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2021.3.12)  14 MAR 2021 14:41
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2021.3.14)  14 MAR 2021 22:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -752,53 +752,56 @@ Chapter 5.
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [29]
-LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <12> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 638.
-<thesis_files/figure-latex/m333-cov-1.pdf, id=476, 457.71pt x 307.1475pt>
+<thesis_files/figure-latex/m333-cov-1.pdf, id=477, 457.71pt x 307.1475pt>
 File: thesis_files/figure-latex/m333-cov-1.pdf Graphic file (type pdf)
 <use thesis_files/figure-latex/m333-cov-1.pdf>
 Package pdftex.def Info: thesis_files/figure-latex/m333-cov-1.pdf  used on inpu
-t line 654.
+t line 639.
 (pdftex.def)             Requested size: 457.7089pt x 307.14674pt.
 
-Overfull \hbox (41.71371pt too wide) in paragraph at lines 654--655
+Overfull \hbox (41.71371pt too wide) in paragraph at lines 639--640
 [][] 
  []
 
-[30 <./thesis_files/figure-latex/m333-cov-1.pdf>]
-<thesis_files/figure-latex/unnamed-chunk-14-1.pdf, id=489, 459.7175pt x 307.147
+<thesis_files/figure-latex/unnamed-chunk-14-1.pdf, id=478, 459.7175pt x 307.147
 5pt>
 File: thesis_files/figure-latex/unnamed-chunk-14-1.pdf Graphic file (type pdf)
 <use thesis_files/figure-latex/unnamed-chunk-14-1.pdf>
 Package pdftex.def Info: thesis_files/figure-latex/unnamed-chunk-14-1.pdf  used
- on input line 684.
+ on input line 641.
 (pdftex.def)             Requested size: 459.71637pt x 307.14674pt.
-
-Overfull \hbox (43.72119pt too wide) in paragraph at lines 684--685
-[][] 
- []
-
-[31 <./thesis_files/figure-latex/unnamed-chunk-14-1.pdf>]
-<thesis_files/figure-latex/unnamed-chunk-14-2.pdf, id=502, 459.7175pt x 307.147
+<thesis_files/figure-latex/unnamed-chunk-14-2.pdf, id=479, 459.7175pt x 307.147
 5pt>
 File: thesis_files/figure-latex/unnamed-chunk-14-2.pdf Graphic file (type pdf)
 <use thesis_files/figure-latex/unnamed-chunk-14-2.pdf>
 Package pdftex.def Info: thesis_files/figure-latex/unnamed-chunk-14-2.pdf  used
- on input line 703.
+ on input line 641.
 (pdftex.def)             Requested size: 459.71637pt x 307.14674pt.
 
-Overfull \hbox (43.72119pt too wide) in paragraph at lines 703--704
-[][] 
+Overfull \hbox (43.72119pt too wide) in paragraph at lines 641--642
+[][]
  []
 
-[32 <./thesis_files/figure-latex/unnamed-chunk-14-2.pdf>]
-<thesis_files/figure-latex/cov-violin-1.pdf, id=515, 463.7325pt x 310.15875pt>
+
+Overfull \hbox (26.09637pt too wide) in paragraph at lines 641--642
+[] 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[30 <./thesis_files/figure-latex/m333-cov-1.pdf>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[31 <./thesis_files/figure-latex/unnamed-chunk-14-1.pdf> <./thesis_files/figure
+-latex/unnamed-chunk-14-2.pdf>]
+<thesis_files/figure-latex/cov-violin-1.pdf, id=511, 463.7325pt x 310.15875pt>
 File: thesis_files/figure-latex/cov-violin-1.pdf Graphic file (type pdf)
 <use thesis_files/figure-latex/cov-violin-1.pdf>
 Package pdftex.def Info: thesis_files/figure-latex/cov-violin-1.pdf  used on in
-put line 715.
+put line 653.
 (pdftex.def)             Requested size: 433.62pt x 290.02534pt.
-[33 <./thesis_files/figure-latex/cov-violin-1.pdf>] [34]
+[32 <./thesis_files/figure-latex/cov-violin-1.pdf>] [33] [34]
 Chapter 6.
 [35
 
@@ -806,9 +809,11 @@ Chapter 6.
 
 ]
 Appendix A.
+LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <12> not available
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 694.
 [37]
 
-LaTeX Warning: Reference `ref-labels' on page 38 undefined on input line 784.
+LaTeX Warning: Reference `ref-labels' on page 38 undefined on input line 722.
 
 [38]
 Appendix B.
@@ -823,13 +828,13 @@ Appendix B.
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `thesis.out' has not changed.
-(rerunfilecheck)             Checksum: 5233D42D6C60197D517EE529C6651061;5491.
+(rerunfilecheck)             Checksum: 72AC01451AC312E1DEDAF3545792180F;5623.
  ) 
 Here is how much of TeX's memory you used:
- 11787 strings out of 480971
- 181284 string characters out of 5906519
- 481106 words of memory out of 5000000
- 28602 multiletter control sequences out of 15000+600000
+ 11787 strings out of 480970
+ 181332 string characters out of 5906508
+ 481175 words of memory out of 5000000
+ 28603 multiletter control sequences out of 15000+600000
  455317 words of font info for 63 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  71i,12n,74p,1935b,449s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -853,10 +858,10 @@ public/lm/lmsy8.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1
 /public/lm/lmtk10.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/typ
 e1/public/lm/lmtt12.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/t
 ype1/public/lm/lmtti10.pfb>
-Output written on thesis.pdf (59 pages, 4431968 bytes).
+Output written on thesis.pdf (59 pages, 4426638 bytes).
 PDF statistics:
- 682 PDF objects out of 1000 (max. 8388607)
- 561 compressed objects within 6 object streams
+ 683 PDF objects out of 1000 (max. 8388607)
+ 562 compressed objects within 6 object streams
  160 named destinations out of 1000 (max. 500000)
  310 words of extra memory for PDF output out of 10000 (max. 10000000)
 

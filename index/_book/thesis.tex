@@ -629,81 +629,19 @@ We used the R statistical software to compute our results (R Core Team, 2020). T
 
 This thesis uses all six of these estimators to produce estimates for basal area (square-foot), tree count per acre, above-ground biomass (lbs), and net volume (\(\text{ft}^3\)). The EBLUP and hierarchical Bayesian estimators use one explanatory variable, total canopy cover, to produce estimates. Our estimation occurs at the eco-subsection level, and thus we have 7,128 estimates produced (six estimators, four response variables, and 297 eco-subsections).
 
-We are generally concerned with producing estimates that have both low variance and low bias. So, this chapter primarily aims to answers questions regarding these two quantities. In order to do so, we will first summarize some findings with a case study in the Northern Rocky Forest. This case study allows us to dig in to results without much aggregation or overwhelming plots due to the large amount of results we have. Next, we will explore variation measures and visualizations across the interior west in order to quantify variance of our estimators. Finally, we will attempt to quantify bias of estimators across the interior west.
+We are generally concerned with producing estimates that have both low variance and low bias. So, this chapter primarily aims to answers questions regarding these two quantities. In order to do so, we will first summarize some findings with a brief case study in the Northern Rocky Forest. This case study allows us to dig in to results without much aggregation or overwhelming plots due to the large amount of results we have. Next, we will explore both measures and visualizations of variance and bias across the interior west in order to understand the performance of our estimators more fully.
 
 \hypertarget{basal-area-in-the-northern-rocky-forest-a-case-study}{%
 \section{Basal Area in the Northern Rocky Forest: A Case Study}\label{basal-area-in-the-northern-rocky-forest-a-case-study}}
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{res_long }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{filter}\NormalTok{(province }\OperatorTok{==}\StringTok{ "M333"}\NormalTok{,}
-\NormalTok{         response }\OperatorTok{==}\StringTok{ "BALIVE_TPA"}\NormalTok{) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{subsection =} \KeywordTok{str_sub}\NormalTok{(subsection, }\DecValTok{5}\NormalTok{)) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ subsection,}
-                       \DataTypeTok{y =}\NormalTok{ cov,}
-                       \DataTypeTok{color =}\NormalTok{ estimator)) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}
-\StringTok{  }\KeywordTok{scale_color_manual}\NormalTok{(}\DataTypeTok{values =} \KeywordTok{c}\NormalTok{(}\StringTok{"#A9A9A9"}\NormalTok{, }\StringTok{"#334F44"}\NormalTok{, }\StringTok{"#E7AB26"}\NormalTok{,}
-                                \StringTok{"#BF4C27"}\NormalTok{,  }\StringTok{"steelblue"}\NormalTok{,  }\StringTok{"#80BCA2"}\NormalTok{),}
-                     \DataTypeTok{labels =} \KeywordTok{c}\NormalTok{(}\StringTok{"Sample Mean"}\NormalTok{, }\StringTok{"Post-Stratification"}\NormalTok{, }\StringTok{"Area EBLUP"}\NormalTok{,}
-                                \StringTok{"Unit EBLUP"}\NormalTok{, }\StringTok{"Area HB"}\NormalTok{, }\StringTok{"Unit HB"}\NormalTok{)) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}
-\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \StringTok{"bottom"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
+
+The Northern Rocky Forest is a large eco-province spanning many states, and can be seen in Figure \ref{fig:northern-rocky}.
+
 \includegraphics{thesis_files/figure-latex/m333-cov-1.pdf}
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{means <-}\StringTok{ }\NormalTok{res_long }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{filter}\NormalTok{(estimator }\OperatorTok{==}\StringTok{ "dirmean"}\NormalTok{) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{mean =}\NormalTok{ estimate) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{select}\NormalTok{(subsection, response, mean)}
-\NormalTok{res_long <-}\StringTok{ }\NormalTok{res_long }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{full_join}\NormalTok{(means, }\DataTypeTok{by =} \KeywordTok{c}\NormalTok{(}\StringTok{"subsection"}\NormalTok{ =}\StringTok{ "subsection"}\NormalTok{,}
-                          \StringTok{"response"}\NormalTok{ =}\StringTok{ "response"}\NormalTok{))}
-\NormalTok{res_long <-}\StringTok{ }\NormalTok{res_long }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{se =}\NormalTok{ mean }\OperatorTok{*}\StringTok{ }\NormalTok{cov)}
 
+\includegraphics{thesis_files/figure-latex/unnamed-chunk-14-1.pdf} \includegraphics{thesis_files/figure-latex/unnamed-chunk-14-2.pdf}
 
-\NormalTok{res_long }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{filter}\NormalTok{(province }\OperatorTok{==}\StringTok{ "M333"}\NormalTok{,}
-\NormalTok{         response }\OperatorTok{==}\StringTok{ "BALIVE_TPA"}\NormalTok{) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{subsection =} \KeywordTok{str_sub}\NormalTok{(subsection, }\DecValTok{5}\NormalTok{)) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ subsection,}
-                       \DataTypeTok{y =}\NormalTok{ estimate,}
-                       \DataTypeTok{color =}\NormalTok{ estimator)) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}
-\StringTok{  }\KeywordTok{scale_color_manual}\NormalTok{(}\DataTypeTok{values =} \KeywordTok{c}\NormalTok{(}\StringTok{"#A9A9A9"}\NormalTok{, }\StringTok{"#334F44"}\NormalTok{, }\StringTok{"#E7AB26"}\NormalTok{,}
-                                \StringTok{"#BF4C27"}\NormalTok{,  }\StringTok{"steelblue"}\NormalTok{,  }\StringTok{"#80BCA2"}\NormalTok{),}
-                     \DataTypeTok{labels =} \KeywordTok{c}\NormalTok{(}\StringTok{"Sample Mean"}\NormalTok{, }\StringTok{"Post-Stratification"}\NormalTok{, }\StringTok{"Area EBLUP"}\NormalTok{,}
-                                \StringTok{"Unit EBLUP"}\NormalTok{, }\StringTok{"Area HB"}\NormalTok{, }\StringTok{"Unit HB"}\NormalTok{)) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}
-\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \StringTok{"bottom"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-\includegraphics{thesis_files/figure-latex/unnamed-chunk-14-1.pdf}
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{res_long }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{filter}\NormalTok{(province }\OperatorTok{==}\StringTok{ "M333"}\NormalTok{,}
-\NormalTok{         response }\OperatorTok{==}\StringTok{ "BALIVE_TPA"}\NormalTok{) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{subsection =} \KeywordTok{str_sub}\NormalTok{(subsection, }\DecValTok{5}\NormalTok{)) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{filter}\NormalTok{(estimator }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"dirps"}\NormalTok{, }\StringTok{"hb_area"}\NormalTok{)) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ subsection,}
-                       \DataTypeTok{y =}\NormalTok{ estimate,}
-                       \DataTypeTok{color =}\NormalTok{ estimator)) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}
-\StringTok{  }\KeywordTok{geom_errorbar}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{ymin =}\NormalTok{ estimate }\OperatorTok{-}\StringTok{ }\NormalTok{se, }\DataTypeTok{ymax =}\NormalTok{ estimate }\OperatorTok{+}\StringTok{ }\NormalTok{se)) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{scale_color_manual}\NormalTok{(}\DataTypeTok{values =} \KeywordTok{c}\NormalTok{(}\StringTok{"#334F44"}\NormalTok{, }\StringTok{"steelblue"}\NormalTok{),}
-                     \DataTypeTok{labels =} \KeywordTok{c}\NormalTok{(}\StringTok{"Post-Stratification"}\NormalTok{, }\StringTok{"Area HB"}\NormalTok{)) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}
-\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \StringTok{"bottom"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-\includegraphics{thesis_files/figure-latex/unnamed-chunk-14-2.pdf}
-
-\hypertarget{variance}{%
-\section{Variance}\label{variance}}
+\hypertarget{results-across-the-interior-west}{%
+\section{Results Across the Interior West}\label{results-across-the-interior-west}}
 
 In order to explore variance, the primary metric we use is the coefficient of variation (CV). This metric, for each estimator, is defined as the standard deviation of our estimate divided by our sample mean. This allows us to normalize our variation across different response variables and areas that are more or less forested. We can express the coefficient of variation as follows:
 \begin{align}
