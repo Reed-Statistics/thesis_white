@@ -2,6 +2,8 @@
 library(tidyverse)
 library(ggpubr)
 library(patchwork)
+library(sf)
+library(USAboundaries)
 res <- readRDS("data/results/final_results.rds")
 res_long <- readRDS("data/results/final_results_long.rds")
 dat <- read_csv("data/subsets/dat_small.csv") %>%
@@ -16,10 +18,118 @@ We used the R statistical software to compute our results [@r-software]. The sam
 
 This thesis uses all six of these estimators to produce estimates for basal area (square-foot), tree count per acre, above-ground biomass (lbs), and net volume ($\text{ft}^3$). The EBLUP and hierarchical Bayesian estimators use one explanatory variable, total canopy cover, to produce estimates. Our estimation occurs at the eco-subsection level, and thus we have 7,128 estimates produced (six estimators, four response variables, and 297 eco-subsections). 
 
-We are generally concerned with producing estimates that have both low variance and low bias. So, this chapter primarily aims to answers questions regarding these two quantities. In order to do so, we will first summarize some findings with a brief case study in the Northern Rocky Forest. This case study allows us to dig in to results without much aggregation or overwhelming plots due to the large amount of results we have. Next, we will explore both measures and visualizations of variance and bias across the interior west in order to understand the performance of our estimators more fully. 
+We are generally concerned with producing estimates that have both low variance and low bias. So, this chapter primarily aims to answers questions regarding these two quantities. In order to do so, we will summarize our findings both globally and by briefly examining a subset of our results in the Northern Rocky Forest. This subset examination allows us to dig in to results without much aggregation or overwhelming plots due to the large amount of results we have. We explore both metrics and visualizations of variance and bias across the interior west in order to deeply understand the performance of our estimators. 
+
+
+## Results Across the Interior West
+
+In order to explore variance, the primary metric we use is the coefficient of variation (CV). This metric, for each estimator, is defined as the standard deviation of our estimate divided by our sample mean. This allows us to normalize our variation across different response variables and areas that are more or less forested. We can express the coefficient of variation as follows:
+\begin{align}
+CV_{y_j} = \frac{\hat\sigma_{y_j}}{\hat\mu_{y_j}^{HT}}
+\end{align}
+It is notable that when the mean of the variable of interest is small, we will sometimes get strangely large coefficients of variation. In order to visualize the coefficients of variation in an appealing way, we have filtered all observations great than one in the following plot:  
+
+```{r cov-violin, fig.align="center", out.width='100%', echo = FALSE, warning = F, message = F, fig.scap="Distribution of the coefficient of variation of each eastimator", fig.cap = "Distribution of the coefficient of variation of each eastimator. The black dot in each violin segment represents the median coefficient of variation value. The width of the violin segments corresponds to the density of points in the given value range. Values greater than 1 truncated in plot, however still considered in median calculation."}
+med <- res_long %>%
+  group_by(estimator) %>%
+  summarize(median_cov = median(cov))
+
+res_long %>%
+  ggplot(mapping = aes(x = estimator,
+                       y = cov,
+                       fill = estimator)) +
+  geom_violin(alpha = 0.5) +
+  stat_summary(fun.y="median", geom="point") +
+  ylim(0,1) +
+  theme_bw() +
+  scale_fill_manual(values = c("#A9A9A9", "#334F44", "#E7AB26",
+                               "#BF4C27",  "steelblue",  "#80BCA2"),
+                    labels = c("Sample Mean", "Post-Stratification", "Area EBLUP",
+                               "Unit EBLUP", "Area HB", "Unit HB")) +
+  scale_x_discrete(labels = c("Sample Mean", "Post-Stratification", "Area EBLUP",
+                               "Unit EBLUP", "Area HB", "Unit HB")) +
+  theme(legend.position = "bottom") +
+  labs(title = "Coefficient of Variation of Each Estimator",
+       x = "Estimator",
+       y = "Coefficient of Variation",
+       fill = "Estimator")
+```
+
+While Figure \@ref(fig:cov-violin) gives us a good sense of the distribution, we must acknowledge that we truncated some values in order for viewing simplicity. Three estimators had coefficients of variation that exceeded 1. The below table shows the count and proportion of each:
+```{r over-one, echo = FALSE, warning = F, message = F}
+over_one <- res_long %>%
+  filter(cov > 1) %>%
+  group_by(estimator) %>%
+  summarize(Count = n(),
+            Proportion = Count / 1188) %>%
+  rename(Estimator = estimator) %>%
+  mutate(Estimator = case_when(Estimator == "freq_unit" ~ "Unit EBLUP",
+                               Estimator == "hb_area" ~ "Area HB",
+                               Estimator == "hb_unit" ~ "Unit HB"))
+
+knitr::kable(
+  over_one,
+  digits = 3,
+  caption = "Coefficient of variation estimates greater than one",
+  longtable = TRUE,
+  booktabs = TRUE
+)
+```
+From Figure \@ref(fig:cov-violin), it is clear that the distribution of coefficient of variation for the area-level hierarchical Bayesian model is much lower than the others with a value of `r round(med$median_cov[5], 3)`. When we compare this value to the post-stratification median coefficient of variation (`r round(med$median_cov[2], 3)`) and the area-level EBLUP median coefficient of variation (`r round(med$median_cov[3], 3)`) we see an extremely large increase in variation in each case. Examining the 25%, 50%, and 75% quantile of these estimator's coefficient of variation continues to show the superiority of the area-level hierarchical Bayesian estimator:
+```{r quantile-table, echo = F}
+quantiledf <- bind_rows(
+  quantile(res$cov_dirmean)[2:4],
+  quantile(res$cov_dirps)[2:4],
+  quantile(res$cov_freq_area)[2:4],
+  quantile(res$cov_freq_unit)[2:4],
+  quantile(res$cov_hb_area)[2:4],
+  quantile(res$cov_hb_unit)[2:4],
+  ) %>%
+  mutate(Estimator = c("Sample Mean", "Post-Stratification", "Area EBLUP",
+                       "Unit EBLUP", "Area HB", "Unit HB")) %>%
+  relocate(Estimator)
+
+knitr::kable(
+  quantiledf,
+  digits = 3,
+  caption = "25th, 50th, and 75th Quantile of Each Estimator's Coefficient of Variation",
+  caption.short = "Coefficient of Variation Quantiles",
+  longtable = TRUE,
+  booktabs = TRUE
+)
+```
+
+
 
 
 ## Basal Area in the Northern Rocky Forest: A Case Study
+
+
+```{r}
+subsections <- st_read("../data/SA_eco_subsection/SA_eco_subsection.shp", quiet = TRUE)
+
+interior_west <- c("AZ", "CO", "ID", "MT", "NV", "NM", "UT", "WY")
+
+int_west_sf <- us_boundaries(type = "state",
+                         states = interior_west)
+
+modeled_subsections <- st_intersection(int_west_sf, subsections) %>%
+  select(PROVINC, SECTION, SUBSECT, geometry)
+
+res_sf <- res %>%
+  full_join(modeled_subsections, by = c("subsection" = "SUBSECT")) %>%
+  distinct()
+
+ggplot() +
+  geom_sf(data = res_sf,
+          mapping = aes(fill = log(cov_freq_area / cov_hb_area),
+                        geometry = geometry),
+          color = "black") +
+  # scale_fill_manual(values = c("#BF4C27", "#E7AB26", "#80BCA2", "#F5F7BD")) +
+  theme_void() 
+  # scale_fill_gradient2(low = "red", mid = "white", high = "blue", midpoint = 0)
+```
+
 
 The Northern Rocky Forest is a large eco-province spanning many states, and can be seen in Figure \@ref(fig:northern-rocky). 
 
@@ -83,63 +193,4 @@ res_long %>%
   theme_bw() +
   theme(legend.position = "bottom")
 ```
-
-
-## Results Across the Interior West
-
-In order to explore variance, the primary metric we use is the coefficient of variation (CV). This metric, for each estimator, is defined as the standard deviation of our estimate divided by our sample mean. This allows us to normalize our variation across different response variables and areas that are more or less forested. We can express the coefficient of variation as follows:
-\begin{align}
-CV_{y_j} = \frac{\hat\sigma_{y_j}}{\hat\mu_{y_j}^{HT}}
-\end{align}
-It is notable that when the mean of the variable of interest is small, we will sometimes get strangely large coefficients of variation. In order to visualize the coefficients of variation in an appealing way, we have filtered all observations great than one in the following plot:  
-
-```{r cov-violin, fig.align="center", out.width='100%', echo = FALSE, warning = F, message = F, fig.scap="Distribution of the coefficient of variation of each eastimator", fig.cap = "Distribution of the coefficient of variation of each eastimator. The black dot in each violin segment represents the median coefficient of variation value. The width of the violin segments corresponds to the density of points in the given value range. Values greater than 1 truncated in plot, however still considered in median calculation."}
-med <- res_long %>%
-  group_by(estimator) %>%
-  summarize(median_cov = median(cov))
-
-res_long %>%
-  ggplot(mapping = aes(x = estimator,
-                       y = cov,
-                       fill = estimator)) +
-  geom_violin(alpha = 0.5) +
-  stat_summary(fun.y="median", geom="point") +
-  ylim(0,1) +
-  theme_bw() +
-  scale_fill_manual(values = c("#A9A9A9", "#334F44", "#E7AB26",
-                               "#BF4C27",  "steelblue",  "#80BCA2"),
-                    labels = c("Sample Mean", "Post-Stratification", "Area EBLUP",
-                               "Unit EBLUP", "Area HB", "Unit HB")) +
-  scale_x_discrete(labels = c("Sample Mean", "Post-Stratification", "Area EBLUP",
-                               "Unit EBLUP", "Area HB", "Unit HB")) +
-  theme(legend.position = "bottom") +
-  labs(title = "Coefficient of Variation of Each Estimator",
-       x = "Estimator",
-       y = "Coefficient of Variation",
-       fill = "Estimator")
-```
-
-While Figure \@ref(fig:cov-violin) gives us a good sense of the distribution, we must acknowledge that we truncated some values in order for viewing simplicity. Three estimators had coefficients of variation that exceeded 1. The below table shows the count and proportion of each:
-```{r over-one, echo = FALSE, warning = F, message = F}
-over_one <- res_long %>%
-  filter(cov > 1) %>%
-  group_by(estimator) %>%
-  summarize(Count = n(),
-            Proportion = Count / 1188) %>%
-  rename(Estimator = estimator) %>%
-  mutate(Estimator = case_when(Estimator == "freq_unit" ~ "Unit EBLUP",
-                               Estimator == "hb_area" ~ "Area HB",
-                               Estimator == "hb_unit" ~ "Unit HB"))
-
-knitr::kable(
-  over_one,
-  digits = 3,
-  caption = "Coefficient of variation estimates greater than one",
-  longtable = TRUE,
-  booktabs = TRUE
-)
-```
-
-From Figure \@ref(fig:cov-violin), it is clear that the distribution of coefficient of variation for the area-level hierarchical Bayesian model is much lower than the others with a value of `r round(med$median_cov[5], 3)`. When we compare this value to the post-stratification median coefficient of variation (`r round(med$median_cov[2], 3)`) and the area-level EBLUP median coefficient of variation (`r round(med$median_cov[3], 3)`) we see an extremely large increase in variation in each case. 
-
 

@@ -629,16 +629,7 @@ We used the R statistical software to compute our results (R Core Team, 2020). T
 
 This thesis uses all six of these estimators to produce estimates for basal area (square-foot), tree count per acre, above-ground biomass (lbs), and net volume (\(\text{ft}^3\)). The EBLUP and hierarchical Bayesian estimators use one explanatory variable, total canopy cover, to produce estimates. Our estimation occurs at the eco-subsection level, and thus we have 7,128 estimates produced (six estimators, four response variables, and 297 eco-subsections).
 
-We are generally concerned with producing estimates that have both low variance and low bias. So, this chapter primarily aims to answers questions regarding these two quantities. In order to do so, we will first summarize some findings with a brief case study in the Northern Rocky Forest. This case study allows us to dig in to results without much aggregation or overwhelming plots due to the large amount of results we have. Next, we will explore both measures and visualizations of variance and bias across the interior west in order to understand the performance of our estimators more fully.
-
-\hypertarget{basal-area-in-the-northern-rocky-forest-a-case-study}{%
-\section{Basal Area in the Northern Rocky Forest: A Case Study}\label{basal-area-in-the-northern-rocky-forest-a-case-study}}
-
-The Northern Rocky Forest is a large eco-province spanning many states, and can be seen in Figure \ref{fig:northern-rocky}.
-
-\includegraphics{thesis_files/figure-latex/m333-cov-1.pdf}
-
-\includegraphics{thesis_files/figure-latex/unnamed-chunk-14-1.pdf} \includegraphics{thesis_files/figure-latex/unnamed-chunk-14-2.pdf}
+We are generally concerned with producing estimates that have both low variance and low bias. So, this chapter primarily aims to answers questions regarding these two quantities. In order to do so, we will summarize our findings both globally and by briefly examining a subset of our results in the Northern Rocky Forest. This subset examination allows us to dig in to results without much aggregation or overwhelming plots due to the large amount of results we have. We explore both metrics and visualizations of variance and bias across the interior west in order to deeply understand the performance of our estimators.
 
 \hypertarget{results-across-the-interior-west}{%
 \section{Results Across the Interior West}\label{results-across-the-interior-west}}
@@ -667,7 +658,69 @@ Area HB & 56 & 0.047\\
 Unit HB & 142 & 0.120\\
 \bottomrule
 \end{longtable}
-From Figure \ref{fig:cov-violin}, it is clear that the distribution of coefficient of variation for the area-level hierarchical Bayesian model is much lower than the others with a value of 0.046. When we compare this value to the post-stratification median coefficient of variation (0.137) and the area-level EBLUP median coefficient of variation (0.114) we see an extremely large increase in variation in each case.
+From Figure \ref{fig:cov-violin}, it is clear that the distribution of coefficient of variation for the area-level hierarchical Bayesian model is much lower than the others with a value of 0.046. When we compare this value to the post-stratification median coefficient of variation (0.137) and the area-level EBLUP median coefficient of variation (0.114) we see an extremely large increase in variation in each case. Examining the 25\%, 50\%, and 75\% quantile of these estimator's coefficient of variation continues to show the superiority of the area-level hierarchical Bayesian estimator:
+\begin{longtable}[t]{lrrr}
+\caption[Coefficient of Variation Quantiles]{\label{tab:quantile-table}25th, 50th, and 75th Quantile of Each Estimator's Coefficient of Variation}\\
+\toprule
+Estimator & 25\% & 50\% & 75\%\\
+\midrule
+Sample Mean & 0.109 & 0.154 & 0.231\\
+Post-Stratification & 0.094 & 0.137 & 0.201\\
+Area EBLUP & 0.081 & 0.114 & 0.170\\
+Unit EBLUP & 0.075 & 0.109 & 0.168\\
+Area HB & 0.030 & 0.046 & 0.081\\
+\addlinespace
+Unit HB & 0.074 & 0.125 & 0.315\\
+\bottomrule
+\end{longtable}
+\hypertarget{basal-area-in-the-northern-rocky-forest-a-case-study}{%
+\section{Basal Area in the Northern Rocky Forest: A Case Study}\label{basal-area-in-the-northern-rocky-forest-a-case-study}}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{subsections <-}\StringTok{ }\KeywordTok{st_read}\NormalTok{(}\StringTok{"../data/SA_eco_subsection/SA_eco_subsection.shp"}\NormalTok{, }\DataTypeTok{quiet =} \OtherTok{TRUE}\NormalTok{)}
+
+\NormalTok{interior_west <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"AZ"}\NormalTok{, }\StringTok{"CO"}\NormalTok{, }\StringTok{"ID"}\NormalTok{, }\StringTok{"MT"}\NormalTok{, }\StringTok{"NV"}\NormalTok{, }\StringTok{"NM"}\NormalTok{, }\StringTok{"UT"}\NormalTok{, }\StringTok{"WY"}\NormalTok{)}
+
+\NormalTok{int_west_sf <-}\StringTok{ }\KeywordTok{us_boundaries}\NormalTok{(}\DataTypeTok{type =} \StringTok{"state"}\NormalTok{,}
+                         \DataTypeTok{states =}\NormalTok{ interior_west)}
+
+\NormalTok{modeled_subsections <-}\StringTok{ }\KeywordTok{st_intersection}\NormalTok{(int_west_sf, subsections) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(PROVINC, SECTION, SUBSECT, geometry)}
+\end{Highlighting}
+\end{Shaded}
+\begin{verbatim}
+although coordinates are longitude/latitude, st_intersection assumes that they are planar
+\end{verbatim}
+\begin{verbatim}
+Warning: attribute variables are assumed to be spatially constant
+throughout all geometries
+\end{verbatim}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{res_sf <-}\StringTok{ }\NormalTok{res }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{full_join}\NormalTok{(modeled_subsections, }\DataTypeTok{by =} \KeywordTok{c}\NormalTok{(}\StringTok{"subsection"}\NormalTok{ =}\StringTok{ "SUBSECT"}\NormalTok{)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{distinct}\NormalTok{()}
+
+\KeywordTok{ggplot}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_sf}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ res_sf,}
+          \DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{fill =} \KeywordTok{log}\NormalTok{(cov_freq_area }\OperatorTok{/}\StringTok{ }\NormalTok{cov_hb_area),}
+                        \DataTypeTok{geometry =}\NormalTok{ geometry),}
+          \DataTypeTok{color =} \StringTok{"black"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\CommentTok{# scale_fill_manual(values = c("#BF4C27", "#E7AB26", "#80BCA2", "#F5F7BD")) +}
+\StringTok{  }\KeywordTok{theme_void}\NormalTok{() }
+\end{Highlighting}
+\end{Shaded}
+\includegraphics{thesis_files/figure-latex/unnamed-chunk-14-1.pdf}
+\begin{Shaded}
+\begin{Highlighting}[]
+  \CommentTok{# scale_fill_gradient2(low = "red", mid = "white", high = "blue", midpoint = 0)}
+\end{Highlighting}
+\end{Shaded}
+The Northern Rocky Forest is a large eco-province spanning many states, and can be seen in Figure \ref{fig:northern-rocky}.
+
+\includegraphics{thesis_files/figure-latex/m333-cov-1.pdf}
+
+\includegraphics{thesis_files/figure-latex/unnamed-chunk-15-1.pdf} \includegraphics{thesis_files/figure-latex/unnamed-chunk-15-2.pdf}
 
 \hypertarget{discussion-and-conclusion}{%
 \chapter{Discussion and Conclusion}\label{discussion-and-conclusion}}
