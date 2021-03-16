@@ -1,28 +1,28 @@
-\BOOKMARK [0][-]{chapter*.8}{\376\377\000I\000n\000t\000r\000o\000d\000u\000c\000t\000i\000o\000n}{}% 1
-\BOOKMARK [0][-]{chapter.1}{\376\377\000C\000h\000a\000p\000t\000e\000r\000\040\0001\000:\000\040\000C\000o\000n\000t\000e\000x\000t}{}% 2
-\BOOKMARK [0][-]{chapter.2}{\376\377\000C\000h\000a\000p\000t\000e\000r\000\040\0002\000:\000\040\000O\000v\000e\000r\000v\000i\000e\000w}{}% 3
-\BOOKMARK [0][-]{chapter.3}{\376\377\000C\000h\000a\000p\000t\000e\000r\000\040\0003\000:\000\040\000D\000a\000t\000a}{}% 4
-\BOOKMARK [1][-]{section.3.1}{\376\377\000T\000h\000e\000\040\000F\000o\000r\000e\000s\000t\000\040\000I\000n\000v\000e\000n\000t\000o\000r\000y\000\040\000\046\000\040\000A\000n\000a\000l\000y\000s\000i\000s\000\040\000P\000r\000o\000g\000r\000a\000m}{chapter.3}% 5
-\BOOKMARK [1][-]{section.3.2}{\376\377\000T\000h\000e\000\040\000I\000n\000t\000e\000r\000i\000o\000r\000\040\000W\000e\000s\000t}{chapter.3}% 6
-\BOOKMARK [1][-]{section.3.3}{\376\377\000O\000u\000r\000\040\000D\000a\000t\000a\000:\000\040\000S\000p\000e\000c\000i\000f\000i\000c\000s}{chapter.3}% 7
-\BOOKMARK [1][-]{section.3.4}{\376\377\000D\000a\000t\000a\000\040\000S\000t\000r\000u\000c\000t\000u\000r\000e\000\040\000\046\000\040\000H\000i\000e\000r\000a\000r\000c\000h\000y}{chapter.3}% 8
-\BOOKMARK [0][-]{chapter.4}{\376\377\000C\000h\000a\000p\000t\000e\000r\000\040\0004\000:\000\040\000M\000e\000t\000h\000o\000d\000s}{}% 9
-\BOOKMARK [1][-]{section.4.1}{\376\377\000D\000i\000r\000e\000c\000t\000\040\000E\000s\000t\000i\000m\000a\000t\000i\000o\000n}{chapter.4}% 10
-\BOOKMARK [2][-]{subsection.4.1.1}{\376\377\000T\000h\000e\000\040\000H\000o\000r\000v\000i\000t\000z\000-\000T\000h\000o\000m\000p\000s\000o\000n\000\040\000E\000s\000t\000i\000m\000a\000t\000o\000r}{section.4.1}% 11
-\BOOKMARK [2][-]{subsection.4.1.2}{\376\377\000T\000h\000e\000\040\000P\000o\000s\000t\000-\000S\000t\000r\000a\000t\000i\000f\000i\000e\000d\000\040\000E\000s\000t\000i\000m\000a\000t\000o\000r}{section.4.1}% 12
-\BOOKMARK [1][-]{section.4.2}{\376\377\000I\000m\000p\000l\000i\000c\000i\000t\000\040\000M\000o\000d\000e\000l\000\040\000B\000a\000s\000e\000d\000\040\000I\000n\000d\000i\000r\000e\000c\000t\000\040\000E\000s\000t\000i\000m\000a\000t\000i\000o\000n}{chapter.4}% 13
-\BOOKMARK [2][-]{subsection.4.2.1}{\376\377\000U\000s\000i\000n\000g\000\040\000A\000r\000e\000a\000-\000l\000e\000v\000e\000l\000\040\000A\000u\000x\000i\000l\000i\000a\000r\000y\000\040\000D\000a\000t\000a}{section.4.2}% 14
-\BOOKMARK [2][-]{subsection.4.2.2}{\376\377\000U\000s\000i\000n\000g\000\040\000U\000n\000i\000t\000-\000l\000e\000v\000e\000l\000\040\000A\000u\000x\000i\000l\000i\000a\000r\000y\000\040\000D\000a\000t\000a}{section.4.2}% 15
-\BOOKMARK [1][-]{section.4.3}{\376\377\000E\000x\000p\000l\000i\000c\000i\000t\000\040\000M\000o\000d\000e\000l\000\040\000B\000a\000s\000e\000d\000\040\000I\000n\000d\000i\000r\000e\000c\000t\000\040\000E\000s\000t\000i\000m\000a\000t\000i\000o\000n}{chapter.4}% 16
-\BOOKMARK [2][-]{subsection.4.3.1}{\376\377\000T\000h\000e\000\040\000U\000n\000i\000t\000-\000l\000e\000v\000e\000l\000\040\000E\000B\000L\000U\000P}{section.4.3}% 17
-\BOOKMARK [2][-]{subsection.4.3.2}{\376\377\000T\000h\000e\000\040\000A\000r\000e\000a\000-\000l\000e\000v\000e\000l\000\040\000E\000B\000L\000U\000P}{section.4.3}% 18
-\BOOKMARK [1][-]{section.4.4}{\376\377\000A\000\040\000H\000i\000e\000r\000a\000r\000c\000h\000i\000c\000a\000l\000\040\000B\000a\000y\000e\000s\000i\000a\000n\000\040\000A\000p\000p\000r\000o\000a\000c\000h}{chapter.4}% 19
-\BOOKMARK [2][-]{subsection.4.4.1}{\376\377\000T\000h\000e\000\040\000U\000n\000i\000t\000-\000l\000e\000v\000e\000l\000\040\000H\000i\000e\000r\000a\000r\000h\000c\000i\000c\000a\000l\000\040\000B\000a\000y\000e\000s\000i\000a\000n\000\040\000M\000o\000d\000e\000l}{section.4.4}% 20
-\BOOKMARK [2][-]{subsection.4.4.2}{\376\377\000T\000h\000e\000\040\000A\000r\000e\000a\000-\000l\000e\000v\000e\000l\000\040\000H\000i\000e\000r\000a\000r\000i\000c\000h\000i\000c\000a\000l\000\040\000B\000a\000y\000e\000s\000i\000a\000n\000\040\000M\000o\000d\000e\000l}{section.4.4}% 21
-\BOOKMARK [0][-]{chapter.5}{\376\377\000C\000h\000a\000p\000t\000e\000r\000\040\0005\000:\000\040\000R\000e\000s\000u\000l\000t\000s}{}% 22
-\BOOKMARK [1][-]{section.5.1}{\376\377\000R\000e\000s\000u\000l\000t\000s\000\040\000A\000c\000r\000o\000s\000s\000\040\000t\000h\000e\000\040\000I\000n\000t\000e\000r\000i\000o\000r\000\040\000W\000e\000s\000t}{chapter.5}% 23
-\BOOKMARK [1][-]{section.5.2}{\376\377\000B\000a\000s\000a\000l\000\040\000A\000r\000e\000a\000\040\000i\000n\000\040\000t\000h\000e\000\040\000N\000o\000r\000t\000h\000e\000r\000n\000\040\000R\000o\000c\000k\000y\000\040\000F\000o\000r\000e\000s\000t\000:\000\040\000A\000\040\000C\000a\000s\000e\000\040\000S\000t\000u\000d\000y}{chapter.5}% 24
-\BOOKMARK [0][-]{chapter.6}{\376\377\000C\000h\000a\000p\000t\000e\000r\000\040\0006\000:\000\040\000D\000i\000s\000c\000u\000s\000s\000i\000o\000n\000\040\000a\000n\000d\000\040\000C\000o\000n\000c\000l\000u\000s\000i\000o\000n}{}% 25
-\BOOKMARK [0][-]{appendix.A}{\376\377\000A\000p\000p\000e\000n\000d\000i\000x\000\040\000A\000:\000\040\000T\000h\000e\000\040\000F\000i\000r\000s\000t\000\040\000A\000p\000p\000e\000n\000d\000i\000x}{}% 26
-\BOOKMARK [0][-]{appendix.B}{\376\377\000A\000p\000p\000e\000n\000d\000i\000x\000\040\000B\000:\000\040\000T\000h\000e\000\040\000S\000e\000c\000o\000n\000d\000\040\000A\000p\000p\000e\000n\000d\000i\000x\000,\000\040\000f\000o\000r\000\040\000F\000u\000n}{}% 27
-\BOOKMARK [0][-]{appendix*.23}{\376\377\000R\000e\000f\000e\000r\000e\000n\000c\000e\000s}{}% 28
+\BOOKMARK [0][-]{chapter*.8}{Introduction}{}% 1
+\BOOKMARK [0][-]{chapter.1}{Chapter 1: Context}{}% 2
+\BOOKMARK [0][-]{chapter.2}{Chapter 2: Overview}{}% 3
+\BOOKMARK [0][-]{chapter.3}{Chapter 3: Data}{}% 4
+\BOOKMARK [1][-]{section.3.1}{The Forest Inventory \046 Analysis Program}{chapter.3}% 5
+\BOOKMARK [1][-]{section.3.2}{The Interior West}{chapter.3}% 6
+\BOOKMARK [1][-]{section.3.3}{Our Data: Specifics}{chapter.3}% 7
+\BOOKMARK [1][-]{section.3.4}{Data Structure \046 Hierarchy}{chapter.3}% 8
+\BOOKMARK [0][-]{chapter.4}{Chapter 4: Methods}{}% 9
+\BOOKMARK [1][-]{section.4.1}{Direct Estimation}{chapter.4}% 10
+\BOOKMARK [2][-]{subsection.4.1.1}{The Horvitz-Thompson Estimator}{section.4.1}% 11
+\BOOKMARK [2][-]{subsection.4.1.2}{The Post-Stratified Estimator}{section.4.1}% 12
+\BOOKMARK [1][-]{section.4.2}{Implicit Model Based Indirect Estimation}{chapter.4}% 13
+\BOOKMARK [2][-]{subsection.4.2.1}{Using Area-level Auxiliary Data}{section.4.2}% 14
+\BOOKMARK [2][-]{subsection.4.2.2}{Using Unit-level Auxiliary Data}{section.4.2}% 15
+\BOOKMARK [1][-]{section.4.3}{Explicit Model Based Indirect Estimation}{chapter.4}% 16
+\BOOKMARK [2][-]{subsection.4.3.1}{The Unit-level EBLUP}{section.4.3}% 17
+\BOOKMARK [2][-]{subsection.4.3.2}{The Area-level EBLUP}{section.4.3}% 18
+\BOOKMARK [1][-]{section.4.4}{A Hierarchical Bayesian Approach}{chapter.4}% 19
+\BOOKMARK [2][-]{subsection.4.4.1}{The Unit-level Hierarhcical Bayesian Model}{section.4.4}% 20
+\BOOKMARK [2][-]{subsection.4.4.2}{The Area-level Hierarichical Bayesian Model}{section.4.4}% 21
+\BOOKMARK [0][-]{chapter.5}{Chapter 5: Results}{}% 22
+\BOOKMARK [1][-]{section.5.1}{Results Across the Interior West}{chapter.5}% 23
+\BOOKMARK [1][-]{section.5.2}{Basal Area in the Northern Rocky Forest: A Case Study}{chapter.5}% 24
+\BOOKMARK [0][-]{chapter.6}{Chapter 6: Discussion and Conclusion}{}% 25
+\BOOKMARK [0][-]{appendix.A}{Appendix A: The First Appendix}{}% 26
+\BOOKMARK [0][-]{appendix.B}{Appendix B: The Second Appendix, for Fun}{}% 27
+\BOOKMARK [0][-]{appendix*.23}{References}{}% 28
