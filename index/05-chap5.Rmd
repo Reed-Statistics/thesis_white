@@ -61,7 +61,7 @@ over_one <- res_long %>%
   filter(cov > 1) %>%
   group_by(estimator) %>%
   summarize(Count = n(),
-            Proportion = Count / 1188) %>%
+            Proportion = Count / sum(Count)) %>%
   rename(Estimator = estimator) %>%
   mutate(Estimator = case_when(Estimator == "freq_unit" ~ "Unit EBLUP",
                                Estimator == "hb_area" ~ "Area HB",
@@ -114,7 +114,7 @@ int_west_sf <- us_boundaries(type = "state",
                          states = interior_west)
 
 modeled_subsections <- st_intersection(int_west_sf, subsections) %>%
-  select(PROVINC, SECTION, SUBSECT, geometry)
+  dplyr::select(PROVINC, SECTION, SUBSECT, geometry)
 
 res_sf <- res %>%
   full_join(modeled_subsections, by = c("subsection" = "SUBSECT")) %>%
@@ -154,7 +154,7 @@ res_long %>%
 means <- res_long %>%
   filter(estimator == "dirmean") %>%
   rename(mean = estimate) %>%
-  select(subsection, response, mean)
+  dplyr::select(subsection, response, mean)
 res_long <- res_long %>%
   full_join(means, by = c("subsection" = "subsection",
                           "response" = "response"))

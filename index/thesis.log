@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2021.3.14)  15 MAR 2021 11:40
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2021.3.14)  15 MAR 2021 18:13
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -760,17 +760,17 @@ put line 644.
 (pdftex.def)             Requested size: 433.62pt x 290.02534pt.
 [30 <./thesis_files/figure-latex/cov-violin-1.pdf>] [31]
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <12> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 680.
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 681.
 [32]
 <thesis_files/figure-latex/unnamed-chunk-14-1.pdf, id=507, 456.70625pt x 275.02
 75pt>
 File: thesis_files/figure-latex/unnamed-chunk-14-1.pdf Graphic file (type pdf)
 <use thesis_files/figure-latex/unnamed-chunk-14-1.pdf>
 Package pdftex.def Info: thesis_files/figure-latex/unnamed-chunk-14-1.pdf  used
- on input line 713.
+ on input line 714.
 (pdftex.def)             Requested size: 456.70512pt x 275.02682pt.
 
-Overfull \hbox (23.08513pt too wide) in paragraph at lines 713--714
+Overfull \hbox (23.08513pt too wide) in paragraph at lines 714--715
 [] 
  []
 
@@ -778,10 +778,10 @@ Overfull \hbox (23.08513pt too wide) in paragraph at lines 713--714
 File: thesis_files/figure-latex/m333-cov-1.pdf Graphic file (type pdf)
 <use thesis_files/figure-latex/m333-cov-1.pdf>
 Package pdftex.def Info: thesis_files/figure-latex/m333-cov-1.pdf  used on inpu
-t line 721.
+t line 722.
 (pdftex.def)             Requested size: 457.7089pt x 307.14674pt.
 
-Overfull \hbox (41.71371pt too wide) in paragraph at lines 721--722
+Overfull \hbox (41.71371pt too wide) in paragraph at lines 722--723
 [][] 
  []
 
@@ -794,22 +794,22 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 File: thesis_files/figure-latex/unnamed-chunk-15-1.pdf Graphic file (type pdf)
 <use thesis_files/figure-latex/unnamed-chunk-15-1.pdf>
 Package pdftex.def Info: thesis_files/figure-latex/unnamed-chunk-15-1.pdf  used
- on input line 723.
+ on input line 724.
 (pdftex.def)             Requested size: 459.71637pt x 307.14674pt.
 <thesis_files/figure-latex/unnamed-chunk-15-2.pdf, id=524, 459.7175pt x 307.147
 5pt>
 File: thesis_files/figure-latex/unnamed-chunk-15-2.pdf Graphic file (type pdf)
 <use thesis_files/figure-latex/unnamed-chunk-15-2.pdf>
 Package pdftex.def Info: thesis_files/figure-latex/unnamed-chunk-15-2.pdf  used
- on input line 723.
+ on input line 724.
 (pdftex.def)             Requested size: 459.71637pt x 307.14674pt.
 
-Overfull \hbox (43.72119pt too wide) in paragraph at lines 723--724
+Overfull \hbox (43.72119pt too wide) in paragraph at lines 724--725
 [][]
  []
 
 
-Overfull \hbox (26.09637pt too wide) in paragraph at lines 723--724
+Overfull \hbox (26.09637pt too wide) in paragraph at lines 724--725
 [] 
  []
 
@@ -828,7 +828,7 @@ Chapter 6.
 Appendix A.
 [39]
 
-LaTeX Warning: Reference `ref-labels' on page 40 undefined on input line 775.
+LaTeX Warning: Reference `ref-labels' on page 40 undefined on input line 776.
 
 [40]
 Appendix B.
@@ -852,7 +852,7 @@ Here is how much of TeX's memory you used:
  28610 multiletter control sequences out of 15000+600000
  455317 words of font info for 63 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 71i,12n,74p,1935b,504s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 71i,12n,74p,1935b,508s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}
 {/Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.en
 c}{/Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.
@@ -873,7 +873,7 @@ public/lm/lmsy8.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1
 /public/lm/lmtk10.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/typ
 e1/public/lm/lmtt12.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/t
 ype1/public/lm/lmtti10.pfb>
-Output written on thesis.pdf (61 pages, 5506079 bytes).
+Output written on thesis.pdf (61 pages, 5905136 bytes).
 PDF statistics:
  704 PDF objects out of 1000 (max. 8388607)
  577 compressed objects within 6 object streams
