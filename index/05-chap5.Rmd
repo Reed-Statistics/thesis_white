@@ -14,9 +14,9 @@ dat <- read_csv("data/subsets/dat_small.csv") %>%
 
 This chapter addresses the performance of the six estimators fit in this thesis: the sample mean, the post-stratified estimator, the unit-level EBLUP, the area-level EBLUP, the unit-level hierarchical Bayesian estimator, and the area-level hierarchical Bayesian estimator. 
 
-We used the R statistical software to compute our results [@r-software]. The sample mean was computed using the *tidyverse* [@tidyverse]. The post-stratified estimates were computed using *mase* [@mase]. The frequentist EBLUP estimates were computed using *sae* [@sae-package]. The hierarchical Bayesian estimates were computed using *hbsae* [@hbsae-package]. Our data spans the entire Interior West, however we were forced to exclude a few eco-provinces. Namely two eco-provinces with a very small number of eco-subsections which caused errors in producing the unit-level hierarchical Bayesian estimates and three eco-provinces which caused errors in producing the area-level hierarchical Bayesian estimates. While this is disappointing, we still were able to fit these estimators to much data. 
+We used the R statistical software to compute our results [@r-software]. The sample mean was computed using the *tidyverse* [@tidyverse]. The post-stratified estimates were computed using *mase* [@mase]. The frequentist EBLUP estimates were computed using *sae* [@sae-package]. The hierarchical Bayesian estimates were computed using *hbsae* [@hbsae-package]. Our data spans the entire Interior West, however we were forced to exclude a few eco-provinces. Namely two eco-provinces with a very small number of eco-subsections which caused errors in producing the unit-level hierarchical Bayesian estimates and eco-subsections with either none or very close to no sampled areas with non-zero values for our variables of interest. While this is disappointing, we still were able to fit these estimators to the great majority of our data. 
 
-This thesis uses all six of these estimators to produce estimates for basal area (square-foot), tree count per acre, above-ground biomass (lbs), and net volume ($\text{ft}^3$). The EBLUP and hierarchical Bayesian estimators use one explanatory variable, total canopy cover, to produce estimates. Our estimation occurs at the eco-subsection level, and thus we have 7,128 estimates produced (six estimators, four response variables, and 297 eco-subsections). 
+This thesis uses all six of these estimators to produce estimates for basal area (square-foot), tree count per acre, above-ground biomass (lbs), and net volume ($\text{ft}^3$). The EBLUP and hierarchical Bayesian estimators use one explanatory variable, total canopy cover, to produce estimates. Our estimation occurs at the eco-subsection level, and thus we have 10,176 estimates produced (six estimators, four response variables, and 424 eco-subsections). 
 
 We are generally concerned with producing estimates that have both low variance and low bias. So, this chapter primarily aims to answers questions regarding these two quantities. In order to do so, we will summarize our findings both globally and by briefly examining a subset of our results in the Northern Rocky Forest. This subset examination allows us to dig in to results without much aggregation or overwhelming plots due to the large amount of results we have. We explore both metrics and visualizations of variance and bias across the interior west in order to deeply understand the performance of our estimators. 
 
@@ -61,11 +61,12 @@ over_one <- res_long %>%
   filter(cov > 1) %>%
   group_by(estimator) %>%
   summarize(Count = n(),
-            Proportion = Count / sum(Count)) %>%
+            Proportion = Count / (length(res_long$response) / length(unique(res_long$estimator)))) %>%
   rename(Estimator = estimator) %>%
   mutate(Estimator = case_when(Estimator == "freq_unit" ~ "Unit EBLUP",
                                Estimator == "hb_area" ~ "Area HB",
-                               Estimator == "hb_unit" ~ "Unit HB"))
+                               Estimator == "hb_unit" ~ "Unit HB",
+                               Estimator == "dirmean" ~ "Sample Mean"))
 
 knitr::kable(
   over_one,

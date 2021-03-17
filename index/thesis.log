@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.12.6)  16 MAR 2021 10:26
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.12.6)  16 MAR 2021 20:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -605,13 +605,13 @@ l.260 \end{figure}
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [5 <./figure/mean-diagram.png>]
-<figure/hbu-diagram.png, id=296, 1927.2pt x 1084.05pt>
+<figure/hbu-diagram.png, id=297, 1927.2pt x 1084.05pt>
 File: figure/hbu-diagram.png Graphic file (type png)
 <use figure/hbu-diagram.png>
 Package pdftex.def Info: figure/hbu-diagram.png  used on input line 266.
 (pdftex.def)             Requested size: 433.62pt x 243.90073pt.
 [6 <./figure/ps-diagram.png>]
-<figure/hba-diagram.png, id=302, 1927.2pt x 1084.05pt>
+<figure/hba-diagram.png, id=303, 1927.2pt x 1084.05pt>
 File: figure/hba-diagram.png Graphic file (type png)
 <use figure/hba-diagram.png>
 Package pdftex.def Info: figure/hba-diagram.png  used on input line 274.
@@ -829,7 +829,7 @@ ublic/lm/lmsy8.pfb></Users/grwhite/Library/TinyTeX/texmf-dist/fonts/type1/publi
 c/lm/lmtk10.pfb></Users/grwhite/Library/TinyTeX/texmf-dist/fonts/type1/public/l
 m/lmtt12.pfb></Users/grwhite/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/l
 mtti10.pfb>
-Output written on thesis.pdf (61 pages, 5904892 bytes).
+Output written on thesis.pdf (61 pages, 5899828 bytes).
 PDF statistics:
  704 PDF objects out of 1000 (max. 8388607)
  577 compressed objects within 6 object streams

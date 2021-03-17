@@ -248,7 +248,7 @@ Direct estimators are defined as those that rely only on the samples within the 
 
 }
 
-\caption[The mean as a direct estimator]{The mean as a direct estimator in the seafoam green eco-subsection. This estimator only relies on sampled areas (hexagons) within the eco-subsection. This estimator does not take into account whether the sampled areas are forested (green) or non-forested (beige) areas. This estimator does not use a model to produce estimates and hence uses the y variable collected by FIA foresters to produce the needed estimate, as shown inside the hexagons.}\label{fig:mean-diagram}
+\caption[The mean as a direct estimator]{The mean as a direct estimator in the seafoam green eco-subsection. This estimator only relies on sampled areas (hexagons) within the eco-subsection. This estimator does not take into account whether the sampled areas are forested (green) or non-forested (beige) areas. This estimator does not use a model to produce estimates and hence uses the \textit{y} variable collected by FIA foresters to produce the needed estimate, as shown inside the hexagons.}\label{fig:mean-diagram}
 \end{figure}
 \begin{figure}
 
@@ -256,7 +256,7 @@ Direct estimators are defined as those that rely only on the samples within the 
 
 }
 
-\caption[The post-stratified direct estimator]{The post-stratified direct estimator in the seafoam green eco-subsection. This estimator only relies on sampled areas (hexagons) within the eco-subsection. This estimator takes into account whether the sampled areas are forested (green) or non-forested (beige) areas. It then weights our estimate based on the true population's proportion of forested area in the eco-subsection. This estimator does not use a model to produce estimates and hence uses the y variable collected by FIA foresters to produce the needed estimate, as shown inside the hexagons.}\label{fig:ps-diagram}
+\caption[The post-stratified direct estimator]{The post-stratified direct estimator in the seafoam green eco-subsection. This estimator only relies on sampled areas (hexagons) within the eco-subsection. This estimator takes into account whether the sampled areas are forested (green) or non-forested (beige) areas. It then weights our estimate based on the true population's proportion of forested area in the eco-subsection. This estimator does not use a model to produce estimates and hence uses the \textit{y} variable collected by FIA foresters to produce the needed estimate, as shown inside the hexagons.}\label{fig:ps-diagram}
 \end{figure}
 The second kind of estimator, indirect estimators with implicit models, rely on data outside of the area of interest to produce their estimate and can rely on auxiliary data, but implement a model implicitly. With implicit, model-based, indirect estimators we can use information (or ``borrow strength'') from nearby small areas to help improve our estimate (i.e.~reduce variance) in our area of interest through implicit use of a model. These indirect estimators are quite a bit more complicated than direct estimators due to the fact that they borrow strength from the variable of interest across small areas, however, they often significantly reduce variance in estimates due to the added information from other sub-populations. According to Rao (2014), while indirect estimators with implicit models reduce variance, they are often design biased due to the inability to specify between-area variation. This is a large cost of implementing implicit, model-based, indirect estimators. Further, these estimators do not reduce variance as significantly as explicit model-based estimators. Thus, we will not implement indirect estimators with implicit models in this thesis.
 
@@ -625,9 +625,9 @@ Depending on the functional form of the densities we must integrate to obtain ou
 
 This chapter addresses the performance of the six estimators fit in this thesis: the sample mean, the post-stratified estimator, the unit-level EBLUP, the area-level EBLUP, the unit-level hierarchical Bayesian estimator, and the area-level hierarchical Bayesian estimator.
 
-We used the R statistical software to compute our results (R Core Team, 2020). The sample mean was computed using the \emph{tidyverse} (Wickham et al., 2019). The post-stratified estimates were computed using \emph{mase} (McConville, Tang, Zhu, Cheung, \& Li, 2018). The frequentist EBLUP estimates were computed using \emph{sae} (Molina \& Marhuenda, 2015). The hierarchical Bayesian estimates were computed using \emph{hbsae} (Boonstra, 2012). Our data spans the entire Interior West, however we were forced to exclude a few eco-provinces. Namely two eco-provinces with a very small number of eco-subsections which caused errors in producing the unit-level hierarchical Bayesian estimates and three eco-provinces which caused errors in producing the area-level hierarchical Bayesian estimates. While this is disappointing, we still were able to fit these estimators to much data.
+We used the R statistical software to compute our results (R Core Team, 2020). The sample mean was computed using the \emph{tidyverse} (Wickham et al., 2019). The post-stratified estimates were computed using \emph{mase} (McConville, Tang, Zhu, Cheung, \& Li, 2018). The frequentist EBLUP estimates were computed using \emph{sae} (Molina \& Marhuenda, 2015). The hierarchical Bayesian estimates were computed using \emph{hbsae} (Boonstra, 2012). Our data spans the entire Interior West, however we were forced to exclude a few eco-provinces. Namely two eco-provinces with a very small number of eco-subsections which caused errors in producing the unit-level hierarchical Bayesian estimates and eco-subsections with either none or very close to no sampled areas with non-zero values for our variables of interest. While this is disappointing, we still were able to fit these estimators to the great majority of our data.
 
-This thesis uses all six of these estimators to produce estimates for basal area (square-foot), tree count per acre, above-ground biomass (lbs), and net volume (\(\text{ft}^3\)). The EBLUP and hierarchical Bayesian estimators use one explanatory variable, total canopy cover, to produce estimates. Our estimation occurs at the eco-subsection level, and thus we have 7,128 estimates produced (six estimators, four response variables, and 297 eco-subsections).
+This thesis uses all six of these estimators to produce estimates for basal area (square-foot), tree count per acre, above-ground biomass (lbs), and net volume (\(\text{ft}^3\)). The EBLUP and hierarchical Bayesian estimators use one explanatory variable, total canopy cover, to produce estimates. Our estimation occurs at the eco-subsection level, and thus we have 10,176 estimates produced (six estimators, four response variables, and 424 eco-subsections).
 
 We are generally concerned with producing estimates that have both low variance and low bias. So, this chapter primarily aims to answers questions regarding these two quantities. In order to do so, we will summarize our findings both globally and by briefly examining a subset of our results in the Northern Rocky Forest. This subset examination allows us to dig in to results without much aggregation or overwhelming plots due to the large amount of results we have. We explore both metrics and visualizations of variance and bias across the interior west in order to deeply understand the performance of our estimators.
 
@@ -653,10 +653,10 @@ While Figure \ref{fig:cov-violin} gives us a good sense of the distribution, we 
 \toprule
 Estimator & Count & Proportion\\
 \midrule
-NA & 3 & 1\\
-Unit EBLUP & 103 & 1\\
-Area HB & 81 & 1\\
-Unit HB & 289 & 1\\
+Sample Mean & 3 & 0.002\\
+Unit EBLUP & 103 & 0.061\\
+Area HB & 81 & 0.048\\
+Unit HB & 289 & 0.170\\
 \bottomrule
 \end{longtable}
 From Figure \ref{fig:cov-violin}, it is clear that the distribution of coefficient of variation for the area-level hierarchical Bayesian model is much lower than the others with a value of 0.055. When we compare this value to the post-stratification median coefficient of variation (0.158) and the area-level EBLUP median coefficient of variation (0.125) we see an extremely large increase in variation in each case. Examining the 25\%, 50\%, and 75\% quantile of these estimator's coefficient of variation continues to show the superiority of the area-level hierarchical Bayesian estimator:
@@ -803,7 +803,7 @@ FIA. (2020). Forest inventory and analysis national program. \emph{What is FIA?}
 Homer, C. (2015, November). Completion of the 2011 national land cover database for the conterminous united states -- representing a decade of land cover change information. \emph{EPA}. Environmental Protection Agency. Retrieved from \url{https://cfpub.epa.gov/si/si_public_record_report.cfm?Lab=NERL\&dirEntryId=309950}
 
 \leavevmode\hypertarget{ref-mcconville2020}{}%
-McConville, K. S., Moisen, G. G., \& Frescino, T. S. (2020). A tutorial on model-assisted estimation with application to forest inventory. \emph{Forests}, \emph{11}(2), 244.
+McConville, K. S., Moisen, G. G., \& Frescino, T. S. (2020). A tutorial on model-assisted estimation with application to forest inventory. \emph{Forests}, \emph{11}(2).
 
 \leavevmode\hypertarget{ref-mase}{}%
 McConville, K., Tang, B., Zhu, G., Cheung, S., \& Li, S. (2018). \emph{Mase: Model-assisted survey estimation}. Retrieved from \url{https://cran.r-project.org/package=mase}
@@ -812,7 +812,7 @@ McConville, K., Tang, B., Zhu, G., Cheung, S., \& Li, S. (2018). \emph{Mase: Mod
 Molina, I., \& Marhuenda, Y. (2015). sae: An R package for small area estimation. \emph{The R Journal}, \emph{7}(1), 81--98. Retrieved from \url{https://journal.r-project.org/archive/2015/RJ-2015-007/RJ-2015-007.pdf}
 
 \leavevmode\hypertarget{ref-rao2014}{}%
-Rao, J. N. (2014). Small-area estimation. \emph{Wiley StatsRef: Statistics Reference Online}, 1--8.
+Rao, J. N. (2014). Small-area estimation. \emph{Wiley StatsRef: Statistics Reference Online}.
 
 \leavevmode\hypertarget{ref-r-software}{}%
 R Core Team. (2020). \emph{R: A language and environment for statistical computing}. Vienna, Austria: R Foundation for Statistical Computing. Retrieved from \url{https://www.R-project.org/}
