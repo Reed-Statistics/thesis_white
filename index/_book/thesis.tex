@@ -737,47 +737,345 @@ And here's some other random info: the first paragraph after a chapter title or 
 \hypertarget{the-first-appendix}{%
 \chapter{The First Appendix}\label{the-first-appendix}}
 
-This first appendix includes all of the R chunks of code that were hidden throughout the document (using the \texttt{include\ =\ FALSE} chunk tag) to help with readibility and/or setup.
+This appendix includes the code used to create the estimates used in this thesis. Notably, we include both the helper functions created to run the analyses and the implementation of these helper functions.
 
-\textbf{In the main Rmd file}
+\hypertarget{helper-functions}{%
+\section{Helper Functions}\label{helper-functions}}
+
+\hypertarget{the-sample-mean}{%
+\subsection{The Sample Mean}\label{the-sample-mean}}
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# This chunk ensures that the thesisdown package is}
-\CommentTok{# installed and loaded. This thesisdown package includes}
-\CommentTok{# the template files for the thesis.}
-\ControlFlowTok{if}\NormalTok{ (}\OperatorTok{!}\KeywordTok{require}\NormalTok{(remotes)) \{}
-  \ControlFlowTok{if}\NormalTok{ (params}\OperatorTok{$}\StringTok{`}\DataTypeTok{Install needed packages for \{thesisdown\}}\StringTok{`}\NormalTok{) \{}
-    \KeywordTok{install.packages}\NormalTok{(}\StringTok{"remotes"}\NormalTok{, }\DataTypeTok{repos =} \StringTok{"https://cran.rstudio.com"}\NormalTok{)}
-\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
-    \KeywordTok{stop}\NormalTok{(}
-      \KeywordTok{paste}\NormalTok{(}\StringTok{'You need to run install.packages("remotes")",}
-\StringTok{            "first in the Console.'}\NormalTok{)}
-\NormalTok{    )}
-\NormalTok{  \}}
+\NormalTok{direct_estimate <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(data, response, small_area) \{}
+  \CommentTok{# Load packages}
+  \KeywordTok{library}\NormalTok{(sae)}
+  
+  \CommentTok{# Create dataframe}
+\NormalTok{  dat <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}
+    \DataTypeTok{y =}\NormalTok{ data[[response]],}
+    \DataTypeTok{small_area =}\NormalTok{ data[[small_area]]}
+\NormalTok{  )}
+  
+  \CommentTok{# Compute estimate}
+\NormalTok{  sae}\OperatorTok{::}\KeywordTok{direct}\NormalTok{(}\DataTypeTok{y =}\NormalTok{ dat}\OperatorTok{$}\NormalTok{y,}
+              \DataTypeTok{dom =}\NormalTok{ dat}\OperatorTok{$}\NormalTok{small_area,}
+              \DataTypeTok{replace =} \OtherTok{TRUE}\NormalTok{)}
 \NormalTok{\}}
-\ControlFlowTok{if}\NormalTok{ (}\OperatorTok{!}\KeywordTok{require}\NormalTok{(thesisdown)) \{}
-  \ControlFlowTok{if}\NormalTok{ (params}\OperatorTok{$}\StringTok{`}\DataTypeTok{Install needed packages for \{thesisdown\}}\StringTok{`}\NormalTok{) \{}
-\NormalTok{    remotes}\OperatorTok{::}\KeywordTok{install_github}\NormalTok{(}\StringTok{"ismayc/thesisdown"}\NormalTok{)}
-\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
-    \KeywordTok{stop}\NormalTok{(}
-      \KeywordTok{paste}\NormalTok{(}
-        \StringTok{"You need to run"}\NormalTok{,}
-        \StringTok{'remotes::install_github("ismayc/thesisdown")'}\NormalTok{,}
-        \StringTok{"first in the Console."}
-\NormalTok{      )}
-\NormalTok{    )}
-\NormalTok{  \}}
-\NormalTok{\}}
-\KeywordTok{library}\NormalTok{(thesisdown)}
-\CommentTok{# Set how wide the R output will go}
-\KeywordTok{options}\NormalTok{(}\DataTypeTok{width =} \DecValTok{70}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
-\textbf{In Chapter \ref{ref-labels}:}
+\hypertarget{post-stratification}{%
+\subsection{Post-Stratification}\label{post-stratification}}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{postStrat2_bio <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(data, strata) \{}
+\NormalTok{  est <-}\StringTok{ }\NormalTok{mase}\OperatorTok{::}\KeywordTok{postStrat}\NormalTok{(}\DataTypeTok{y =}\NormalTok{ data[[}\StringTok{"BIOLIVE_TPA"}\NormalTok{]],}
+                  \DataTypeTok{x_sample =}\NormalTok{ data[[}\StringTok{"FIAstrat"}\NormalTok{]],}
+                  \DataTypeTok{x_pop =}\NormalTok{ strata,}
+                  \DataTypeTok{data_type =} \StringTok{"totals"}\NormalTok{,}
+                  \DataTypeTok{var_est =}\NormalTok{ T)}
+  \KeywordTok{return}\NormalTok{(}\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{ps_est =}\NormalTok{ est}\OperatorTok{$}\NormalTok{pop_mean, }\DataTypeTok{sd =} \KeywordTok{sqrt}\NormalTok{(est}\OperatorTok{$}\NormalTok{pop_mean_var)))}
+\NormalTok{\}}
+\NormalTok{postStrat2_ba <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(data, strata) \{}
+\NormalTok{  est <-}\StringTok{ }\NormalTok{mase}\OperatorTok{::}\KeywordTok{postStrat}\NormalTok{(}\DataTypeTok{y =}\NormalTok{ data[[}\StringTok{"BALIVE_TPA"}\NormalTok{]],}
+                  \DataTypeTok{x_sample =}\NormalTok{ data[[}\StringTok{"FIAstrat"}\NormalTok{]],}
+                  \DataTypeTok{x_pop =}\NormalTok{ strata,}
+                  \DataTypeTok{data_type =} \StringTok{"totals"}\NormalTok{,}
+                  \DataTypeTok{var_est =}\NormalTok{ T)}
+  \KeywordTok{return}\NormalTok{(}\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{ps_est =}\NormalTok{ est}\OperatorTok{$}\NormalTok{pop_mean, }\DataTypeTok{sd =} \KeywordTok{sqrt}\NormalTok{(est}\OperatorTok{$}\NormalTok{pop_mean_var)))}
+\NormalTok{\}}
 
-\hypertarget{the-second-appendix-for-fun}{%
-\chapter{The Second Appendix, for Fun}\label{the-second-appendix-for-fun}}
+\NormalTok{postStrat2_voln <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(data, strata) \{}
+\NormalTok{  est <-}\StringTok{ }\NormalTok{mase}\OperatorTok{::}\KeywordTok{postStrat}\NormalTok{(}\DataTypeTok{y =}\NormalTok{ data[[}\StringTok{"VOLNLIVE_TPA"}\NormalTok{]],}
+                  \DataTypeTok{x_sample =}\NormalTok{ data[[}\StringTok{"FIAstrat"}\NormalTok{]],}
+                  \DataTypeTok{x_pop =}\NormalTok{ strata,}
+                  \DataTypeTok{data_type =} \StringTok{"totals"}\NormalTok{,}
+                  \DataTypeTok{var_est =}\NormalTok{ T)}
+  \KeywordTok{return}\NormalTok{(}\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{ps_est =}\NormalTok{ est}\OperatorTok{$}\NormalTok{pop_mean, }\DataTypeTok{sd =} \KeywordTok{sqrt}\NormalTok{(est}\OperatorTok{$}\NormalTok{pop_mean_var)))}
+\NormalTok{\}}
 
+\NormalTok{postStrat2_cnt <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(data, strata) \{}
+\NormalTok{  est <-}\StringTok{ }\NormalTok{mase}\OperatorTok{::}\KeywordTok{postStrat}\NormalTok{(}\DataTypeTok{y =}\NormalTok{ data[[}\StringTok{"CNTLIVE_TPA"}\NormalTok{]],}
+                  \DataTypeTok{x_sample =}\NormalTok{ data[[}\StringTok{"FIAstrat"}\NormalTok{]],}
+                  \DataTypeTok{x_pop =}\NormalTok{ strata,}
+                  \DataTypeTok{data_type =} \StringTok{"totals"}\NormalTok{,}
+                  \DataTypeTok{var_est =}\NormalTok{ T)}
+  \KeywordTok{return}\NormalTok{(}\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{ps_est =}\NormalTok{ est}\OperatorTok{$}\NormalTok{pop_mean, }\DataTypeTok{sd =} \KeywordTok{sqrt}\NormalTok{(est}\OperatorTok{$}\NormalTok{pop_mean_var)))}
+\NormalTok{\}}
+
+\NormalTok{postStrat2_x <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(data, strata) \{}
+\NormalTok{  est <-}\StringTok{ }\NormalTok{mase}\OperatorTok{::}\KeywordTok{postStrat}\NormalTok{(}\DataTypeTok{y =}\NormalTok{ data[[}\StringTok{"nlcd11"}\NormalTok{]],}
+                  \DataTypeTok{x_sample =}\NormalTok{ data[[}\StringTok{"FIAstrat"}\NormalTok{]],}
+                  \DataTypeTok{x_pop =}\NormalTok{ strata,}
+                  \DataTypeTok{data_type =} \StringTok{"totals"}\NormalTok{,}
+                  \DataTypeTok{var_est =}\NormalTok{ T)}
+  \KeywordTok{return}\NormalTok{(}\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{ps_est_x =}\NormalTok{ est}\OperatorTok{$}\NormalTok{pop_mean))}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+\hypertarget{hierarchical-bayesian-unit-level}{%
+\subsection{Hierarchical Bayesian Unit-Level}\label{hierarchical-bayesian-unit-level}}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hb_unit <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(data, formula, small_area, pop_data) \{}
+  \CommentTok{# Load packages}
+  \KeywordTok{library}\NormalTok{(tidyverse)}
+  \KeywordTok{library}\NormalTok{(hbsae)}
+  
+  \CommentTok{# Create model frame}
+\NormalTok{  model_frame <-}\StringTok{ }\KeywordTok{model.frame}\NormalTok{(formula, data) }\OperatorTok{%>%}
+\StringTok{    }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{small_area =}\NormalTok{ data[[small_area]])}
+  \KeywordTok{colnames}\NormalTok{(model_frame) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"y"}\NormalTok{, }\StringTok{"x"}\NormalTok{, }\StringTok{"small_area"}\NormalTok{)}
+  
+  \CommentTok{# Area population sizes}
+\NormalTok{  pop_size <-}\StringTok{ }\NormalTok{pop_data }\OperatorTok{%>%}
+\StringTok{    }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{filter}\NormalTok{(zoneid }\OperatorTok{%in%}\StringTok{ }\NormalTok{model_frame}\OperatorTok{$}\NormalTok{small_area) }\OperatorTok{%>%}
+\StringTok{    }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{select}\NormalTok{(zoneid, sum) }\OperatorTok{%>%}
+\StringTok{    }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{rename}\NormalTok{(}\DataTypeTok{pop_size =}\NormalTok{ sum) }\OperatorTok{%>%}
+\StringTok{    }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{select}\NormalTok{(pop_size)}
+  
+  \CommentTok{# Create population means matrix}
+\NormalTok{  pop_means <-}\StringTok{ }\NormalTok{pop_data }\OperatorTok{%>%}
+\StringTok{    }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{filter}\NormalTok{(zoneid }\OperatorTok{%in%}\StringTok{ }\NormalTok{model_frame}\OperatorTok{$}\NormalTok{small_area) }\OperatorTok{%>%}
+\StringTok{    }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{select}\NormalTok{(zoneid, mean) }\OperatorTok{%>%}
+\StringTok{    }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{rename}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ mean) }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{column_to_rownames}\NormalTok{(}\StringTok{"zoneid"}\NormalTok{)}
+  
+  \CommentTok{# Create lambda}
+\NormalTok{  anova <-}\StringTok{ }\KeywordTok{aov}\NormalTok{(y }\OperatorTok{~}\StringTok{ }\NormalTok{small_area, }\DataTypeTok{data =}\NormalTok{ model_frame)}
+\NormalTok{  l <-}\StringTok{ }\KeywordTok{summary}\NormalTok{(anova)[[}\DecValTok{1}\NormalTok{]][}\StringTok{"small_area"}\NormalTok{, }\StringTok{"F value"}\NormalTok{]}
+  
+  \CommentTok{# Fit the model}
+\NormalTok{  mod <-}\StringTok{ }\KeywordTok{fSAE.Unit}\NormalTok{(}
+    \DataTypeTok{y =} \KeywordTok{model.frame}\NormalTok{(formula, }\DataTypeTok{data =}\NormalTok{ data)[, }\DecValTok{1}\NormalTok{],}
+    \DataTypeTok{X =} \KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{X =} \KeywordTok{model.frame}\NormalTok{(formula, }\DataTypeTok{data =}\NormalTok{ data)[,}\OperatorTok{-}\DecValTok{1}\NormalTok{]),}
+    \DataTypeTok{area =}\NormalTok{ data[[small_area]],}
+    \DataTypeTok{Narea =}\NormalTok{ pop_size}\OperatorTok{$}\NormalTok{pop_size,}
+    \DataTypeTok{Xpop =}\NormalTok{ pop_means,}
+    \DataTypeTok{fpc =} \OtherTok{TRUE}\NormalTok{,}
+    \DataTypeTok{lambda0 =}\NormalTok{ l,}
+    \DataTypeTok{silent =}\NormalTok{ T}
+\NormalTok{  )}
+
+  \CommentTok{# Calculate CoV}
+\NormalTok{  mean_y <-}\StringTok{ }\NormalTok{model_frame }\OperatorTok{%>%}
+\StringTok{    }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{group_by}\NormalTok{(small_area) }\OperatorTok{%>%}
+\StringTok{    }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{mean_y =} \KeywordTok{mean}\NormalTok{(y))}
+\NormalTok{  CoV <-}\StringTok{ }\NormalTok{hbsae}\OperatorTok{::}\KeywordTok{SE}\NormalTok{(mod) }\OperatorTok{/}\StringTok{ }\NormalTok{mean_y}\OperatorTok{$}\NormalTok{mean_y}
+
+  \CommentTok{## Add to model object}
+\NormalTok{  mod}\OperatorTok{$}\NormalTok{CoV <-}\StringTok{ }\NormalTok{CoV}
+
+  \CommentTok{# Print model}
+\NormalTok{  mod}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+\hypertarget{hierarchical-bayesian-area-level}{%
+\subsection{Hierarchical Bayesian Area-Level}\label{hierarchical-bayesian-area-level}}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hb_area <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(data, formula, small_area, pop_data) \{}
+  \CommentTok{# Load packages}
+  \KeywordTok{library}\NormalTok{(tidyverse)}
+  \KeywordTok{library}\NormalTok{(hbsae)}
+  
+  \CommentTok{# Create unnamed model frame (to call correct y var in a filter)}
+\NormalTok{  mf <-}\StringTok{ }\KeywordTok{model.frame}\NormalTok{(formula, data)}
+  
+  \CommentTok{# Create model frame}
+\NormalTok{  model_frame <-}\StringTok{ }\KeywordTok{model.frame}\NormalTok{(formula, data) }\OperatorTok{%>%}
+\StringTok{    }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{small_area =}\NormalTok{ data[[small_area]])}
+  \KeywordTok{colnames}\NormalTok{(model_frame) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"y"}\NormalTok{, }\StringTok{"x"}\NormalTok{, }\StringTok{"small_area"}\NormalTok{)}
+  
+  \CommentTok{# Direct X}
+\NormalTok{  X <-}\StringTok{ }\NormalTok{pop_data }\OperatorTok{%>%}
+\StringTok{    }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{filter}\NormalTok{(zoneid }\OperatorTok{%in%}\StringTok{ }\NormalTok{model_frame}\OperatorTok{$}\NormalTok{small_area) }\OperatorTok{%>%}
+\StringTok{    }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{select}\NormalTok{(zoneid, mean) }\OperatorTok{%>%}
+\StringTok{    }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{rename}\NormalTok{(}\DataTypeTok{mean_x =}\NormalTok{ mean,}
+                  \DataTypeTok{small_area =}\NormalTok{ zoneid) }\OperatorTok{%>%}
+\StringTok{    }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{arrange}\NormalTok{(small_area)}
+
+  \CommentTok{# Compute direct estimate}
+\NormalTok{  mean <-}\StringTok{ }\KeywordTok{direct_estimate}\NormalTok{(model_frame, }\StringTok{"y"}\NormalTok{, }\StringTok{"small_area"}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{    }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{var =}\NormalTok{ SD}\OperatorTok{^}\DecValTok{2}\NormalTok{)}
+  
+\NormalTok{  dir <-}\StringTok{ }\NormalTok{ps_dat }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{filter}\NormalTok{(response }\OperatorTok{%in%}\StringTok{ }\KeywordTok{colnames}\NormalTok{(mf)[}\DecValTok{1}\NormalTok{],}
+\NormalTok{           province }\OperatorTok{%in%}\StringTok{ }\KeywordTok{unique}\NormalTok{(data}\OperatorTok{$}\NormalTok{province)) }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{arrange}\NormalTok{(subsection)}
+  
+  \CommentTok{# Create lambda}
+\NormalTok{  anova <-}\StringTok{ }\KeywordTok{aov}\NormalTok{(y }\OperatorTok{~}\StringTok{ }\NormalTok{small_area, }\DataTypeTok{data =}\NormalTok{ model_frame)}
+\NormalTok{  l <-}\StringTok{ }\KeywordTok{summary}\NormalTok{(anova)[[}\DecValTok{1}\NormalTok{]][}\StringTok{"small_area"}\NormalTok{, }\StringTok{"F value"}\NormalTok{]}
+
+  \CommentTok{# Fit the model}
+\NormalTok{  mod <-}\StringTok{ }\KeywordTok{fSAE.Area}\NormalTok{(}
+    \DataTypeTok{est.init =}\NormalTok{ dir}\OperatorTok{$}\NormalTok{est,}
+    \DataTypeTok{var.init =}\NormalTok{ dir}\OperatorTok{$}\NormalTok{var,}
+    \DataTypeTok{X =}\NormalTok{ X }\OperatorTok{%>%}\StringTok{ }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{select}\NormalTok{(mean_x),}
+    \DataTypeTok{lambda0 =}\NormalTok{ l}
+\NormalTok{  )}
+
+  \CommentTok{# Calculate CoV}
+\NormalTok{   CoV <-}\StringTok{ }\NormalTok{hbsae}\OperatorTok{::}\KeywordTok{SE}\NormalTok{(mod) }\OperatorTok{/}\StringTok{ }\NormalTok{mean}\OperatorTok{$}\NormalTok{Direct}
+\NormalTok{   mod}\OperatorTok{$}\NormalTok{CoV <-}\StringTok{ }\NormalTok{CoV}
+
+  \CommentTok{# Print model}
+\NormalTok{  mod}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+\hypertarget{frequentist-unit-level}{%
+\subsection{Frequentist Unit-Level}\label{frequentist-unit-level}}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{freq_unit <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(data, formula, small_area, pop_data) \{}
+  \CommentTok{# Load packages}
+  \KeywordTok{library}\NormalTok{(tidyverse)}
+  \KeywordTok{library}\NormalTok{(sae)}
+  
+  \CommentTok{# Create model frame}
+\NormalTok{  model_frame <-}\StringTok{ }\KeywordTok{model.frame}\NormalTok{(formula, data) }\OperatorTok{%>%}
+\StringTok{    }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{small_area =}\NormalTok{ data[[small_area]])}
+  \KeywordTok{colnames}\NormalTok{(model_frame) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"y"}\NormalTok{, }\StringTok{"x"}\NormalTok{, }\StringTok{"small_area"}\NormalTok{)}
+  
+  \CommentTok{# Area population sizes}
+\NormalTok{  pop_size <-}\StringTok{ }\NormalTok{pop_data }\OperatorTok{%>%}
+\StringTok{    }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{filter}\NormalTok{(zoneid }\OperatorTok{%in%}\StringTok{ }\NormalTok{model_frame}\OperatorTok{$}\NormalTok{small_area) }\OperatorTok{%>%}
+\StringTok{    }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{select}\NormalTok{(zoneid, sum) }\OperatorTok{%>%}
+\StringTok{    }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{rename}\NormalTok{(}\DataTypeTok{pop_size =}\NormalTok{ sum,}
+                  \DataTypeTok{small_area =}\NormalTok{ zoneid)}
+  
+  \CommentTok{# Create population means matrix}
+\NormalTok{  meanxpop <-}\StringTok{ }\NormalTok{pop_data }\OperatorTok{%>%}
+\StringTok{    }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{filter}\NormalTok{(zoneid }\OperatorTok{%in%}\StringTok{ }\NormalTok{model_frame}\OperatorTok{$}\NormalTok{small_area) }\OperatorTok{%>%}
+\StringTok{    }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{select}\NormalTok{(zoneid, mean) }\OperatorTok{%>%}
+\StringTok{    }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{rename}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ mean,}
+                  \DataTypeTok{small_area =}\NormalTok{ zoneid)}
+  
+  \CommentTok{# Fit the model}
+\NormalTok{  mod <-}\StringTok{ }\KeywordTok{eblupBHF}\NormalTok{(}
+    \DataTypeTok{formula =}\NormalTok{ model_frame}\OperatorTok{$}\NormalTok{y }\OperatorTok{~}\StringTok{ }\NormalTok{model_frame}\OperatorTok{$}\NormalTok{x,}
+    \DataTypeTok{dom =}\NormalTok{ model_frame}\OperatorTok{$}\NormalTok{small_area,}
+    \DataTypeTok{meanxpop =}\NormalTok{ meanxpop,}
+    \DataTypeTok{popnsize =}\NormalTok{ pop_size}
+\NormalTok{  )}
+\NormalTok{  mod}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+\hypertarget{frequentist-area-level}{%
+\subsection{Frequentist Area-Level}\label{frequentist-area-level}}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{freq_area <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(data, formula, small_area, pop_data) \{}
+  \CommentTok{# Load packages}
+  \KeywordTok{library}\NormalTok{(tidyverse)}
+  \KeywordTok{library}\NormalTok{(sae)}
+  
+  \CommentTok{# Create model frame}
+\NormalTok{  model_frame <-}\StringTok{ }\KeywordTok{model.frame}\NormalTok{(formula, data) }\OperatorTok{%>%}
+\StringTok{    }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{small_area =}\NormalTok{ data[[small_area]])}
+  \KeywordTok{colnames}\NormalTok{(model_frame) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"y"}\NormalTok{, }\StringTok{"x"}\NormalTok{, }\StringTok{"small_area"}\NormalTok{)}
+\NormalTok{  model_frame}
+  
+\NormalTok{  mf <-}\StringTok{ }\KeywordTok{model.frame}\NormalTok{(formula, data)}
+  
+\NormalTok{  dir <-}\StringTok{ }\NormalTok{ps_dat }\OperatorTok{%>%}\StringTok{ }\CommentTok{# need to have the ps_dat object in global env...}
+\StringTok{    }\KeywordTok{filter}\NormalTok{(response }\OperatorTok{%in%}\StringTok{ }\KeywordTok{colnames}\NormalTok{(mf)[}\DecValTok{1}\NormalTok{],}
+\NormalTok{           province }\OperatorTok{%in%}\StringTok{ }\KeywordTok{unique}\NormalTok{(data}\OperatorTok{$}\NormalTok{province)) }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{arrange}\NormalTok{(subsection)}
+  
+  \CommentTok{# Direct X}
+\NormalTok{  X <-}\StringTok{ }\NormalTok{pop_data }\OperatorTok{%>%}
+\StringTok{    }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{filter}\NormalTok{(zoneid }\OperatorTok{%in%}\StringTok{ }\NormalTok{model_frame}\OperatorTok{$}\NormalTok{small_area) }\OperatorTok{%>%}
+\StringTok{    }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{select}\NormalTok{(zoneid, mean) }\OperatorTok{%>%}
+\StringTok{    }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{rename}\NormalTok{(}\DataTypeTok{mean_x =}\NormalTok{ mean,}
+                  \DataTypeTok{small_area =}\NormalTok{ zoneid) }\OperatorTok{%>%}
+\StringTok{    }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{arrange}\NormalTok{(small_area)}
+  
+  \CommentTok{# Join pop and dir}
+\NormalTok{  dat <-}\StringTok{ }\NormalTok{dir }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{left_join}\NormalTok{(X, }\DataTypeTok{by =} \KeywordTok{c}\NormalTok{(}\StringTok{"subsection"}\NormalTok{ =}\StringTok{ "small_area"}\NormalTok{))}
+
+  \CommentTok{# Fit the model}
+\NormalTok{  mod <-}\StringTok{ }\NormalTok{sae}\OperatorTok{::}\KeywordTok{mseFH}\NormalTok{(}\DataTypeTok{formula =}\NormalTok{ dat}\OperatorTok{$}\NormalTok{est }\OperatorTok{~}\StringTok{ }\NormalTok{dat}\OperatorTok{$}\NormalTok{mean_x,}
+                      \DataTypeTok{vardir =}\NormalTok{ dat}\OperatorTok{$}\NormalTok{var)}
+\NormalTok{  mod}
+  
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+\hypertarget{coeffiicent-of-variation-functions}{%
+\subsection{Coeffiicent of Variation Functions}\label{coeffiicent-of-variation-functions}}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hb_CoV <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(data) \{}
+  \CommentTok{# Load packages}
+  \KeywordTok{library}\NormalTok{(tidyverse)}
+  \KeywordTok{library}\NormalTok{(hbsae)}
+  
+  \CommentTok{# Grab CoV}
+\NormalTok{  data}\OperatorTok{$}\NormalTok{CoV}
+\NormalTok{\}}
+
+\NormalTok{freq_unit_CoV <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(data, formula, small_area, pop_data, }\DataTypeTok{B =} \DecValTok{100}\NormalTok{) \{}
+  \CommentTok{# Load packages}
+  \KeywordTok{library}\NormalTok{(tidyverse)}
+  \KeywordTok{library}\NormalTok{(sae)}
+  
+  \CommentTok{# Create empty items for looping}
+\NormalTok{  boots <-}\StringTok{ }\KeywordTok{list}\NormalTok{()}
+\NormalTok{  fit <-}\StringTok{ }\KeywordTok{list}\NormalTok{()}
+\NormalTok{  mean_df <-}\StringTok{ }\KeywordTok{list}\NormalTok{()}
+\NormalTok{  final <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{()}
+  
+  \CommentTok{# Create model frame}
+\NormalTok{  model_frame <-}\StringTok{ }\KeywordTok{model.frame}\NormalTok{(formula, data) }\OperatorTok{%>%}
+\StringTok{    }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{small_area =}\NormalTok{ data[[small_area]])}
+  \KeywordTok{colnames}\NormalTok{(model_frame) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"y"}\NormalTok{, }\StringTok{"x"}\NormalTok{, }\StringTok{"small_area"}\NormalTok{)}
+  
+  \CommentTok{# Nest by small area}
+\NormalTok{  data_nested <-}\StringTok{ }\NormalTok{model_frame }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{id =}\NormalTok{ small_area) }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{group_by}\NormalTok{(small_area) }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{nest}\NormalTok{()}
+  
+  \CommentTok{# Bootstrap}
+  \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\NormalTok{B)\{}
+    \ControlFlowTok{for}\NormalTok{(j }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(}\KeywordTok{unique}\NormalTok{(model_frame}\OperatorTok{$}\NormalTok{small_area))) \{}
+\NormalTok{      boots[[j]] <-}\StringTok{ }\KeywordTok{sample_n}\NormalTok{(}
+\NormalTok{        data_nested[[}\DecValTok{2}\NormalTok{]][[j]],}
+        \DataTypeTok{size =} \KeywordTok{length}\NormalTok{(data_nested[[}\DecValTok{2}\NormalTok{]][[j]]}\OperatorTok{$}\NormalTok{y),}
+        \DataTypeTok{replace =} \OtherTok{TRUE}
+\NormalTok{      )}
+\NormalTok{      boots_df <-}\StringTok{ }\KeywordTok{bind_rows}\NormalTok{(boots) }
+\NormalTok{    \}}
+    
+\NormalTok{    fit[[i]] <-}\StringTok{ }\KeywordTok{freq_unit}\NormalTok{(boots_df, y }\OperatorTok{~}\StringTok{ }\NormalTok{x, }\StringTok{"id"}\NormalTok{, pop_data)}
+    
+\NormalTok{    mean_df[[i]] <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{fitted =}\NormalTok{ fit[[i]]}\OperatorTok{$}\NormalTok{eblup}\OperatorTok{$}\NormalTok{eblup,}
+                               \DataTypeTok{subsection =}\NormalTok{ fit[[i]]}\OperatorTok{$}\NormalTok{eblup}\OperatorTok{$}\NormalTok{domain)}
+    \ControlFlowTok{if}\NormalTok{ (i }\OperatorTok{%%}\StringTok{ }\DecValTok{50} \OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{) \{}
+      \KeywordTok{print}\NormalTok{(i)}
+\NormalTok{    \}}
+\NormalTok{  \}}
+  
+  \CommentTok{# Create final output}
+\NormalTok{  final <-}\StringTok{ }\KeywordTok{bind_rows}\NormalTok{(mean_df) }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{group_by}\NormalTok{(subsection) }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{summarize}\NormalTok{(}\DataTypeTok{sd =} \KeywordTok{sd}\NormalTok{(fitted, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{))}
+\NormalTok{  mean_y <-}\StringTok{ }\NormalTok{model_frame }\OperatorTok{%>%}
+\StringTok{    }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{group_by}\NormalTok{(small_area) }\OperatorTok{%>%}
+\StringTok{    }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{mean_y =} \KeywordTok{mean}\NormalTok{(y, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{))}
+  
+\NormalTok{  COV <-}\StringTok{ }\NormalTok{final}\OperatorTok{$}\NormalTok{sd }\OperatorTok{/}\StringTok{ }\NormalTok{mean_y}\OperatorTok{$}\NormalTok{mean_y}
+  \KeywordTok{names}\NormalTok{(COV) <-}\StringTok{ }\NormalTok{final}\OperatorTok{$}\NormalTok{subsection}
+  
+\NormalTok{  COV}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
 \backmatter
 
 \hypertarget{references}{%
