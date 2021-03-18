@@ -3,15 +3,19 @@
 `r if(!knitr:::is_latex_output()) '# (APPENDIX) Appendix {-}'` 
 
 
-# The First Appendix
+# Code Appendix
 
-This appendix includes the code used to create the estimates used in this thesis. Notably, we include both the helper functions created to run the analyses and the implementation of these helper functions.
+This appendix includes the code used to create the estimates used in this thesis. We include both the helper functions created to run the analyses and the implementation of these helper functions.
 
 ## Helper Functions
 
 ### The Sample Mean
 
-```{r sample-mean, eval = F}
+```{r include = FALSE}
+knitr::opts_chunk$set(eval = FALSE, message = FALSE, warning = FALSE)
+```
+
+```{r}
 direct_estimate <- function(data, response, small_area) {
   # Load packages
   library(sae)
@@ -31,14 +35,15 @@ direct_estimate <- function(data, response, small_area) {
 
 ### Post-Stratification
 
-```{r post-strat, eval = F}
+```{r}
 postStrat2_bio <- function(data, strata) {
   est <- mase::postStrat(y = data[["BIOLIVE_TPA"]],
                   x_sample = data[["FIAstrat"]],
                   x_pop = strata,
                   data_type = "totals",
                   var_est = T)
-  return(data.frame(ps_est = est$pop_mean, sd = sqrt(est$pop_mean_var)))
+  return(data.frame(ps_est = est$pop_mean,
+                    sd = sqrt(est$pop_mean_var)))
 }
 postStrat2_ba <- function(data, strata) {
   est <- mase::postStrat(y = data[["BALIVE_TPA"]],
@@ -46,7 +51,8 @@ postStrat2_ba <- function(data, strata) {
                   x_pop = strata,
                   data_type = "totals",
                   var_est = T)
-  return(data.frame(ps_est = est$pop_mean, sd = sqrt(est$pop_mean_var)))
+  return(data.frame(ps_est = est$pop_mean,
+                    sd = sqrt(est$pop_mean_var)))
 }
 
 postStrat2_voln <- function(data, strata) {
@@ -55,7 +61,8 @@ postStrat2_voln <- function(data, strata) {
                   x_pop = strata,
                   data_type = "totals",
                   var_est = T)
-  return(data.frame(ps_est = est$pop_mean, sd = sqrt(est$pop_mean_var)))
+  return(data.frame(ps_est = est$pop_mean,
+                    sd = sqrt(est$pop_mean_var)))
 }
 
 postStrat2_cnt <- function(data, strata) {
@@ -64,22 +71,14 @@ postStrat2_cnt <- function(data, strata) {
                   x_pop = strata,
                   data_type = "totals",
                   var_est = T)
-  return(data.frame(ps_est = est$pop_mean, sd = sqrt(est$pop_mean_var)))
-}
-
-postStrat2_x <- function(data, strata) {
-  est <- mase::postStrat(y = data[["nlcd11"]],
-                  x_sample = data[["FIAstrat"]],
-                  x_pop = strata,
-                  data_type = "totals",
-                  var_est = T)
-  return(data.frame(ps_est_x = est$pop_mean))
+  return(data.frame(ps_est = est$pop_mean,
+                    sd = sqrt(est$pop_mean_var)))
 }
 ```
 
 ### Hierarchical Bayesian Unit-Level
 
-```{r, eval = F}
+```{r}
 hb_unit <- function(data, formula, small_area, pop_data) {
   # Load packages
   library(tidyverse)
@@ -136,8 +135,9 @@ hb_unit <- function(data, formula, small_area, pop_data) {
 
 ### Hierarchical Bayesian Area-Level
 
-```{r, eval = F}
-hb_area <- function(data, formula, small_area, pop_data) {
+```{r}
+hb_area <- function(data, formula, small_area,
+                    pop_data, post_strat_data) {
   # Load packages
   library(tidyverse)
   library(hbsae)
@@ -162,7 +162,7 @@ hb_area <- function(data, formula, small_area, pop_data) {
   mean <- direct_estimate(model_frame, "y", "small_area") %>%
     dplyr::mutate(var = SD^2)
   
-  dir <- ps_dat %>%
+  dir <- post_strat_data %>%
     filter(response %in% colnames(mf)[1],
            province %in% unique(data$province)) %>%
     arrange(subsection)
@@ -190,7 +190,7 @@ hb_area <- function(data, formula, small_area, pop_data) {
 
 ### Frequentist Unit-Level
 
-```{r, eval = F}
+```{r}
 freq_unit <- function(data, formula, small_area, pop_data) {
   # Load packages
   library(tidyverse)
@@ -228,8 +228,9 @@ freq_unit <- function(data, formula, small_area, pop_data) {
 
 ### Frequentist Area-Level
 
-```{r, eval = F}
-freq_area <- function(data, formula, small_area, pop_data) {
+```{r}
+freq_area <- function(data, formula, small_area,
+                      pop_data, post_strat_data) {
   # Load packages
   library(tidyverse)
   library(sae)
@@ -242,7 +243,7 @@ freq_area <- function(data, formula, small_area, pop_data) {
   
   mf <- model.frame(formula, data)
   
-  dir <- ps_dat %>% # need to have the ps_dat object in global env...
+  dir <- post_strat_data %>% 
     filter(response %in% colnames(mf)[1],
            province %in% unique(data$province)) %>%
     arrange(subsection)
@@ -269,7 +270,7 @@ freq_area <- function(data, formula, small_area, pop_data) {
 
 ### Coeffiicent of Variation Functions
 
-```{r, eval = F}
+```{r}
 hb_CoV <- function(data) {
   # Load packages
   library(tidyverse)
@@ -279,7 +280,8 @@ hb_CoV <- function(data) {
   data$CoV
 }
 
-freq_unit_CoV <- function(data, formula, small_area, pop_data, B = 100) {
+freq_unit_CoV <- function(data, formula, small_area,
+                          pop_data, B = 100) {
   # Load packages
   library(tidyverse)
   library(sae)
@@ -336,9 +338,512 @@ freq_unit_CoV <- function(data, formula, small_area, pop_data, B = 100) {
 }
 ```
 
+## Fitting Models
+
+### Data Set-up & Preprocessing
+
+```{r, eval=FALSE}
+library(tidyverse)
+library(mase)
+library(hbsae)
+library(sae)
+```
+
+```{r load_data, message = FALSE, warning = FALSE}
+intwest <- read_csv("data/subsets/df.csv")
+tccpop <- read_csv("data/population/tcc_pop.csv")
+strata <- read_csv("data/population/strata.csv")
+```
+
+```{r clean_data, message = FALSE, warning = FALSE}
+# Set-up strata:
+intwest <- intwest %>%
+  mutate(FIAstrat = case_when(
+    FIAstrat == "1" ~ "Sampled-Forest",
+    FIAstrat == "2" ~ "Sampled-Nonforest",
+    FIAstrat == "0" ~ "Sampled-Nonforest",
+    FIAstrat == "3" ~ "Sampled-Nonforest",
+  )) 
+```
+
+```{r}
+# Filter out subsections that cause errors in computation
+no0_subsections <- intwest %>%
+  group_by(subsection) %>%
+  summarize(mean_y = mean(BIOLIVE_TPA),
+            mean_x = mean(nlcd11)) %>%
+  filter(mean_y > 0 & mean_x > 0) %>% 
+  dplyr::select(subsection) %>%
+  pull()
+
+intwest_no0 <- intwest %>%
+  filter(subsection %in% no0_subsections) %>%
+  filter(!(province %in% c("M261", "M334"))) %>% 
+  filter(!(subsection %in% c("342Fi", "331Kj", "342Dh", "341Dc"))) 
+```
+
+```{r}
+# Create list of dataframes
+iw <- split(intwest_no0, f = intwest_no0$province)
+```
+
+### Direct Estimation
+```{r postStrat, message = FALSE}
+strata <- strata %>%
+  filter(zoneid %in% unique(intwest_no0$subsection)) %>%
+  mutate(
+    fnf_no_water = case_when(
+      fnf_no_water == 1 ~ "Sampled-Forest",
+      fnf_no_water == 2 ~ "Sampled-Nonforest"
+    )
+  )
+strata <- strata %>%
+  dplyr::select(-zoneprop)
+
+# split strata into list and drop column split by
+strata_list <- lapply(
+  split(strata, f = strata$zoneid),
+  function(strata) { strata$zoneid <- NULL; strata}
+  )
+
+# split subsections into list
+subsection_list <- split(intwest_no0,
+                         intwest_no0$subsection)
 
 
+post_strat_bio <- map2(.x = subsection_list,
+                       .y = strata_list,
+                       .f = postStrat2_bio)
+post_strat_ba <- map2(.x = subsection_list,
+                      .y = strata_list,
+                      .f = postStrat2_ba)
+post_strat_voln <- map2(.x = subsection_list,
+                        .y = strata_list,
+                        .f = postStrat2_voln)
+post_strat_cnt <- map2(.x = subsection_list,
+                       .y = strata_list,
+                       .f = postStrat2_cnt)
+
+results <- data.frame(
+  ps_est = c(bind_rows(post_strat_bio)$ps_est,
+             bind_rows(post_strat_ba)$ps_est,
+             bind_rows(post_strat_cnt)$ps_est,
+             bind_rows(post_strat_voln)$ps_est),
+  ps_sd = c(bind_rows(post_strat_bio)$sd,
+             bind_rows(post_strat_ba)$sd,
+             bind_rows(post_strat_cnt)$sd,
+             bind_rows(post_strat_voln)$sd),
+  subsection = rep(names(post_strat_bio), 4),
+  response = c(
+    rep("BIOLIVE_TPA", length(post_strat_bio)),
+    rep("BALIVE_TPA", length(post_strat_ba)),
+    rep("CNTLIVE_TPA", length(post_strat_cnt)),
+    rep("VOLNLIVE_TPA", length(post_strat_voln)))
+)
+```
+
+```{r mean}
+dirmean <- list()
+dirmean[1:length(iw)] <- 
+  lapply(iw,
+         direct_estimate,
+         response = "BIOLIVE_TPA", 
+         "subsection")
+dirmean[(length(iw) + 1):(2 * length(iw))] <- 
+  lapply(iw,
+        direct_estimate,
+        response = "BALIVE_TPA",
+        "subsection")
+dirmean[(2*length(iw) + 1):(3*length(iw))] <- 
+  lapply(iw,
+         direct_estimate,
+         response = "CNTLIVE_TPA",
+         "subsection")
+dirmean[(3*length(iw) + 1):(4*length(iw))] <- 
+  lapply(iw,
+         direct_estimate,
+         response = "VOLNLIVE_TPA",
+         "subsection")
+
+dir <- bind_rows(dirmean) %>%
+  dplyr::select(Domain, Direct, CV) %>%
+  mutate(cov_dirmean = CV / 100) %>%
+  rename(est_dirmean = Direct) %>%
+  dplyr::select(-CV) %>%
+  mutate(response = c(
+    rep("BIOLIVE_TPA", length(post_strat_bio)),
+    rep("BALIVE_TPA", length(post_strat_ba)),
+    rep("CNTLIVE_TPA", length(post_strat_cnt)),
+    rep("VOLNLIVE_TPA", length(post_strat_voln))))
+
+results <- results %>%
+  left_join(dir, by = c("subsection" = "Domain",
+                        "response" = "response"))
+```
+
+```{r dataframe-cleanup}
+# Create CoV for ps-estimator
+results <- results %>%
+  mutate(
+    cov_dirps = ps_sd / est_dirmean
+  )
+
+# change names and rearrange 
+results <- results %>%
+  rename(est_dirps = ps_est,
+         sd_dirps = ps_sd) %>%
+  relocate("subsection", "response",
+           "est_dirps", "cov_dirps")
+```
+
+### Model-Based Estimation
+```{r}
+# set up list for area level models
+ps_dat <- results %>%
+  dplyr::select(est_dirps, sd_dirps,
+                subsection, response) %>%
+  dplyr::mutate(var = sd_dirps^2) %>%
+  dplyr::rename(est = est_dirps) %>%
+  dplyr::select(est, var, subsection, response) %>%
+  dplyr::mutate(
+    section = str_remove_all(subsection, "[:lower:]"),
+    province = str_sub(section, end = -2))
+
+ps_l <- split(ps_dat, list(ps_dat$province))
+```
+
+```{r}
+# HB Unit
+set.seed(1)
+bayes_unit <- list()
+bayes_unit[1:length(iw)] <- lapply(
+  iw,
+  hb_unit,
+  formula = BIOLIVE_TPA ~ nlcd11,
+  small_area = "subsection",
+  pop_data = tccpop
+)
+bayes_unit[(length(iw) + 1):(2 * length(iw))] <-
+  lapply(
+    iw,
+    hb_unit,
+    formula = BALIVE_TPA ~ nlcd11,
+    small_area = "subsection",
+    pop_data = tccpop
+  )
+bayes_unit[(2 * length(iw) + 1):(3 * length(iw))] <-
+  lapply(
+    iw,
+    hb_unit,
+    formula = CNTLIVE_TPA ~ nlcd11,
+    small_area = "subsection",
+    pop_data = tccpop
+  )
+bayes_unit[(3 * length(iw) + 1):(4 * length(iw))] <-
+  lapply(
+    iw,
+    hb_unit,
+    formula = VOLNLIVE_TPA ~ nlcd11,
+    small_area = "subsection",
+    pop_data = tccpop
+  )
+
+res_hbu <- data.frame(
+  subsection = names(unlist(lapply(bayes_unit, EST))),
+response = c(
+    rep("BIOLIVE_TPA", length(post_strat_bio)),
+    rep("BALIVE_TPA", length(post_strat_ba)),
+    rep("CNTLIVE_TPA", length(post_strat_cnt)),
+    rep("VOLNLIVE_TPA", length(post_strat_voln))),
+  est_hb_unit = unlist(lapply(bayes_unit, EST)),
+  cov_hb_unit = unlist(lapply(bayes_unit, hb_CoV))
+)
+
+results <- results %>%
+  left_join(res_hbu, by = c("subsection" = "subsection",
+                        "response" = "response"))
+```
+
+```{r}
+# HB Area
+set.seed(1)
+bayes_area <- list()
+bayes_area[1:length(iw)] <-
+  lapply(
+    iw,
+    hb_area,
+    formula = BIOLIVE_TPA ~ nlcd11,
+    small_area = "subsection",
+    pop_data = tccpop,
+    post_strat_data = ps_dat
+  )
+bayes_area[(length(iw) + 1):(2 * length(iw))] <-
+  lapply(
+    iw,
+    hb_area,
+    formula = BALIVE_TPA ~ nlcd11,
+    small_area = "subsection",
+    pop_data = tccpop,
+    post_strat_data = ps_dat
+  )
+bayes_area[(2 * length(iw) + 1):(3 * length(iw))] <-
+  lapply(
+    iw,
+    hb_area,
+    formula = CNTLIVE_TPA ~ nlcd11,
+    small_area = "subsection",
+    pop_data = tccpop,
+    post_strat_data = ps_dat
+  )
+bayes_area[(3 * length(iw) + 1):(4 * length(iw))] <-
+  lapply(
+    iw,
+    hb_area,
+    formula = VOLNLIVE_TPA ~ nlcd11,
+    small_area = "subsection",
+    pop_data = tccpop,
+    post_strat_data = ps_dat
+  )
+
+aranged_df <- intwest_no0 %>%
+  filter(province %in% names(iw)) %>%
+  arrange(province) %>%
+  arrange(subsection)
+hb_area_res <- data.frame(
+  subsection = rep(unique(aranged_df$subsection), 4),
+  est_hb_area = unlist(lapply(bayes_area, EST)),
+  cov_hb_area = unlist(lapply(bayes_area, hb_CoV)),
+  response = c(
+    rep("BIOLIVE_TPA", length(post_strat_bio)),
+    rep("BALIVE_TPA", length(post_strat_ba)),
+    rep("CNTLIVE_TPA", length(post_strat_cnt)),
+    rep("VOLNLIVE_TPA", length(post_strat_voln))
+  )
+)
+
+results <- results %>%
+  left_join(hb_area_res, by = c("subsection" = "subsection",
+                                "response" = "response"))
+```
 
 
+```{r}
+# Freq Unit
+set.seed(1)
+frequnit <- list()
+frequnit[1:length(iw)] <-
+  lapply(iw,
+         freq_unit,
+         formula = BIOLIVE_TPA ~ nlcd11,
+         "subsection",
+         tccpop)
+frequnit[(length(iw) + 1):(2 * length(iw))] <-
+  lapply(iw,
+         freq_unit,
+         formula = BALIVE_TPA ~ nlcd11,
+         "subsection",
+         tccpop)
+frequnit[(2 * length(iw) + 1):(3 * length(iw))] <-
+  lapply(iw, 
+         freq_unit,
+         formula = CNTLIVE_TPA ~ nlcd11,
+         "subsection", 
+         tccpop)
+frequnit[(3 * length(iw) + 1):(4 * length(iw))] <-
+  lapply(iw,
+         freq_unit,
+         formula = VOLNLIVE_TPA ~ nlcd11,
+         "subsection",
+         tccpop)
+
+frequnit_list <- list()
+  for(i in 1:(4 * length(iw))) {
+    frequnit_list[[i]] <- frequnit[[i]]$eblup
+  }
+
+frequnit_df <- frequnit_list %>%
+  bind_rows() %>%
+  mutate(response = c(
+    rep("BIOLIVE_TPA", length(post_strat_bio)),
+    rep("BALIVE_TPA", length(post_strat_ba)),
+    rep("CNTLIVE_TPA", length(post_strat_cnt)),
+    rep("VOLNLIVE_TPA", length(post_strat_voln)))) %>%
+  rename(
+    subsection = domain,
+    est_freq_unit = eblup
+  ) %>%
+  dplyr::select(-sampsize)
+
+# Coef of variation
+frequnitcov <- c()
+frequnitcov <- c(
+  Reduce(c,
+       lapply(iw,
+       freq_unit_CoV,
+       formula = BIOLIVE_TPA ~ nlcd11,
+       small_area = "subsection",
+       pop_data = tccpop,
+       B = 500)),
+  Reduce(c,
+       lapply(iw,
+       freq_unit_CoV,
+       formula = BALIVE_TPA ~ nlcd11,
+       small_area = "subsection",
+       pop_data = tccpop,
+       B = 500)),
+  Reduce(c,
+       lapply(iw,
+       freq_unit_CoV,
+       formula = CNTLIVE_TPA ~ nlcd11,
+       small_area = "subsection",
+       pop_data = tccpop,
+       B = 500)),
+  Reduce(c,
+       lapply(iw,
+       freq_unit_CoV,
+       formula = VOLNLIVE_TPA ~ nlcd11,
+       small_area = "subsection",
+       pop_data = tccpop,
+       B = 500))
+)
+
+frequnitcov_df <- data.frame(
+  cov_freq_unit = frequnitcov,
+  subsection = names(frequnitcov),
+  response = c(
+    rep("BIOLIVE_TPA", length(post_strat_bio)),
+    rep("BALIVE_TPA", length(post_strat_ba)),
+    rep("CNTLIVE_TPA", length(post_strat_cnt)),
+    rep("VOLNLIVE_TPA", length(post_strat_voln))
+  )
+)
+
+frequnit_df <- frequnit_df %>%
+  left_join(frequnitcov_df,
+            by = c("subsection" = "subsection",
+                   "response" = "response"))
+
+results <- results %>%
+  left_join(frequnit_df,
+            by = c("subsection" = "subsection",
+                   "response" = "response"))
+```
 
 
+```{r}
+# Freq Area
+set.seed(1)
+freqarea <- list()
+freqarea[1:length(iw)] <-
+  lapply(
+    iw,
+    freq_area,
+    formula = BIOLIVE_TPA ~ nlcd11,
+    "subsection",
+    tccpop,
+    post_strat_data = ps_dat
+)
+freqarea[(length(iw) + 1):(2 * length(iw))] <- 
+  lapply(
+    iw,
+    freq_area,
+    formula = BALIVE_TPA ~ nlcd11,
+    "subsection",
+    tccpop,
+    post_strat_data = ps_dat
+)
+freqarea[(2 * length(iw) + 1):(3 * length(iw))] <-
+  lapply(
+    iw,
+    freq_area,
+    formula = CNTLIVE_TPA ~ nlcd11,
+    "subsection",
+    tccpop,
+    post_strat_data = ps_dat
+)
+freqarea[(3 * length(iw) + 1):(4 * length(iw))] <-
+  lapply(
+    iw,
+    freq_area,
+    formula = VOLNLIVE_TPA ~ nlcd11,
+    "subsection",
+    tccpop,
+    post_strat_data = ps_dat
+)
+
+freqarea_list <- list()
+for (i in 1:(4 * length(iw))) {
+  freqarea_list[[i]] <- freqarea[[i]]$est$eblup
+}
+freqarea_cov_list <- list()
+for (i in 1:(4 * length(iw))) {
+  freqarea_cov_list[[i]] <- sqrt(freqarea[[i]]$mse)
+}
+
+freq_area_res <- data.frame(
+  subsection = rep(unique(aranged_df$subsection), 4),
+  est_freq_area = unlist(freqarea_list),
+  se_freq_area = unlist(freqarea_cov_list),
+  response = c(
+    rep("BIOLIVE_TPA", length(post_strat_bio)),
+    rep("BALIVE_TPA", length(post_strat_ba)),
+    rep("CNTLIVE_TPA", length(post_strat_cnt)),
+    rep("VOLNLIVE_TPA", length(post_strat_voln))
+  )
+)
+results <- results %>%
+  left_join(freq_area_res,
+            by = c("subsection" = "subsection",
+                   "response" = "response"))
+results <- results %>%
+  mutate(cov_freq_area = se_freq_area / est_dirmean)
+```
+
+### Writing Data Files & Pivoting to Tidy Format
+```{r}
+write.csv(results, 
+          "data/results/final_results.csv")
+saveRDS(results,
+        file = "data/results/final_results.rds")
+```
+
+```{r long_format}
+estimates_long <- results %>%
+  pivot_longer(cols = c("est_hb_unit", "est_hb_area",
+                        "est_freq_unit", "est_freq_area", 
+                        "est_dirmean", "est_dirps"),
+               names_to = "estimator",
+               values_to = "estimate") %>%
+  dplyr::select(-cov_hb_unit, -cov_hb_area,
+                -cov_freq_unit, -cov_freq_area,
+                -cov_dirmean, -cov_dirps) %>%
+  mutate(estimator = stringr::str_sub(estimator, start = 5))
+
+cov_long <- results %>%
+  pivot_longer(cols = c("cov_hb_unit", "cov_hb_area",
+                        "cov_freq_unit", "cov_freq_area",
+                        "cov_dirmean", "cov_dirps"),
+               names_to = "estimator",
+               values_to = "cov") %>%
+  dplyr::select(-est_hb_unit, -est_hb_area,
+                -est_freq_unit, -est_freq_area,
+                -est_dirmean, -est_dirps) %>%
+  mutate(estimator = stringr::str_sub(estimator, start = 5))
+
+final_results_long <- estimates_long %>%
+  full_join(cov_long) %>%
+  mutate(
+    section = str_remove_all(subsection, "[:lower:]"),
+    province = str_sub(section, end = -2)
+  )
+
+final_results_long <- final_results_long %>%
+  dplyr::select(-sd_dirps, -se_freq_area)
+```
+
+```{r}
+write.csv(final_results_long,
+          "data/results/final_results_long.csv")
+saveRDS(final_results_long,
+        file = "data/results/final_results_long.rds")
+```
