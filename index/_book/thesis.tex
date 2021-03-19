@@ -569,15 +569,17 @@ We introduce two implicit model based indirect estimators commonly used when aux
 
 When we choose to use area-level auxiliary data and implicit model based indirect estimation, Rao (2014) suggests the regression-synthetic estimator. Here, in order to estimate our parameter of interest, \(\mu_{y_j}\), we fit an ordinary least squares linear regression on our \(p\) auxiliary variables over each small area in our large domain:
 \begin{align}
-\hat\mu_{y_j}^{REG} = \hat\beta_0 + \hat\beta_1 x_{j,1} + \cdots + \hat\beta_p x_{j,p}
+\hat\mu_{y_j}^{RS} = \hat\beta_0 + \hat\beta_1 x_{j,1} + \cdots + \hat\beta_p x_{j,p}
 \end{align}
-We denote this estimator with \(REG\) rather than a seemingly more sensible notation of \(RSE\) in order to avoid confusion with the residual standard errors of a model. We note that the \(\hat \beta\)'s are calculated through standard methods of ordinary least squares and in the case of our analysis \(p=1\). Further, it is important to recognize that in the case of the regression-synthetic estimator each small area receives the same \(\hat\beta\)'s. This is the realization of the requirement that the auxiliary information must have the same effect on each small area.
+We note that the \(\hat \beta\)'s are calculated through standard methods of ordinary least squares and in the case of our analysis \(p=1\). Further, it is important to recognize that in the case of the regression-synthetic estimator each small area receives the same \(\hat\beta\)'s. This is the realization of the requirement that the auxiliary information must have the same effect on each small area.
 
 \hypertarget{using-unit-level-auxiliary-data}{%
 \subsection{Using Unit-level Auxiliary Data}\label{using-unit-level-auxiliary-data}}
 
-An approach to implicit model based indirect estimation when unit-level auxiliary information is available is to use the
-
+An approach to implicit model based indirect estimation when unit-level auxiliary information is available is to use the survey regression estimator.
+\begin{align}
+\hat \mu_{y_j}^{SR} = EQN 2.5.1 
+\end{align}
 \hypertarget{explicit-model-based-indirect-estimation}{%
 \section{Explicit Model Based Indirect Estimation}\label{explicit-model-based-indirect-estimation}}
 
@@ -588,17 +590,46 @@ In small area estimation it is most common that the mixed model estimator used i
 \hypertarget{the-unit-level-eblup}{%
 \subsection{The Unit-level EBLUP}\label{the-unit-level-eblup}}
 
+In the case of the unit-level EBLUP, we first fit a varying-intercepts linear mixed model at the unit-level:
+\begin{align}
+y_{i,j} = \vec x_{i,j}^T \vec \beta + \nu_j + e_{i,j}
+\end{align}
+with
+\[
+ \newcommand\myeq{\stackrel{\mathclap{\normalfont\mbox{s}}}{~}}
+\nu_j \stackrel{\text{iid}}{\sim} \text{N}(0,~ \sigma^2_{\nu}), \quad e_{i,j} \stackrel{\text{ind}}{\sim}\text{N}(0, k^2_{i,j}\sigma^2_e).
+\]
+Rao (2014) derives the unit-level EBLUP estimator from (the above eqn) fit in the frequentist paradigm as the weighted average of the survey regression estimator and the regression-synthetic estimator:
+\begin{align}
+\hat \mu_{y_j}^{FRU} = \hat \gamma_j \hat\mu_{y_j}^{SR} + (1 - \hat \gamma_j) \hat\mu_{y_j}^{RS}
+\end{align}
+where
+\begin{align}
+\hat\gamma_j = \sigma^2_\nu / (\sigma^2_\nu + \sigma^2_e / a_i)
+\end{align}
+(say what \(a_i\) is from Rao around 7.1.3, 7.1.4)
+
 \hypertarget{the-area-level-eblup}{%
 \subsection{The Area-level EBLUP}\label{the-area-level-eblup}}
 
+EQN 6.1.1 (the linear mixed model formula at the area level):
+
+In order to obtain the EBLUP estimator at the area level, we first fit the following linear mixed model:
+\begin{align}
+\hat\mu_{j}^{PS} = z_j^T \beta + b_j \nu_j + e_j
+\end{align}
+Next, Rao (2014) derives the commonly expressed form of the EBLUP estimator:
+
 The area-level EBLUP estimator is expressed by Rao (2014) as a weighted average of the direct estimator and the regression-synthetic estimator:
 \begin{align}
-\hat \mu_j^{EBLUP-A} = \hat\gamma_j \hat\mu_j^{DIRECT} + (1 - \hat\gamma_j) z_i^T \hat\beta
+\hat \mu_j^{FRA} = \hat\gamma_j \hat\mu_j^{PS} + (1 - \hat\gamma_j) \hat\mu_j^{RS}
 \end{align}
 where
 \begin{align}
 \hat \gamma_j = \hat \sigma_\nu^2 b_j^2 / (\psi_j + \hat\sigma_\nu^2 b_j^2)
 \end{align}
+(I need to define a lot of these quantities. Trying to find the best way to do this without pulling every little thing from Rao)
+
 \hypertarget{a-hierarchical-bayesian-approach}{%
 \section{A Hierarchical Bayesian Approach}\label{a-hierarchical-bayesian-approach}}
 
