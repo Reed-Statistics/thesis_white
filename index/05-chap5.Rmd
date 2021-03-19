@@ -14,7 +14,7 @@ dat <- read_csv("data/subsets/dat_small.csv") %>%
 
 This chapter addresses the performance of the six estimators fit in this thesis: the sample mean, the post-stratified estimator, the unit-level EBLUP, the area-level EBLUP, the unit-level hierarchical Bayesian estimator, and the area-level hierarchical Bayesian estimator. 
 
-We used the R statistical software to compute our results [@r-software]. The sample mean was computed using the *tidyverse* [@tidyverse]. The post-stratified estimates were computed using *mase* [@mase]. The frequentist EBLUP estimates were computed using *sae* [@sae-package]. The hierarchical Bayesian estimates were computed using *hbsae* [@hbsae-package]. Our data spans the entire Interior West, however we were forced to exclude a few eco-provinces. Namely two eco-provinces with a very small number of eco-subsections which caused errors in producing the unit-level hierarchical Bayesian estimates and eco-subsections with either none or very close to no sampled areas with non-zero values for our variables of interest. While this is disappointing, we still were able to fit these estimators to the great majority of our data. 
+We used the R statistical software to compute our results [@r-software]. The sample mean was computed using the *sae* [@sae-package]. The post-stratified estimates were computed using *mase* [@mase]. The frequentist EBLUP estimates were computed using *sae* [@sae-package]. The hierarchical Bayesian estimates were computed using *hbsae* [@hbsae-package]. The results were tidied, processed, and visualized using many *tidyverse* packages [@tidyverse]. Our data spans the entire Interior West, however we were forced to exclude a few eco-provinces. Namely two eco-provinces with a very small number of eco-subsections which caused errors in producing the unit-level hierarchical Bayesian estimates and eco-subsections with either none or very close to no sampled areas with non-zero values for our variables of interest. While this is disappointing, we still were able to fit these estimators to the great majority of our data. 
 
 This thesis uses all six of these estimators to produce estimates for basal area (square-foot), tree count per acre, above-ground biomass (lbs), and net volume ($\text{ft}^3$). The EBLUP and hierarchical Bayesian estimators use one explanatory variable, total canopy cover, to produce estimates. Our estimation occurs at the eco-subsection level, and thus we have 10,176 estimates produced (six estimators, four response variables, and 424 eco-subsections). 
 
@@ -23,11 +23,11 @@ We are generally concerned with producing estimates that have both low variance 
 
 ## Results Across the Interior West
 
-In order to explore variance, the primary metric we use is the coefficient of variation (CV). This metric, for each estimator, is defined as the standard deviation of our estimate divided by our sample mean. This allows us to normalize our variation across different response variables and areas that are more or less forested. We can express the coefficient of variation as follows:
+In order to explore variance, the primary metric we use is the coefficient of variation ($CV$). This metric, for each estimator, is defined as the standard deviation of our estimate divided by our sample mean. This allows us to normalize our variation across different response variables and areas that are more or less forested. We can express the coefficient of variation as follows:
 \begin{align}
 CV_{y_j} = \frac{\hat\sigma_{y_j}}{\hat\mu_{y_j}^{HT}}
 \end{align}
-It is notable that when the mean of the variable of interest is small, we will sometimes get strangely large coefficients of variation. In order to visualize the coefficients of variation in an appealing way, we have filtered all observations great than one in the following plot:  
+It is notable that when the mean of the variable of interest is small, we will sometimes get strangely large coefficients of variation. In order to visualize the coefficients of variation in an appealing way, we have filtered all observations greater than one in the following plot:  
 
 ```{r cov-violin, fig.align="center", out.width='100%', echo = FALSE, warning = F, message = F, fig.scap="Distribution of the coefficient of variation of each eastimator", fig.cap = "Distribution of the coefficient of variation of each eastimator. The black dot in each violin segment represents the median coefficient of variation value. The width of the violin segments corresponds to the density of points in the given value range. Values greater than 1 truncated in plot, however still considered in median calculation."}
 med <- res_long %>%
@@ -66,7 +66,11 @@ over_one <- res_long %>%
   mutate(Estimator = case_when(Estimator == "freq_unit" ~ "Unit EBLUP",
                                Estimator == "hb_area" ~ "Area HB",
                                Estimator == "hb_unit" ~ "Unit HB",
-                               Estimator == "dirmean" ~ "Sample Mean"))
+                               Estimator == "dirmean" ~ "Sample Mean")) %>%
+  bind_rows(data.frame(Estimator = c("Post-Stratification", "Area EBLUP"),
+                       Count = c(0,0),
+                       Proportion = c(0.000, 0.000))) %>%
+  arrange(Count)
 
 knitr::kable(
   over_one,
@@ -76,6 +80,7 @@ knitr::kable(
   booktabs = TRUE
 )
 ```
+
 From Figure \@ref(fig:cov-violin), it is clear that the distribution of coefficient of variation for the area-level hierarchical Bayesian model is much lower than the others with a value of `r round(med$median_cov[5], 3)`. When we compare this value to the post-stratification median coefficient of variation (`r round(med$median_cov[2], 3)`) and the area-level EBLUP median coefficient of variation (`r round(med$median_cov[3], 3)`) we see an extremely large increase in variation in each case. Examining the 25%, 50%, and 75% quantile of these estimator's coefficient of variation continues to show the superiority of the area-level hierarchical Bayesian estimator:
 ```{r quantile-table, echo = F}
 quantiledf <- bind_rows(
@@ -99,11 +104,6 @@ knitr::kable(
   booktabs = TRUE
 )
 ```
-
-
-
-
-## Basal Area in the Northern Rocky Forest: A Case Study
 
 
 ```{r}

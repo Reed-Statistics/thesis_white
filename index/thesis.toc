@@ -21,7 +21,6 @@
 \contentsline {subsection}{\numberline {4.4.2}The Area-level Hierarichical Bayesian Model}{28}{subsection.4.4.2}%
 \contentsline {chapter}{Chapter 5: Results}{29}{chapter.5}%
 \contentsline {section}{\numberline {5.1}Results Across the Interior West}{30}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Basal Area in the Northern Rocky Forest: A Case Study}{32}{section.5.2}%
 \contentsline {chapter}{Chapter 6: Discussion and Conclusion}{37}{chapter.6}%
 \contentsline {chapter}{Appendix A: Code Appendix}{39}{appendix.A}%
 \contentsline {section}{\numberline {A.1}Helper Functions}{39}{section.A.1}%
