@@ -662,16 +662,18 @@ We used the R statistical software to compute our results (R Core Team, 2020). T
 
 This thesis uses all six of these estimators to produce estimates for basal area (square-foot), tree count per acre, above-ground biomass (lbs), and net volume (\(\text{ft}^3\)). The EBLUP and hierarchical Bayesian estimators use one explanatory variable, total canopy cover, to produce estimates. Our estimation occurs at the eco-subsection level, and thus we have 10,176 estimates produced (six estimators, four response variables, and 424 eco-subsections).
 
-We are generally concerned with producing estimates that have both low variance and low bias. So, this chapter primarily aims to answers questions regarding these two quantities. In order to do so, we will summarize our findings both globally and by briefly examining a subset of our results in the Northern Rocky Forest. This subset examination allows us to dig in to results without much aggregation or overwhelming plots due to the large amount of results we have. We explore both metrics and visualizations of variance and bias across the interior west in order to deeply understand the performance of our estimators.
+We are generally concerned with producing estimates that have both low variance and low bias. So, this chapter primarily aims to answers questions regarding these two quantities. In order to do so, we will summarize our findings both globally and by briefly examining a subset of our results in the Northern Rocky Forest. This subset examination allows us to dig in to results without much aggregation or overwhelming plots due to the large amount of results we have. We explore both metrics and visualizations of variance and bias across the interior west in order to deeply understand the performance of our estimators. This thesis is, in many ways, a study navigating the bias-variance trade-off in depth in a real world setting. While quantifying variance of estimates is a generally straight forward task, producing an accurate depiction of bias is extremely difficult without knowing population parameters.
 
-\hypertarget{results-across-the-interior-west}{%
-\section{Results Across the Interior West}\label{results-across-the-interior-west}}
+\hypertarget{estimator-performance}{%
+\section{Estimator Performance}\label{estimator-performance}}
 
-In order to explore variance, the primary metric we use is the coefficient of variation (\(CV\)). This metric, for each estimator, is defined as the standard deviation of our estimate divided by our sample mean. This allows us to normalize our variation across different response variables and areas that are more or less forested. We can express the coefficient of variation as follows:
+We will now investigate the performance of the six estimators used in this thesis. In order to explore variance, the primary metric we use is the coefficient of variation (\(CV\)). This metric, for each estimator, is defined as the standard deviation of our estimate divided by the sample mean in that small area (\(\hat \mu_{y_j}^{HT}\)). This allows us to normalize our variation across different response variables and areas that are more or less forested. We can express the coefficient of variation as follows:
 \begin{align}
 CV_{y_j} = \frac{\hat\sigma_{y_j}}{\hat\mu_{y_j}^{HT}}
 \end{align}
-It is notable that when the mean of the variable of interest is small, we will sometimes get strangely large coefficients of variation. In order to visualize the coefficients of variation in an appealing way, we have filtered all observations greater than one in the following plot:
+It is notable that when the mean of the variable of interest is small, we will sometimes get strangely large coefficients of variation for estimators that borrow strength. This phenomenon can generally be thought of as more to do with intrinsic (and often very good) qualities of the estimator rather than the correlating with poor performance of the estimator when the sample mean is small. Notably, estimators which borrow strength to a large degree in situations where the sample mean is low and the areas which we borrow strength from have significantly higher values will have higher variance due to this heterogeneity.
+
+In order to visualize the coefficients of variation in an appealing way, we have filtered all observations greater than one in the following plot:
 \begin{figure}
 
 {\centering \includegraphics[width=1\linewidth]{thesis_files/figure-latex/cov-violin-1} 
@@ -680,22 +682,7 @@ It is notable that when the mean of the variable of interest is small, we will s
 
 \caption[Distribution of the coefficient of variation of each eastimator]{Distribution of the coefficient of variation of each eastimator. The black dot in each violin segment represents the median coefficient of variation value. The width of the violin segments corresponds to the density of points in the given value range. Values greater than 1 truncated in plot, however still considered in median calculation.}\label{fig:cov-violin}
 \end{figure}
-While Figure \ref{fig:cov-violin} gives us a good sense of the distribution, we must acknowledge that we truncated some values in order for viewing simplicity. Three estimators had coefficients of variation that exceeded 1. The below table shows the count and proportion of each:
-\begin{longtable}[t]{lrr}
-\caption{\label{tab:over-one}Coefficient of variation estimates greater than one}\\
-\toprule
-Estimator & Count & Proportion\\
-\midrule
-Post-Stratification & 0 & 0.000\\
-Area EBLUP & 0 & 0.000\\
-Sample Mean & 3 & 0.002\\
-Area HB & 81 & 0.048\\
-Unit EBLUP & 103 & 0.061\\
-\addlinespace
-Unit HB & 289 & 0.170\\
-\bottomrule
-\end{longtable}
-From Figure \ref{fig:cov-violin}, it is clear that the distribution of coefficient of variation for the area-level hierarchical Bayesian model is much lower than the others with a value of 0.055. When we compare this value to the post-stratification median coefficient of variation (0.158) and the area-level EBLUP median coefficient of variation (0.125) we see an extremely large increase in variation in each case. Examining the 25\%, 50\%, and 75\% quantile of these estimator's coefficient of variation continues to show the superiority of the area-level hierarchical Bayesian estimator:
+Figure \ref{fig:cov-violin} shows the coefficient of variation for each estimator. We see a slight reduction in the coefficient of variation when moving from the sample mean to post-stratification, and a decently large reduction in variation when adding auxiliary data with either EBLUP estimator. We also see that the unit-level hierarchical Bayesian estimator performs quite similarly to the unit-level EBLUP. This makes sense as at the unit-level we have so much data that it outweighs the contribution of any priors significantly. Finally, we see a huge reduction in the coefficient of variation compared to all other estimators when we fit the area-level hierarchical Bayesian estimator. The median coefficient of variation for this area-level hierarchical Bayesian estimator (0.055) is less than half of the next best performing median coefficient of variation from the area-level EBLUP (0.125). Examining the 25\%, 50\%, and 75\% quantile of these estimator's coefficient of variation continues to show the superiority of the area-level hierarchical Bayesian estimator:
 \begin{longtable}[t]{lrrr}
 \caption[Coefficient of Variation Quantiles]{\label{tab:quantile-table}25th, 50th, and 75th Quantile of Each Estimator's Coefficient of Variation}\\
 \toprule
@@ -708,6 +695,21 @@ Unit EBLUP & 0.085 & 0.131 & 0.244\\
 Area HB & 0.034 & 0.055 & 0.112\\
 \addlinespace
 Unit HB & 0.078 & 0.150 & 0.486\\
+\bottomrule
+\end{longtable}
+While Figure \ref{fig:cov-violin} and Table \ref{tab:quantile-table} gives us a good sense of the distribution, we must acknowledge that we truncated some values in order for viewing simplicity. Three estimators had coefficients of variation that exceeded 1. The below table shows the count and proportion of each:
+\begin{longtable}[t]{lrr}
+\caption{\label{tab:over-one}Coefficient of variation estimates greater than one}\\
+\toprule
+Estimator & Count & Proportion\\
+\midrule
+Post-Stratification & 0 & 0.000\\
+Area EBLUP & 0 & 0.000\\
+Sample Mean & 3 & 0.002\\
+Area HB & 81 & 0.048\\
+Unit EBLUP & 103 & 0.061\\
+\addlinespace
+Unit HB & 289 & 0.170\\
 \bottomrule
 \end{longtable}
 \begin{Shaded}
