@@ -124,10 +124,54 @@ knitr::kable(
   booktabs = TRUE
 )
 ```
-From this table we are able to confirm that we see high coefficients of variation more often in areas with lower values for our response variable. It now becomes apparent why some estimators have many coefficients of variation greater than one and others have none or very few. The three estimators which have a significant number of estimates with the coefficient of variation greater than one (unit-level hierarchical Bayesian and frequentist, area-level hierarchical Bayesian) all will borrow a great deal of strength from outside eco-subsections when the observations within the eco-subsection of interest are much below the other eco-subsections within the eco-province we choose to borrow strength out to. In other words, with these three estimators, eco-subsections with lower response variable values will get larger estimates. These larger estimates require larger standard errors as we are unsure whether we had a non-representative sample (too low) in the given eco-subsection or if this eco-subsection truly has a low value for its response variable(s). We can see an example of estimates being "pulled up" in this nature in the following plot:
+From this table we are able to confirm that we see high coefficients of variation more often in areas with lower values for our response variable. It now becomes apparent why some estimators have many coefficients of variation greater than one and others have none or very few. The three estimators which have a significant number of estimates with the coefficient of variation greater than one (unit-level hierarchical Bayesian and frequentist, area-level hierarchical Bayesian) all will borrow a great deal of strength from outside eco-subsections when those outside eco-subections have a much higher response variable value than the eco-subsection of interest. In other words, with these three estimators, eco-subsections with lower response variable values will get larger estimates. These larger estimates require larger standard errors as we are unsure whether we had a non-representative sample (too low) in the given eco-subsection or if this eco-subsection truly has a low value for its response variable(s). However when we are choosing methods of estimation which borrow strength, this is a property we like to see. In fact, estimators which do not borrow strength in these situations and have small coefficients of variation will often produce under-estimates with an artificial amount of precision. We can see this phenomenon below by examining the performance of the hierarchical Bayesian area-level estimator compared to the post-stratified estimator: 
 
+```{r fig.align="center", out.width='100%', echo = FALSE, warning = F, message = F,}
+means <- res_long %>%
+  filter(estimator == "dirmean") %>%
+  rename(mean = estimate) %>%
+  dplyr::select(subsection, response, mean)
+res_long <- res_long %>%
+  full_join(means, by = c("subsection" = "subsection",
+                          "response" = "response"))
+res_long <- res_long %>%
+  mutate(se = mean * cov)
 
+res_long %>%
+  filter(province == "M333",
+         response == "BALIVE_TPA") %>%
+  mutate(subsection = str_sub(subsection, 5),
+         subsection = fct_reorder(subsection, estimate)) %>%
+  filter(estimator %in% c("dirps", "hb_area")) %>%
+  ggplot(mapping = aes(x = subsection,
+                       y = estimate,
+                       color = estimator)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = estimate - se, ymax = estimate + se)) +
+  scale_color_manual(values = c("#334F44", "steelblue"),
+                     labels = c("Post-Stratification", "Area HB")) +
+  theme_bw() +
+  theme(legend.position = "bottom")
+```
 
+The frequentist area-level estimator has a different approach to making these estimates. Notably, in the case of small within-area variation we see that the EBLUP will put a heavy weight on the post-stratified estimate (verify this and point to eqn). We can see this occur by comparing the area-level frequentist estimator to the post-stratified estimate with the same eco-province and response variable as above: 
+```{r fig.align="center", out.width='100%', echo = FALSE, warning = F, message = F,}
+res_long %>%
+  filter(province == "M333",
+         response == "BALIVE_TPA") %>%
+  mutate(subsection = str_sub(subsection, 5),
+         subsection = fct_reorder(subsection, estimate)) %>%
+  filter(estimator %in% c("dirps", "freq_area")) %>%
+  ggplot(mapping = aes(x = subsection,
+                       y = estimate,
+                       color = estimator)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = estimate - se, ymax = estimate + se)) +
+  scale_color_manual(values = c("#334F44", "#E7AB26"),
+                     labels = c("Post-Stratification", "Area EBLUP")) +
+  theme_bw() +
+  theme(legend.position = "bottom")
+```
 
 
 
@@ -175,19 +219,6 @@ res_long %>%
                                 "Unit EBLUP", "Area HB", "Unit HB")) +
   theme_bw() +
   theme(legend.position = "bottom")
-```
-
-```{r echo = F, warning = F, message = F}
-means <- res_long %>%
-  filter(estimator == "dirmean") %>%
-  rename(mean = estimate) %>%
-  dplyr::select(subsection, response, mean)
-res_long <- res_long %>%
-  full_join(means, by = c("subsection" = "subsection",
-                          "response" = "response"))
-res_long <- res_long %>%
-  mutate(se = mean * cov)
-
 
 res_long %>%
   filter(province == "M333",
@@ -203,21 +234,7 @@ res_long %>%
                                 "Unit EBLUP", "Area HB", "Unit HB")) +
   theme_bw() +
   theme(legend.position = "bottom")
-
-
-res_long %>%
-  filter(province == "M333",
-         response == "BALIVE_TPA") %>%
-  mutate(subsection = str_sub(subsection, 5)) %>%
-  filter(estimator %in% c("dirps", "hb_area")) %>%
-  ggplot(mapping = aes(x = subsection,
-                       y = estimate,
-                       color = estimator)) +
-  geom_point() +
-  geom_errorbar(aes(ymin = estimate - se, ymax = estimate + se)) +
-  scale_color_manual(values = c("#334F44", "steelblue"),
-                     labels = c("Post-Stratification", "Area HB")) +
-  theme_bw() +
-  theme(legend.position = "bottom")
 ```
+
+
 
