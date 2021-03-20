@@ -27,7 +27,7 @@ We will now investigate the performance of the six estimators used in this thesi
 \begin{align}
 CV_{y_j} = \frac{\hat\sigma_{y_j}}{\hat\mu_{y_j}^{HT}}
 \end{align}
-It is notable that when the mean of the variable of interest is small, we will sometimes get strangely large coefficients of variation for estimators that borrow strength. This phenomenon can generally be thought of as more to do with intrinsic (and often very good) qualities of the estimator rather than the correlating with poor performance of the estimator when the sample mean is small. Notably, estimators which borrow strength to a large degree in situations where the sample mean is low and the areas which we borrow strength from have significantly higher values will have higher variance due to this heterogeneity.  
+It is notable that when the mean of the variable of interest is small, we will sometimes get strangely large coefficients of variation for estimators that borrow strength. This phenomenon can generally be thought of as more to do with intrinsic (and often very good) qualities of the estimator rather than the correlating with poor performance of the estimator when the sample mean is small. Notably, estimators which borrow strength to a large degree in situations where the sample mean is low and the areas which we borrow strength from have significantly higher values will have higher variance due to this heterogeneity. We will explore this idea in depth further on in this chapter. 
 
 In order to visualize the coefficients of variation in an appealing way, we have filtered all observations greater than one in the following plot:  
 
@@ -80,7 +80,7 @@ knitr::kable(
 )
 ```
 
-While Figure \@ref(fig:cov-violin) and Table \@ref(tab:quantile-table) gives us a good sense of the distribution, we must acknowledge that we truncated some values in order for viewing simplicity. Three estimators had coefficients of variation that exceeded 1. The below table shows the count and proportion of each:
+While Figure \@ref(fig:cov-violin) and Table \@ref(tab:quantile-table) gives us a good sense of the distribution, we must acknowledge that we truncated some values in order for viewing simplicity. By examining the distribution and performance of the coefficients of variation by truncating the tails we can gain insight that would be much harder to see while including the tails. Now, we can look at the tails of these distributions. Four estimators had coefficients of variation that exceeded 1. The below table shows the count and proportion of each:
 ```{r over-one, echo = FALSE, warning = F, message = F}
 over_one <- res_long %>%
   filter(cov > 1) %>%
@@ -105,11 +105,34 @@ knitr::kable(
   booktabs = TRUE
 )
 ```
+We see that there are three estimators with over 1% of their coefficient of variations greater than one. Both the frequentist and hierarchical Bayesian unit-level estimators have many values greater than one, and the area-level hierarchical Bayesian has some as well. To understand why these particular estimators have many estimates greater than one, we first need to explore the small areas which have these coefficient of variation values. To do so, we can examine the mean response value for estimates where the coefficient of variation is greater than one and when it is less than one. 
+```{r covg1l1, message = F, warning = F, echo = F}
+cov_g_1 <- res_long %>%
+  mutate(`CV > 1` = cov > 1) %>%
+  group_by(response, `CV > 1`) %>%
+  summarize(mean = mean(estimate)) %>%
+  pivot_wider(values_from = mean, names_from = `CV > 1`) %>%
+  rename(l1 = `FALSE`,
+         `g1` = `TRUE`)
+names(cov_g_1) <- c("Response", "Mean Estimate (CV < 1)", "Mean Estimate (CV > 1)")
+
+knitr::kable(
+  cov_g_1,
+  digits = 3,
+  caption = "Mean Estimates Where Coefficent of Variation is Greater Than and Less Than One",
+  longtable = TRUE,
+  booktabs = TRUE
+)
+```
+From this table we are able to confirm that we see high coefficients of variation more often in areas with lower values for our response variable. It now becomes apparent why some estimators have many coefficients of variation greater than one and others have none or very few. The three estimators which have a significant number of estimates with the coefficient of variation greater than one (unit-level hierarchical Bayesian and frequentist, area-level hierarchical Bayesian) all will borrow a great deal of strength from outside eco-subsections when the observations within the eco-subsection of interest are much below the other eco-subsections within the eco-province we choose to borrow strength out to. In other words, with these three estimators, eco-subsections with lower response variable values will get larger estimates. These larger estimates require larger standard errors as we are unsure whether we had a non-representative sample (too low) in the given eco-subsection or if this eco-subsection truly has a low value for its response variable(s). We can see an example of estimates being "pulled up" in this nature in the following plot:
 
 
 
 
-```{r}
+
+
+
+```{r, warning = F, message = F, echo = F}
 subsections <- st_read("../data/SA_eco_subsection/SA_eco_subsection.shp", quiet = TRUE)
 
 interior_west <- c("AZ", "CO", "ID", "MT", "NV", "NM", "UT", "WY")
