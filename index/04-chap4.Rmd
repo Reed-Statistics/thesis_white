@@ -97,7 +97,7 @@ Next, Rao (2014) derives the commonly expressed form of the EBLUP estimator:
 
 The area-level EBLUP estimator is expressed by Rao (2014) as a weighted average of the direct estimator and the regression-synthetic estimator:
 \begin{align}
-\hat \mu_j^{FRA} = \hat\gamma_j \hat\mu_j^{PS} + (1 - \hat\gamma_j) \hat\mu_j^{RS}
+\hat \mu_j^{FRA} = \hat\gamma_j \hat\mu_j^{PS} + (1 - \hat\gamma_j) \hat\mu_j^{RS} (\#eq:eblup-area-weight)
 \end{align}
 where
 \begin{align}

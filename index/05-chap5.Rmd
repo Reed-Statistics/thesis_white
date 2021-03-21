@@ -124,7 +124,7 @@ knitr::kable(
   booktabs = TRUE
 )
 ```
-From this table we are able to confirm that we see high coefficients of variation more often in areas with lower values for our response variable. It now becomes apparent why some estimators have many coefficients of variation greater than one and others have none or very few. The three estimators which have a significant number of estimates with the coefficient of variation greater than one (unit-level hierarchical Bayesian and frequentist, area-level hierarchical Bayesian) all will borrow a great deal of strength from outside eco-subsections when those outside eco-subections have a much higher response variable value than the eco-subsection of interest. In other words, with these three estimators, eco-subsections with lower response variable values will get larger estimates. These larger estimates require larger standard errors as we are unsure whether we had a non-representative sample (too low) in the given eco-subsection or if this eco-subsection truly has a low value for its response variable(s). However when we are choosing methods of estimation which borrow strength, this is a property we like to see. In fact, estimators which do not borrow strength in these situations and have small coefficients of variation will often produce under-estimates with an artificial amount of precision. We can see this phenomenon below by examining the performance of the hierarchical Bayesian area-level estimator compared to the post-stratified estimator: 
+From this table we are able to confirm that we see high coefficients of variation more often in areas with lower values for our response variable. It now becomes apparent why some estimators have many coefficients of variation greater than one and others have none or very few. The three estimators which have a significant number of estimates associated with a coefficient of variation greater than one (unit-level hierarchical Bayesian and frequentist, area-level hierarchical Bayesian) all will borrow a great deal of strength from outside eco-subsections when those outside eco-subections have a much higher response variable value than the eco-subsection of interest. In other words, with these three estimators, eco-subsections with lower response variable values will get larger estimates. These larger estimates require larger standard errors as we are unsure whether we had a non-representative sample (too low) in the given eco-subsection or if this eco-subsection truly has a low value for its response variable(s). However when we are choosing methods of estimation which borrow strength, this is a property we like to see. In fact, estimators which do not borrow strength in these situations and have small coefficients of variation will often produce under-estimates with an artificial amount of precision. We can see this phenomenon below by examining the performance of the hierarchical Bayesian area-level estimator compared to the post-stratified estimator: 
 
 ```{r fig.align="center", out.width='100%', echo = FALSE, warning = F, message = F,}
 means <- res_long %>%
@@ -154,7 +154,7 @@ res_long %>%
   theme(legend.position = "bottom")
 ```
 
-The frequentist area-level estimator has a different approach to making these estimates. Notably, in the case of small within-area variation we see that the EBLUP will put a heavy weight on the post-stratified estimate (verify this and point to eqn). We can see this occur by comparing the area-level frequentist estimator to the post-stratified estimate with the same eco-province and response variable as above: 
+The frequentist area-level estimator has a different approach to making these estimates. Notably, in the case of small within-area variation we see that the EBLUP will put a heavy weight on the post-stratified estimate from Equation \@ref(eq:eblup-area-weight). We can see this occur by comparing the area-level frequentist estimator to the post-stratified estimate with the same eco-province and response variable as above: 
 ```{r fig.align="center", out.width='100%', echo = FALSE, warning = F, message = F,}
 res_long %>%
   filter(province == "M333",
@@ -172,11 +172,30 @@ res_long %>%
   theme_bw() +
   theme(legend.position = "bottom")
 ```
+Overall, we can see that the frequentist area-level estimator performs much more similarly to the post-stratified estimator, a trait that may or may not be appealing based on the confidence we have in representative sampling. In an attempt to quantify the magnitude of difference between two estimators we introduce percent relative difference, which we define below.
+\begin{align*}
+PRD(\hat\mu_1,~ \hat\mu_2) = \frac{\hat \mu_1 - \hat\mu_2}{\hat\mu_2} \cdot 100
+\end{align*}
+While we could explore percent relative difference between all combinations of estimators, the Forest Inventory and Analysis Program's go-to estimator is post-stratification, so we will compare the remaining five estimators to post-stratification. Below, we can see the quantiles of percent relative difference to post-stratification.
+```{r, echo = F, warning = F, message = F}
+knitr::kable(
+  bind_rows(
+    quantile((res$est_hb_unit - res$est_dirps) / (res$est_dirps)) * 100,
+    quantile((res$est_hb_area - res$est_dirps) / (res$est_dirps)) * 100,
+    quantile((res$est_freq_unit - res$est_dirps) / (res$est_dirps)) * 100,
+    quantile((res$est_freq_area - res$est_dirps) / (res$est_dirps)) * 100
+  ) %>%
+    mutate(Estimator = c("Unit HB", "Area HB", "Unit EBLUP", "Area EBLUP")) %>%
+    relocate(Estimator),
+  digits = 3,
+  caption = "Quantiles of Percent Relative Difference to the Post-Stratified Estimator",
+  longtable = TRUE,
+  booktabs = TRUE)
+```
 
 
 
-
-```{r, warning = F, message = F, echo = F}
+```{r, warning = F, message = F, echo = F, include = F}
 subsections <- st_read("../data/SA_eco_subsection/SA_eco_subsection.shp", quiet = TRUE)
 
 interior_west <- c("AZ", "CO", "ID", "MT", "NV", "NM", "UT", "WY")
@@ -193,18 +212,23 @@ res_sf <- res %>%
 
 ggplot() +
   geom_sf(data = res_sf,
-          mapping = aes(fill = log(cov_freq_area / cov_hb_area),
+          mapping = aes(fill = log(cov_hb_area),
                         geometry = geometry),
           color = "black") +
-  # scale_fill_manual(values = c("#BF4C27", "#E7AB26", "#80BCA2", "#F5F7BD")) +
   theme_void() 
-  # scale_fill_gradient2(low = "red", mid = "white", high = "blue", midpoint = 0)
+
+ggplot() +
+  geom_sf(data = res_sf,
+          mapping = aes(fill = log(est_hb_area),
+                        geometry = geometry),
+          color = "black") +
+  theme_void() 
 ```
 
 
 The Northern Rocky Forest is a large eco-province spanning many states, and can be seen in Figure \@ref(fig:northern-rocky). 
 
-```{r m333-cov, echo = F, warning = F, message = F}
+```{r m333-cov, echo = F, warning = F, message = F, include = F}
 res_long %>%
   filter(province == "M333",
          response == "BALIVE_TPA") %>%

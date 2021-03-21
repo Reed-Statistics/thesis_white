@@ -624,7 +624,7 @@ Next, Rao (2014) derives the commonly expressed form of the EBLUP estimator:
 
 The area-level EBLUP estimator is expressed by Rao (2014) as a weighted average of the direct estimator and the regression-synthetic estimator:
 \begin{align}
-\hat \mu_j^{FRA} = \hat\gamma_j \hat\mu_j^{PS} + (1 - \hat\gamma_j) \hat\mu_j^{RS}
+\hat \mu_j^{FRA} = \hat\gamma_j \hat\mu_j^{PS} + (1 - \hat\gamma_j) \hat\mu_j^{RS} \label{eq:eblup-area-weight}
 \end{align}
 where
 \begin{align}
@@ -724,17 +724,29 @@ CNTLIVE\_TPA & 181.724 & 96.469\\
 VOLNLIVE\_TPA & 615.601 & 130.547\\
 \bottomrule
 \end{longtable}
-From this table we are able to confirm that we see high coefficients of variation more often in areas with lower values for our response variable. It now becomes apparent why some estimators have many coefficients of variation greater than one and others have none or very few. The three estimators which have a significant number of estimates with the coefficient of variation greater than one (unit-level hierarchical Bayesian and frequentist, area-level hierarchical Bayesian) all will borrow a great deal of strength from outside eco-subsections when those outside eco-subections have a much higher response variable value than the eco-subsection of interest. In other words, with these three estimators, eco-subsections with lower response variable values will get larger estimates. These larger estimates require larger standard errors as we are unsure whether we had a non-representative sample (too low) in the given eco-subsection or if this eco-subsection truly has a low value for its response variable(s). However when we are choosing methods of estimation which borrow strength, this is a property we like to see. In fact, estimators which do not borrow strength in these situations and have small coefficients of variation will often produce under-estimates with an artificial amount of precision. We can see this phenomenon below by examining the performance of the hierarchical Bayesian area-level estimator compared to the post-stratified estimator:
+From this table we are able to confirm that we see high coefficients of variation more often in areas with lower values for our response variable. It now becomes apparent why some estimators have many coefficients of variation greater than one and others have none or very few. The three estimators which have a significant number of estimates associated with a coefficient of variation greater than one (unit-level hierarchical Bayesian and frequentist, area-level hierarchical Bayesian) all will borrow a great deal of strength from outside eco-subsections when those outside eco-subections have a much higher response variable value than the eco-subsection of interest. In other words, with these three estimators, eco-subsections with lower response variable values will get larger estimates. These larger estimates require larger standard errors as we are unsure whether we had a non-representative sample (too low) in the given eco-subsection or if this eco-subsection truly has a low value for its response variable(s). However when we are choosing methods of estimation which borrow strength, this is a property we like to see. In fact, estimators which do not borrow strength in these situations and have small coefficients of variation will often produce under-estimates with an artificial amount of precision. We can see this phenomenon below by examining the performance of the hierarchical Bayesian area-level estimator compared to the post-stratified estimator:
 \begin{center}\includegraphics[width=1\linewidth]{thesis_files/figure-latex/unnamed-chunk-14-1} \end{center}
 
-The frequentist area-level estimator has a different approach to making these estimates. Notably, in the case of small within-area variation we see that the EBLUP will put a heavy weight on the post-stratified estimate (verify this and point to eqn). We can see this occur by comparing the area-level frequentist estimator to the post-stratified estimate with the same eco-province and response variable as above:
+The frequentist area-level estimator has a different approach to making these estimates. Notably, in the case of small within-area variation we see that the EBLUP will put a heavy weight on the post-stratified estimate from Equation \eqref{eq:eblup-area-weight}. We can see this occur by comparing the area-level frequentist estimator to the post-stratified estimate with the same eco-province and response variable as above:
 \begin{center}\includegraphics[width=1\linewidth]{thesis_files/figure-latex/unnamed-chunk-15-1} \end{center}
 
-\includegraphics{thesis_files/figure-latex/unnamed-chunk-16-1.pdf}
-
+Overall, we can see that the frequentist area-level estimator performs much more similarly to the post-stratified estimator, a trait that may or may not be appealing based on the confidence we have in representative sampling. In an attempt to quantify the magnitude of difference between two estimators we introduce percent relative difference, which we define below.
+\begin{align*}
+PRD(\hat\mu_1,~ \hat\mu_2) = \frac{\hat \mu_1 - \hat\mu_2}{\hat\mu_2} \cdot 100
+\end{align*}
+While we could explore percent relative difference between all combinations of estimators, the Forest Inventory and Analysis Program's go-to estimator is post-stratification, so we will compare the remaining five estimators to post-stratification. Below, we can see the quantiles of percent relative difference to post-stratification.
+\begin{longtable}[t]{lrrrrr}
+\caption{\label{tab:unnamed-chunk-16}Quantiles of Percent Relative Difference to the Post-Stratified Estimator}\\
+\toprule
+Estimator & 0\% & 25\% & 50\% & 75\% & 100\%\\
+\midrule
+Unit HB & -99.928 & 1.326 & 21.816 & 94.770 & 24224.087\\
+Area HB & -74.491 & -13.192 & 13.095 & 66.254 & 105994.261\\
+Unit EBLUP & -80.319 & 3.521 & 25.471 & 99.885 & 27724.471\\
+Area EBLUP & -79.641 & -3.747 & -0.165 & 2.802 & 160.843\\
+\bottomrule
+\end{longtable}
 The Northern Rocky Forest is a large eco-province spanning many states, and can be seen in Figure \ref{fig:northern-rocky}.
-
-\includegraphics{thesis_files/figure-latex/m333-cov-1.pdf} \includegraphics{thesis_files/figure-latex/m333-cov-2.pdf}
 
 \hypertarget{discussion-and-conclusion}{%
 \chapter{Discussion and Conclusion}\label{discussion-and-conclusion}}
