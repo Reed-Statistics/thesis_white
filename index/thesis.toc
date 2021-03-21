@@ -36,4 +36,4 @@
 \contentsline {subsection}{\numberline {A.2.2}Direct Estimation}{47}{subsection.A.2.2}%
 \contentsline {subsection}{\numberline {A.2.3}Model-Based Estimation}{50}{subsection.A.2.3}%
 \contentsline {subsection}{\numberline {A.2.4}Writing Data Files \& Pivoting to Tidy Format}{56}{subsection.A.2.4}%
-\contentsline {chapter}{References}{59}{appendix*.23}%
+\contentsline {chapter}{References}{59}{appendix*.25}%

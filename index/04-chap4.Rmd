@@ -54,7 +54,7 @@ We note that the $\hat \beta$'s are calculated through standard methods of ordin
 
 An approach to implicit model based indirect estimation when unit-level auxiliary information is available is to use the survey regression estimator. 
 \begin{align}
-\hat \mu_{y_j}^{SR} = EQN 2.5.1 
+\hat \mu_{y_j}^{SR} = \overline y_j + (\overline X_j - \overline x_j)^T \hat\beta
 \end{align}
 
 ## Explicit Model Based Indirect Estimation
