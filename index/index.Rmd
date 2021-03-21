@@ -9,14 +9,8 @@ department: 'Mathematics'
 degree: 'Bachelor of Arts'
 knit: bookdown::render_book
 site: bookdown::bookdown_site
-
-# This will automatically install the {remotes} package and {thesisdown}
-# Change this to FALSE if you'd like to install them manually on your own.
 params:
   'Install needed packages for {thesisdown}': True
-  
-# Remove the hashtag to specify which version of output you would like.
-# Can only choose one at a time.
 output:
   thesisdown::thesis_pdf: default 
 #  thesisdown::thesis_gitbook: default         
@@ -46,19 +40,6 @@ csl: csl/apa.csl
 lot: true
 lof: true
 ---
-
-<!--
-Above is the YAML (YAML Ain't Markup Language) header that includes a lot of 
-metadata used to produce the document.  Be careful with spacing in this header!
-
-If you'd prefer to not include a Dedication, for example, simply delete the section entirely, or silence them (add # before each line). 
-
-If you have other LaTeX packages you would like to include, delete the # before header-includes and list the packages after hyphens on new lines.
-
-If you'd like to include a comment that won't be produced in your resulting file enclose it in a block like this.
-
-If you receive a duplicate label error after knitting, make sure to delete the index.Rmd file and then knit again.
--->
 
 ```{r include_packages, include=FALSE}
 # This chunk ensures that the thesisdown package is
@@ -92,14 +73,6 @@ library(thesisdown)
 options(width = 70)
 ```
 
-<!--
-The ackowledgements, preface, dedication, and abstract are added into the PDF
-version automatically by inputing them in the YAML at the top of this file.
-Alternatively, you can put that content in files like 00--prelim.Rmd and
-00-abstract.Rmd like done below.
--->
-
-
 
 ```{r eval=!knitr::is_latex_output(), child=here::here("prelims", "00--prelim.Rmd")}
 
@@ -108,10 +81,6 @@ Alternatively, you can put that content in files like 00--prelim.Rmd and
 ```{r eval=!knitr::is_latex_output(), child=here::here("prelims", "00-abstract.Rmd")}
 
 ```
-
-<!-- The {.unnumbered} option here means that the introduction will be 
-"Chapter 0." You can also use {-} for no numbers on chapters.
--->
 
 # Introduction {.unnumbered}
 
