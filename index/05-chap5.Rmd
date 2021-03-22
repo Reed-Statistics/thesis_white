@@ -5,10 +5,53 @@ library(patchwork)
 library(sf)
 library(USAboundaries)
 library(latex2exp)
+library(scales)
 res <- readRDS("data/results/final_results.rds")
 res_long <- readRDS("data/results/final_results_long.rds")
 dat <- read_csv("data/subsets/dat_small.csv") %>%
   filter(province %in% unique(res_long$province))
+
+means <- res_long %>%
+  filter(estimator == "dirmean") %>%
+  rename(mean = estimate) %>%
+  dplyr::select(subsection, response, mean)
+res_long <- res_long %>%
+  full_join(means, by = c("subsection" = "subsection",
+                          "response" = "response"))
+res_long <- res_long %>%
+  mutate(se = mean * cov)
+
+# for six cov maps:
+subsections <- st_read("../data/SA_eco_subsection/SA_eco_subsection.shp", quiet = TRUE)
+
+interior_west <- c("AZ", "CO", "ID", "MT", "NV", "NM", "UT", "WY")
+
+int_west_sf <- us_boundaries(type = "state",
+                         states = interior_west)
+
+modeled_subsections <- st_intersection(int_west_sf, subsections) %>%
+  dplyr::select(PROVINC, SECTION, SUBSECT, geometry)
+
+res_sf <- res %>%
+  full_join(modeled_subsections, by = c("subsection" = "SUBSECT")) %>%
+  distinct()
+
+res_long_sf <- res_long %>%
+  full_join(modeled_subsections, by = c("subsection" = "SUBSECT")) %>%
+  distinct()
+
+res_long_sf_na <- res_long_sf %>%
+  filter(is.na(estimator))
+
+res_long_sf_na <- bind_rows(
+  res_long_sf_na, res_long_sf_na, res_long_sf_na,
+  res_long_sf_na, res_long_sf_na, res_long_sf_na
+) 
+
+res_long_sf_na$estimator <- c(
+  rep("dirmean", 61), rep("dirps", 61), rep("freq_unit", 61),
+  rep("freq_area", 61), rep("hb_unit", 61), rep("hb_area", 61)
+)
 ```
 
 # Results {#results}
@@ -128,19 +171,41 @@ knitr::kable(
   booktabs = TRUE
 )
 ```
-From this table we are able to confirm that we see high coefficients of variation more often in areas with lower values for our response variable. It now becomes apparent why some estimators have many coefficients of variation greater than one and others have none or very few. The three estimators which have coefficients of variation greater than one all will borrow a great deal of strength from outside eco-subsections when those outside eco-subections have a much higher response variable value than the eco-subsection of interest. In other words, with these three estimators, eco-subsections with lower response variable values will get larger estimates. These larger estimates require larger standard errors as we are unsure whether we had a non-representative sample (too low) in the given eco-subsection or if this eco-subsection truly has a low value for its response variable(s). However, when we are choosing methods of estimation which borrow strength, this is a property we like to see. In fact, estimators which do not borrow strength in these situations and have small coefficients of variation will often produce under-estimates with an artificial amount of precision. We can see this phenomenon below by examining the performance of the hierarchical Bayesian area-level estimator compared to the post-stratified estimator: 
+From this table we are able to confirm that we see high coefficients of variation more often in areas with lower values for our response variable. It now becomes apparent why some estimators have many coefficients of variation greater than one and others have none or very few. The three estimators which have coefficients of variation greater than one all will borrow a great deal of strength from outside eco-subsections when those outside eco-subections have a much higher response variable value than the eco-subsection of interest. In other words, with these three estimators, eco-subsections with lower response variable values will get larger estimates. These larger estimates require larger standard errors as we are unsure whether we had a non-representative sample (too low) in the given eco-subsection or if this eco-subsection truly has a low value for its response variable(s). However, when we are choosing methods of estimation which borrow strength, this is a property we like to see. In fact, estimators which do not borrow strength in these situations and have small coefficients of variation could be producing under-estimates with an artificial amount of precision. We can first visualize this phenomenon by examining the coefficient of variation of each estimator across the Interior West:
+```{r, warning = F, message = F, echo = F, fig.align="center", fig.cap = "Average log coefficient of variation of each estimator in each eco-subsection plotted onto a map of the Interior West. The average is taken over the four response variables. The natural log is used to perserve a reasonable color scale. Grey areas represent areas where models were not fit.", fig.scap = "Coefficient of variation map"}
+bind_rows(res_long_sf, res_long_sf_na) %>%
+  filter(!is.na(estimator)) %>%
+  mutate(estimator = case_when(
+    estimator == "dirmean" ~ "Sample Mean",
+    estimator == "dirps" ~ "Post-Stratification",
+    estimator == "freq_area" ~ "Area EBLUP",
+    estimator == "freq_unit" ~ "Unit EBLUP",
+    estimator == "hb_area" ~ "Area HB",
+    estimator == "hb_unit" ~ "Unit HB"
+  )) %>%
+  mutate(estimator = factor(estimator, levels = c("Sample Mean", "Post-Stratification",
+                                                  "Area EBLUP", "Unit EBLUP",
+                                                  "Area HB", "Unit HB"))) %>%
+  ggplot() +
+  geom_sf(mapping = aes(fill = log(cov),
+                        geometry = geometry),
+          color = NA) +
+  theme_void() +
+  facet_wrap( ~ estimator, ncol = 3, dir = "v") +
+  scale_fill_gradient2(low = "#334F44",
+                      mid = "white",
+                      high = "#BF4C27",
+                      na.value = "grey",
+                      midpoint = 0) +
+  theme(legend.position = "bottom") +
+  guides(fill = guide_colorbar(title.position = "top", title.hjust = 0.5)) +
+  labs(fill = "log(CV)")
+```
+We see that the three estimators which have coefficient of variation values higher than one generally produce these values in heavily deserted areas in the southern parts of the Interior West and some deserts in the north parts of Nevada. It is sensible that these areas may truly have low values for our response variables given that the post-stratified estimator is doing its job correctly and the population totals for forested and non-forested areas are correct. On the other hand, it may be reasonable to use a higher variance estimate in these cases and borrow strength from surrounding areas. While it is hard to say which approach to handling these situations gives a better estimate, it highlights distinct ways in which the hierarchical Bayesian estimators (and the unit-level EBLUP) perform differently than the direct estimators and area-level EBLUP. 
+
+We can see this phenomenon below by examining the performance of the hierarchical Bayesian area-level estimator compared to the post-stratified estimator: 
 
 ```{r fig.align="center", out.width='100%', echo = FALSE, warning = F, message = F, fig.cap = "The hierarchical Bayesian area-level estimator and post-stratified estimator predicting basal area in the Northern Rocky Forest.", fig.scap = "HB Area and Post-stratified estimates in M333"}
-means <- res_long %>%
-  filter(estimator == "dirmean") %>%
-  rename(mean = estimate) %>%
-  dplyr::select(subsection, response, mean)
-res_long <- res_long %>%
-  full_join(means, by = c("subsection" = "subsection",
-                          "response" = "response"))
-res_long <- res_long %>%
-  mutate(se = mean * cov)
-
 res_long %>%
   filter(province == "M333",
          response == "BALIVE_TPA") %>%
@@ -206,61 +271,16 @@ These quantiles continue to enforce the idea that the area-level EBLUP generally
 
 
 ```{r, warning = F, message = F, echo = F, fig.align="center"}
-subsections <- st_read("../data/SA_eco_subsection/SA_eco_subsection.shp", quiet = TRUE)
-
-interior_west <- c("AZ", "CO", "ID", "MT", "NV", "NM", "UT", "WY")
-
-int_west_sf <- us_boundaries(type = "state",
-                         states = interior_west)
-
-modeled_subsections <- st_intersection(int_west_sf, subsections) %>%
-  dplyr::select(PROVINC, SECTION, SUBSECT, geometry)
-
-res_sf <- res %>%
-  full_join(modeled_subsections, by = c("subsection" = "SUBSECT")) %>%
-  distinct()
-
-res_long_sf <- res_long %>%
-  full_join(modeled_subsections, by = c("subsection" = "SUBSECT")) %>%
-  distinct()
-
-res_long_sf_na <- res_long_sf %>%
-  filter(is.na(estimator))
-
-res_long_sf_na <- bind_rows(
-  res_long_sf_na, res_long_sf_na, res_long_sf_na,
-  res_long_sf_na, res_long_sf_na, res_long_sf_na
-) 
-
-res_long_sf_na$estimator <- c(
-  rep("dirmean", 61), rep("dirps", 61), rep("freq_unit", 61),
-  rep("freq_area", 61), rep("hb_unit", 61), rep("hb_area", 61)
-)
-
-
-bind_rows(res_long_sf, res_long_sf_na) %>%
-  filter(!is.na(estimator)) %>%
-  ggplot() +
-  geom_sf(mapping = aes(fill = log(cov),
-                        geometry = geometry),
-          color = NA) +
-  theme_void() +
-  facet_wrap( ~ estimator, ncol = 3) +
-  scale_fill_gradient2(low = "white",
-                      mid = "#80BCA2",
-                      high = "#2A5043",
-                      na.value = "grey",
-                      midpoint = 1) +
-  theme(legend.position = "bottom") +
-  labs(fill = "log(CV)")
-
 res_sf %>%
   mutate(hb_area_l_dirps = cov_hb_area < cov_dirps) %>%
   ggplot(mapping = aes(fill = hb_area_l_dirps,
                        geometry = geometry)) +
   geom_sf(color = "grey30") +
   scale_fill_manual(values = c("#BF4C27", "#80BCA2"), na.value = "grey") +
-  theme_void()
+  theme_void() +
+  labs(fill = "Area HB CV < Post-Strat CV") +
+  theme(legend.position = "bottom") +
+  guides(fill = guide_legend(title.position = "top", title.hjust = 0.5))
 
 res_sf %>%
   mutate(hb_area_l_freq_area = cov_hb_area < cov_freq_area) %>%
@@ -268,7 +288,10 @@ res_sf %>%
                        geometry = geometry)) +
   geom_sf(color = "grey30") +
   scale_fill_manual(values = c("#BF4C27", "#80BCA2"), na.value = "grey") +
-  theme_void()
+  theme_void() +
+  labs(fill = "Area HB CV < Area EBLUP CV") +
+  theme(legend.position = "bottom") +
+  guides(fill = guide_legend(title.position = "top", title.hjust = 0.5))
 ```
 
 

@@ -21,19 +21,19 @@
 \contentsline {subsection}{\numberline {4.4.2}The Area-level Hierarichical Bayesian Model}{28}{subsection.4.4.2}%
 \contentsline {chapter}{Chapter 5: Results}{29}{chapter.5}%
 \contentsline {section}{\numberline {5.1}Estimator Performance}{30}{section.5.1}%
-\contentsline {chapter}{Chapter 6: Discussion and Conclusion}{37}{chapter.6}%
-\contentsline {chapter}{Appendix A: Code Appendix}{39}{appendix.A}%
-\contentsline {section}{\numberline {A.1}Helper Functions}{39}{section.A.1}%
-\contentsline {subsection}{\numberline {A.1.1}The Sample Mean}{39}{subsection.A.1.1}%
-\contentsline {subsection}{\numberline {A.1.2}Post-Stratification}{39}{subsection.A.1.2}%
-\contentsline {subsection}{\numberline {A.1.3}Hierarchical Bayesian Unit-Level}{40}{subsection.A.1.3}%
-\contentsline {subsection}{\numberline {A.1.4}Hierarchical Bayesian Area-Level}{42}{subsection.A.1.4}%
-\contentsline {subsection}{\numberline {A.1.5}Frequentist Unit-Level}{43}{subsection.A.1.5}%
-\contentsline {subsection}{\numberline {A.1.6}Frequentist Area-Level}{44}{subsection.A.1.6}%
-\contentsline {subsection}{\numberline {A.1.7}Coeffiicent of Variation Functions}{45}{subsection.A.1.7}%
-\contentsline {section}{\numberline {A.2}Fitting Models}{46}{section.A.2}%
-\contentsline {subsection}{\numberline {A.2.1}Data Set-up \& Preprocessing}{46}{subsection.A.2.1}%
-\contentsline {subsection}{\numberline {A.2.2}Direct Estimation}{47}{subsection.A.2.2}%
-\contentsline {subsection}{\numberline {A.2.3}Model-Based Estimation}{50}{subsection.A.2.3}%
-\contentsline {subsection}{\numberline {A.2.4}Writing Data Files \& Pivoting to Tidy Format}{56}{subsection.A.2.4}%
-\contentsline {chapter}{References}{59}{appendix*.25}%
+\contentsline {chapter}{Chapter 6: Discussion and Conclusion}{39}{chapter.6}%
+\contentsline {chapter}{Appendix A: Code Appendix}{41}{appendix.A}%
+\contentsline {section}{\numberline {A.1}Helper Functions}{41}{section.A.1}%
+\contentsline {subsection}{\numberline {A.1.1}The Sample Mean}{41}{subsection.A.1.1}%
+\contentsline {subsection}{\numberline {A.1.2}Post-Stratification}{41}{subsection.A.1.2}%
+\contentsline {subsection}{\numberline {A.1.3}Hierarchical Bayesian Unit-Level}{42}{subsection.A.1.3}%
+\contentsline {subsection}{\numberline {A.1.4}Hierarchical Bayesian Area-Level}{44}{subsection.A.1.4}%
+\contentsline {subsection}{\numberline {A.1.5}Frequentist Unit-Level}{45}{subsection.A.1.5}%
+\contentsline {subsection}{\numberline {A.1.6}Frequentist Area-Level}{46}{subsection.A.1.6}%
+\contentsline {subsection}{\numberline {A.1.7}Coeffiicent of Variation Functions}{47}{subsection.A.1.7}%
+\contentsline {section}{\numberline {A.2}Fitting Models}{48}{section.A.2}%
+\contentsline {subsection}{\numberline {A.2.1}Data Set-up \& Preprocessing}{48}{subsection.A.2.1}%
+\contentsline {subsection}{\numberline {A.2.2}Direct Estimation}{49}{subsection.A.2.2}%
+\contentsline {subsection}{\numberline {A.2.3}Model-Based Estimation}{52}{subsection.A.2.3}%
+\contentsline {subsection}{\numberline {A.2.4}Writing Data Files \& Pivoting to Tidy Format}{58}{subsection.A.2.4}%
+\contentsline {chapter}{References}{61}{appendix*.26}%
