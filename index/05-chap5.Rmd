@@ -253,6 +253,22 @@ bind_rows(res_long_sf, res_long_sf_na) %>%
                       midpoint = 1) +
   theme(legend.position = "bottom") +
   labs(fill = "log(CV)")
+
+res_sf %>%
+  mutate(hb_area_l_dirps = cov_hb_area < cov_dirps) %>%
+  ggplot(mapping = aes(fill = hb_area_l_dirps,
+                       geometry = geometry)) +
+  geom_sf(color = "grey30") +
+  scale_fill_manual(values = c("#BF4C27", "#80BCA2"), na.value = "grey") +
+  theme_void()
+
+res_sf %>%
+  mutate(hb_area_l_freq_area = cov_hb_area < cov_freq_area) %>%
+  ggplot(mapping = aes(fill = hb_area_l_freq_area,
+                       geometry = geometry)) +
+  geom_sf(color = "grey30") +
+  scale_fill_manual(values = c("#BF4C27", "#80BCA2"), na.value = "grey") +
+  theme_void()
 ```
 
 
