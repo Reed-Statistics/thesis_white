@@ -180,7 +180,7 @@ The largest motivation for hierarchical modeling in this particular application 
 ```{r, echo=F, message=F, warning=F}
 load("data/anova_BIOLIVE_TPA.rds")
 
-pander::pander(broom::tidy(anova_BIOLIVE_TPA),
+knitr::kable(broom::tidy(anova_BIOLIVE_TPA),
                caption = "Analysis of Variance Model (Biomass Response)",
                longtable = TRUE,
                booktabs = TRUE)
