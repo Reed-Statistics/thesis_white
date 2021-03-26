@@ -202,7 +202,7 @@ bind_rows(res_long_sf, res_long_sf_na) %>%
   labs(fill = "log(CV)")
 ```
 We see that the three estimators which have coefficient of variation values higher than one generally produce these values in heavily deserted areas in the southern parts of the Interior West and some deserts in the north parts of Nevada. It is sensible that these areas may truly have low values for our response variables given that the post-stratified estimator is doing its job correctly and the population totals for forested and non-forested areas are correct. On the other hand, it may be reasonable to use a higher variance estimate in these cases and borrow strength from surrounding areas. While it is hard to say which approach to handling these situations gives a better estimate, it highlights distinct ways in which the hierarchical Bayesian estimators (and the unit-level EBLUP) perform differently than the direct estimators and area-level EBLUP. When examining the Northern Rocky Forest we notice the behavior of the hierarchical Bayesian area-level estimator "pulling up" lower valued eco-subsections compared to their post-stratified estimate:
-```{r fig.align="center", out.width='100%', echo = FALSE, warning = F, message = F, fig.cap = "The hierarchical Bayesian area-level estimator and post-stratified estimator predicting basal area in the Northern Rocky Forest.", fig.scap = "HB Area and Post-stratified estimates in M333"}
+```{r fig.align="center", out.width='100%', echo = FALSE, warning = F, message = F, fig.cap = "The hierarchical Bayesian area-level estimator and post-stratified estimator predicting basal area in the Northern Rocky Forest. The error bars depict two standard errors above an below the estimate of our response variable.", fig.scap = "HB Area and Post-stratified estimates in M333"}
 res_long %>%
   filter(province == "M333",
          response == "BALIVE_TPA") %>%
@@ -213,7 +213,7 @@ res_long %>%
                        y = estimate,
                        color = estimator)) +
   geom_point() +
-  geom_errorbar(aes(ymin = estimate - se, ymax = estimate + se)) +
+  geom_errorbar(aes(ymin = estimate - 2*se, ymax = estimate + 2*se)) +
   scale_color_manual(values = c("#334F44", "steelblue"),
                      labels = c("Post-Stratification", "Area HB")) +
   theme_bw() +
@@ -225,7 +225,7 @@ res_long %>%
 We also observe that the eco-subsections with high response values will get "pulled down", however the coefficient of variation does not increase significantly here as the sample mean is still relatively high. The "pulling up" and "pushing down" of estimates is a trait expected of these hierarchical Bayesian models, and it is the realization of "borrowing strength" or "pooling information" [@statrethinking]. 
 
 The frequentist area-level estimator takes a different approach to making these estimates. Notably, in the case of small within-area variation we see that the EBLUP will put a heavy weight on the post-stratified estimate from Equation \@ref(eq:eblup-area-weight). We can see this occur by comparing the area-level frequentist estimator to the post-stratified estimate with the same eco-province and response variable as above: 
-```{r fig.align="center", out.width='100%', echo = FALSE, warning = F, message = F, fig.cap = "The frequentist area-level estimator and post-stratified estimator predicting basal area in the Northern Rocky Forest.", fig.scap = "EBLUP area-level and Post-stratified estimates in M333"}
+```{r fig.align="center", out.width='100%', echo = FALSE, warning = F, message = F, fig.cap = "The frequentist area-level estimator and post-stratified estimator predicting basal area in the Northern Rocky Forest. The error bars depict two standard errors above an below the estimate of our response variable.", fig.scap = "EBLUP area-level and Post-stratified estimates in M333"}
 res_long %>%
   filter(province == "M333",
          response == "BALIVE_TPA") %>%
@@ -236,7 +236,7 @@ res_long %>%
                        y = estimate,
                        color = estimator)) +
   geom_point() +
-  geom_errorbar(aes(ymin = estimate - se, ymax = estimate + se)) +
+  geom_errorbar(aes(ymin = estimate - 2*se, ymax = estimate + 2*se)) +
   scale_color_manual(values = c("#334F44", "#E7AB26"),
                      labels = c("Post-Stratification", "Area EBLUP")) +
   theme_bw() +
@@ -247,28 +247,9 @@ res_long %>%
 ```
 Overall, we can see that the frequentist area-level estimator performs much more similarly to the post-stratified estimator, a trait that may or may not be appealing based on the confidence we have in representative sampling. However, it is important to note that the frequentist area-level estimator is still borrowing strength, it just seems that it will often borrow less strength than the hierarchical Bayesian area-level estimator. 
 
-While it is visualally insightful to compare these estimators in the Northern Rocky Forest, it is also beneficial to looking at the numbers across the Interior West. In an attempt to quantify the magnitude of difference between two estimators we introduce percent relative difference, which we define below.
-\begin{align*}
-PRD(\hat\mu_1,~ \hat\mu_2) = \frac{\hat \mu_1 - \hat\mu_2}{\hat\mu_2} \cdot 100
-\end{align*}
-While we could explore percent relative difference between all combinations of estimators, the Forest Inventory and Analysis Program's go-to estimator is post-stratification, so we will compare the remaining five estimators to post-stratification. Below, we can see the quantiles of percent relative difference to post-stratification.
-```{r, echo = F, warning = F, message = F}
-knitr::kable(
-  bind_rows(
-    quantile((res$est_hb_unit - res$est_dirps) / (res$est_dirps)) * 100,
-    quantile((res$est_hb_area - res$est_dirps) / (res$est_dirps)) * 100,
-    quantile((res$est_freq_unit - res$est_dirps) / (res$est_dirps)) * 100,
-    quantile((res$est_freq_area - res$est_dirps) / (res$est_dirps)) * 100
-  ) %>%
-    mutate(Estimator = c("Unit HB", "Area HB", "Unit EBLUP", "Area EBLUP")) %>%
-    relocate(Estimator),
-  digits = 3,
-  caption = "Quantiles of Percent Relative Difference to the Post-Stratified Estimator",
-  longtable = TRUE,
-  booktabs = TRUE)
-```
-These quantiles continue to enforce the idea that the area-level EBLUP generally performs very similarly to the post-stratified estimator (albeit with lower variance). Notably though, the percent relative difference between the area-level hierarchical Bayesian estimator and the post-stratified estimator is small compared to both unit-level models. Percent relative difference to the post-stratified estimator can be thought of in some senses as a weak proxy for bias. However, this is a difficult comparison to make when we do not have the parameter values. While this proxy for bias may be weak, it is reassuring that for the area-level hierarchical Bayesian estimator our median (50% quantile) percent relative difference is somewhat low. 
+When we narrow our vision to the Northern Rocky Forest it does seem like the hierarchical Bayesian area-level model 
 
+(more text here)
 
 ```{r, warning = F, message = F, echo = F, fig.align="center"}
 p1 <- res_sf %>%
@@ -290,39 +271,46 @@ p2 <- res_sf %>%
   theme_void() +
   labs(title = "Area HB CV < Area EBLUP CV") +
   theme(legend.position = "none") 
-p3 <- res_sf %>%
-  mutate(hb_area_l_freq_area = cov_hb_area < cov_freq_unit) %>%
-  ggplot(mapping = aes(fill = hb_area_l_freq_area,
-                       geometry = geometry)) +
-  geom_sf(color = "grey30") +
-  scale_fill_manual(values = c("#BF4C27", "#80BCA2"), na.value = "grey") +
-  theme_void() +
-  labs(title = "Area HB CV < Unit EBLUP CV") +
-  theme(legend.position = "none")
 
-p4 <- res_sf %>%
-  mutate(hb_area_l_freq_area = cov_hb_unit < cov_dirps) %>%
-  ggplot(mapping = aes(fill = hb_area_l_freq_area,
+p1 + p2
+```
+
+While it is visually insightful to compare these estimators in the Northern Rocky Forest, it is also beneficial to looking at the numbers across the Interior West. In an attempt to quantify the magnitude of difference between two estimators we introduce percent relative difference, which we define below.
+\begin{align*}
+PRD(\hat\mu_1,~ \hat\mu_2) = \frac{\hat \mu_1 - \hat\mu_2}{\hat\mu_2} \cdot 100
+\end{align*}
+While we could explore percent relative difference between all combinations of estimators, the Forest Inventory and Analysis Program's go-to estimator is post-stratification, so we will compare the remaining five estimators to post-stratification. Below, we can see the quantiles of percent relative difference to post-stratification.
+```{r, echo = F, warning = F, message = F}
+knitr::kable(
+  bind_rows(
+    quantile((res$est_hb_unit - res$est_dirps) / (res$est_dirps)) * 100,
+    quantile((res$est_hb_area - res$est_dirps) / (res$est_dirps)) * 100,
+    quantile((res$est_freq_unit - res$est_dirps) / (res$est_dirps)) * 100,
+    quantile((res$est_freq_area - res$est_dirps) / (res$est_dirps)) * 100
+  ) %>%
+    mutate(Estimator = c("Unit HB", "Area HB", "Unit EBLUP", "Area EBLUP")) %>%
+    relocate(Estimator),
+  digits = 3,
+  caption = "Quantiles of Percent Relative Difference to the Post-Stratified Estimator",
+  longtable = TRUE,
+  booktabs = TRUE)
+```
+These quantiles continue to enforce the idea that the area-level EBLUP generally performs very similarly to the post-stratified estimator (albeit with lower variance). Notably though, the percent relative difference between the area-level hierarchical Bayesian estimator and the post-stratified estimator is small compared to both unit-level models. Percent relative difference to the post-stratified estimator can be thought of in some senses as a weak proxy for bias. However, this is a difficult comparison to make when we do not have the parameter values. While this proxy for bias may be weak, it is reassuring that for the area-level hierarchical Bayesian estimator our median (50% quantile) percent relative difference is somewhat low. 
+
+Another aspect of our results that percent relative difference allows us to investigate is the performance of an estimator which we have hardly addressed so far: the hierarchical Bayesian unit-level model. 
+
+```{r}
+p3 <- res_sf %>%
+  mutate(hb_area_l_dirps = cov_hb_unit < cov_dirps) %>%
+  ggplot(mapping = aes(fill = hb_area_l_dirps,
                        geometry = geometry)) +
   geom_sf(color = "grey30") +
   scale_fill_manual(values = c("#BF4C27", "#80BCA2"), na.value = "grey") +
   theme_void() +
   labs(title = "Unit HB CV < Post-Strat CV") +
-  theme(legend.position = "none")
+  theme(legend.position = "none") 
 
-p5 <- res_sf %>%
-  mutate(hb_area_l_freq_area = cov_hb_unit < cov_freq_area) %>%
-  ggplot(mapping = aes(fill = hb_area_l_freq_area,
-                       geometry = geometry)) +
-  geom_sf(color = "grey30") +
-  scale_fill_manual(values = c("#BF4C27", "#80BCA2"), na.value = "grey") +
-  theme_void() +
-  labs(title = "Unit HB CV < Area EBLUP CV",
-       fill = "") +
-  theme(legend.position = "bottom",
-        plot.title = element_text(hjust = 0.5))
-
-p6 <- res_sf %>%
+p4 <- res_sf %>%
   mutate(hb_area_l_freq_area = cov_hb_unit < cov_freq_unit) %>%
   ggplot(mapping = aes(fill = hb_area_l_freq_area,
                        geometry = geometry)) +
@@ -330,49 +318,11 @@ p6 <- res_sf %>%
   scale_fill_manual(values = c("#BF4C27", "#80BCA2"), na.value = "grey") +
   theme_void() +
   labs(title = "Unit HB CV < Unit EBLUP CV") +
-  theme(legend.position = "none",
-        plot.title = element_text(hjust = 0.5)) 
-
-(p1 + p2 + p3) / (p4 + p5 + p6)
-
-(p1 + p2)
+  theme(legend.position = "none") 
+(p3 + p4)
 ```
 
 
 
-The Northern Rocky Forest is a large eco-province spanning many states, and can be seen in Figure \@ref(fig:northern-rocky). 
-
-```{r m333-cov, echo = F, warning = F, message = F, include = F}
-res_long %>%
-  filter(province == "M333",
-         response == "BALIVE_TPA") %>%
-  mutate(subsection = str_sub(subsection, 5)) %>%
-  ggplot(mapping = aes(x = subsection,
-                       y = cov,
-                       color = estimator)) +
-  geom_point() +
-  scale_color_manual(values = c("#A9A9A9", "#334F44", "#E7AB26",
-                                "#BF4C27",  "steelblue",  "#80BCA2"),
-                     labels = c("Sample Mean", "Post-Stratification", "Area EBLUP",
-                                "Unit EBLUP", "Area HB", "Unit HB")) +
-  theme_bw() +
-  theme(legend.position = "bottom")
-
-res_long %>%
-  filter(province == "M333",
-         response == "BALIVE_TPA") %>%
-  mutate(subsection = str_sub(subsection, 5)) %>%
-  ggplot(mapping = aes(x = subsection,
-                       y = estimate,
-                       color = estimator)) +
-  geom_point() +
-  scale_color_manual(values = c("#A9A9A9", "#334F44", "#E7AB26",
-                                "#BF4C27",  "steelblue",  "#80BCA2"),
-                     labels = c("Sample Mean", "Post-Stratification", "Area EBLUP",
-                                "Unit EBLUP", "Area HB", "Unit HB")) +
-  theme_bw() +
-  theme(legend.position = "bottom")
-```
-
-
+... then some concluding thoughts to lead into the discussion chapter
 

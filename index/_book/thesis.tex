@@ -692,7 +692,7 @@ We see that the three estimators which have coefficient of variation values high
 
 }
 
-\caption[HB Area and Post-stratified estimates in M333]{The hierarchical Bayesian area-level estimator and post-stratified estimator predicting basal area in the Northern Rocky Forest.}\label{fig:unnamed-chunk-15}
+\caption[HB Area and Post-stratified estimates in M333]{The hierarchical Bayesian area-level estimator and post-stratified estimator predicting basal area in the Northern Rocky Forest. The error bars depict two standard errors above an below the estimate of our response variable.}\label{fig:unnamed-chunk-15}
 \end{figure}
 We also observe that the eco-subsections with high response values will get ``pulled down,'' however the coefficient of variation does not increase significantly here as the sample mean is still relatively high. The ``pulling up'' and ``pushing down'' of estimates is a trait expected of these hierarchical Bayesian models, and it is the realization of ``borrowing strength'' or ``pooling information'' (McElreath, 2020).
 
@@ -703,17 +703,22 @@ The frequentist area-level estimator takes a different approach to making these 
 
 }
 
-\caption[EBLUP area-level and Post-stratified estimates in M333]{The frequentist area-level estimator and post-stratified estimator predicting basal area in the Northern Rocky Forest.}\label{fig:unnamed-chunk-16}
+\caption[EBLUP area-level and Post-stratified estimates in M333]{The frequentist area-level estimator and post-stratified estimator predicting basal area in the Northern Rocky Forest. The error bars depict two standard errors above an below the estimate of our response variable.}\label{fig:unnamed-chunk-16}
 \end{figure}
 Overall, we can see that the frequentist area-level estimator performs much more similarly to the post-stratified estimator, a trait that may or may not be appealing based on the confidence we have in representative sampling. However, it is important to note that the frequentist area-level estimator is still borrowing strength, it just seems that it will often borrow less strength than the hierarchical Bayesian area-level estimator.
 
-While it is visualally insightful to compare these estimators in the Northern Rocky Forest, it is also beneficial to looking at the numbers across the Interior West. In an attempt to quantify the magnitude of difference between two estimators we introduce percent relative difference, which we define below.
+When we narrow our vision to the Northern Rocky Forest it does seem like the hierarchical Bayesian area-level model
+
+(more text here)
+\begin{center}\includegraphics{thesis_files/figure-latex/unnamed-chunk-17-1} \end{center}
+
+While it is visually insightful to compare these estimators in the Northern Rocky Forest, it is also beneficial to looking at the numbers across the Interior West. In an attempt to quantify the magnitude of difference between two estimators we introduce percent relative difference, which we define below.
 \begin{align*}
 PRD(\hat\mu_1,~ \hat\mu_2) = \frac{\hat \mu_1 - \hat\mu_2}{\hat\mu_2} \cdot 100
 \end{align*}
 While we could explore percent relative difference between all combinations of estimators, the Forest Inventory and Analysis Program's go-to estimator is post-stratification, so we will compare the remaining five estimators to post-stratification. Below, we can see the quantiles of percent relative difference to post-stratification.
 \begin{longtable}[t]{lrrrrr}
-\caption{\label{tab:unnamed-chunk-17}Quantiles of Percent Relative Difference to the Post-Stratified Estimator}\\
+\caption{\label{tab:unnamed-chunk-18}Quantiles of Percent Relative Difference to the Post-Stratified Estimator}\\
 \toprule
 Estimator & 0\% & 25\% & 50\% & 75\% & 100\%\\
 \midrule
@@ -724,10 +729,35 @@ Area EBLUP & -79.641 & -3.747 & -0.165 & 2.802 & 160.843\\
 \bottomrule
 \end{longtable}
 These quantiles continue to enforce the idea that the area-level EBLUP generally performs very similarly to the post-stratified estimator (albeit with lower variance). Notably though, the percent relative difference between the area-level hierarchical Bayesian estimator and the post-stratified estimator is small compared to both unit-level models. Percent relative difference to the post-stratified estimator can be thought of in some senses as a weak proxy for bias. However, this is a difficult comparison to make when we do not have the parameter values. While this proxy for bias may be weak, it is reassuring that for the area-level hierarchical Bayesian estimator our median (50\% quantile) percent relative difference is somewhat low.
-\begin{center}\includegraphics{thesis_files/figure-latex/unnamed-chunk-18-1} \end{center}
-\begin{center}\includegraphics{thesis_files/figure-latex/unnamed-chunk-18-2} \end{center}
 
-The Northern Rocky Forest is a large eco-province spanning many states, and can be seen in Figure \ref{fig:northern-rocky}.
+Another aspect of our results that percent relative difference allows us to investigate is the performance of an estimator which we have hardly addressed so far: the hierarchical Bayesian unit-level model.
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p3 }\OtherTok{\textless{}{-}}\NormalTok{ res\_sf }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{hb\_area\_l\_dirps =}\NormalTok{ cov\_hb\_unit }\SpecialCharTok{\textless{}}\NormalTok{ cov\_dirps) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{ggplot}\NormalTok{(}\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{fill =}\NormalTok{ hb\_area\_l\_dirps,}
+                       \AttributeTok{geometry =}\NormalTok{ geometry)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{color =} \StringTok{"grey30"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"\#BF4C27"}\NormalTok{, }\StringTok{"\#80BCA2"}\NormalTok{), }\AttributeTok{na.value =} \StringTok{"grey"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_void}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Unit HB CV \textless{} Post{-}Strat CV"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.position =} \StringTok{"none"}\NormalTok{) }
+
+\NormalTok{p4 }\OtherTok{\textless{}{-}}\NormalTok{ res\_sf }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{hb\_area\_l\_freq\_area =}\NormalTok{ cov\_hb\_unit }\SpecialCharTok{\textless{}}\NormalTok{ cov\_freq\_unit) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{ggplot}\NormalTok{(}\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{fill =}\NormalTok{ hb\_area\_l\_freq\_area,}
+                       \AttributeTok{geometry =}\NormalTok{ geometry)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{color =} \StringTok{"grey30"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"\#BF4C27"}\NormalTok{, }\StringTok{"\#80BCA2"}\NormalTok{), }\AttributeTok{na.value =} \StringTok{"grey"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_void}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Unit HB CV \textless{} Unit EBLUP CV"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.position =} \StringTok{"none"}\NormalTok{) }
+\NormalTok{(p3 }\SpecialCharTok{+}\NormalTok{ p4)}
+\end{Highlighting}
+\end{Shaded}
+\includegraphics{thesis_files/figure-latex/unnamed-chunk-19-1.pdf}
+
+\ldots{} then some concluding thoughts to lead into the discussion chapter
 
 \hypertarget{discussion-and-conclusion}{%
 \chapter{Discussion and Conclusion}\label{discussion-and-conclusion}}
