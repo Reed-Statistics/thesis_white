@@ -22,7 +22,7 @@ What might be the most intuitive approach to estimating the population mean $\mu
 \end{align}
 Ignoring the finite population correction, the variance estimate for Horvitz-Thompson estimator is calculated by:
 \begin{align}
-V\Big(\hat\mu_{y_j}^{HT}\Big) = \frac{1}{n_j-1} \sum_{i \in s_j} \Big(y_{i,j} - \hat\mu_{y_j}^{HT}\Big)^2
+V\Big(\hat\mu_{y_j}^{HT}\Big) = \frac{1}{n_j-1} \sum_{i \in s_j} \Big(y_{ij} - \hat\mu_{y_j}^{HT}\Big)^2
 \end{align}
 Recall that the Horvitz-Thompson estimator is just taking the mean of the study variable of interest, $y$. Note that $y_i$ represents the value of the study variable in the $i$th unit sampled of eco-subsection $j$. This estimator is useful as it is easy to compute and does not require any auxiliary information. However, the Horvitz-Thompson estimator high variance relative to other estimators we will discuss. The post-stratified estimator begins to address the variance of the Horvitz-Thompson estimator.
 
@@ -30,13 +30,13 @@ Recall that the Horvitz-Thompson estimator is just taking the mean of the study 
 
 The post-stratified estimator is very similar to the Horvitz-Thompson estimator however, as stated above, it addresses variance that occurred from using the Horvitz-Thompson estimator. While decreasing variance seems like a no cost solution to some of our problems, the post-stratified estimator requires auxiliary information in order to be used. The post-stratified estimator is a weighted sum of two Horvitz-Thompson estimators: one Horvitz-Thompson estimator giving the estimate of the mean in sampled units which are forested and the other Horvitz-Thompson estimator in non-forested areas. We then weight these estimates by the true proportion of area in the eco-subsection of interest that is forested. Note that while we are using auxiliary information such as the true proportion of forested area in the eco-subsection of interest and whether or not the sampled units were forested areas or not, both of these pieces of information only consider the eco-subsection of interest. Therefore, since information is not used from outside of the eco-subsection of interest, the post-stratified estimator is still within the family of direct estimators. We can represent the post-stratified estimator as follows:
 \begin{align}
-\hat\mu_{y_j}^{PS} = \sum_{k=1}^{2} w_k \cdot \hat\mu_{y_{j,k}}^{HT}
+\hat\mu_{y_j}^{PS} = \sum_{k=1}^{2} w_k \cdot \hat\mu_{y_{jk}}^{HT}
 \end{align}
 Ignoring the finite population correction, the variance estimate for post-stratified estimator is calculated by:
 $$
 V\Big(\hat \mu_{y_j}^{PS}\Big) = 
-\frac{1}{n_j} \Bigg( \sum_{k=1}^{2} w_k n_k V\Big(\hat\mu_{y_{j,k}}^{HT}\Big) + 
-\sum_{k=1}^{2} (1 - w_k) \frac{n_k}{n_j} V\Big(\hat\mu_{y_{j,k}}^{HT}\Big) \Bigg)
+\frac{1}{n_j} \Bigg( \sum_{k=1}^{2} w_k n_k V\Big(\hat\mu_{y_{jk}}^{HT}\Big) + 
+\sum_{k=1}^{2} (1 - w_k) \frac{n_k}{n_j} V\Big(\hat\mu_{y_{jk}}^{HT}\Big) \Bigg)
 $$
 Recall that $k$ indexes over our strata, which in this case is forested and non-forested sampled units. We also have $w_k$, which is a survey weight entirely decided by the true proportion of eco-subsection $j$ which is forested. For example, if eco-subsection $j$ was 80% forested, we would have $w_1 = 0.8$ and $w_2 = 0.2$. Therefore if we had under-sampled forests at only 60% of our samples, we correct this under-sampling with our survey weights and this results in a better estimate of $\mu_{y_j}$ that is less variable. 
 
@@ -46,8 +46,8 @@ The post-stratified estimator is a great alternative to the Horvitz-Thompson est
 
 Another direct estimator that is often used for small area estimation is the survey regression estimator. While we do not implement in this estimator, the unit-level frequentist EBLUP estimator can be written as a weighted average of the survey regression estimator and a regression-synthetic estimator. Thus, it is important to understand the intuition behind this estimator in order to fully understand how the unit-level frequentist EBLUP estimator works. We can represent the survey regression estimator as follows:
 \begin{align}
-\hat \mu_{y_j}^{SR} = \frac{1}{N_j} \sum_{i \in U_j} (\hat y_{j,i}) +
-\frac{1}{n_j} \sum_{i \in s_j} (y_{j,i} - \hat y_{j,i})
+\hat \mu_{y_j}^{SR} = \frac{1}{N_j} \sum_{i \in U_j} (\hat y_{ji}) +
+\frac{1}{n_j} \sum_{i \in s_j} (y_{ji} - \hat y_{ji})
 \end{align}
 where $N_j$ is the population size in the $j$th area. The survey regression estimator has a particular subtlety which makes it arguably not a direct estimator. Particularly, the $\hat y_{j,i}$ is calculated through linear regression with $\beta$'s fit by ordinary least squares across the study region, rather than the small area. This is the case for this particular survey regression estimator, as it is the estimator which we can partially represent the unit-level EBLUP estimator by. One may make a quite legitimate argument that this estimator then should in fact be considered an implicit model-based estimator, however Rao (2014) sticks to the convention that this estimator is in fact still a direct estimator. He argues that we should consider this estimator to be a direct estimator as the strength we are borrowing does not increase the "effective" sample size. Making a final decision on this estimator's class is left as an exercise to the reader.  
 
@@ -59,9 +59,9 @@ We introduce two implicit model-based indirect estimators commonly used when aux
 
 ### The Area-level Regression-Synthetic Estimator
 
-A common method of an implicit model-based indirect estimator outlined by Rao (2014) for area-level is the regression-synthetic estimator. Here, in order to estimate our parameter of interest, $\mu_{y_j}$, we fit an ordinary least squares linear regression on our auxiliary variable. Notably, we use $\bar x_j$ to denote the auxiliary data's sample mean in the $j$th small area. 
+A common method of an implicit model-based indirect estimator outlined by Rao (2014) for area-level is the regression-synthetic estimator. Here, in order to estimate our parameter of interest, $\mu_{y_j}$, we fit an ordinary least squares linear regression on our auxiliary variable. Notably, we use $\bar X_j$ to denote the auxiliary data population mean in the $j$th small area. 
 \begin{align}
-\hat\mu_{y_j}^{RSA} = \hat\beta_0 + \hat\beta_1 \bar x_{j}
+\hat\mu_{y_j}^{RSA} = \hat\beta_0 + \hat\beta_1 \bar X_{j}
 \end{align}
 We note that the $\hat \beta$'s are calculated through standard methods of ordinary least squares. Further, it is important to recognize that in the case of the regression-synthetic estimator each small area receives the same $\hat\beta$'s as they are calculated by fitting an ordinary least squares model over all small areas within their eco-province. This is the realization of the requirement that the auxiliary information must have the same effect on each small area. It is also important to note that this estimator can be generalized to $p$ predictors, however in this thesis we use $p=1$.
 
@@ -69,11 +69,11 @@ We note that the $\hat \beta$'s are calculated through standard methods of ordin
 
 The unit-level regression-synthetic estimator is very similar to the area-level regression-synthetic estimator. Rather than the ordinary least squares model being fit at the area-level, it is fit at the unit-level. We first fit this unit-level model:
 $$
-\hat y_{j,i} = \hat\beta_0 + \hat\beta_1 X_{j,i}
+\hat y_{ji} = \hat\beta_0 + \hat\beta_1 X_{ji}
 $$
 Note that we use capital $X$ to denote the population mean of our explanatory variable at the unit-level. We can do express the unit-level regression-synthetic estimator below:
 \begin{align}
-\hat\mu_{y_j}^{RSU} = \frac{1}{n_j} \sum_{i \in s_j} \hat y_{j,i}
+\hat\mu_{y_j}^{RSU} = \frac{1}{n_j} \sum_{i \in s_j} \hat y_{ji}
 \end{align}
 This estimator is very similar to the area-level regression-synthetic estimator as it fits an ordinarily least squares model over the eco-province our small area is in, and the auxiliary information has the same effect on each small area. 
 
@@ -87,21 +87,23 @@ In small area estimation it is most common that the mixed model estimator used i
 
 In the case of the unit-level EBLUP, we first fit a varying-intercepts linear mixed model at the unit-level:
 \begin{align}
-y_{i,j} = \vec x_{i,j}^T \vec \beta + \nu_j + e_{i,j}
+y_{i,j} = x_{ij} \beta + \nu_j + e_{ij}
 \end{align}
-with 
+where $\beta$ is calculated from data across the eco-province and will stay constant for each eco-subsection. However, $\nu_j$, the "random effect", will be different for each eco-subsection. This random effect helps account for variation between eco-subsections that the auxiliary data does not account for. The random effects $\nu$ and sampling errors $e$ are assumed to be distributed as follows:
 $$
  \newcommand\myeq{\stackrel{\mathclap{\normalfont\mbox{s}}}{~}}
-\nu_j \stackrel{\text{iid}}{\sim} \text{N}(0,~ \sigma^2_{\nu}), \quad e_{i,j} \stackrel{\text{ind}}{\sim}\text{N}(0, k^2_{i,j}\sigma^2_e).
+\nu_j \stackrel{\text{iid}}{\sim} \text{N}(0,~ \sigma^2_{\nu}), \quad e_{ij} \stackrel{\text{ind}}{\sim}\text{N}(0, k^2_{ij}\sigma^2_e).
 $$
-Rao (2014) derives the unit-level EBLUP estimator from (the above eqn) fit in the frequentist paradigm as the weighted average of the survey regression estimator and the regression-synthetic estimator:
+Intuitively, we can think of the variance of the random effect, $\sigma^2_\nu$, as the heterogeneity between our small areas $j$ after we account for our fixed effects [@breidenbach2012]. [NEED TO TALK ABOUT WHAT K IS... cant find explanation in Rao]. 
+From our mixed model, Rao (2014) derives the unit-level EBLUP estimator fit in the frequentist paradigm as the weighted average of the survey regression estimator and the regression-synthetic estimator:
 \begin{align}
-\hat \mu_{y_j}^{FRU} = \hat \gamma_j \hat\mu_{y_j}^{SR} + (1 - \hat \gamma_j) \hat\mu_{y_j}^{RS}
+\hat \mu_{y_j}^{FRU} = \hat \gamma_j \hat\mu_{y_j}^{SR} + (1 - \hat \gamma_j) \hat\mu_{y_j}^{RSU}
 \end{align}
 where
 \begin{align}
-\hat\gamma_j = \sigma^2_\nu / (\sigma^2_\nu + \sigma^2_e / a_i)
+\hat\gamma_j = \frac{\sigma^2_\nu}{(\sigma^2_\nu + \sigma^2_e / a_i)}
 \end{align}
+This $\hat\gamma_j$ can be broken down into two parts: the numerator and denominator. The numerator measures the between-area variation, and the denominator measures the total variability. Thus, when a large proportion of the overall variation is between-area variation, the unit-level EBLUP will put more weight on the survey regression estimator. 
 (say what $a_i$ is from Rao around 7.1.3, 7.1.4)
 
 ### The Area-level EBLUP 
