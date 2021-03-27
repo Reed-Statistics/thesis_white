@@ -22,7 +22,7 @@ What might be the most intuitive approach to estimating the population mean $\mu
 \end{align}
 Ignoring the finite population correction, the variance estimate for Horvitz-Thompson estimator is calculated by:
 \begin{align}
-V(\hat\mu_{y_j}^{HT}) = \frac{1}{n_j-1} \sum_{i \in s_j} \Big(y_{i,j} - \hat\mu_{y_j}^{HT}\Big)^2
+V\Big(\hat\mu_{y_j}^{HT}\Big) = \frac{1}{n_j-1} \sum_{i \in s_j} \Big(y_{i,j} - \hat\mu_{y_j}^{HT}\Big)^2
 \end{align}
 Recall that the Horvitz-Thompson estimator is just taking the mean of the study variable of interest, $y$. Note that $y_i$ represents the value of the study variable in the $i$th unit sampled of eco-subsection $j$. This estimator is useful as it is easy to compute and does not require any auxiliary information. However, the Horvitz-Thompson estimator high variance relative to other estimators we will discuss. The post-stratified estimator begins to address the variance of the Horvitz-Thompson estimator.
 
@@ -32,35 +32,54 @@ The post-stratified estimator is very similar to the Horvitz-Thompson estimator 
 \begin{align}
 \hat\mu_{y_j}^{PS} = \sum_{k=1}^{2} w_k \cdot \hat\mu_{y_{j,k}}^{HT}
 \end{align}
+Ignoring the finite population correction, the variance estimate for post-stratified estimator is calculated by:
+$$
+V\Big(\hat \mu_{y_j}^{PS}\Big) = 
+\frac{1}{n_j} \Bigg( \sum_{k=1}^{2} w_k n_k V\Big(\hat\mu_{y_{j,k}}^{HT}\Big) + 
+\sum_{k=1}^{2} (1 - w_k) \frac{n_k}{n_j} V\Big(\hat\mu_{y_{j,k}}^{HT}\Big) \Bigg)
+$$
 Recall that $k$ indexes over our strata, which in this case is forested and non-forested sampled units. We also have $w_k$, which is a survey weight entirely decided by the true proportion of eco-subsection $j$ which is forested. For example, if eco-subsection $j$ was 80% forested, we would have $w_1 = 0.8$ and $w_2 = 0.2$. Therefore if we had under-sampled forests at only 60% of our samples, we correct this under-sampling with our survey weights and this results in a better estimate of $\mu_{y_j}$ that is less variable. 
 
 The post-stratified estimator is a great alternative to the Horvitz-Thompson estimator when auxiliary information related to the response variable of interest is available, and in that situation there is not a justifiable reason to pick the Horvitz-Thompson estimator over the post-stratified estimator as the direct estimator of choice. We have access to the information needed to compute the post-stratified estimate in the Interior West so we will primarily be comparing our indirect estimators to the post-stratified estimator in our results. Also, our area-level indirect model-based estimators will be based on the post-stratified estimate. 
 
 ### The Survey Regression Estimator
 
-An approach to implicit model based indirect estimation when unit-level auxiliary information is available is to use the survey regression estimator. 
+Another direct estimator that is often used for small area estimation is the survey regression estimator. While we do not implement in this estimator, the unit-level frequentist EBLUP estimator can be written as a weighted average of the survey regression estimator and a regression-synthetic estimator. Thus, it is important to understand the intuition behind this estimator in order to fully understand how the unit-level frequentist EBLUP estimator works. We can represent the survey regression estimator as follows:
 \begin{align}
-\hat \mu_{y_j}^{SR} = \overline y_j + (\overline X_j - \overline x_j)^T \hat\beta
+\hat \mu_{y_j}^{SR} = \frac{1}{N_j} \sum_{i \in U_j} (\hat y_{j,i}) +
+\frac{1}{n_j} \sum_{i \in s_j} (y_{j,i} - \hat y_{j,i})
 \end{align}
+where $N_j$ is the population size in the $j$th area. The survey regression estimator has a particular subtlety which makes it arguably not a direct estimator. Particularly, the $\hat y_{j,i}$ is calculated through linear regression with $\beta$'s fit by ordinary least squares across the study region, rather than the small area. This is the case for this particular survey regression estimator, as it is the estimator which we can partially represent the unit-level EBLUP estimator by. One may make a quite legitimate argument that this estimator then should in fact be considered an implicit model-based estimator, however Rao (2014) sticks to the convention that this estimator is in fact still a direct estimator. He argues that we should consider this estimator to be a direct estimator as the strength we are borrowing does not increase the "effective" sample size. Making a final decision on this estimator's class is left as an exercise to the reader.  
 
-## Implicit Model Based Indirect Estimation
+## Implicit Model-Based Indirect Estimation
 
-Often times it is the case that direct estimation techniques do not provide sufficiently small standard errors to be able to make informative inferences at the small area level. That is the case in our situation, as the FIA's survey design was based around making inferences at larger levels than eco-subsections. One relatively simple approach to decreasing variance of estimates at a small area level is to use auxiliary data from surrounding areas to help attain the estimate in the small area of interest. This process is called borrowing strength. It is very similar to the borrowing of strength outlined in Figures \@ref(fig:hbu-diagram) and \@ref(fig:hba-diagram), however, in the case of implicit model based indirect estimation we do not allow for between-area variation of explanatory variables. That is, we may borrow strength across small areas by using auxiliary data, but this auxiliary data must be aggregated and have the same effect on each small area within a designated area (in our case, this is the ecological province). 
+Often times it is the case that direct estimation techniques do not provide sufficiently small standard errors to be able to make informative inferences at the small area level. That is the case in our situation, as the FIA's survey design was based around making inferences at larger levels than eco-subsections. One relatively simple approach to decreasing variance of estimates at a small area level is to use auxiliary data from surrounding areas to help attain the estimate in the small area of interest. This process is called borrowing strength. It is very similar to the borrowing of strength outlined in Figures \@ref(fig:hbu-diagram) and \@ref(fig:hba-diagram), however, in the case of implicit model-based indirect estimation we do not allow for between-area variation of explanatory variables. That is, we may borrow strength across small areas by using auxiliary data, but this auxiliary data must be aggregated and have the same effect on each small area within a designated area (in our case, this is the ecological province). 
 
-We introduce two implicit model based indirect estimators commonly used when auxiliary data is available at the unit- and area-levels. These estimators are not used in the final analyses done in this thesis. However, they are crucial building blocks for understanding the frequentist EBLUP models we discuss and implement. First we discuss a common estimator used when area-level auxiliary data is available and then a common estimator for unit-level auxiliary data.
+We introduce two implicit model-based indirect estimators commonly used when auxiliary data is available at the unit- and area-levels. These estimators are not used in the final analyses done in this thesis. However, they are crucial building blocks for understanding the frequentist EBLUP models we discuss and implement. We discuss the regression-synthetic estimator used when area-level auxiliary data is available and then the regression-synthetic estimator used for unit-level auxiliary data.
 
-### Using Area-level Auxiliary Data
+### The Area-level Regression-Synthetic Estimator
 
-When we chose to use area-level auxiliary data and implicit model based indirect estimation, Rao (2014) suggests the regression-synthetic estimator. Here, in order to estimate our parameter of interest, $\mu_{y_j}$, we fit an ordinary least squares linear regression on our $p$ auxiliary variables over each small area in our large domain:
+A common method of an implicit model-based indirect estimator outlined by Rao (2014) for area-level is the regression-synthetic estimator. Here, in order to estimate our parameter of interest, $\mu_{y_j}$, we fit an ordinary least squares linear regression on our auxiliary variable. Notably, we use $\bar x_j$ to denote the auxiliary data's sample mean in the $j$th small area. 
 \begin{align}
-\hat\mu_{y_j}^{RS} = \hat\beta_0 + \hat\beta_1 x_{j,1} + \cdots + \hat\beta_p x_{j,p}
+\hat\mu_{y_j}^{RSA} = \hat\beta_0 + \hat\beta_1 \bar x_{j}
 \end{align}
-We note that the $\hat \beta$'s are calculated through standard methods of ordinary least squares and in the case of our analysis $p=1$. Further, it is important to recognize that in the case of the regression-synthetic estimator each small area receives the same $\hat\beta$'s. This is the realization of the requirement that the auxiliary information must have the same effect on each small area. 
+We note that the $\hat \beta$'s are calculated through standard methods of ordinary least squares. Further, it is important to recognize that in the case of the regression-synthetic estimator each small area receives the same $\hat\beta$'s as they are calculated by fitting an ordinary least squares model over all small areas within their eco-province. This is the realization of the requirement that the auxiliary information must have the same effect on each small area. It is also important to note that this estimator can be generalized to $p$ predictors, however in this thesis we use $p=1$.
 
+### The Unit-level Regression-Synthetic Estimator
 
-## Explicit Model Based Indirect Estimation
+The unit-level regression-synthetic estimator is very similar to the area-level regression-synthetic estimator. Rather than the ordinary least squares model being fit at the area-level, it is fit at the unit-level. We first fit this unit-level model:
+$$
+\hat y_{j,i} = \hat\beta_0 + \hat\beta_1 X_{j,i}
+$$
+Note that we use capital $X$ to denote the population mean of our explanatory variable at the unit-level. We can do express the unit-level regression-synthetic estimator below:
+\begin{align}
+\hat\mu_{y_j}^{RSU} = \frac{1}{n_j} \sum_{i \in s_j} \hat y_{j,i}
+\end{align}
+This estimator is very similar to the area-level regression-synthetic estimator as it fits an ordinarily least squares model over the eco-province our small area is in, and the auxiliary information has the same effect on each small area. 
 
-Often times, implicit model-based indirect estimators still do not reduce variance enough to give us estimates with a reasonably low variance. However, we can turn to explicit model based indirect estimation in order to combat this issue further. Explicit model based indirect estimators are extremely useful when relevant auxiliary data is available and we would like to allow for between-area variation of these auxiliary variables. By allowing for this between-area variation our models should fit to the data better given that there is truly between-area variation in the population. In the case of forests across a large portion of the United States, this assumption is very reasonable and one could attribute this variation to a number of factors such as temperature, humidity, or even elevation. Rather than attempting the daunting and nonsensical task of collecting data to fully explain this between-area variation, we fit a mixed model. 
+## Explicit Model-Based Indirect Estimation
+
+Often times, implicit model-based indirect estimators still do not reduce variance enough to give us estimates with a reasonably low variance. However, we can turn to explicit model-based indirect estimation in order to combat this issue further. Explicit model-based indirect estimators are extremely useful when relevant auxiliary data is available and we would like to allow for between-area variation of these auxiliary variables. By allowing for this between-area variation our models should fit to the data better given that there is truly between-area variation in the population. In the case of forests across a large portion of the United States, this assumption is very reasonable and one could attribute this variation to a number of factors such as temperature, humidity, or even elevation. Rather than attempting the daunting and nonsensical task of collecting data to fully explain this between-area variation, we fit a mixed model. 
 
 In small area estimation it is most common that the mixed model estimator used is one of the EBLUP estimators: either the unit- or area-level variant depending on the resolution of auxiliary data preferred. The EBLUP estimators are unbiased given the modeling assumptions are met, similar to the post-stratified estimator. We will now explore the model specifications of these EBLUP estimators at the unit- and area-level. 
 
