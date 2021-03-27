@@ -16,7 +16,7 @@
 \contentsline {subsection}{\numberline {4.2.2}The Unit-level Regression-Synthetic Estimator}{27}{subsection.4.2.2}%
 \contentsline {section}{\numberline {4.3}Explicit Model-Based Indirect Estimation}{27}{section.4.3}%
 \contentsline {subsection}{\numberline {4.3.1}The Unit-level EBLUP}{28}{subsection.4.3.1}%
-\contentsline {subsection}{\numberline {4.3.2}The Area-level EBLUP}{28}{subsection.4.3.2}%
+\contentsline {subsection}{\numberline {4.3.2}The Area-level EBLUP}{29}{subsection.4.3.2}%
 \contentsline {section}{\numberline {4.4}A Hierarchical Bayesian Approach}{29}{section.4.4}%
 \contentsline {subsection}{\numberline {4.4.1}The Unit-level Hierarhcical Bayesian Model}{30}{subsection.4.4.1}%
 \contentsline {subsection}{\numberline {4.4.2}The Area-level Hierarichical Bayesian Model}{30}{subsection.4.4.2}%

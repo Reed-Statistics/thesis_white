@@ -587,6 +587,20 @@ where
 This \(\hat\gamma_j\) can be broken down into two parts: the numerator and denominator. The numerator measures the between-area variation, and the denominator measures the total variability. Thus, when a large proportion of the overall variation is between-area variation, the unit-level EBLUP will put more weight on the survey regression estimator.
 (say what \(a_i\) is from Rao around 7.1.3, 7.1.4)
 
+For this thesis, in order to compute the variance of the unit-level EBLUP estimator we chose to bootstrap. Bootstrapping is the process taking repeated samples of our data with replacement, computing our statistic on that new bootstrap sample, and then repeating this process many times (Efron, 1992). The property of the bootstrap which is useful to us is that it produces good estimates for the variance of our estimator. For our application, we bootstrap within each small area to compute the variance. For each eco-subsection \(j\), we sample \(n_j\) plots with replacement. Next, we fit the unit-level EBLUP estimator to the bootstrapped eco-subsections and produce our mean estimate on our first bootstrap sample (we denote each bootstrap sample with \(b\), so in this case \(b=1\)).
+\[
+\hat\mu_j^{FRU}(b=1)
+\]
+Next, we repeat this sampling \(B\) times, and in our case we choose \(B = 500\) to produce 500 estimates:
+\[
+\hat\mu_j^{FRU}(b), \quad b = 1,\dots,500
+\]
+Finally, we compute our estimate of the variance:
+\begin{align}
+\hat V(\hat\mu_j) = \frac{1}{B-1} \sum_{b=1}^{B}\Big(\hat\mu_j(b) - \overline\mu_j^B\Big)
+\end{align}
+where \(\overline\mu_j^B\) denotes the sample mean of the bootstrap estimates of \(\mu_j\).
+
 \hypertarget{the-area-level-eblup}{%
 \subsection{The Area-level EBLUP}\label{the-area-level-eblup}}
 
@@ -1683,6 +1697,9 @@ Boonstra, H. J. (2012). \emph{Hbsae: Hierarchical bayesian small area estimation
 
 \leavevmode\vadjust pre{\hypertarget{ref-breidenbach2012}{}}%
 Breidenbach, J., \& Astrup, R. (2012). Small area estimation of forest attributes in the norwegian national forest inventory. \emph{European Journal of Forest Research}, \emph{131}(4), 1255--1267.
+
+\leavevmode\vadjust pre{\hypertarget{ref-bootstrap}{}}%
+Efron, B. (1992). Bootstrap methods: Another look at the jackknife. In \emph{Breakthroughs in statistics} (pp. 569--593). Springer.
 
 \leavevmode\vadjust pre{\hypertarget{ref-whatisfia}{}}%
 FIA. (2020). Forest inventory and analysis national program. \emph{What is FIA?} Retrieved from \url{https://www.fia.fs.fed.us/about/about_us/}
