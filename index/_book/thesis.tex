@@ -604,12 +604,16 @@ where \(\overline\mu_j^B\) denotes the sample mean of the bootstrap estimates of
 \hypertarget{the-area-level-eblup}{%
 \subsection{The Area-level EBLUP}\label{the-area-level-eblup}}
 
-EQN 6.1.1 (the linear mixed model formula at the area level):
-
-In order to obtain the EBLUP estimator at the area level, we first fit the following linear mixed model:
+We can also fit the EBLUP at the area-level. In order to do this, we fit the following linear mixed model:
 \begin{align}
-\hat\mu_{j}^{PS} = z_j^T \beta + b_j \nu_j + e_j
+\hat\mu_{j}^{PS} = x_j \beta + \nu_j + e_j
 \end{align}
+where we assume
+\[
+ \newcommand\myeq{\stackrel{\mathclap{\normalfont\mbox{s}}}{~}}
+\nu_j \stackrel{\text{iid}}{\sim} \text{N}(0,~ \sigma^2_{\nu}), \quad e_{j} \stackrel{\text{ind}}{\sim}\text{N}(0, \sigma^2_e).
+\]
+
 Next, Rao (2014) derives the commonly expressed form of the EBLUP estimator:
 
 The area-level EBLUP estimator is expressed by Rao (2014) as a weighted average of the direct estimator and the regression-synthetic estimator:
@@ -620,6 +624,16 @@ where
 \begin{align}
 \hat \gamma_j = \hat \sigma_\nu^2 b_j^2 / (\psi_j + \hat\sigma_\nu^2 b_j^2)
 \end{align}
+We compute the variance of this estimator by using the MSE of this estimator. The MSE is expressed by the following equation (Hidiroglou \& You, 2016):
+\begin{align}
+V(\hat\mu_j^{FRA}) = MSE(\hat\mu_j^{FRA}) = g_{1j} + g_{2j} + 2g_{3j}
+\end{align}
+where
+\begin{align*}
+g_{1j} = \hat\gamma_j \sigma^2_e, \\
+g_{2j} = \text{figure this out... wls beta?} \\
+g_{3j} = (\sigma^2_e)^2 \cdot (\sigma^2_\nu + \sigma^2_e)^{-3} \cdot 2(\sum_{j} (\sigma^2_\nu + \sigma^2_e)^{-2})^{-1}
+\end{align*}
 (I need to define a lot of these quantities. Trying to find the best way to do this without pulling every little thing from Rao)
 
 \hypertarget{a-hierarchical-bayesian-approach}{%
@@ -1703,6 +1717,9 @@ Efron, B. (1992). Bootstrap methods: Another look at the jackknife. In \emph{Bre
 
 \leavevmode\vadjust pre{\hypertarget{ref-whatisfia}{}}%
 FIA. (2020). Forest inventory and analysis national program. \emph{What is FIA?} Retrieved from \url{https://www.fia.fs.fed.us/about/about_us/}
+
+\leavevmode\vadjust pre{\hypertarget{ref-mse-area}{}}%
+Hidiroglou, M., \& You, Y. (2016). Comparison of unit level and area level small area estimators, \emph{42}, 41--61.
 
 \leavevmode\vadjust pre{\hypertarget{ref-nlcd11}{}}%
 Homer, C. (2015, November). Completion of the 2011 national land cover database for the conterminous united states -- representing a decade of land cover change information. \emph{EPA}. Environmental Protection Agency. Retrieved from \url{https://cfpub.epa.gov/si/si_public_record_report.cfm?Lab=NERL\&dirEntryId=309950}
