@@ -175,24 +175,20 @@ Bayes' Theorem allows us to derive one conditional probability, $P(A ~\vert~ B)$
 f(\mu_{y_j} ~\vert~ \text{data}) \propto P(\text{data} ~\vert~ \mu_{y_j}) \cdot P(\mu_{y_j})
 (\#eq:bayes-thm)
 \end{align}
-In our application, we are interested in making inferences about $\mu_{y_j}$ given the data we have. This is represented on the left hand side of Equation \@ref(eq:bayes-thm). We call this quantity the posterior distribution of $\mu_{y_j}$ given the data. As we continue to read left to right, we have our likelihood (or, data) multiplied with the distribution of $\mu_{y_j}$. Clearly we do not know the true value of $\mu_{y_j}$ or else we would not attempt to estimate $\mu_{y_j}$. In order to estimate our posterior distribution we must multiply something with the likelihood function, so we choose a "prior" distribution which reflects our prior belief of the distribution of $\mu_{y_j}$. 
-
-These are the concepts and basics of Bayesian statistics applied to the problem at hand: estimating $\mu_{y_j}$. 
-
-
-
-```{r}
+In our application, we are interested in making inferences about $\mu_{y_j}$ given the data we have. This is represented on the left hand side of Equation \@ref(eq:bayes-thm). We call this quantity the posterior distribution of $\mu_{y_j}$ given the data. As we continue to read left to right, we have our likelihood (or, data) multiplied with the distribution of $\mu_{y_j}$. Clearly we do not know the true value of $\mu_{y_j}$ or else we would not attempt to estimate $\mu_{y_j}$. In order to estimate our posterior distribution we must multiply something with the likelihood function, so we choose a "prior" distribution which reflects our prior belief of the distribution of $\mu_{y_j}$. We can visualize obtaining a posterior distribution below:
+```{r, warning = F, message = F, echo = F, fig.cap="Hypothetical prior, likelihood, and posterior distributions. The posterior is inbetween the prior and likelihood as it is the normalized product of these distributions.", fig.scap = "Prior, likelihood, and posterior distributions."}
+library(tidyverse)
 x <- seq(from = -90, to = 90, by = 1)
-data <- dnorm(x, mean = 30, sd = 10)
-prior <- dnorm(x, mean = 10, sd = 5)
-posterior <- 0.5 * dnorm(x, mean = 10, sd = 5) + 0.5 * dnorm(x, mean = 30, sd = 10)
+data <- dnorm(x, mean = 40, sd = 5)
+prior <- dnorm(x, mean = 10, sd = 10)
+posterior <- dnorm(x, 25, 4)
 bayes_df <- tibble(
   x = rep(x,3),
   distributions = c(prior, data, posterior),
   which_one = c(rep("Prior", 181), rep("Likelihood", 181), rep("Posterior", 181))
 )
-ggplot(bayes_df) +
-  geom_line(aes(x = x, y = distributions, color = which_one)) +
+ggplot(bayes_df, aes(x = x, y = distributions, color = which_one)) +
+  geom_line() +
   theme_bw() +
   scale_color_manual(values = c("steelblue", "#BF4C27", "#E7AB26")) +
   theme(legend.position = "bottom",
@@ -200,25 +196,17 @@ ggplot(bayes_df) +
         axis.text = element_blank()) +
   labs(x = "", y = "", color = "Distribution")
 ```
+Here we can see that our estimate is informed by both the data and the prior distribution, rather than in the frequentist paradigm where only the data is used. We also see that if the prior is "flat", our posterior would just be our likelihood function, leading us to the same result as we achieve through a frequentist analysis, just though a different method. 
 
-
-
-
-
-<!-- Before we introduce the models used in this thesis, we must introduce some notation. Consider a set of model parameters $\lambda$, the data $y$, and the parameter of interest $\mu$ for each eco-subsection. We would like to obtain the distribution of $f(\mu ~\vert~ y)$, i.e. the distribution of our parameter of interest, $\mu$, given our data $y$. Rao (2014) shows that we can obtain this desired posterior density by first obtaining the posterior density of $\mu$ and $\lambda ~\vert~ y$, -->
-<!-- \begin{align} -->
-<!-- f(\mu,~ \lambda ~\vert~ y) = \frac{f(y, \mu ~\vert~ \lambda) f(\lambda)}{f(y)} -->
-<!-- \end{align} -->
-<!-- and then integrating over $\lambda$: -->
-<!-- \begin{align} -->
-<!-- f(\mu ~\vert~ y) = \int f(\mu,~ \lambda ~\vert~ y) \text{d}\lambda. -->
-<!-- \end{align} -->
-Depending on the functional form of the densities we must integrate to obtain our posterior, it is often easier to approximate the distribution with MCMC methods. However, in the case of this thesis, we use numerical integration to extract exact posterior densities from our likelihood and priors. We will now give the form of both the unit- and area-level hierarchical Bayesian models used in this thesis. 
+These are the concepts and basics of Bayesian statistics applied to the problem at hand: estimating $\mu_{y_j}$. We introduce two methods which estimate $\hat\mu_{y_j}$: the unit-level hierarchical Bayesian estimator and the area-level hierarchical Bayesian estimator. These estimators are analogous to the unit-level EBLUP and the area-level EBLUP, respectively. Notably, when $\sigma^2_\nu$ is known and we use flat priors to attain our posterior the hierarchcial Bayesian approach and EBLUPs give the same estimates and measures of variability [@rao2014]. However, we of course do not know $\sigma^2_\nu$. We now introduce each estimator. 
 
 ### The Unit-level Hierarhcical Bayesian Model
 
 ### The Area-level Hierarichical Bayesian Model
 
+
+
+<!-- Depending on the functional form of the densities we must integrate to obtain our posterior, it is often easier to approximate the distribution with MCMC methods. However, in the case of this thesis, we use numerical integration to extract exact posterior densities from our likelihood and priors. We will now give the form of both the unit- and area-level hierarchical Bayesian models used in this thesis.  -->
 
 
 <!-- \begin{align} -->
