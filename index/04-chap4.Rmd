@@ -161,16 +161,58 @@ g_{3j} = (\sigma^2_e)^2 \cdot (\sigma^2_\nu + \sigma^2_e)^{-3} \cdot 2(\sum_{j} 
 
 ## A Hierarchical Bayesian Approach
 
-So far in this chapter, we have explored common frequentist approaches to small area estimation. However, the research goal of this thesis is to study the performance of the hierarchical Bayesian model for small area estimation. With a hierarchical Bayesian model, we derive the posterior distribution of our variable of interest with either Markov Chain Monte Carlo (MCMC) methods or through numerical integration. We do this by considering both the data (likelihood) and prior distributions. This allows us to use Bayes' Theorem in order to attain our posterior. 
+So far in this chapter, we have explored common frequentist approaches to small area estimation. However, the research goal of this thesis is to study the performance of the hierarchical Bayesian model for small area estimation. With a hierarchical Bayesian model, we derive the posterior distribution of our variable of interest with either Markov Chain Monte Carlo (MCMC) methods or through numerical integration. We do this by considering both the data (likelihood) and prior distributions. This allows us to use Bayes' Theorem in order to attain our posterior.
 
-Before we introduce the models used in this thesis, we must introduce some notation. Consider a set of model parameters $\lambda$, the data $y$, and the parameter of interest $\mu$ for each eco-subsection. We would like to obtain the distribution of $f(\mu ~\vert~ y)$, i.e. the distribution of our parameter of interest, $\mu$, given our data $y$. Rao (2014) shows that we can obtain this desired posterior density by first obtaining the posterior density of $\mu$ and $\lambda ~\vert~ y$,
+Before introducing a slew of notation regarding Bayesian statistics, let's take a step back to recall the type of questions we have been asking so far. Each estimator in this chapter so far has attempted to quantify the mean of our response variable $y$ in each eco-subsection $j$, that is estimating $\mu_{y_j}$. The way in which we attain our estimate $\hat\mu_{y_j}$ and its variance $V\Big(\hat\mu_{y_j}\Big)$ is by asking the question: what sort of $\hat\mu_{y_j}$ would we expect to get under hypothetical resampling? This question is the basis of the name "frequentist" as our estimates in this frequentist paradigm rely on the hypothetical repeated (frequent) sampling. When we choose to use Bayesian methods to estimate $\mu_{y_j}$, we ask a different question: What is our knowledge of $\mu_{y_j}$ based on the data and prior information?
+
+These questions bring up a philosophical difference between Bayesian and frequentist statistics about the addition of prior information. One may object to this, however in this thesis we add very little prior information and rely quite heavily on the data to much of the work for us. Secondly, the addition of prior information allows us to attain a posterior distribution for our estimate of $\mu_{y_j}$, rather than a point estimate. Now with this philosophical difference in mind, recall Bayes' Theorem below:
 \begin{align}
-f(\mu,~ \lambda ~\vert~ y) = \frac{f(y, \mu ~\vert~ \lambda) f(\lambda)}{f(y)}
+P(A ~\vert~ B) &= \frac{P(B ~\vert~ A) \cdot P(A)}{P(B)} \\
+&\propto P(B ~\vert~ A) \cdot P(A)
 \end{align}
-and then integrating over $\lambda$:
+Bayes' Theorem allows us to derive one conditional probability, $P(A ~\vert~ B)$, given that we know the inverse conditional probability and each marginal distribution [@bayes-orig]. This theorem is the basis of our hierarchical Bayesian models. Replacing $A$ with our parameter of interest, $\mu_{y_j}$, and $B$ with our data we get the following equation:
 \begin{align}
-f(\mu ~\vert~ y) = \int f(\mu,~ \lambda ~\vert~ y) \text{d}\lambda.
+f(\mu_{y_j} ~\vert~ \text{data}) \propto P(\text{data} ~\vert~ \mu_{y_j}) \cdot P(\mu_{y_j})
+(\#eq:bayes-thm)
 \end{align}
+In our application, we are interested in making inferences about $\mu_{y_j}$ given the data we have. This is represented on the left hand side of Equation \@ref(eq:bayes-thm). We call this quantity the posterior distribution of $\mu_{y_j}$ given the data. As we continue to read left to right, we have our likelihood (or, data) multiplied with the distribution of $\mu_{y_j}$. Clearly we do not know the true value of $\mu_{y_j}$ or else we would not attempt to estimate $\mu_{y_j}$. In order to estimate our posterior distribution we must multiply something with the likelihood function, so we choose a "prior" distribution which reflects our prior belief of the distribution of $\mu_{y_j}$. 
+
+These are the concepts and basics of Bayesian statistics applied to the problem at hand: estimating $\mu_{y_j}$. 
+
+
+
+```{r}
+x <- seq(from = -90, to = 90, by = 1)
+data <- dnorm(x, mean = 30, sd = 10)
+prior <- dnorm(x, mean = 10, sd = 5)
+posterior <- 0.5 * dnorm(x, mean = 10, sd = 5) + 0.5 * dnorm(x, mean = 30, sd = 10)
+bayes_df <- tibble(
+  x = rep(x,3),
+  distributions = c(prior, data, posterior),
+  which_one = c(rep("Prior", 181), rep("Likelihood", 181), rep("Posterior", 181))
+)
+ggplot(bayes_df) +
+  geom_line(aes(x = x, y = distributions, color = which_one)) +
+  theme_bw() +
+  scale_color_manual(values = c("steelblue", "#BF4C27", "#E7AB26")) +
+  theme(legend.position = "bottom",
+        axis.ticks = element_blank(),
+        axis.text = element_blank()) +
+  labs(x = "", y = "", color = "Distribution")
+```
+
+
+
+
+
+<!-- Before we introduce the models used in this thesis, we must introduce some notation. Consider a set of model parameters $\lambda$, the data $y$, and the parameter of interest $\mu$ for each eco-subsection. We would like to obtain the distribution of $f(\mu ~\vert~ y)$, i.e. the distribution of our parameter of interest, $\mu$, given our data $y$. Rao (2014) shows that we can obtain this desired posterior density by first obtaining the posterior density of $\mu$ and $\lambda ~\vert~ y$, -->
+<!-- \begin{align} -->
+<!-- f(\mu,~ \lambda ~\vert~ y) = \frac{f(y, \mu ~\vert~ \lambda) f(\lambda)}{f(y)} -->
+<!-- \end{align} -->
+<!-- and then integrating over $\lambda$: -->
+<!-- \begin{align} -->
+<!-- f(\mu ~\vert~ y) = \int f(\mu,~ \lambda ~\vert~ y) \text{d}\lambda. -->
+<!-- \end{align} -->
 Depending on the functional form of the densities we must integrate to obtain our posterior, it is often easier to approximate the distribution with MCMC methods. However, in the case of this thesis, we use numerical integration to extract exact posterior densities from our likelihood and priors. We will now give the form of both the unit- and area-level hierarchical Bayesian models used in this thesis. 
 
 ### The Unit-level Hierarhcical Bayesian Model

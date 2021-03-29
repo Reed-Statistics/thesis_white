@@ -641,14 +641,44 @@ g_{3j} = (\sigma^2_e)^2 \cdot (\sigma^2_\nu + \sigma^2_e)^{-3} \cdot 2(\sum_{j} 
 
 So far in this chapter, we have explored common frequentist approaches to small area estimation. However, the research goal of this thesis is to study the performance of the hierarchical Bayesian model for small area estimation. With a hierarchical Bayesian model, we derive the posterior distribution of our variable of interest with either Markov Chain Monte Carlo (MCMC) methods or through numerical integration. We do this by considering both the data (likelihood) and prior distributions. This allows us to use Bayes' Theorem in order to attain our posterior.
 
-Before we introduce the models used in this thesis, we must introduce some notation. Consider a set of model parameters \(\lambda\), the data \(y\), and the parameter of interest \(\mu\) for each eco-subsection. We would like to obtain the distribution of \(f(\mu ~\vert~ y)\), i.e.~the distribution of our parameter of interest, \(\mu\), given our data \(y\). Rao (2014) shows that we can obtain this desired posterior density by first obtaining the posterior density of \(\mu\) and \(\lambda ~\vert~ y\),
+Before introducing a slew of notation regarding Bayesian statistics, let's take a step back to recall the type of questions we have been asking so far. Each estimator in this chapter so far has attempted to quantify the mean of our response variable \(y\) in each eco-subsection \(j\), that is estimating \(\mu_{y_j}\). The way in which we attain our estimate \(\hat\mu_{y_j}\) and its variance \(V\Big(\hat\mu_{y_j}\Big)\) is by asking the question: what sort of \(\hat\mu_{y_j}\) would we expect to get under hypothetical resampling? This question is the basis of the name ``frequentist'' as our estimates in this frequentist paradigm rely on the hypothetical repeated (frequent) sampling. When we choose to use Bayesian methods to estimate \(\mu_{y_j}\), we ask a different question: What is our knowledge of \(\mu_{y_j}\) based on the data and prior information?
+
+These questions bring up a philosophical difference between Bayesian and frequentist statistics about the addition of prior information. One may object to this, however in this thesis we add very little prior information and rely quite heavily on the data to much of the work for us. Secondly, the addition of prior information allows us to attain a posterior distribution for our estimate of \(\mu_{y_j}\), rather than a point estimate. Now with this philosophical difference in mind, recall Bayes' Theorem below:
 \begin{align}
-f(\mu,~ \lambda ~\vert~ y) = \frac{f(y, \mu ~\vert~ \lambda) f(\lambda)}{f(y)}
+P(A ~\vert~ B) &= \frac{P(B ~\vert~ A) \cdot P(A)}{P(B)} \\
+&\propto P(B ~\vert~ A) \cdot P(A)
 \end{align}
-and then integrating over \(\lambda\):
+Bayes' Theorem allows us to derive one conditional probability, \(P(A ~\vert~ B)\), given that we know the inverse conditional probability and each marginal distribution (Bayes, 1763). This theorem is the basis of our hierarchical Bayesian models. Replacing \(A\) with our parameter of interest, \(\mu_{y_j}\), and \(B\) with our data we get the following equation:
 \begin{align}
-f(\mu ~\vert~ y) = \int f(\mu,~ \lambda ~\vert~ y) \text{d}\lambda.
+f(\mu_{y_j} ~\vert~ \text{data}) \propto P(\text{data} ~\vert~ \mu_{y_j}) \cdot P(\mu_{y_j})
+\label{eq:bayes-thm}
 \end{align}
+In our application, we are interested in making inferences about \(\mu_{y_j}\) given the data we have. This is represented on the left hand side of Equation \eqref{eq:bayes-thm}. We call this quantity the posterior distribution of \(\mu_{y_j}\) given the data. As we continue to read left to right, we have our likelihood (or, data) multiplied with the distribution of \(\mu_{y_j}\). Clearly we do not know the true value of \(\mu_{y_j}\) or else we would not attempt to estimate \(\mu_{y_j}\). In order to estimate our posterior distribution we must multiply something with the likelihood function, so we choose a ``prior'' distribution which reflects our prior belief of the distribution of \(\mu_{y_j}\).
+
+These are the concepts and basics of Bayesian statistics applied to the problem at hand: estimating \(\mu_{y_j}\).
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\AttributeTok{from =} \SpecialCharTok{{-}}\DecValTok{90}\NormalTok{, }\AttributeTok{to =} \DecValTok{90}\NormalTok{, }\AttributeTok{by =} \DecValTok{1}\NormalTok{)}
+\NormalTok{data }\OtherTok{\textless{}{-}} \FunctionTok{dnorm}\NormalTok{(x, }\AttributeTok{mean =} \DecValTok{30}\NormalTok{, }\AttributeTok{sd =} \DecValTok{10}\NormalTok{)}
+\NormalTok{prior }\OtherTok{\textless{}{-}} \FunctionTok{dnorm}\NormalTok{(x, }\AttributeTok{mean =} \DecValTok{10}\NormalTok{, }\AttributeTok{sd =} \DecValTok{5}\NormalTok{)}
+\NormalTok{posterior }\OtherTok{\textless{}{-}} \FloatTok{0.5} \SpecialCharTok{*} \FunctionTok{dnorm}\NormalTok{(x, }\AttributeTok{mean =} \DecValTok{10}\NormalTok{, }\AttributeTok{sd =} \DecValTok{5}\NormalTok{) }\SpecialCharTok{+} \FloatTok{0.5} \SpecialCharTok{*} \FunctionTok{dnorm}\NormalTok{(x, }\AttributeTok{mean =} \DecValTok{30}\NormalTok{, }\AttributeTok{sd =} \DecValTok{10}\NormalTok{)}
+\NormalTok{bayes\_df }\OtherTok{\textless{}{-}} \FunctionTok{tibble}\NormalTok{(}
+  \AttributeTok{x =} \FunctionTok{rep}\NormalTok{(x,}\DecValTok{3}\NormalTok{),}
+  \AttributeTok{distributions =} \FunctionTok{c}\NormalTok{(prior, data, posterior),}
+  \AttributeTok{which\_one =} \FunctionTok{c}\NormalTok{(}\FunctionTok{rep}\NormalTok{(}\StringTok{"Prior"}\NormalTok{, }\DecValTok{181}\NormalTok{), }\FunctionTok{rep}\NormalTok{(}\StringTok{"Likelihood"}\NormalTok{, }\DecValTok{181}\NormalTok{), }\FunctionTok{rep}\NormalTok{(}\StringTok{"Posterior"}\NormalTok{, }\DecValTok{181}\NormalTok{))}
+\NormalTok{)}
+\FunctionTok{ggplot}\NormalTok{(bayes\_df) }\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ x, }\AttributeTok{y =}\NormalTok{ distributions, }\AttributeTok{color =}\NormalTok{ which\_one)) }\SpecialCharTok{+}
+  \FunctionTok{theme\_bw}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"steelblue"}\NormalTok{, }\StringTok{"\#BF4C27"}\NormalTok{, }\StringTok{"\#E7AB26"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.position =} \StringTok{"bottom"}\NormalTok{,}
+        \AttributeTok{axis.ticks =} \FunctionTok{element\_blank}\NormalTok{(),}
+        \AttributeTok{axis.text =} \FunctionTok{element\_blank}\NormalTok{()) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{""}\NormalTok{, }\AttributeTok{y =} \StringTok{""}\NormalTok{, }\AttributeTok{color =} \StringTok{"Distribution"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+\includegraphics{thesis_files/figure-latex/unnamed-chunk-13-1.pdf}
+
 Depending on the functional form of the densities we must integrate to obtain our posterior, it is often easier to approximate the distribution with MCMC methods. However, in the case of this thesis, we use numerical integration to extract exact posterior densities from our likelihood and priors. We will now give the form of both the unit- and area-level hierarchical Bayesian models used in this thesis.
 
 \hypertarget{the-unit-level-hierarhcical-bayesian-model}{%
@@ -731,38 +761,38 @@ VOLNLIVE\_TPA & 615.601 & 130.547\\
 From this table we are able to confirm that we see high coefficients of variation more often in areas with lower values for our response variable. It now becomes apparent why some estimators have many coefficients of variation greater than one and others have none or very few. The three estimators which have coefficients of variation greater than one all will borrow a great deal of strength from outside eco-subsections when those outside eco-subections have a much higher response variable value than the eco-subsection of interest. In other words, with these three estimators, eco-subsections with lower response variable values will get larger estimates. These larger estimates require larger standard errors as we are unsure whether we had a non-representative sample (too low) in the given eco-subsection or if this eco-subsection truly has a low value for its response variable(s). However, when we are choosing methods of estimation which borrow strength, this is a property we like to see. In fact, estimators which do not borrow strength in these situations and have small coefficients of variation could be producing under-estimates with an artificial amount of precision. We can first visualize this phenomenon by examining the coefficient of variation of each estimator across the Interior West:
 \begin{figure}
 
-{\centering \includegraphics{thesis_files/figure-latex/unnamed-chunk-14-1} 
+{\centering \includegraphics{thesis_files/figure-latex/unnamed-chunk-15-1} 
 
 }
 
-\caption[Coefficient of variation map]{Average log coefficient of variation of each estimator in each eco-subsection plotted onto a map of the Interior West. The average is taken over the four response variables. The natural log is used to perserve a reasonable color scale. Grey areas represent areas where models were not fit.}\label{fig:unnamed-chunk-14}
+\caption[Coefficient of variation map]{Average log coefficient of variation of each estimator in each eco-subsection plotted onto a map of the Interior West. The average is taken over the four response variables. The natural log is used to perserve a reasonable color scale. Grey areas represent areas where models were not fit.}\label{fig:unnamed-chunk-15}
 \end{figure}
 We see that the three estimators which have coefficient of variation values higher than one generally produce these values in heavily deserted areas in the southern parts of the Interior West and some deserts in the north parts of Nevada. It is sensible that these areas may truly have low values for our response variables given that the post-stratified estimator is doing its job correctly and the population totals for forested and non-forested areas are correct. On the other hand, it may be reasonable to use a higher variance estimate in these cases and borrow strength from surrounding areas. While it is hard to say which approach to handling these situations gives a better estimate, it highlights distinct ways in which the hierarchical Bayesian estimators (and the unit-level EBLUP) perform differently than the direct estimators and area-level EBLUP. When examining the Northern Rocky Forest we notice the behavior of the hierarchical Bayesian area-level estimator ``pulling up'' lower valued eco-subsections compared to their post-stratified estimate:
-\begin{figure}
-
-{\centering \includegraphics[width=1\linewidth]{thesis_files/figure-latex/unnamed-chunk-15-1} 
-
-}
-
-\caption[HB Area and Post-stratified estimates in M333]{The hierarchical Bayesian area-level estimator and post-stratified estimator predicting basal area in the Northern Rocky Forest. The error bars depict two standard errors above an below the estimate of our response variable.}\label{fig:unnamed-chunk-15}
-\end{figure}
-We also observe that the eco-subsections with high response values will get ``pulled down,'' however the coefficient of variation does not increase significantly here as the sample mean is still relatively high. The ``pulling up'' and ``pushing down'' of estimates is a trait expected of these hierarchical Bayesian models, and it is the realization of ``borrowing strength'' or ``pooling information'' (McElreath, 2020).
-
-The frequentist area-level estimator takes a different approach to making these estimates. Notably, in the case of small within-area variation we see that the EBLUP will put a heavy weight on the post-stratified estimate from Equation \eqref{eq:eblup-area-weight}. We can see this occur by comparing the area-level frequentist estimator to the post-stratified estimate with the same eco-province and response variable as above:
 \begin{figure}
 
 {\centering \includegraphics[width=1\linewidth]{thesis_files/figure-latex/unnamed-chunk-16-1} 
 
 }
 
-\caption[EBLUP area-level and Post-stratified estimates in M333]{The frequentist area-level estimator and post-stratified estimator predicting basal area in the Northern Rocky Forest. The error bars depict two standard errors above an below the estimate of our response variable.}\label{fig:unnamed-chunk-16}
+\caption[HB Area and Post-stratified estimates in M333]{The hierarchical Bayesian area-level estimator and post-stratified estimator predicting basal area in the Northern Rocky Forest. The error bars depict two standard errors above an below the estimate of our response variable.}\label{fig:unnamed-chunk-16}
+\end{figure}
+We also observe that the eco-subsections with high response values will get ``pulled down,'' however the coefficient of variation does not increase significantly here as the sample mean is still relatively high. The ``pulling up'' and ``pushing down'' of estimates is a trait expected of these hierarchical Bayesian models, and it is the realization of ``borrowing strength'' or ``pooling information'' (McElreath, 2020).
+
+The frequentist area-level estimator takes a different approach to making these estimates. Notably, in the case of small within-area variation we see that the EBLUP will put a heavy weight on the post-stratified estimate from Equation \eqref{eq:eblup-area-weight}. We can see this occur by comparing the area-level frequentist estimator to the post-stratified estimate with the same eco-province and response variable as above:
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{thesis_files/figure-latex/unnamed-chunk-17-1} 
+
+}
+
+\caption[EBLUP area-level and Post-stratified estimates in M333]{The frequentist area-level estimator and post-stratified estimator predicting basal area in the Northern Rocky Forest. The error bars depict two standard errors above an below the estimate of our response variable.}\label{fig:unnamed-chunk-17}
 \end{figure}
 Overall, we can see that the frequentist area-level estimator performs much more similarly to the post-stratified estimator, a trait that may or may not be appealing based on the confidence we have in representative sampling. However, it is important to note that the frequentist area-level estimator is still borrowing strength, it just seems that it will often borrow less strength than the hierarchical Bayesian area-level estimator.
 
 When we narrow our vision to the Northern Rocky Forest it does seem like the hierarchical Bayesian area-level model
 
 (more text here)
-\begin{center}\includegraphics{thesis_files/figure-latex/unnamed-chunk-17-1} \end{center}
+\begin{center}\includegraphics{thesis_files/figure-latex/unnamed-chunk-18-1} \end{center}
 
 While it is visually insightful to compare these estimators in the Northern Rocky Forest, it is also beneficial to looking at the numbers across the Interior West. In an attempt to quantify the magnitude of difference between two estimators we introduce percent relative difference, which we define below.
 \begin{align*}
@@ -770,7 +800,7 @@ PRD(\hat\mu_1,~ \hat\mu_2) = \frac{\hat \mu_1 - \hat\mu_2}{\hat\mu_2} \cdot 100
 \end{align*}
 While we could explore percent relative difference between all combinations of estimators, the Forest Inventory and Analysis Program's go-to estimator is post-stratification, so we will compare the remaining five estimators to post-stratification. Below, we can see the quantiles of percent relative difference to post-stratification.
 \begin{longtable}[t]{lrrrrr}
-\caption{\label{tab:unnamed-chunk-18}Quantiles of Percent Relative Difference to the Post-Stratified Estimator}\\
+\caption{\label{tab:unnamed-chunk-19}Quantiles of Percent Relative Difference to the Post-Stratified Estimator}\\
 \toprule
 Estimator & 0\% & 25\% & 50\% & 75\% & 100\%\\
 \midrule
@@ -807,7 +837,7 @@ Another aspect of our results that percent relative difference allows us to inve
 \NormalTok{(p3 }\SpecialCharTok{+}\NormalTok{ p4)}
 \end{Highlighting}
 \end{Shaded}
-\includegraphics{thesis_files/figure-latex/unnamed-chunk-19-1.pdf}
+\includegraphics{thesis_files/figure-latex/unnamed-chunk-20-1.pdf}
 
 \ldots{} then some concluding thoughts to lead into the discussion chapter
 
@@ -1706,6 +1736,9 @@ This appendix includes the code used to create the estimates used in this thesis
 
 \hypertarget{refs}{}
 \begin{CSLReferences}{1}{0}
+\leavevmode\vadjust pre{\hypertarget{ref-bayes-orig}{}}%
+Bayes, T. (1763). LII. An essay towards solving a problem in the doctrine of chances. By the late rev. Mr. Bayes, FRS communicated by mr. Price, in a letter to john canton, AMFR s. \emph{Philosophical Transactions of the Royal Society of London}, (53), 370--418.
+
 \leavevmode\vadjust pre{\hypertarget{ref-hbsae-package}{}}%
 Boonstra, H. J. (2012). \emph{Hbsae: Hierarchical bayesian small area estimation}. Retrieved from \url{https://CRAN.R-project.org/package=hbsae}
 
