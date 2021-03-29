@@ -18,8 +18,8 @@
 \contentsline {subsection}{\numberline {4.3.1}The Unit-level EBLUP}{28}{subsection.4.3.1}%
 \contentsline {subsection}{\numberline {4.3.2}The Area-level EBLUP}{29}{subsection.4.3.2}%
 \contentsline {section}{\numberline {4.4}A Hierarchical Bayesian Approach}{30}{section.4.4}%
-\contentsline {subsection}{\numberline {4.4.1}The Unit-level Hierarhcical Bayesian Model}{31}{subsection.4.4.1}%
-\contentsline {subsection}{\numberline {4.4.2}The Area-level Hierarichical Bayesian Model}{32}{subsection.4.4.2}%
+\contentsline {subsection}{\numberline {4.4.1}The Unit-level Hierarhcical Bayesian Estimator}{31}{subsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.4.2}The Area-level Hierarichical Bayesian Estimator}{32}{subsection.4.4.2}%
 \contentsline {chapter}{Chapter 5: Results}{33}{chapter.5}%
 \contentsline {section}{\numberline {5.1}Estimator Performance}{34}{section.5.1}%
 \contentsline {chapter}{Chapter 6: Discussion and Conclusion}{43}{chapter.6}%

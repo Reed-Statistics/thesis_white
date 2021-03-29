@@ -198,12 +198,13 @@ ggplot(bayes_df, aes(x = x, y = distributions, color = which_one)) +
 ```
 Here we can see that our estimate is informed by both the data and the prior distribution, rather than in the frequentist paradigm where only the data is used. We also see that if the prior is "flat", our posterior would just be our likelihood function, leading us to the same result as we achieve through a frequentist analysis, just though a different method. 
 
-These are the concepts and basics of Bayesian statistics applied to the problem at hand: estimating $\mu_{y_j}$. We introduce two methods which estimate $\hat\mu_{y_j}$: the unit-level hierarchical Bayesian estimator and the area-level hierarchical Bayesian estimator. These estimators are analogous to the unit-level EBLUP and the area-level EBLUP, respectively. Notably, when $\sigma^2_\nu$ is known and we use flat priors to attain our posterior the hierarchcial Bayesian approach and EBLUPs give the same estimates and measures of variability [@rao2014]. However, we of course do not know $\sigma^2_\nu$. We now introduce each estimator. 
+These are the concepts and basics of Bayesian statistics applied to the problem at hand: estimating $\mu_{y_j}$. We introduce two methods which estimate $\hat\mu_{y_j}$: the unit-level hierarchical Bayesian estimator and the area-level hierarchical Bayesian estimator. These estimators are analogous to the unit-level EBLUP and the area-level EBLUP, respectively. Notably, when our variance parameters are known and we use flat priors to attain our posterior the hierarchical Bayesian approach and EBLUPs give the same estimates and measures of variability [@rao2014]. However, we of course do not know the underlying parameter values of our variances. We now introduce each estimator. 
 
-### The Unit-level Hierarhcical Bayesian Model
+### The Unit-level Hierarhcical Bayesian Estimator
 
-### The Area-level Hierarichical Bayesian Model
 
+
+### The Area-level Hierarichical Bayesian Estimator
 
 
 <!-- Depending on the functional form of the densities we must integrate to obtain our posterior, it is often easier to approximate the distribution with MCMC methods. However, in the case of this thesis, we use numerical integration to extract exact posterior densities from our likelihood and priors. We will now give the form of both the unit- and area-level hierarchical Bayesian models used in this thesis.  -->
