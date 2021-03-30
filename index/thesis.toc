@@ -23,7 +23,7 @@
 \contentsline {chapter}{Chapter 5: Results}{33}{chapter.5}%
 \contentsline {section}{\numberline {5.1}The Big Picture}{34}{section.5.1}%
 \contentsline {section}{\numberline {5.2}Zooming In: The Northern Rocky Forest}{38}{section.5.2}%
-\contentsline {section}{\numberline {5.3}Zooming Back Out}{41}{section.5.3}%
+\contentsline {section}{\numberline {5.3}Stepping Back}{41}{section.5.3}%
 \contentsline {chapter}{Chapter 6: Discussion and Conclusion}{45}{chapter.6}%
 \contentsline {chapter}{Appendix A: Code Appendix}{47}{appendix.A}%
 \contentsline {section}{\numberline {A.1}Helper Functions}{47}{section.A.1}%

@@ -774,8 +774,8 @@ The frequentist area-level estimator takes a different approach to making these 
 \end{figure}
 Overall, we can see that the frequentist area-level estimator performs much more similarly to the post-stratified estimator, a trait that may or may not be appealing based on the confidence we have in representative sampling. However, it is important to note that the frequentist area-level estimator is still borrowing strength, it just seems that it will often borrow less strength than the hierarchical Bayesian area-level estimator. This is expected, if we recall Equation \eqref{eq:eblup-area-weight} we note that when a large proportion of the total variation is between-area variation, the area-level EBLUP will rely heavily on the post-stratified estimate. Thus, in eco-subsections with low within-area variation the area-level EBLUP will produce an estimate very similar to the post-stratified estimate. It is important to recall that much of our data contains many observations which equal zero (Figure \ref{fig:hists} and Table \ref{tab:var-tab}). So, in eco-subsections with a low number of sampled plots and a high proportion of sampled plots with response values equal to zero we may artificially lower our variance. The hierarchical Bayesian estimators have the unique property of considering the uncertainty in the variance estimate when producing estimates, rather than relying on just a point value.
 
-\hypertarget{zooming-back-out}{%
-\section{Zooming Back Out}\label{zooming-back-out}}
+\hypertarget{stepping-back}{%
+\section{Stepping Back}\label{stepping-back}}
 
 When we narrow our vision to the Northern Rocky Forest it does seem like the area-level hierarchical Bayesian estimator clearly outperforms the analogous frequentist estimator. However, we must return to the Interior West in order to understand trends of estimator performance over space. To do this, we simply examine the eco-subsections in which the area-level hierarchical Bayesian estimator has lower variance than the post-stratified estimator and the area-level EBLUP:
 \begin{figure}
@@ -786,38 +786,46 @@ When we narrow our vision to the Northern Rocky Forest it does seem like the are
 
 \caption[Area-level coefficient of variation comparison across the Interior West]{The area-level hierarcical Bayesian estimator's coefficient of variation compared with the coefficient of variation for the post-stratified estimator (left) and area-level EBLUP (right). Eco-subsections in seafoam green indicate areas where the coefficient of variation is lower for the area-level hierarchical Bayesian estimator, red areas indicate that the coefficient of variation of the hierarchical Bayesian estimator is greater than the estimator we are comparing it to. Grey areas indicate areas where we did not fit these estimators.}\label{fig:unnamed-chunk-15}
 \end{figure}
-Generally, we continue to see the trend in Figure \ref{fig:cv-map} where the area-level hierarcical Bayesian estimator producing estimates with higher variance in heavily deserted areas in the southern parts of the Interior West and deserts in the north parts of Nevada.
+Generally, we continue to see the trend in Figure \ref{fig:cv-map} where the area-level hierarchical Bayesian estimator producing estimates with higher variance in heavily deserted areas in the southern parts of the Interior West and deserts in the north parts of Nevada. The areas in which the area-level hierarchical Bayesian estimator has more variation than the post-stratified estimator and the area-level EBLUP are clearly non-randomly distributed across the Interior West. This gives us great insight as to where we may want to use this hierarchical Bayesian estimator and further supports our idea that the area-level hierarchical Bayesian estimator has a high coefficient of variation in non-forested areas.
 
-{[}talk about how non-random this is{]}
-
-In an attempt to quantify the magnitude of difference between two estimators we introduce percent relative difference, which we define below.
+We have largely discussed the variance of these estimators thus far, as we cannot know the true bias of an estimator without knowing the population parameters \(\mu_{y_j}\) in each eco-subsection. However, in an attempt to quantify the magnitude of difference between two estimators we introduce percent relative difference, which we define below.
 \begin{align*}
 PRD(\hat\mu_1,~ \hat\mu_2) = \frac{\hat \mu_1 - \hat\mu_2}{\hat\mu_2} \cdot 100
 \end{align*}
-While we could explore percent relative difference between all combinations of estimators, the Forest Inventory and Analysis Program's go-to estimator is post-stratification, so we will compare the remaining five estimators to post-stratification. Below, we can see the quantiles of percent relative difference to post-stratification.
+While we could explore percent relative difference between all combinations of estimators, the Forest Inventory and Analysis Program's go-to estimator is post-stratification, so we will compare the remaining five estimators to post-stratification. Also, post-stratification, as discussed in Methods, is an unbiased estimator given assumptions about our auxiliary data. Thus, we will rely on it for some proxy of truth. However we must realize that this proxy is quite weak. Below, we can see the quantiles of percent relative difference to post-stratification.
 \begin{longtable}[t]{lrrrrr}
-\caption{\label{tab:unnamed-chunk-16}Quantiles of Percent Relative Difference to the Post-Stratified Estimator}\\
+\caption{\label{tab:prd-tab}Quantiles of Percent Relative Difference to the Post-Stratified Estimator}\\
 \toprule
 Estimator & 0\% & 25\% & 50\% & 75\% & 100\%\\
 \midrule
+Sample Mean & -60.997 & -3.826 & 0.056 & 5.610 & 1102.114\\
 Unit HB & -99.928 & 1.326 & 21.816 & 94.770 & 24224.087\\
 Area HB & -74.491 & -13.192 & 13.095 & 66.254 & 105994.261\\
 Unit EBLUP & -80.319 & 3.521 & 25.471 & 99.885 & 27724.471\\
 Area EBLUP & -79.641 & -3.747 & -0.165 & 2.802 & 160.843\\
 \bottomrule
 \end{longtable}
-These quantiles continue to enforce the idea that the area-level EBLUP generally performs very similarly to the post-stratified estimator (albeit with lower variance). Notably though, the percent relative difference between the area-level hierarchical Bayesian estimator and the post-stratified estimator is small compared to both unit-level models. Percent relative difference to the post-stratified estimator can be thought of in some senses as a weak proxy for bias. However, this is a difficult comparison to make when we do not have the parameter values. While this proxy for bias may be weak, it is reassuring that for the area-level hierarchical Bayesian estimator our median (50\% quantile) percent relative difference is somewhat low.
+These quantiles continue to enforce the idea that the area-level EBLUP generally performs very similarly to the post-stratified estimator (albeit with lower variance). Notably though, the percent relative difference between the area-level hierarchical Bayesian estimator and the post-stratified estimator is small compared to both unit-level models. The median values in Table @ref\{tab:prd-tab\} can be thought of some sort of proxy for each estimator's bias, but this is a difficult equivalency to make when we do not have the parameter values. While this proxy for bias may be weak, it is reassuring that for the area-level hierarchical Bayesian estimator our median (50\% quantile) percent relative difference is somewhat low compared to other common estimators.
 
-Another aspect of our results that percent relative difference allows us to investigate is the performance of an estimator which we have hardly addressed so far: the hierarchical Bayesian unit-level model.
+Another aspect of our results that percent relative difference allows us to investigate is the performance of an estimator which we have hardly addressed so far: the hierarchical Bayesian unit-level model. This thesis claims to be a hierarchical Bayesian approach to small area estimation, yet the performance of one of the hierarchical Bayesian estimators has yet to be discussed in depth in this chapter. This is because the area-level hierarchical Bayesian estimator outperforms it by a huge margin in terms of variance. However, the case of the unit-level hierarchical Bayesian estimator is interesting in itself, even if it does not increase precision of estimates. To understand its performance, let's examine its percent relative difference to the unit-level EBLUP estimator:
+\begin{longtable}[t]{lrrrrr}
+\caption{\label{tab:prd-unit}Quantiles of Percent Relative Difference to the Unit-level EBLUP}\\
+\toprule
+Estimator & 0\% & 25\% & 50\% & 75\% & 100\%\\
+\midrule
+Unit HB & -99.845 & -2.736 & -0.658 & -0.119 & 4.844\\
+\bottomrule
+\end{longtable}
+We immediately see that the unit-level hierarchical Bayesian estimator is extremely similar to the unit-level EBLUP.
 
 {[}talk about how similar the unit-level hb is the same as the unit-level freq{]}
 \begin{figure}
 
-{\centering \includegraphics{thesis_files/figure-latex/unnamed-chunk-17-1} 
+{\centering \includegraphics{thesis_files/figure-latex/unnamed-chunk-16-1} 
 
 }
 
-\caption[Unit-level coefficient of variation comparison across the Interior West]{The unit-level hierarcical Bayesian estimator's coefficient of variation compared with the coefficient of variation for the post-stratified estimator (left) and unit-level EBLUP (right). Eco-subsections in seafoam green indicate areas where the coefficient of variation is lower for the unit-level hierarchical Bayesian estimator, red areas indicate that the coefficient of variation of the hierarchical Bayesian estimator is greater than the estimator we are comparing it to. Grey areas indicate areas where we did not fit these estimators.}\label{fig:unnamed-chunk-17}
+\caption[Unit-level coefficient of variation comparison across the Interior West]{The unit-level hierarcical Bayesian estimator's coefficient of variation compared with the coefficient of variation for the post-stratified estimator (left) and unit-level EBLUP (right). Eco-subsections in seafoam green indicate areas where the coefficient of variation is lower for the unit-level hierarchical Bayesian estimator, red areas indicate that the coefficient of variation of the hierarchical Bayesian estimator is greater than the estimator we are comparing it to. Grey areas indicate areas where we did not fit these estimators.}\label{fig:unnamed-chunk-16}
 \end{figure}
 \ldots{} then some concluding thoughts to lead into the discussion chapter
 
