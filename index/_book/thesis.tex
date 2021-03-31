@@ -568,7 +568,7 @@ In small area estimation it is most common that the mixed model estimator used i
 
 In the case of the unit-level EBLUP, we first fit a varying-intercepts linear mixed model at the unit-level:
 \begin{align}
-y_{i,j} = x_{ij} \beta + \nu_j + e_{ij}
+y_{i,j} = x_{ij} \beta + \nu_j + e_{ij} \label{eq:unit-mod}
 \end{align}
 where \(\beta\) is calculated from data across the eco-province and will stay constant for each eco-subsection. However, \(\nu_j\), the ``random effect,'' will be different for each eco-subsection. This random effect helps account for variation between eco-subsections that the auxiliary data does not account for. The random effects \(\nu\) and sampling errors \(e\) are assumed to be distributed as follows:
 \[
@@ -606,7 +606,7 @@ where \(\overline\mu_j^B\) denotes the sample mean of the bootstrap estimates of
 
 We can also fit the EBLUP at the area-level. In order to do this, we fit the following linear mixed model:
 \begin{align}
-\hat\mu_{j}^{PS} = x_j \beta + \nu_j + e_j
+\hat\mu_{j}^{PS} = x_j \beta + \nu_j + e_j \label{eq:area-mod}
 \end{align}
 where we assume
 \[
@@ -661,12 +661,50 @@ Here we can see that our estimate is informed by both the data and the prior dis
 
 These are the concepts and basics of Bayesian statistics applied to the problem at hand: estimating \(\mu_{y_j}\). We introduce two methods which estimate \(\hat\mu_{y_j}\): the unit-level hierarchical Bayesian estimator and the area-level hierarchical Bayesian estimator. These estimators are analogous to the unit-level EBLUP and the area-level EBLUP, respectively. Notably, when our variance parameters are known and we use flat priors to attain our posterior the hierarchical Bayesian approach and EBLUPs give the same estimates and measures of variability (Rao, 2014). However, we of course do not know the underlying parameter values of our variances. We now introduce each estimator.
 
-\hypertarget{the-unit-level-hierarhcical-bayesian-estimator}{%
-\subsection{The Unit-level Hierarhcical Bayesian Estimator}\label{the-unit-level-hierarhcical-bayesian-estimator}}
+\hypertarget{the-unit-level-hierarchical-bayesian-estimator}{%
+\subsection{The Unit-level Hierarchical Bayesian Estimator}\label{the-unit-level-hierarchical-bayesian-estimator}}
 
+For the unit-level hierarchical Bayesian estimator, we start with Equation \eqref{eq:unit-mod} as we did for the unit-level frequentist EBLUP. We now just apply a hierarchical Bayesian approach to this equation. We must assume a prior distribution on \(\beta\), \(\sigma^2_\nu\), and \(\sigma^2_e\). We now specify Equation \eqref{eq:unit-mod} as a hierarchical Bayesian model:
+\begin{align}
+&y_{ij} ~\vert~ \beta,~ \nu_j, \sigma^2_e \sim \text{N}(x_{ij}\beta + \nu_j,~ \sigma^2_e), \nonumber \\
+&\nu_j ~\vert~ \sigma^2_\nu \sim \text{N}(0,~ \sigma^2_\nu),\nonumber \\
+&f(\beta,~ \sigma^2_\nu, ~\sigma^2_e) = f(\beta)\cdot f(\sigma^2_\nu) \cdot f(\sigma^2_e).
+\end{align}
+where \(f(\beta)\), \(f(\sigma^2_\nu)\), and \(f(\sigma^2_e)\) are priors specified below:
+\begin{align*}
+&f(\beta) \propto 1, \\
+&\frac{f(\sigma^2_e)}{f(\sigma^2_\nu)} = \text{Inv-Gamma}(\text{df} = 0,~ \text{scale} = 0).
+\end{align*}
+Now that we have specified the estimator, it is easy to attain the small area estimate and variance. For the estimate, we have:
+\begin{align}
+\hat\mu_{y_j}^{HBU} = \overline X_j \beta + \nu_j
+\end{align}
+where \(\overline X_j\) is the population mean in the \(j\)th small area. Finally, for the variance we have:
+\begin{align}
+V(\hat \mu_{y_j}^{HBU} ~\vert~ \sigma^2_\nu,~ \sigma^2_e) = \text{MSE}(\hat\mu_{y_j}^{HBU}).
+\end{align}
 \hypertarget{the-area-level-hierarichical-bayesian-estimator}{%
 \subsection{The Area-level Hierarichical Bayesian Estimator}\label{the-area-level-hierarichical-bayesian-estimator}}
 
+For the area-level hierarchical Bayesian estimator, we start with Equation \eqref{eq:area-mod} as we did for the area-level frequentist EBLUP. We now just apply a hierarchical Bayesian approach to this equation. We must assume a prior distribution on \(\beta\) and \(\sigma^2_\nu\). We now specify Equation \eqref{eq:area-mod} as a hierarchical Bayesian model:
+\begin{align}
+&\hat\mu_{y_j}^{PS} ~\vert~ \mu_{y_j},~ \beta,~ \sigma^2_\nu \sim \text{N}(\mu_{y_j},~ \psi_j), \nonumber \\
+&\mu_{y_j} ~\vert~ \beta,~ \sigma^2_\nu \sim \text{N}(x_j\beta,~ b_j^2 \sigma^2_\nu),\nonumber \\
+&f(\beta,~ \sigma^2_\nu) = f(\beta)\cdot f(\sigma^2_\nu).
+\end{align}
+where \(f(\beta)\) and \(f(\sigma^2_\nu)\) and \(f(\sigma^2_e)\) are priors specified below:
+\begin{align*}
+&f(\beta) \propto 1, \\
+&f(\sigma^2_\nu) = \text{Inv-Gamma}(\text{df} = 10000 \cdot m,~ \text{scale} = 1).
+\end{align*}
+where \(m\) is the number of small areas in the eco-province we fit the estimator in. Now that we have specified the estimator, it is easy to attain the small area estimate and variance. For the estimate, we have:
+\begin{align}
+\hat\mu_{y_j}^{HBA} = E[\mu_{y_j} ~\vert~ \hat\mu_{y_j}^{PS}] = 
+\end{align}
+Finally, for the variance we have:
+\begin{align}
+V() = 
+\end{align}
 \hypertarget{results}{%
 \chapter{Results}\label{results}}
 
