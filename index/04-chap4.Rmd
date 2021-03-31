@@ -1,267 +1,351 @@
-# Methods {#methods}
-
-<!-- Gives an overview of the current main approaches to the problem. -->
-<!-- Points out flaws in existing approaches and addresses how the current work mitigates these problems -->
-
-Currently, there are three main types of estimators used to estimate the value of forest attributes: direct, indirect with implicit models, and indirect with explicit models. Direct estimators are commonly thought of as the simplest estimators as they do not borrow strength across small areas for estimation. Direct estimators are hence easy to use and interpret, but we often do not get precise enough estimates with these estimators, in other words, they have high variance. Indirect estimators with implicit models borrow strength implicitly across small areas to produce estimates. These estimators decrease variance by providing a link to related small areas through supplementary data [@rao2014]. Finally, indirect estimators that make explicit use of a model, or "model-based estimators", aim to reduce variance in estimates by using auxiliary data and making specific allowance for between area variation. As explained in Rao (2014), these model-based estimators have significant advantages over direct estimators and implicit indirect estimators. Notably, model diagnostics can be used, small area-specific measures of precision can be attained (in our case, we compare the coefficient of variation between estimators), and we can used mixed or hierarchical models to capture the dependence structure in the data. 
-
-This thesis explores the application of two model-based estimators, the hierarchical Bayesian unit-level model and the hierarchical Bayesian area-level model. These hierarchical Bayesian models are not commonly used in forest inventory research, however these models are often applied in a variety of other application areas ranging from ophthalmology to economic growth to tracking the spread of invasive species, to name a few [@med; @inbook; @doves]. We compare these novel Bayesian models to the frequentist EBLUP unit- and area-level models and two common direct estimators, the sample mean and the post-stratified estimator. To compare these estimators, we will apply them over many ecological provinces in the Interior West and study their performance when considering four key response variables with one explanatory variable. 
-
-In order to explore these estimators in depth, we must introduce notation relevant to them. First of all, our indices will work as follows: $i$ indexes over units sampled; $j$ indexes over eco-subsections or "small areas"; and $k$ indexes over strata. Now, we are interested in estimating the mean of some response variable $y$, such as trees per acre or biomass, in a small area. So, let $\mu_{y_j}$ be the population mean of the study variable in eco-subsection $j$ in the Interior West. To denote the estimate produced of $\mu_{y_j}$ we will use $\hat\mu_{y_j}$ with a superscript denoting which estimator is being used. We will also use $V(\hat\mu_{y_j})$ to denote the variance of $\hat\mu_{y_j}$. In summary, each of our estimators aims to estimate $\mu_{y_j}$, the population mean of some study variable in the $j$th eco-subsection and our estimated value is denoted by $\hat\mu_{y_j}$ and its variance is denoted by $V(\hat\mu_{y_j})$. We also must introduce $s_j$, which is a set. The set $s_j$ includes all units sampled within eco-subsection $j$. We also introduce $U_j$, the set of all the area in subsection $j$. The "$U$" is chosen as it stands for "universe." Also, we introduce $n_j$, this denotes the number of sampled units within an eco-subsection $j$, i.e. the cardinality of $s_j$. 
-
-
-## Direct Estimation
-
-There are two direct estimators that we implement throughout this thesis: the sample mean (a.k.a. the Horvitz-Thompson estimator) and the post-stratified estimator. While the sample mean is an intuitive choice for estimating the population mean of a variable of interest $y$, the post-stratified estimator helps correct for over- and under-sampling of forested areas. We also introduce a direct estimator which helps create intuition for the unit-level frequentist model, however we do not fit this model to our data. We will now explore the mathematics behind these estimators in depth. 
-
-### The Horvitz-Thompson Estimator
-
-What might be the most intuitive approach to estimating the population mean $\mu_{y_j}$ is taking the sample mean, i.e. using the "Horvitz-Thompson estimator" as survey samplers like to say [@hor52]. This estimator can be expressed as follows:
-\begin{align}
-\hat\mu_{y_j}^{HT} = \frac{1}{n_j} \sum_{i \in s_j} y_i
-\end{align}
-Ignoring the finite population correction, the variance estimate for Horvitz-Thompson estimator is calculated by:
-\begin{align}
-V\Big(\hat\mu_{y_j}^{HT}\Big) = \frac{1}{n_j-1} \sum_{i \in s_j} \Big(y_{ij} - \hat\mu_{y_j}^{HT}\Big)^2
-\end{align}
-Recall that the Horvitz-Thompson estimator is just taking the mean of the study variable of interest, $y$. Note that $y_i$ represents the value of the study variable in the $i$th unit sampled of eco-subsection $j$. This estimator is useful as it is easy to compute and does not require any auxiliary information. However, the Horvitz-Thompson estimator high variance relative to other estimators we will discuss. The post-stratified estimator begins to address the variance of the Horvitz-Thompson estimator.
-
-### The Post-Stratified Estimator
-
-The post-stratified estimator is very similar to the Horvitz-Thompson estimator however, as stated above, it addresses variance that occurred from using the Horvitz-Thompson estimator. While decreasing variance seems like a no cost solution to some of our problems, the post-stratified estimator requires auxiliary information in order to be used. The post-stratified estimator is a weighted sum of two Horvitz-Thompson estimators: one Horvitz-Thompson estimator giving the estimate of the mean in sampled units which are forested and the other Horvitz-Thompson estimator in non-forested areas. We then weight these estimates by the true proportion of area in the eco-subsection of interest that is forested. Note that while we are using auxiliary information such as the true proportion of forested area in the eco-subsection of interest and whether or not the sampled units were forested areas or not, both of these pieces of information only consider the eco-subsection of interest. Therefore, since information is not used from outside of the eco-subsection of interest, the post-stratified estimator is still within the family of direct estimators. We can represent the post-stratified estimator as follows:
-\begin{align}
-\hat\mu_{y_j}^{PS} = \sum_{k=1}^{2} w_k \cdot \hat\mu_{y_{jk}}^{HT}
-\end{align}
-Ignoring the finite population correction, the variance estimate for post-stratified estimator is calculated by:
-$$
-V\Big(\hat \mu_{y_j}^{PS}\Big) = 
-\frac{1}{n_j} \Bigg( \sum_{k=1}^{2} w_k n_k V\Big(\hat\mu_{y_{jk}}^{HT}\Big) + 
-\sum_{k=1}^{2} (1 - w_k) \frac{n_k}{n_j} V\Big(\hat\mu_{y_{jk}}^{HT}\Big) \Bigg)
-$$
-Recall that $k$ indexes over our strata, which in this case is forested and non-forested sampled units. We also have $w_k$, which is a survey weight entirely decided by the true proportion of eco-subsection $j$ which is forested. For example, if eco-subsection $j$ was 80% forested, we would have $w_1 = 0.8$ and $w_2 = 0.2$. Therefore if we had under-sampled forests at only 60% of our samples, we correct this under-sampling with our survey weights and this results in a better estimate of $\mu_{y_j}$ that is less variable. 
-
-The post-stratified estimator is a great alternative to the Horvitz-Thompson estimator when auxiliary information related to the response variable of interest is available, and in that situation there is not a justifiable reason to pick the Horvitz-Thompson estimator over the post-stratified estimator as the direct estimator of choice. We have access to the information needed to compute the post-stratified estimate in the Interior West so we will primarily be comparing our indirect estimators to the post-stratified estimator in our results. Also, our area-level indirect model-based estimators will be based on the post-stratified estimate. 
-
-### The Survey Regression Estimator
-
-Another direct estimator that is often used for small area estimation is the survey regression estimator. While we do not implement in this estimator, the unit-level frequentist EBLUP estimator can be written as a weighted average of the survey regression estimator and a regression-synthetic estimator. Thus, it is important to understand the intuition behind this estimator in order to fully understand how the unit-level frequentist EBLUP estimator works. We can represent the survey regression estimator as follows:
-\begin{align}
-\hat \mu_{y_j}^{SR} = \frac{1}{N_j} \sum_{i \in U_j} (\hat y_{ji}) +
-\frac{1}{n_j} \sum_{i \in s_j} (y_{ji} - \hat y_{ji})
-\end{align}
-where $N_j$ is the population size in the $j$th area. The survey regression estimator has a particular subtlety which makes it arguably not a direct estimator. Particularly, the $\hat y_{j,i}$ is calculated through linear regression with $\beta$'s fit by ordinary least squares across the study region, rather than the small area. This is the case for this particular survey regression estimator, as it is the estimator which we can partially represent the unit-level EBLUP estimator by. One may make a quite legitimate argument that this estimator then should in fact be considered an implicit model-based estimator, however Rao (2014) sticks to the convention that this estimator is in fact still a direct estimator. He argues that we should consider this estimator to be a direct estimator as the strength we are borrowing does not increase the "effective" sample size. Making a final decision on this estimator's class is left as an exercise to the reader.  
-
-## Implicit Model-Based Indirect Estimation
-
-Often times it is the case that direct estimation techniques do not provide sufficiently small standard errors to be able to make informative inferences at the small area level. That is the case in our situation, as the FIA's survey design was based around making inferences at larger levels than eco-subsections. One relatively simple approach to decreasing variance of estimates at a small area level is to use auxiliary data from surrounding areas to help attain the estimate in the small area of interest. This process is called borrowing strength. It is very similar to the borrowing of strength outlined in Figures \@ref(fig:hbu-diagram) and \@ref(fig:hba-diagram), however, in the case of implicit model-based indirect estimation we do not allow for between-area variation of explanatory variables. That is, we may borrow strength across small areas by using auxiliary data, but this auxiliary data must be aggregated and have the same effect on each small area within a designated area (in our case, this is the ecological province). 
-
-We introduce two implicit model-based indirect estimators commonly used when auxiliary data is available at the unit- and area-levels. These estimators are not used in the final analyses done in this thesis. However, they are crucial building blocks for understanding the frequentist EBLUP models we discuss and implement. We discuss the regression-synthetic estimator used when area-level auxiliary data is available and then the regression-synthetic estimator used for unit-level auxiliary data.
-
-### The Area-level Regression-Synthetic Estimator
-
-A common method of an implicit model-based indirect estimator outlined by Rao (2014) for area-level is the regression-synthetic estimator. Here, in order to estimate our parameter of interest, $\mu_{y_j}$, we fit an ordinary least squares linear regression on our auxiliary variable. Notably, we use $\bar X_j$ to denote the auxiliary data population mean in the $j$th small area. 
-\begin{align}
-\hat\mu_{y_j}^{RSA} = \hat\beta_0 + \hat\beta_1 \bar X_{j}
-\end{align}
-We note that the $\hat \beta$'s are calculated through standard methods of ordinary least squares. Further, it is important to recognize that in the case of the regression-synthetic estimator each small area receives the same $\hat\beta$'s as they are calculated by fitting an ordinary least squares model over all small areas within their eco-province. This is the realization of the requirement that the auxiliary information must have the same effect on each small area. It is also important to note that this estimator can be generalized to $p$ predictors, however in this thesis we use $p=1$.
-
-### The Unit-level Regression-Synthetic Estimator
-
-The unit-level regression-synthetic estimator is very similar to the area-level regression-synthetic estimator. Rather than the ordinary least squares model being fit at the area-level, it is fit at the unit-level. We first fit this unit-level model:
-$$
-\hat y_{ji} = \hat\beta_0 + \hat\beta_1 X_{ji}
-$$
-Note that we use capital $X$ to denote the population mean of our explanatory variable at the unit-level. We can do express the unit-level regression-synthetic estimator below:
-\begin{align}
-\hat\mu_{y_j}^{RSU} = \frac{1}{n_j} \sum_{i \in s_j} \hat y_{ji}
-\end{align}
-This estimator is very similar to the area-level regression-synthetic estimator as it fits an ordinarily least squares model over the eco-province our small area is in, and the auxiliary information has the same effect on each small area. 
-
-## Explicit Model-Based Indirect Estimation
-
-Often times, implicit model-based indirect estimators still do not reduce variance enough to give us estimates with a reasonably low variance. However, we can turn to explicit model-based indirect estimation in order to combat this issue further. Explicit model-based indirect estimators are extremely useful when relevant auxiliary data is available and we would like to allow for between-area variation of these auxiliary variables. By allowing for this between-area variation our models should fit to the data better given that there is truly between-area variation in the population. In the case of forests across a large portion of the United States, this assumption is very reasonable and one could attribute this variation to a number of factors such as temperature, humidity, or even elevation. Rather than attempting the daunting and nonsensical task of collecting data to fully explain this between-area variation, we fit a mixed model. 
-
-In small area estimation it is most common that the mixed model estimator used is one of the EBLUP estimators: either the unit- or area-level variant depending on the resolution of auxiliary data preferred. The EBLUP estimators are unbiased given the modeling assumptions are met, similar to the post-stratified estimator. We will now explore the model specifications of these EBLUP estimators at the unit- and area-level. 
-
-### The Unit-level EBLUP
-
-In the case of the unit-level EBLUP, we first fit a varying-intercepts linear mixed model at the unit-level:
-\begin{align}
-y_{i,j} = x_{ij} \beta + \nu_j + e_{ij} (\#eq:unit-mod)
-\end{align}
-where $\beta$ is calculated from data across the eco-province and will stay constant for each eco-subsection. However, $\nu_j$, the "random effect", will be different for each eco-subsection. This random effect helps account for variation between eco-subsections that the auxiliary data does not account for. The random effects $\nu$ and sampling errors $e$ are assumed to be distributed as follows:
-$$
- \newcommand\myeq{\stackrel{\mathclap{\normalfont\mbox{s}}}{~}}
-\nu_j \stackrel{\text{iid}}{\sim} \text{N}(0,~ \sigma^2_{\nu}), \quad e_{ij} \stackrel{\text{ind}}{\sim}\text{N}(0, k^2_{ij}\sigma^2_e).
-$$
-Intuitively, we can think of the variance of the random effect, $\sigma^2_\nu$, as the heterogeneity between our small areas $j$ after we account for our fixed effects [@breidenbach2012]. [NEED TO TALK ABOUT WHAT K IS... cant find explanation in Rao]. 
-From our mixed model, Rao (2014) derives the unit-level EBLUP estimator fit in the frequentist paradigm as the weighted average of the survey regression estimator and the regression-synthetic estimator:
-\begin{align}
-\hat \mu_{y_j}^{FRU} = \hat \gamma_j \hat\mu_{y_j}^{SR} + (1 - \hat \gamma_j) \hat\mu_{y_j}^{RSU}
-\end{align}
-where
-\begin{align}
-\hat\gamma_j = \frac{\sigma^2_\nu}{(\sigma^2_\nu + \sigma^2_e / a_i)}
-\end{align}
-This $\hat\gamma_j$ can be broken down into two parts: the numerator and denominator. The numerator measures the between-area variation, and the denominator measures the total variability. Thus, when a large proportion of the overall variation is between-area variation, the unit-level EBLUP will put more weight on the survey regression estimator. 
-(say what $a_i$ is from Rao around 7.1.3, 7.1.4)
-
-For this thesis, in order to compute the variance of the unit-level EBLUP estimator we chose to bootstrap. Bootstrapping is the process taking repeated samples of our data with replacement, computing our statistic on that new bootstrap sample, and then repeating this process many times [@bootstrap]. The property of the bootstrap which is useful to us is that it produces good estimates for the variance of our estimator. For our application, we bootstrap within each small area to compute the variance. For each eco-subsection $j$, we sample $n_j$ plots with replacement. Next, we fit the unit-level EBLUP estimator to the bootstrapped eco-subsections and produce our mean estimate on our first bootstrap sample (we denote each bootstrap sample with $b$, so in this case $b=1$). 
-$$
-\hat\mu_j^{FRU}(b=1)
-$$
-Next, we repeat this sampling $B$ times, and in our case we choose $B = 500$ to produce 500 estimates:
-$$
-\hat\mu_j^{FRU}(b), \quad b = 1,\dots,500
-$$
-Finally, we compute our estimate of the variance:
-\begin{align}
-\hat V(\hat\mu_j) = \frac{1}{B-1} \sum_{b=1}^{B}\Big(\hat\mu_j(b) - \overline\mu_j^B\Big)
-\end{align}
-where $\overline\mu_j^B$ denotes the sample mean of the bootstrap estimates of $\mu_j$. 
-
-### The Area-level EBLUP 
-
-We can also fit the EBLUP at the area-level. In order to do this, we fit the following linear mixed model:
-\begin{align}
-\hat\mu_{j}^{PS} = x_j \beta + \nu_j + e_j (\#eq:area-mod)
-\end{align}
-where we assume
-$$
- \newcommand\myeq{\stackrel{\mathclap{\normalfont\mbox{s}}}{~}}
-\nu_j \stackrel{\text{iid}}{\sim} \text{N}(0,~ \sigma^2_{\nu}), \quad e_{j} \stackrel{\text{ind}}{\sim}\text{N}(0, \sigma^2_e).
-$$
-
-
-
-Next, Rao (2014) derives the commonly expressed form of the EBLUP estimator:
-
-
-The area-level EBLUP estimator is expressed by Rao (2014) as a weighted average of the direct estimator and the regression-synthetic estimator:
-\begin{align}
-\hat \mu_j^{FRA} = \hat\gamma_j \hat\mu_j^{PS} + (1 - \hat\gamma_j) \hat\mu_j^{RS} (\#eq:eblup-area-weight)
-\end{align}
-where
-\begin{align}
-\hat \gamma_j = \hat \sigma_\nu^2 b_j^2 / (\psi_j + \hat\sigma_\nu^2 b_j^2)
-\end{align}
-
-We compute the variance of this estimator by using the MSE of this estimator. The MSE is expressed by the following equation [@mse-area]:
-\begin{align}
-V(\hat\mu_j^{FRA}) = MSE(\hat\mu_j^{FRA}) = g_{1j} + g_{2j} + 2g_{3j}
-\end{align}
-where
-\begin{align*}
-g_{1j} = \hat\gamma_j \sigma^2_e, \\
-g_{2j} = \text{figure this out... wls beta?} \\
-g_{3j} = (\sigma^2_e)^2 \cdot (\sigma^2_\nu + \sigma^2_e)^{-3} \cdot 2(\sum_{j} (\sigma^2_\nu + \sigma^2_e)^{-2})^{-1}
-\end{align*}
-
-(I need to define a lot of these quantities. Trying to find the best way to do this without pulling every little thing from Rao)
-
-## A Hierarchical Bayesian Approach
-
-So far in this chapter, we have explored common frequentist approaches to small area estimation. However, the research goal of this thesis is to study the performance of the hierarchical Bayesian model for small area estimation. With a hierarchical Bayesian model, we derive the posterior distribution of our variable of interest with either Markov Chain Monte Carlo (MCMC) methods or through numerical integration. We do this by considering both the data (likelihood) and prior distributions. This allows us to use Bayes' Theorem in order to attain our posterior.
-
-Before introducing a slew of notation regarding Bayesian statistics, let's take a step back to recall the type of questions we have been asking so far. Each estimator in this chapter so far has attempted to quantify the mean of our response variable $y$ in each eco-subsection $j$, that is estimating $\mu_{y_j}$. The way in which we attain our estimate $\hat\mu_{y_j}$ and its variance $V\Big(\hat\mu_{y_j}\Big)$ is by asking the question: what sort of $\hat\mu_{y_j}$ would we expect to get under hypothetical resampling? This question is the basis of the name "frequentist" as our estimates in this frequentist paradigm rely on the hypothetical repeated (frequent) sampling. When we choose to use Bayesian methods to estimate $\mu_{y_j}$, we ask a different question: What is our knowledge of $\mu_{y_j}$ based on the data and prior information?
-
-These questions bring up a philosophical difference between Bayesian and frequentist statistics about the addition of prior information. One may object to this, however in this thesis we add very little prior information and rely quite heavily on the data to much of the work for us. Secondly, the addition of prior information allows us to attain a posterior distribution for our estimate of $\mu_{y_j}$, rather than a point estimate. Now with this philosophical difference in mind, recall Bayes' Theorem below:
-\begin{align}
-P(A ~\vert~ B) &= \frac{P(B ~\vert~ A) \cdot P(A)}{P(B)} \\
-&\propto P(B ~\vert~ A) \cdot P(A)
-\end{align}
-Bayes' Theorem allows us to derive one conditional probability, $P(A ~\vert~ B)$, given that we know the inverse conditional probability and each marginal distribution [@bayes-orig]. This theorem is the basis of our hierarchical Bayesian models. Replacing $A$ with our parameter of interest, $\mu_{y_j}$, and $B$ with our data we get the following equation:
-\begin{align}
-f(\mu_{y_j} ~\vert~ \text{data}) \propto P(\text{data} ~\vert~ \mu_{y_j}) \cdot P(\mu_{y_j})
-(\#eq:bayes-thm)
-\end{align}
-In our application, we are interested in making inferences about $\mu_{y_j}$ given the data we have. This is represented on the left hand side of Equation \@ref(eq:bayes-thm). We call this quantity the posterior distribution of $\mu_{y_j}$ given the data. As we continue to read left to right, we have our likelihood (or, data) multiplied with the distribution of $\mu_{y_j}$. Clearly we do not know the true value of $\mu_{y_j}$ or else we would not attempt to estimate $\mu_{y_j}$. In order to estimate our posterior distribution we must multiply something with the likelihood function, so we choose a "prior" distribution which reflects our prior belief of the distribution of $\mu_{y_j}$. We can visualize obtaining a posterior distribution below:
-```{r, warning = F, message = F, echo = F, fig.cap="Hypothetical prior, likelihood, and posterior distributions. The posterior is inbetween the prior and likelihood as it is the normalized product of these distributions.", fig.scap = "Prior, likelihood, and posterior distributions."}
+```{r, include = F}
 library(tidyverse)
-x <- seq(from = -90, to = 90, by = 1)
-data <- dnorm(x, mean = 40, sd = 5)
-prior <- dnorm(x, mean = 10, sd = 10)
-posterior <- dnorm(x, 25, 4)
-bayes_df <- tibble(
-  x = rep(x,3),
-  distributions = c(prior, data, posterior),
-  which_one = c(rep("Prior", 181), rep("Likelihood", 181), rep("Posterior", 181))
+library(ggpubr)
+library(patchwork)
+library(sf)
+library(USAboundaries)
+library(latex2exp)
+library(scales)
+res <- readRDS("data/results/final_results.rds")
+res_long <- readRDS("data/results/final_results_long.rds")
+dat <- read_csv("data/subsets/dat_small.csv") %>%
+  filter(province %in% unique(res_long$province))
+
+means <- res_long %>%
+  filter(estimator == "dirmean") %>%
+  rename(mean = estimate) %>%
+  dplyr::select(subsection, response, mean)
+res_long <- res_long %>%
+  full_join(means, by = c("subsection" = "subsection",
+                          "response" = "response"))
+res_long <- res_long %>%
+  mutate(se = mean * cov)
+
+# for six cov maps:
+subsections <- st_read("../data/SA_eco_subsection/SA_eco_subsection.shp", quiet = TRUE)
+
+interior_west <- c("AZ", "CO", "ID", "MT", "NV", "NM", "UT", "WY")
+
+int_west_sf <- us_boundaries(type = "state",
+                         states = interior_west)
+
+modeled_subsections <- st_intersection(int_west_sf, subsections) %>%
+  dplyr::select(PROVINC, SECTION, SUBSECT, geometry)
+
+res_sf <- res %>%
+  full_join(modeled_subsections, by = c("subsection" = "SUBSECT")) %>%
+  distinct()
+
+res_long_sf <- res_long %>%
+  full_join(modeled_subsections, by = c("subsection" = "SUBSECT")) %>%
+  distinct()
+
+res_long_sf_na <- res_long_sf %>%
+  filter(is.na(estimator))
+
+res_long_sf_na <- bind_rows(
+  res_long_sf_na, res_long_sf_na, res_long_sf_na,
+  res_long_sf_na, res_long_sf_na, res_long_sf_na
+) 
+
+res_long_sf_na$estimator <- c(
+  rep("dirmean", 61), rep("dirps", 61), rep("freq_unit", 61),
+  rep("freq_area", 61), rep("hb_unit", 61), rep("hb_area", 61)
 )
-ggplot(bayes_df, aes(x = x, y = distributions, color = which_one)) +
-  geom_line() +
-  theme_bw() +
-  scale_color_manual(values = c("steelblue", "#BF4C27", "#E7AB26")) +
-  theme(legend.position = "bottom",
-        axis.ticks = element_blank(),
-        axis.text = element_blank()) +
-  labs(x = "", y = "", color = "Distribution")
 ```
-Here we can see that our estimate is informed by both the data and the prior distribution, rather than in the frequentist paradigm where only the data is used. We also see that if the prior is "flat", our posterior would just be our likelihood function, leading us to the same result as we achieve through a frequentist analysis, just though a different method. 
 
-These are the concepts and basics of Bayesian statistics applied to the problem at hand: estimating $\mu_{y_j}$. We introduce two methods which estimate $\hat\mu_{y_j}$: the unit-level hierarchical Bayesian estimator and the area-level hierarchical Bayesian estimator. These estimators are analogous to the unit-level EBLUP and the area-level EBLUP, respectively. Notably, when our variance parameters are known and we use flat priors to attain our posterior the hierarchical Bayesian approach and EBLUPs give the same estimates and measures of variability [@rao2014]. However, we of course do not know the underlying parameter values of our variances. We now introduce each estimator. 
+# Results {#results}
 
-### The Unit-level Hierarchical Bayesian Estimator
+This chapter addresses the performance of the six estimators in this thesis: the sample mean, the post-stratified estimator, the unit-level EBLUP, the area-level EBLUP, the unit-level hierarchical Bayesian estimator, and the area-level hierarchical Bayesian estimator. 
 
-For the unit-level hierarchical Bayesian estimator, we start with Equation \@ref(eq:unit-mod) as we did for the unit-level frequentist EBLUP. We now just apply a hierarchical Bayesian approach to this equation. We must assume a prior distribution on $\beta$, $\sigma^2_\nu$, and $\sigma^2_e$. We now specify Equation \@ref(eq:unit-mod) as a hierarchical Bayesian model:
+We used the R statistical software to compute our results [@r-software]. The sample mean was computed using the *sae* [@sae-package]. The post-stratified estimates were computed using *mase* [@mase]. The frequentist EBLUP estimates were computed using *sae* [@sae-package]. The hierarchical Bayesian estimates were computed using *hbsae* [@hbsae-package]. The results were tidied, processed, and visualized using many *tidyverse* packages [@tidyverse]. Our data spans the entire Interior West, however we were forced to exclude a few eco-provinces. Namely two eco-provinces with a very small number of eco-subsections which caused errors in producing the unit-level hierarchical Bayesian estimates. We also had to not include estimates in a few eco-subsections with either none or very close to no sampled areas with non-zero values for our variables of interest. That is, areas which are in extremely non-forested areas. While this is disappointing, we still were able to fit these estimators to the great majority of our data. 
+
+This thesis uses all six of these estimators to produce estimates for basal area (square-foot), tree count per acre, above-ground biomass (lbs), and net volume ($\text{ft}^3$). The EBLUP and hierarchical Bayesian estimators use one explanatory variable, total canopy cover, to produce estimates. Our estimation occurs at the eco-subsection level, and thus we have 10,176 estimates produced (six estimators, four response variables, and 424 eco-subsections). 
+
+We are generally concerned with producing estimates that have both low variance and low bias. This chapter primarily aims to answer questions regarding these two quantities. In order to do so, we will summarize our findings both globally and by briefly examining a subset of our results in the Northern Rocky Forest. This subset examination allows us to dig in to results without much aggregation or incomprehensible plots due to the large amount of results we have. We explore both metrics and visualizations of variance and bias across the interior west in order to deeply understand the performance of our estimators. This thesis is, in many ways, a study navigating the bias-variance trade-off in depth in a real world setting. While quantifying variance of estimates is a generally straightforward task, producing an accurate depiction of bias is extremely difficult without knowing population parameters. 
+
+## The Big Picture
+
+We will now investigate the performance of the six estimators used in this thesis. In order to explore variance, the primary metric we use is the coefficient of variation ($CV$). This metric, for each estimator, is defined as the standard deviation of our estimate divided by the sample mean in that small area ($\hat \mu_{y_j}^{HT}$). This allows us to normalize our variation across different response variables and areas that are more or less forested. We can express the coefficient of variation as follows:
 \begin{align}
-&y_{ij} ~\vert~ \beta,~ \nu_j, \sigma^2_e \sim \text{N}(x_{ij}\beta + \nu_j,~ \sigma^2_e), \nonumber \\
-&\nu_j ~\vert~ \sigma^2_\nu \sim \text{N}(0,~ \sigma^2_\nu),\nonumber \\
-&f(\beta,~ \sigma^2_\nu, ~\sigma^2_e) = f(\beta)\cdot f(\sigma^2_\nu) \cdot f(\sigma^2_e).
+CV_{y_j} = \frac{\hat\sigma_{y_j}}{\hat\mu_{y_j}^{HT}}
 \end{align}
-where $f(\beta)$, $f(\sigma^2_\nu)$, and $f(\sigma^2_e)$ are priors specified below:
+It is notable that when the mean of the variable of interest is small, we will sometimes get strangely large coefficients of variation for estimators that borrow strength. This phenomenon can generally be thought of as more to do with intrinsic (and often very good) qualities of the estimator rather than correlation with poor performance of the estimator when the sample mean is small. Notably, estimators which borrow strength to a large degree in situations where the sample mean is low and the areas which we borrow strength from have significantly higher values will have higher variance due to this heterogeneity. We will explore this idea in depth further on in this chapter. 
+\clearpage
+In order to visualize the coefficients of variation in an appealing way, we have filtered out all observations greater than one in the following plot:  
+
+```{r cov-violin, fig.align="center", out.width='100%', echo = FALSE, warning = F, message = F, fig.scap="Distribution of the coefficient of variation of each eastimator", fig.cap = "Distribution of the coefficient of variation of each eastimator. The black dot in each violin segment represents the median coefficient of variation value. The width of the violin segments corresponds to the density of points in the given value range. Values greater than 1 truncated in plot, however still considered in median calculation."}
+med <- res_long %>%
+  group_by(estimator) %>%
+  summarize(median_cov = median(cov))
+
+res_long %>%
+  ggplot(mapping = aes(x = estimator,
+                       y = cov,
+                       fill = estimator)) +
+  geom_violin(alpha = 0.5) +
+  stat_summary(fun.y="median", geom="point") +
+  ylim(0,1) +
+  theme_bw() +
+  scale_fill_manual(values = c("#A9A9A9", "#334F44", "#E7AB26",
+                               "#BF4C27",  "steelblue",  "#80BCA2"),
+                    labels = c("Sample Mean", "Post-Stratification", "Area EBLUP",
+                               "Unit EBLUP", "Area HB", "Unit HB")) +
+  scale_x_discrete(labels = c("Sample Mean", "Post-Stratification", "Area EBLUP",
+                               "Unit EBLUP", "Area HB", "Unit HB")) +
+  theme(legend.position = "bottom") +
+  labs(title = "Coefficient of Variation of Each Estimator",
+       x = "Estimator",
+       y = "Coefficient of Variation",
+       fill = "Estimator")
+```
+Figure \@ref(fig:cov-violin) shows the coefficient of variation for each estimator. We see a slight reduction in the coefficient of variation when moving from the sample mean to post-stratification, and a decently large reduction in variation when adding auxiliary data with either EBLUP estimator. We also see that the unit-level hierarchical Bayesian estimator performs quite similarly to the unit-level EBLUP. This makes sense as at the unit-level we have so much data that it outweighs the contribution of any priors significantly. Finally, we see a huge reduction in the coefficient of variation compared to all other estimators when we fit the area-level hierarchical Bayesian estimator. The median coefficient of variation for this area-level hierarchical Bayesian estimator (`r round(med$median_cov[5], 3)`) is less than half of the next best performing median coefficient of variation from the area-level EBLUP (`r round(med$median_cov[3], 3)`). Examining the quantiles of these estimator's coefficient of variation continues to show the superiority of the area-level hierarchical Bayesian estimator while also demonstrating the metric's tendency to have some extremely large values:
+```{r quantile-table, echo = F}
+quantiledf <- bind_rows(
+  quantile(res$cov_dirmean),
+  quantile(res$cov_dirps),
+  quantile(res$cov_freq_area),
+  quantile(res$cov_freq_unit),
+  quantile(res$cov_hb_area),
+  quantile(res$cov_hb_unit)
+  ) %>%
+  mutate(Estimator = c("Sample Mean", "Post-Stratification", "Area EBLUP",
+                       "Unit EBLUP", "Area HB", "Unit HB")) %>%
+  relocate(Estimator)
+
+knitr::kable(
+  quantiledf,
+  digits = 3,
+  caption = "Quantiles of Each Estimator's Coefficient of Variation",
+  caption.short = "Coefficient of Variation Quantiles",
+  longtable = TRUE,
+  booktabs = TRUE
+)
+```
+
+While Figure \@ref(fig:cov-violin) and Table \@ref(tab:quantile-table) gives us a good sense of the distribution, we must acknowledge that we truncated some values in Figure \@ref(fig:cov-violin) and further investigate why the coefficient of variation tends to get very large in some cases. By examining the distribution and performance of the coefficients of variation by truncating the tails in Figure \@ref(fig:cov-violin) we are able to gain insight that would be much harder to see while including the tails. Now, we can look more in depth at the tails of these distributions. Three estimators had coefficients of variation that exceeded 1. The below table shows the count and proportion of each:
+```{r over-one, echo = FALSE, warning = F, message = F}
+over_one <- res_long %>%
+  filter(cov > 1) %>%
+  group_by(estimator) %>%
+  summarize(Count = n(),
+            Proportion = Count / (length(res_long$response) / length(unique(res_long$estimator)))) %>%
+  rename(Estimator = estimator) %>%
+  mutate(Estimator = case_when(Estimator == "freq_unit" ~ "Unit EBLUP",
+                               Estimator == "hb_area" ~ "Area HB",
+                               Estimator == "hb_unit" ~ "Unit HB",
+                               Estimator == "dirmean" ~ "Sample Mean")) %>%
+  bind_rows(data.frame(Estimator = c("Post-Stratification", "Area EBLUP"),
+                       Count = c(0,0),
+                       Proportion = c(0.000, 0.000))) %>%
+  arrange(Count)
+# Fix R's rounding error (accidentally grabs 3 observations that are 1.00000 and says they are > 1)
+over_one[3,2] <- 0
+over_one[3,3] <- 0.000
+
+knitr::kable(
+  over_one,
+  digits = 3,
+  caption = "Coefficient of variation estimates greater than one",
+  longtable = TRUE,
+  booktabs = TRUE
+)
+```
+We see that there are three estimators with coefficient of variations greater than one. Both the frequentist and hierarchical Bayesian unit-level estimators have many values greater than one, and the area-level hierarchical Bayesian has some as well. To understand why these particular estimators have many estimates greater than one, we first need to explore the small areas which have these coefficient of variation values. To do so, we can examine the mean response value for estimates where the coefficient of variation is greater than one and when it is less than one. 
+\clearpage
+```{r covg1l1, message = F, warning = F, echo = F}
+cov_g_1 <- res_long %>%
+  mutate(`CV > 1` = cov > 1) %>%
+  group_by(response, `CV > 1`) %>%
+  summarize(mean = mean(estimate)) %>%
+  pivot_wider(values_from = mean, names_from = `CV > 1`) %>%
+  rename(l1 = `FALSE`,
+         `g1` = `TRUE`)
+names(cov_g_1) <- c("Response", "Mean Estimate (CV < 1)", "Mean Estimate (CV > 1)")
+
+knitr::kable(
+  cov_g_1,
+  digits = 3,
+  caption = "Mean Estimates Where Coefficent of Variation is Greater Than and Less Than One",
+  longtable = TRUE,
+  booktabs = TRUE
+)
+```
+From this table we are able to confirm that we see high coefficients of variation more often in areas with lower values for our response variable. It now becomes apparent why some estimators have many coefficients of variation greater than one and others have none or very few. The three estimators which have coefficients of variation greater than one all will borrow a great deal of strength from outside eco-subsections when those outside eco-subections have a much higher response variable value than the eco-subsection of interest. In other words, with these three estimators, eco-subsections with lower response variable sample means will produce larger estimates. These larger estimates require larger a larger variance as we are unsure whether we had a non-representative sample (too low) in the given eco-subsection or if this eco-subsection truly has a low value for its response variable(s). However, when we are selecting methods of estimation which borrow strength, this is a property we like to see. In fact, estimators which do not borrow strength in these situations and have small coefficients of variation could be producing under-estimates with an artificial amount of precision. We can first visualize this phenomenon by examining the coefficient of variation of each estimator across the Interior West:
+\clearpage
+```{r cv-map, warning = F, message = F, echo = F, fig.align="center", fig.cap = "Average log coefficient of variation of each estimator in each eco-subsection plotted onto a map of the Interior West. The average is taken over the four response variables. The natural log is used to perserve a reasonable color scale. Grey areas represent areas where models were not fit.", fig.scap = "Coefficient of variation map"}
+bind_rows(res_long_sf, res_long_sf_na) %>%
+  filter(!is.na(estimator)) %>%
+  mutate(estimator = case_when(
+    estimator == "dirmean" ~ "Sample Mean",
+    estimator == "dirps" ~ "Post-Stratification",
+    estimator == "freq_area" ~ "Area EBLUP",
+    estimator == "freq_unit" ~ "Unit EBLUP",
+    estimator == "hb_area" ~ "Area HB",
+    estimator == "hb_unit" ~ "Unit HB"
+  )) %>%
+  mutate(estimator = factor(estimator, levels = c("Sample Mean", "Post-Stratification",
+                                                  "Area EBLUP", "Unit EBLUP",
+                                                  "Area HB", "Unit HB"))) %>%
+  ggplot() +
+  geom_sf(mapping = aes(fill = log(cov),
+                        geometry = geometry),
+          color = NA) +
+  theme_void() +
+  facet_wrap( ~ estimator, ncol = 3, dir = "v") +
+  scale_fill_gradient2(low = "#334F44",
+                      mid = "white",
+                      high = "#BF4C27",
+                      na.value = "grey",
+                      midpoint = 0) +
+  theme(legend.position = "bottom") +
+  guides(fill = guide_colorbar(title.position = "top", title.hjust = 0.5)) +
+  labs(fill = "log(CV)")
+```
+We see that the three estimators which have coefficient of variation values higher than one generally produce these values in heavily deserted areas in the southern parts of the Interior West and some deserts in the north parts of Nevada. It is sensible that these areas may truly have low values for our response variables given that the post-stratified estimator is doing its job correctly and the population totals for forested and non-forested areas are correct. On the other hand, it may be reasonable to use a higher variance estimate in these cases and borrow strength from surrounding areas. While it is hard to say which approach to handling these situations gives a better estimate, it highlights distinct ways in which the hierarchical Bayesian estimators (and the unit-level EBLUP) perform differently than the direct estimators and area-level EBLUP. 
+
+
+## Zooming In: The Northern Rocky Forest
+
+In order to give ourselves a closer look at *how* borrowing of strength differs between the area-level hierarchical Bayesian estimator and the area-level EBLUP estimator, we zoom in to basal area in the Northern Rocky Forest. Immediately, when we examine the Northern Rocky Forest we notice the behavior of the hierarchical Bayesian area-level estimator "pulling up" lower valued eco-subsections compared to their post-stratified estimate:
+```{r fig.align="center", out.width='100%', echo = FALSE, warning = F, message = F, fig.cap = "The hierarchical Bayesian area-level estimator and post-stratified estimator predicting basal area in the Northern Rocky Forest. The error bars depict two standard errors above an below the estimate of our response variable.", fig.scap = "HB Area and Post-stratified estimates in M333"}
+res_long %>%
+  filter(province == "M333",
+         response == "BALIVE_TPA") %>%
+  mutate(subsection = str_sub(subsection, 5),
+         subsection = fct_reorder(subsection, estimate)) %>%
+  filter(estimator %in% c("dirps", "hb_area")) %>%
+  ggplot(mapping = aes(x = subsection,
+                       y = estimate,
+                       color = estimator)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = estimate - 2*se, ymax = estimate + 2*se)) +
+  scale_color_manual(values = c("#334F44", "steelblue"),
+                     labels = c("Post-Stratification", "Area HB")) +
+  theme_bw() +
+  theme(legend.position = "bottom") +
+  labs(x = "Eco-subsection",
+       y = TeX("Basal Area Estimate ($ft^2$)"),
+       title = "Post-Stratification and Hierarchical Bayesian Area-Level Estimates of Basal Area\nin the Northern Rocky Forest ")
+```
+We also observe that the eco-subsections with high response values will get "pulled down", however the coefficient of variation does not increase significantly here as the sample mean is still relatively high. The "pulling up" and "pushing down" of estimates is a trait expected of these hierarchical Bayesian models, and it is the realization of "borrowing strength" or "pooling information" [@statrethinking]. 
+
+The frequentist area-level estimator takes a different approach to making these estimates. Notably, in the case of small within-area variation we see that the EBLUP will put a heavy weight on the post-stratified estimate from Equation \@ref(eq:eblup-area-weight). We can see this occur by comparing the area-level frequentist estimator to the post-stratified estimate with the same eco-province and response variable as above: 
+```{r fig.align="center", out.width='100%', echo = FALSE, warning = F, message = F, fig.cap = "The frequentist area-level estimator and post-stratified estimator predicting basal area in the Northern Rocky Forest. The error bars depict two standard errors above an below the estimate of our response variable.", fig.scap = "EBLUP area-level and Post-stratified estimates in M333"}
+res_long %>%
+  filter(province == "M333",
+         response == "BALIVE_TPA") %>%
+  mutate(subsection = str_sub(subsection, 5),
+         subsection = fct_reorder(subsection, estimate)) %>%
+  filter(estimator %in% c("dirps", "freq_area")) %>%
+  ggplot(mapping = aes(x = subsection,
+                       y = estimate,
+                       color = estimator)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = estimate - 2*se, ymax = estimate + 2*se)) +
+  scale_color_manual(values = c("#334F44", "#E7AB26"),
+                     labels = c("Post-Stratification", "Area EBLUP")) +
+  theme_bw() +
+  theme(legend.position = "bottom") +
+  labs(x = "Eco-subsection",
+       y = TeX("Basal Area Estimate ($ft^2$)"),
+       title = "Post-Stratification and Frequentist Area-Level Estimates of Basal Area\nin the Northern Rocky Forest ")
+```
+Overall, we can see that the frequentist area-level estimator performs much more similarly to the post-stratified estimator, a trait that may or may not be appealing based on the confidence we have in representative sampling. However, it is important to note that the frequentist area-level estimator is still borrowing strength, it just seems that it will often borrow less strength than the hierarchical Bayesian area-level estimator. This is expected, if we recall Equation \@ref(eq:eblup-area-weight) we note that when a large proportion of the total variation is between-area variation, the area-level EBLUP will rely heavily on the post-stratified estimate. Thus, in eco-subsections with low within-area variation the area-level EBLUP will produce an estimate very similar to the post-stratified estimate. It is important to recall that much of our data contains many observations which equal zero (Figure \@ref(fig:hists) and Table \@ref(tab:var-tab)). So, in eco-subsections with a low number of sampled plots and a high proportion of sampled plots with response values equal to zero we may artificially lower our variance. The hierarchical Bayesian estimators have the unique property of considering the uncertainty in the variance estimate when producing estimates, rather than relying on just a point value. 
+
+
+## Stepping Back
+
+When we narrow our vision to the Northern Rocky Forest it does seem like the area-level hierarchical Bayesian estimator clearly outperforms the analogous frequentist estimator. However, we must return to the Interior West in order to understand trends of estimator performance over space. To do this, we simply examine the eco-subsections in which the area-level hierarchical Bayesian estimator has lower variance than the post-stratified estimator and the area-level EBLUP:
+
+```{r, warning = F, message = F, echo = F, fig.align="center", fig.cap = "The area-level hierarcical Bayesian estimator's coefficient of variation compared with the coefficient of variation for the post-stratified estimator (left) and area-level EBLUP (right). Eco-subsections in seafoam green indicate areas where the coefficient of variation is lower for the area-level hierarchical Bayesian estimator, red areas indicate that the coefficient of variation of the hierarchical Bayesian estimator is greater than the estimator we are comparing it to. Grey areas indicate areas where we did not fit these estimators.", fig.scap = "Area-level coefficient of variation comparison across the Interior West"}
+p1 <- res_sf %>%
+  mutate(hb_area_l_dirps = cov_hb_area < cov_dirps) %>%
+  ggplot(mapping = aes(fill = hb_area_l_dirps,
+                       geometry = geometry)) +
+  geom_sf(color = "grey30") +
+  scale_fill_manual(values = c("#BF4C27", "#80BCA2"), na.value = "grey") +
+  theme_void() +
+  labs(title = "Area HB CV < Post-Strat CV",
+       fill = "") +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5)) 
+
+p2 <- res_sf %>%
+  mutate(hb_area_l_freq_area = cov_hb_area < cov_freq_area) %>%
+  ggplot(mapping = aes(fill = hb_area_l_freq_area,
+                       geometry = geometry)) +
+  geom_sf(color = "grey30") +
+  scale_fill_manual(values = c("#BF4C27", "#80BCA2"), na.value = "grey") +
+  theme_void() +
+  labs(title = "Area HB CV < Area EBLUP CV", fill = "") +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5)) 
+
+(p1 + p2) + plot_layout(guides = 'collect') & theme(legend.position = "bottom")
+```
+Generally, we continue to see the trend in Figure \@ref(fig:cv-map) where the area-level hierarchical Bayesian estimator producing estimates with higher variance in heavily deserted areas in the southern parts of the Interior West and deserts in the north parts of Nevada. The areas in which the area-level hierarchical Bayesian estimator has more variation than the post-stratified estimator and the area-level EBLUP are clearly non-randomly distributed across the Interior West. This gives us great insight as to where we may want to use this hierarchical Bayesian estimator and further supports our idea that the area-level hierarchical Bayesian estimator has a high coefficient of variation in non-forested areas. 
+
+We have largely discussed the variance of these estimators thus far, as we cannot know the true bias of an estimator without knowing the population parameters $\mu_{y_j}$ in each eco-subsection. However, in an attempt to quantify the magnitude of difference between two estimators we introduce percent relative difference, which we define below.
 \begin{align*}
-&f(\beta) \propto 1, \\
-&\frac{f(\sigma^2_e)}{f(\sigma^2_\nu)} = \text{Inv-Gamma}(\text{df} = 0,~ \text{scale} = 0).
+PRD(\hat\mu_1,~ \hat\mu_2) = \frac{\hat \mu_1 - \hat\mu_2}{\hat\mu_2} \cdot 100
 \end{align*}
-Now that we have specified the estimator, it is easy to attain the small area estimate and variance. For the estimate, we have:
-\begin{align}
-\hat\mu_{y_j}^{HBU} = \overline X_j \beta + \nu_j
-\end{align}
-where $\overline X_j$ is the population mean in the $j$th small area. Finally, for the variance we have:
-\begin{align}
-V(\hat \mu_{y_j}^{HBU} ~\vert~ \sigma^2_\nu,~ \sigma^2_e) = \text{MSE}(\hat\mu_{y_j}^{HBU}).
-\end{align}
+While we could explore percent relative difference between all combinations of estimators, the Forest Inventory and Analysis Program's go-to estimator is post-stratification, so we will compare the remaining five estimators to post-stratification. Also, post-stratification, as discussed in Methods, is an unbiased estimator given assumptions about our auxiliary data. Thus, we will rely on it for some proxy of truth. However we must realize that this proxy is quite weak. Below, we can see the quantiles of percent relative difference to post-stratification.
+```{r prd-tab, echo = F, warning = F, message = F}
+knitr::kable(
+  bind_rows(
+    quantile((res$est_dirmean - res$est_dirps) / (res$est_dirps)) * 100,
+    quantile((res$est_hb_unit - res$est_dirps) / (res$est_dirps)) * 100,
+    quantile((res$est_hb_area - res$est_dirps) / (res$est_dirps)) * 100,
+    quantile((res$est_freq_unit - res$est_dirps) / (res$est_dirps)) * 100,
+    quantile((res$est_freq_area - res$est_dirps) / (res$est_dirps)) * 100
+  ) %>%
+    mutate(Estimator = c("Sample Mean", "Unit HB", "Area HB", "Unit EBLUP", "Area EBLUP")) %>%
+    relocate(Estimator),
+  digits = 3,
+  caption = "Quantiles of Percent Relative Difference to the Post-Stratified Estimator",
+  longtable = TRUE,
+  booktabs = TRUE)
+```
+These quantiles continue to enforce the idea that the area-level EBLUP generally performs very similarly to the post-stratified estimator (albeit with lower variance). Notably though, the percent relative difference between the area-level hierarchical Bayesian estimator and the post-stratified estimator is small compared to both unit-level models. The median values in Table \@ref(tab:prd-tab) can be thought of some sort of proxy for each estimator's bias, but this is a difficult equivalency to make when we do not have the parameter values. While this proxy for bias may be weak, it is reassuring that for the area-level hierarchical Bayesian estimator our median (50% quantile) percent relative difference is somewhat low compared to other common estimators. 
 
-### The Area-level Hierarichical Bayesian Estimator
+Another aspect of our results that percent relative difference allows us to investigate is the performance of an estimator which we have hardly addressed so far: the hierarchical Bayesian unit-level model. This thesis claims to be a hierarchical Bayesian approach to small area estimation, yet the performance of one of the hierarchical Bayesian estimators has yet to be discussed in depth in this chapter. This is because the area-level hierarchical Bayesian estimator outperforms it by a huge margin in terms of variance. However, the case of the unit-level hierarchical Bayesian estimator is interesting in itself, even if it does not increase precision of estimates. To understand its performance, let's examine its percent relative difference to the unit-level EBLUP estimator:
+```{r prd-unit, echo = F, warning = F, message = F}
+knitr::kable(
+  bind_rows(
+    quantile((res$est_hb_unit - res$est_freq_unit) / (res$est_freq_unit)) * 100
+  ) %>%
+    mutate(Estimator = c("Unit HB")) %>%
+    relocate(Estimator),
+  digits = 3,
+  caption = "Quantiles of Percent Relative Difference to the Unit-level EBLUP",
+  longtable = TRUE,
+  booktabs = TRUE)
+```
+\clearpage
+We immediately see that the unit-level hierarchical Bayesian estimator is extremely similar to the unit-level EBLUP. That is, many of their estimates are within just a few percent difference compared to the unit-level EBLUP. This is because the data (or, likelihood) outweighs any prior information we gave the this model to a large degree. At the unit level we have so many observations that any reasonable prior has a negligible effect on the estimator's results. This illustrates the idea that under "flat" or "uninformative" priors that the hierarchical Bayesian estimates will converge to the analogous EBLUP estimator's estimates. Also, recall that not only the estimates should converge to the same point, but the variance should as well. We can see this illustrated in Figure \@ref(fig:cov-violin) and below:
+```{r, warning = F, message = F, echo = F, fig.align="center", fig.cap = "The unit-level hierarcical Bayesian estimator's coefficient of variation compared with the coefficient of variation for the post-stratified estimator (left) and unit-level EBLUP (right). Eco-subsections in seafoam green indicate areas where the coefficient of variation is lower for the unit-level hierarchical Bayesian estimator, red areas indicate that the coefficient of variation of the hierarchical Bayesian estimator is greater than the estimator we are comparing it to. Grey areas indicate areas where we did not fit these estimators.", fig.scap = "Unit-level coefficient of variation comparison across the Interior West"}
+p3 <- res_sf %>%
+  mutate(hb_area_l_dirps = cov_hb_unit < cov_dirps) %>%
+  ggplot(mapping = aes(fill = hb_area_l_dirps,
+                       geometry = geometry)) +
+  geom_sf(color = "grey30") +
+  scale_fill_manual(values = c("#BF4C27", "#80BCA2"), na.value = "grey") +
+  theme_void() +
+  labs(title = "Unit HB CV < Post-Strat CV", fill = "") +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5)) 
 
-For the area-level hierarchical Bayesian estimator, we start with Equation \@ref(eq:area-mod) as we did for the area-level frequentist EBLUP. We now just apply a hierarchical Bayesian approach to this equation. We must assume a prior distribution on $\beta$ and $\sigma^2_\nu$. We now specify Equation \@ref(eq:area-mod) as a hierarchical Bayesian model:
-\begin{align}
-&\hat\mu_{y_j}^{PS} ~\vert~ \mu_{y_j},~ \beta,~ \sigma^2_\nu \sim \text{N}(\mu_{y_j},~ \psi_j), \nonumber \\
-&\mu_{y_j} ~\vert~ \beta,~ \sigma^2_\nu \sim \text{N}(x_j\beta,~ b_j^2 \sigma^2_\nu),\nonumber \\
-&f(\beta,~ \sigma^2_\nu) = f(\beta)\cdot f(\sigma^2_\nu).
-\end{align}
-where $f(\beta)$ and $f(\sigma^2_\nu)$ and $f(\sigma^2_e)$ are priors specified below:
-\begin{align*}
-&f(\beta) \propto 1, \\
-&f(\sigma^2_\nu) = \text{Inv-Gamma}(\text{df} = 10000 \cdot m,~ \text{scale} = 1).
-\end{align*}
-where $m$ is the number of small areas in the eco-province we fit the estimator in. Now that we have specified the estimator, it is easy to attain the small area estimate and variance. For the estimate, we have:
-\begin{align}
-\hat\mu_{y_j}^{HBA} = E[\mu_{y_j} ~\vert~ \hat\mu_{y_j}^{PS}] = 
-\end{align}
-Finally, for the variance we have:
-\begin{align}
-V() = 
-\end{align}
-
-
-<!-- Depending on the functional form of the densities we must integrate to obtain our posterior, it is often easier to approximate the distribution with MCMC methods. However, in the case of this thesis, we use numerical integration to extract exact posterior densities from our likelihood and priors. We will now give the form of both the unit- and area-level hierarchical Bayesian models used in this thesis.  -->
-
-
-<!-- \begin{align} -->
-<!-- Y_{i,j} &\sim \text{N}(\nu_j + \vec\beta\vec X_i,~ \sigma^2) \\ -->
-<!-- \nu_j &\sim \text{N}(\mu_\nu,~ \sigma^2_\nu) \\ -->
-<!-- \mu_\nu &\sim \text{N}(a,~b) \\ -->
-<!-- \sigma &\sim \text{Inv-Gamma}(c,~d) -->
-<!-- \end{align} -->
-<!-- In this model, we have the response variable, $Y$, which is modeled to have a Gaussian posterior distribution with mean $\nu_j + \vec\beta\vec X_i$ which can change intercept based on the level that a given observation is in. Note that $\mu_\nu$ is given a hyperprior distribution where $a$ and $b$ are numbers that often specify a weakly informative or uninformative prior. Often we will set $a=0$ and $b$ equal to some large number to specify a very small amount of prior information. Also, we give the within-area variance a regularizing prior with the Inverse Gamma.  -->
-
-
-<!-- These are models which are often fit by maximum likelihood estimation and other methods of maximizing the likelihood function such are restricted maximum likelihood estimation. The likelihood can be written as -->
-<!-- $$ -->
-<!-- P(X ~\vert ~ \theta) -->
-<!-- $$ -->
-<!-- where $X$ is the data and $\theta$ is the parameter of interest. Note that the likelihood function allows the value of $X$ to vary while the parameter, $\theta$, is considered a fixed value. The other school of statistical thought, Bayesian statistics, considers the parameter of interest as varying while the considering the data as fixed. We call this the posterior distribution of $\theta$, and Bayes' theorem gives us the following relation -->
-<!-- $$ -->
-<!-- P(\theta ~\vert ~ X) = \frac{P(X ~\vert ~ \theta) P(\theta)}{P(X)} -->
-<!-- $$ -->
+p4 <- res_sf %>%
+  mutate(hb_area_l_freq_area = cov_hb_unit < cov_freq_unit) %>%
+  ggplot(mapping = aes(fill = hb_area_l_freq_area,
+                       geometry = geometry)) +
+  geom_sf(color = "grey30") +
+  scale_fill_manual(values = c("#BF4C27", "#80BCA2"), na.value = "grey") +
+  theme_void() +
+  labs(title = "Unit HB CV < Unit EBLUP CV", fill = "") +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5)) 
+(p3 + p4) + plot_layout(guides = 'collect') & theme(legend.position = "bottom")
+```
+The distribution of areas where the hierarchical Bayesian unit-level estimator has lower variance than the unit-level EBLUP appears to be very random. Just under 46% of areas have the hierarchical Bayesian unit-level model with lower variance than the unit-level EBLUP. We are not making any significant variance gains by implementing the unit-level hierarchical Bayesian estimator, however there are benefits of the implementation of this estimator. First, we now have a case study of a hierarchical Bayesian estimator converging in variance and estimates to the analogous frequentist model. This allows us to verify a statement often made in Bayesian statistics courses and textbooks with a real world example rather than a mathematical proof. Second, we now have access to a much more flexible estimator than the unit-level EBLUP that does a very similar job to the unit-level EBLUP. We can "tweak" the behavior of this estimator through the use of priors, or even a different linking model if needed. These changes could allow for a more successful estimator at the unit-level without changes many processes computationally. If we were to attempt to approach improving the unit-level model starting with the EBLUP we would be met with restrictions due to the rigidity of the EBLUP's mathematics, and we would have to construct a new estimator entirely.

@@ -1,190 +1,267 @@
-```{r data_setup, include = FALSE}
+# Methods {#methods}
+
+<!-- Gives an overview of the current main approaches to the problem. -->
+<!-- Points out flaws in existing approaches and addresses how the current work mitigates these problems -->
+
+Currently, there are three main types of estimators used to estimate the value of forest attributes: direct, indirect with implicit models, and indirect with explicit models. Direct estimators are commonly thought of as the simplest estimators as they do not borrow strength across small areas for estimation. Direct estimators are hence easy to use and interpret, but we often do not get precise enough estimates with these estimators, in other words, they have high variance. Indirect estimators with implicit models borrow strength implicitly across small areas to produce estimates. These estimators decrease variance by providing a link to related small areas through supplementary data [@rao2014]. Finally, indirect estimators that make explicit use of a model, or "model-based estimators", aim to reduce variance in estimates by using auxiliary data and making specific allowance for between area variation. As explained in Rao (2014), these model-based estimators have significant advantages over direct estimators and implicit indirect estimators. Notably, model diagnostics can be used, small area-specific measures of precision can be attained (in our case, we compare the coefficient of variation between estimators), and we can used mixed or hierarchical models to capture the dependence structure in the data. 
+
+This thesis explores the application of two model-based estimators, the hierarchical Bayesian unit-level model and the hierarchical Bayesian area-level model. These hierarchical Bayesian models are not commonly used in forest inventory research, however these models are often applied in a variety of other application areas ranging from ophthalmology to economic growth to tracking the spread of invasive species, to name a few [@med; @inbook; @doves]. We compare these novel Bayesian models to the frequentist EBLUP unit- and area-level models and two common direct estimators, the sample mean and the post-stratified estimator. To compare these estimators, we will apply them over many ecological provinces in the Interior West and study their performance when considering four key response variables with one explanatory variable. 
+
+In order to explore these estimators in depth, we must introduce notation relevant to them. First of all, our indices will work as follows: $i$ indexes over units sampled; $j$ indexes over eco-subsections or "small areas"; and $k$ indexes over strata. Now, we are interested in estimating the mean of some response variable $y$, such as trees per acre or biomass, in a small area. So, let $\mu_{y_j}$ be the population mean of the study variable in eco-subsection $j$ in the Interior West. To denote the estimate produced of $\mu_{y_j}$ we will use $\hat\mu_{y_j}$ with a superscript denoting which estimator is being used. We will also use $V(\hat\mu_{y_j})$ to denote the variance of $\hat\mu_{y_j}$. In summary, each of our estimators aims to estimate $\mu_{y_j}$, the population mean of some study variable in the $j$th eco-subsection and our estimated value is denoted by $\hat\mu_{y_j}$ and its variance is denoted by $V(\hat\mu_{y_j})$. We also must introduce $s_j$, which is a set. The set $s_j$ includes all units sampled within eco-subsection $j$. We also introduce $U_j$, the set of all the area in subsection $j$. The "$U$" is chosen as it stands for "universe." Also, we introduce $n_j$, this denotes the number of sampled units within an eco-subsection $j$, i.e. the cardinality of $s_j$. 
+
+
+## Direct Estimation
+
+There are two direct estimators that we implement throughout this thesis: the sample mean (a.k.a. the Horvitz-Thompson estimator) and the post-stratified estimator. While the sample mean is an intuitive choice for estimating the population mean of a variable of interest $y$, the post-stratified estimator helps correct for over- and under-sampling of forested areas. We also introduce a direct estimator which helps create intuition for the unit-level frequentist model, however we do not fit this model to our data. We will now explore the mathematics behind these estimators in depth. 
+
+### The Horvitz-Thompson Estimator
+
+What might be the most intuitive approach to estimating the population mean $\mu_{y_j}$ is taking the sample mean, i.e. using the "Horvitz-Thompson estimator" as survey samplers like to say [@hor52]. This estimator can be expressed as follows:
+\begin{align}
+\hat\mu_{y_j}^{HT} = \frac{1}{n_j} \sum_{i \in s_j} y_i
+\end{align}
+Ignoring the finite population correction, the variance estimate for Horvitz-Thompson estimator is calculated by:
+\begin{align}
+V\Big(\hat\mu_{y_j}^{HT}\Big) = \frac{1}{n_j-1} \sum_{i \in s_j} \Big(y_{ij} - \hat\mu_{y_j}^{HT}\Big)^2
+\end{align}
+Recall that the Horvitz-Thompson estimator is just taking the mean of the study variable of interest, $y$. Note that $y_i$ represents the value of the study variable in the $i$th unit sampled of eco-subsection $j$. This estimator is useful as it is easy to compute and does not require any auxiliary information. However, the Horvitz-Thompson estimator high variance relative to other estimators we will discuss. The post-stratified estimator begins to address the variance of the Horvitz-Thompson estimator.
+
+### The Post-Stratified Estimator
+
+The post-stratified estimator is very similar to the Horvitz-Thompson estimator however, as stated above, it addresses variance that occurred from using the Horvitz-Thompson estimator. While decreasing variance seems like a no cost solution to some of our problems, the post-stratified estimator requires auxiliary information in order to be used. The post-stratified estimator is a weighted sum of two Horvitz-Thompson estimators: one Horvitz-Thompson estimator giving the estimate of the mean in sampled units which are forested and the other Horvitz-Thompson estimator in non-forested areas. We then weight these estimates by the true proportion of area in the eco-subsection of interest that is forested. Note that while we are using auxiliary information such as the true proportion of forested area in the eco-subsection of interest and whether or not the sampled units were forested areas or not, both of these pieces of information only consider the eco-subsection of interest. Therefore, since information is not used from outside of the eco-subsection of interest, the post-stratified estimator is still within the family of direct estimators. We can represent the post-stratified estimator as follows:
+\begin{align}
+\hat\mu_{y_j}^{PS} = \sum_{k=1}^{2} w_k \cdot \hat\mu_{y_{jk}}^{HT}
+\end{align}
+Ignoring the finite population correction, the variance estimate for post-stratified estimator is calculated by:
+$$
+V\Big(\hat \mu_{y_j}^{PS}\Big) = 
+\frac{1}{n_j} \Bigg( \sum_{k=1}^{2} w_k n_k V\Big(\hat\mu_{y_{jk}}^{HT}\Big) + 
+\sum_{k=1}^{2} (1 - w_k) \frac{n_k}{n_j} V\Big(\hat\mu_{y_{jk}}^{HT}\Big) \Bigg)
+$$
+Recall that $k$ indexes over our strata, which in this case is forested and non-forested sampled units. We also have $w_k$, which is a survey weight entirely decided by the true proportion of eco-subsection $j$ which is forested. For example, if eco-subsection $j$ was 80% forested, we would have $w_1 = 0.8$ and $w_2 = 0.2$. Therefore if we had under-sampled forests at only 60% of our samples, we correct this under-sampling with our survey weights and this results in a better estimate of $\mu_{y_j}$ that is less variable. 
+
+The post-stratified estimator is a great alternative to the Horvitz-Thompson estimator when auxiliary information related to the response variable of interest is available, and in that situation there is not a justifiable reason to pick the Horvitz-Thompson estimator over the post-stratified estimator as the direct estimator of choice. We have access to the information needed to compute the post-stratified estimate in the Interior West so we will primarily be comparing our indirect estimators to the post-stratified estimator in our results. Also, our area-level indirect model-based estimators will be based on the post-stratified estimate. 
+
+### The Survey Regression Estimator
+
+Another direct estimator that is often used for small area estimation is the survey regression estimator. While we do not implement in this estimator, the unit-level frequentist EBLUP estimator can be written as a weighted average of the survey regression estimator and a regression-synthetic estimator. Thus, it is important to understand the intuition behind this estimator in order to fully understand how the unit-level frequentist EBLUP estimator works. We can represent the survey regression estimator as follows:
+\begin{align}
+\hat \mu_{y_j}^{SR} = \frac{1}{N_j} \sum_{i \in U_j} (\hat y_{ji}) +
+\frac{1}{n_j} \sum_{i \in s_j} (y_{ji} - \hat y_{ji})
+\end{align}
+where $N_j$ is the population size in the $j$th area. The survey regression estimator has a particular subtlety which makes it arguably not a direct estimator. Particularly, the $\hat y_{j,i}$ is calculated through linear regression with $\beta$'s fit by ordinary least squares across the study region, rather than the small area. This is the case for this particular survey regression estimator, as it is the estimator which we can partially represent the unit-level EBLUP estimator by. One may make a quite legitimate argument that this estimator then should in fact be considered an implicit model-based estimator, however Rao (2014) sticks to the convention that this estimator is in fact still a direct estimator. He argues that we should consider this estimator to be a direct estimator as the strength we are borrowing does not increase the "effective" sample size. Making a final decision on this estimator's class is left as an exercise to the reader.  
+
+## Implicit Model-Based Indirect Estimation
+
+Often times it is the case that direct estimation techniques do not provide sufficiently small standard errors to be able to make informative inferences at the small area level. That is the case in our situation, as the FIA's survey design was based around making inferences at larger levels than eco-subsections. One relatively simple approach to decreasing variance of estimates at a small area level is to use auxiliary data from surrounding areas to help attain the estimate in the small area of interest. This process is called borrowing strength. It is very similar to the borrowing of strength outlined in Figures \@ref(fig:hbu-diagram) and \@ref(fig:hba-diagram), however, in the case of implicit model-based indirect estimation we do not allow for between-area variation of explanatory variables. That is, we may borrow strength across small areas by using auxiliary data, but this auxiliary data must be aggregated and have the same effect on each small area within a designated area (in our case, this is the ecological province). 
+
+We introduce two implicit model-based indirect estimators commonly used when auxiliary data is available at the unit- and area-levels. These estimators are not used in the final analyses done in this thesis. However, they are crucial building blocks for understanding the frequentist EBLUP models we discuss and implement. We discuss the regression-synthetic estimator used when area-level auxiliary data is available and then the regression-synthetic estimator used for unit-level auxiliary data.
+
+### The Area-level Regression-Synthetic Estimator
+
+A common method of an implicit model-based indirect estimator outlined by Rao (2014) for area-level is the regression-synthetic estimator. Here, in order to estimate our parameter of interest, $\mu_{y_j}$, we fit an ordinary least squares linear regression on our auxiliary variable. Notably, we use $\bar X_j$ to denote the auxiliary data population mean in the $j$th small area. 
+\begin{align}
+\hat\mu_{y_j}^{RSA} = \hat\beta_0 + \hat\beta_1 \bar X_{j}
+\end{align}
+We note that the $\hat \beta$'s are calculated through standard methods of ordinary least squares. Further, it is important to recognize that in the case of the regression-synthetic estimator each small area receives the same $\hat\beta$'s as they are calculated by fitting an ordinary least squares model over all small areas within their eco-province. This is the realization of the requirement that the auxiliary information must have the same effect on each small area. It is also important to note that this estimator can be generalized to $p$ predictors, however in this thesis we use $p=1$.
+
+### The Unit-level Regression-Synthetic Estimator
+
+The unit-level regression-synthetic estimator is very similar to the area-level regression-synthetic estimator. Rather than the ordinary least squares model being fit at the area-level, it is fit at the unit-level. We first fit this unit-level model:
+$$
+\hat y_{ji} = \hat\beta_0 + \hat\beta_1 X_{ji}
+$$
+Note that we use capital $X$ to denote the population mean of our explanatory variable at the unit-level. We can do express the unit-level regression-synthetic estimator below:
+\begin{align}
+\hat\mu_{y_j}^{RSU} = \frac{1}{n_j} \sum_{i \in s_j} \hat y_{ji}
+\end{align}
+This estimator is very similar to the area-level regression-synthetic estimator as it fits an ordinarily least squares model over the eco-province our small area is in, and the auxiliary information has the same effect on each small area. 
+
+## Explicit Model-Based Indirect Estimation
+
+Often times, implicit model-based indirect estimators still do not reduce variance enough to give us estimates with a reasonably low variance. However, we can turn to explicit model-based indirect estimation in order to combat this issue further. Explicit model-based indirect estimators are extremely useful when relevant auxiliary data is available and we would like to allow for between-area variation of these auxiliary variables. By allowing for this between-area variation our models should fit to the data better given that there is truly between-area variation in the population. In the case of forests across a large portion of the United States, this assumption is very reasonable and one could attribute this variation to a number of factors such as temperature, humidity, or even elevation. Rather than attempting the daunting and nonsensical task of collecting data to fully explain this between-area variation, we fit a mixed model. 
+
+In small area estimation it is most common that the mixed model estimator used is one of the EBLUP estimators: either the unit- or area-level variant depending on the resolution of auxiliary data preferred. The EBLUP estimators are unbiased given the modeling assumptions are met, similar to the post-stratified estimator. We will now explore the model specifications of these EBLUP estimators at the unit- and area-level. 
+
+### The Unit-level EBLUP
+
+In the case of the unit-level EBLUP, we first fit a varying-intercepts linear mixed model at the unit-level:
+\begin{align}
+y_{i,j} = x_{ij} \beta + \nu_j + e_{ij} (\#eq:unit-mod)
+\end{align}
+where $\beta$ is calculated from data across the eco-province and will stay constant for each eco-subsection. However, $\nu_j$, the "random effect", will be different for each eco-subsection. This random effect helps account for variation between eco-subsections that the auxiliary data does not account for. The random effects $\nu$ and sampling errors $e$ are assumed to be distributed as follows:
+$$
+ \newcommand\myeq{\stackrel{\mathclap{\normalfont\mbox{s}}}{~}}
+\nu_j \stackrel{\text{iid}}{\sim} \text{N}(0,~ \sigma^2_{\nu}), \quad e_{ij} \stackrel{\text{ind}}{\sim}\text{N}(0, k^2_{ij}\sigma^2_e).
+$$
+Intuitively, we can think of the variance of the random effect, $\sigma^2_\nu$, as the heterogeneity between our small areas $j$ after we account for our fixed effects [@breidenbach2012]. [NEED TO TALK ABOUT WHAT K IS... cant find explanation in Rao]. 
+From our mixed model, Rao (2014) derives the unit-level EBLUP estimator fit in the frequentist paradigm as the weighted average of the survey regression estimator and the regression-synthetic estimator:
+\begin{align}
+\hat \mu_{y_j}^{FRU} = \hat \gamma_j \hat\mu_{y_j}^{SR} + (1 - \hat \gamma_j) \hat\mu_{y_j}^{RSU}
+\end{align}
+where
+\begin{align}
+\hat\gamma_j = \frac{\sigma^2_\nu}{(\sigma^2_\nu + \sigma^2_e / a_i)}
+\end{align}
+This $\hat\gamma_j$ can be broken down into two parts: the numerator and denominator. The numerator measures the between-area variation, and the denominator measures the total variability. Thus, when a large proportion of the overall variation is between-area variation, the unit-level EBLUP will put more weight on the survey regression estimator. 
+(say what $a_i$ is from Rao around 7.1.3, 7.1.4)
+
+For this thesis, in order to compute the variance of the unit-level EBLUP estimator we chose to bootstrap. Bootstrapping is the process taking repeated samples of our data with replacement, computing our statistic on that new bootstrap sample, and then repeating this process many times [@bootstrap]. The property of the bootstrap which is useful to us is that it produces good estimates for the variance of our estimator. For our application, we bootstrap within each small area to compute the variance. For each eco-subsection $j$, we sample $n_j$ plots with replacement. Next, we fit the unit-level EBLUP estimator to the bootstrapped eco-subsections and produce our mean estimate on our first bootstrap sample (we denote each bootstrap sample with $b$, so in this case $b=1$). 
+$$
+\hat\mu_j^{FRU}(b=1)
+$$
+Next, we repeat this sampling $B$ times, and in our case we choose $B = 500$ to produce 500 estimates:
+$$
+\hat\mu_j^{FRU}(b), \quad b = 1,\dots,500
+$$
+Finally, we compute our estimate of the variance:
+\begin{align}
+\hat V(\hat\mu_j) = \frac{1}{B-1} \sum_{b=1}^{B}\Big(\hat\mu_j(b) - \overline\mu_j^B\Big)
+\end{align}
+where $\overline\mu_j^B$ denotes the sample mean of the bootstrap estimates of $\mu_j$. 
+
+### The Area-level EBLUP 
+
+We can also fit the EBLUP at the area-level. In order to do this, we fit the following linear mixed model:
+\begin{align}
+\hat\mu_{j}^{PS} = x_j \beta + \nu_j + e_j (\#eq:area-mod)
+\end{align}
+where we assume
+$$
+ \newcommand\myeq{\stackrel{\mathclap{\normalfont\mbox{s}}}{~}}
+\nu_j \stackrel{\text{iid}}{\sim} \text{N}(0,~ \sigma^2_{\nu}), \quad e_{j} \stackrel{\text{ind}}{\sim}\text{N}(0, \sigma^2_e).
+$$
+
+
+
+Next, Rao (2014) derives the commonly expressed form of the EBLUP estimator:
+
+
+The area-level EBLUP estimator is expressed by Rao (2014) as a weighted average of the direct estimator and the regression-synthetic estimator:
+\begin{align}
+\hat \mu_j^{FRA} = \hat\gamma_j \hat\mu_j^{PS} + (1 - \hat\gamma_j) \hat\mu_j^{RS} (\#eq:eblup-area-weight)
+\end{align}
+where
+\begin{align}
+\hat \gamma_j = \hat \sigma_\nu^2 b_j^2 / (\psi_j + \hat\sigma_\nu^2 b_j^2)
+\end{align}
+
+We compute the variance of this estimator by using the MSE of this estimator. The MSE is expressed by the following equation [@mse-area]:
+\begin{align}
+V(\hat\mu_j^{FRA}) = MSE(\hat\mu_j^{FRA}) = g_{1j} + g_{2j} + 2g_{3j}
+\end{align}
+where
+\begin{align*}
+g_{1j} = \hat\gamma_j \sigma^2_e, \\
+g_{2j} = \text{figure this out... wls beta?} \\
+g_{3j} = (\sigma^2_e)^2 \cdot (\sigma^2_\nu + \sigma^2_e)^{-3} \cdot 2(\sum_{j} (\sigma^2_\nu + \sigma^2_e)^{-2})^{-1}
+\end{align*}
+
+(I need to define a lot of these quantities. Trying to find the best way to do this without pulling every little thing from Rao)
+
+## A Hierarchical Bayesian Approach
+
+So far in this chapter, we have explored common frequentist approaches to small area estimation. However, the research goal of this thesis is to study the performance of the hierarchical Bayesian model for small area estimation. With a hierarchical Bayesian model, we derive the posterior distribution of our variable of interest with either Markov Chain Monte Carlo (MCMC) methods or through numerical integration. We do this by considering both the data (likelihood) and prior distributions. This allows us to use Bayes' Theorem in order to attain our posterior.
+
+Before introducing a slew of notation regarding Bayesian statistics, let's take a step back to recall the type of questions we have been asking so far. Each estimator in this chapter so far has attempted to quantify the mean of our response variable $y$ in each eco-subsection $j$, that is estimating $\mu_{y_j}$. The way in which we attain our estimate $\hat\mu_{y_j}$ and its variance $V\Big(\hat\mu_{y_j}\Big)$ is by asking the question: what sort of $\hat\mu_{y_j}$ would we expect to get under hypothetical resampling? This question is the basis of the name "frequentist" as our estimates in this frequentist paradigm rely on the hypothetical repeated (frequent) sampling. When we choose to use Bayesian methods to estimate $\mu_{y_j}$, we ask a different question: What is our knowledge of $\mu_{y_j}$ based on the data and prior information?
+
+These questions bring up a philosophical difference between Bayesian and frequentist statistics about the addition of prior information. One may object to this, however in this thesis we add very little prior information and rely quite heavily on the data to much of the work for us. Secondly, the addition of prior information allows us to attain a posterior distribution for our estimate of $\mu_{y_j}$, rather than a point estimate. Now with this philosophical difference in mind, recall Bayes' Theorem below:
+\begin{align}
+P(A ~\vert~ B) &= \frac{P(B ~\vert~ A) \cdot P(A)}{P(B)} \\
+&\propto P(B ~\vert~ A) \cdot P(A)
+\end{align}
+Bayes' Theorem allows us to derive one conditional probability, $P(A ~\vert~ B)$, given that we know the inverse conditional probability and each marginal distribution [@bayes-orig]. This theorem is the basis of our hierarchical Bayesian models. Replacing $A$ with our parameter of interest, $\mu_{y_j}$, and $B$ with our data we get the following equation:
+\begin{align}
+f(\mu_{y_j} ~\vert~ \text{data}) \propto P(\text{data} ~\vert~ \mu_{y_j}) \cdot P(\mu_{y_j})
+(\#eq:bayes-thm)
+\end{align}
+In our application, we are interested in making inferences about $\mu_{y_j}$ given the data we have. This is represented on the left hand side of Equation \@ref(eq:bayes-thm). We call this quantity the posterior distribution of $\mu_{y_j}$ given the data. As we continue to read left to right, we have our likelihood (or, data) multiplied with the distribution of $\mu_{y_j}$. Clearly we do not know the true value of $\mu_{y_j}$ or else we would not attempt to estimate $\mu_{y_j}$. In order to estimate our posterior distribution we must multiply something with the likelihood function, so we choose a "prior" distribution which reflects our prior belief of the distribution of $\mu_{y_j}$. We can visualize obtaining a posterior distribution below:
+```{r, warning = F, message = F, echo = F, fig.cap="Hypothetical prior, likelihood, and posterior distributions. The posterior is inbetween the prior and likelihood as it is the normalized product of these distributions.", fig.scap = "Prior, likelihood, and posterior distributions."}
 library(tidyverse)
-library(sf)
-library(USAboundaries)
-library(patchwork)
-
-`%ni%` <- Negate(`%in%`)
-
-interior_west <- c("AZ", "CO", "ID", "MT", "NV", "NM", "UT", "WY")
-
-states <- data.frame(state.abb) %>%
-  filter(state.abb %ni% interior_west & state.abb %ni% c("AK", "HI")) %>%
-  pull()
-
-dat_small <- read_csv("data/subsets/dat_small.csv")
-```
-
-
-# Data {#data}
-
-## The Forest Inventory & Analysis Program
-
-The FIA is a program within the United States Forest Service which aims to collect information and data in order to assess the country's forests. The FIA has been continuously operating since 1930 and their official mission is to "make and keep current a comprehensive inventory and analysis of the present and prospective conditions of and requirements for the renewable resources of the forest and rangelands of the US" [@whatisfia].
-
-The FIA collects data all throughout the United States by completing a survey each year of many plots of land. The units measured by the FIA and their ground crews are approximately 30 meter by 30 meter hexagonal units. Due to the vast size of the United States and immense amount of forested land, it would be nearly impossible for the FIA to attain population data for the country, so they use sampling instead. The FIA samples from the population of 30 meter by 30 meter hexagonal units by using a geographically-based systematic sampling design [@mcconville2020]. The FIA chooses these samples by first overlaying a hexagonal grid over the United States where each hexagon contains approximately 6000 acres of land. Then, they fill these hexagons with much smaller hexagons and randomly sample from the population of small hexagons. Then, ground crews go to these sampled small hexagons and collect variables such as basal area, trees per acre, etc. Along with this hand-collected data from FIA ground crews, the FIA also uses remotely sensed data to gain more information about the areas which they collect data. For example, the `nlcd11` variable, which measures total percent tree canopy cover of a plot, is collected via remote sensing by the Multi-Resolution Land Characteristics Consortium [@nlcd11]. Throughout the duration of the thesis, we will be working to predict ground-collected data with remotely sensed variables, such as `nlcd11`. Having remotely sensed variables like `nlcd11` is useful to us and the FIA because if our models can predict ground-collected variables well, the FIA can collect less data and have a larger effective sample size. 
-
-## The Interior West
-
-While the FIA collects data in all regions of the United States, the analyses done in this thesis uses data from the Interior West Forest Inventory and Analysis Unit (IW-FIA). Data from this unit will henceforth be referred to as data from "the Interior West". The Interior West is defined as a broad region of the United States, covering the states of Arizona, Colorado, Idaho, Montana, Nevada, New Mexico, Utah, and Wyoming. For reference we have provided the Interior West colored green on a map of the continental United States:
-
-```{r, fig.align="center", out.width='100%', echo = FALSE, fig.cap="The Interior West region of the United States"}
-knitr::include_graphics("figure/interior-west-on-usa.png")
-```
-
-The IW-FIA collects annual inventories of the Interior West, with the goal of covering 10% of the region each year, so every decade the IW-FIA should have measurement of 100% of each Interior West state's forests.
-
-The Interior West region itself contains the states which encompass the Rocky Mountains along with some other smaller mountain ranges. The Interior West contains 855,767 square miles of land which has an extremely diverse landscape ranging from the high mountain peaks of the Rockies to flat desert plains in Nevada and other Interior West states. Along with desert and mountains, the Interior West also includes parts of the Great Plains. Throughout this diverse landscape, there is a similarly diverse range of forested areas. The forested areas range from areas that are humid and temperate to areas like the Northern Rocky Mountain Forest which is dry and considered a temperate desert. 
-
-## Our Data: Specifics
-
-The data used in this thesis was collected by the FIA in the span of 10 years from 2007 to 2017. While this data was collected over this 10 year period, the analyses done throughout this thesis are under the assumption that this is a "snapshot" of the Interior West at some moment in time. Thus we do not consider any temporal features of this dataset, however the inventory year information is available to us. The data we have is plot-level (sometimes referred to as "unit-level") data for the Interior West region of the United States, where the data for each plot consists of ground data collected by FIA and remotely sensed data.
-
-The dataframe used in this thesis is a joined dataframe derived from two FIA datasets of the Interior West, `spatial` and `response`. The `spatial` dataframe contains 89444 observations and 70 variables, most notably our remotely sensed predictor variable (`nlcd11`), location information, and eco-subsection. The `nlcd11` variable was collected by the Multi-Resolution Land Characteristics Consortium [@nlcd11]. This variable measures percent tree canopy cover in a given plot. 
-
-The `response` dataframe contains 86085 observations and 67 variables, most notably four response variables collected by FIA crew members (`BALIVE_TPA`, `CNTLIVE_TPA`, `BIOLIVE_TPA`, and `VOLNLIVE_TPA`), location information, and eco-subsection. The response variables noted above measure basal area, tree count, biomass, and volume, respectively. We join these dataframes by their unique plot number, and subset the number of variables significantly to 19 variables which contain plot information, longitude & latitude, elevation, predictor variables, response variables, eco-subsection, eco-section, and eco-province. The resulting joined dataframe has 86085 rows as these are the rows which share the same plots between the `response` and `spatial` dataframes. We can see the first few rows of the dataframe with relevant columns selected and values rounded to the second decimal place:
-
-```{r, results="asis", message = F, warning = F, echo = F}
-library(knitr)
-kable(dat_small %>%
-        dplyr::select(PLOT, LON_PUBLIC, LAT_PUBLIC, nlcd11, BIOLIVE_TPA, subsection) %>%
-        dplyr::slice(1036:1041),
-      digits = 2,
-      col.names = c("Plot", "Latitude", "Longitude", "nlcd11", "BIOLIVE_TPA", "subsection"),
-      caption = "Relevant Glimpse of Data",
-      caption.short = "Relevant Glimpse of Data",
-      longtable = TRUE,
-      booktabs = TRUE)
-```
-
-While the data covers the Interior West as a whole, we have very granular information, as each row represents a plot sampled by the FIA. The data also includes variables that subset the Interior West into provinces which contain eco-sections, and these eco-sections contain eco-subsections. In our data, on average, each eco-section contains approximately 7.06 eco-subsections, and each province contains an average of 4.86 eco-sections. So, an average province then contains just over 34 eco-subsections. We can take a look at the Northern Rocky Forest province, colored by eco-section, with lines dividing each eco-subsection to see this structure in action:
-
-```{r northern-rocky, echo = F, message = F, warning = F, fig.align="center", fig.cap="The Northern Rocky Forest colored by eco-section"}
-subsections <- st_read("../data/SA_eco_subsection/SA_eco_subsection.shp", quiet = TRUE)
-m333_sub <- subsections %>%
-  filter(PROVINC == "M333")
-
-int_west_sf <- us_boundaries(type = "state",
-                         states = interior_west)
-
-m333_sub2 <- st_intersection(int_west_sf, m333_sub)
-ggplot() +
-  geom_sf(data = m333_sub2,
-          mapping = aes(fill = SECTION),
-          color = "black") +
-  scale_fill_manual(values = c("#BF4C27", "#E7AB26", "#80BCA2", "#F5F7BD")) +
-  theme_void() +
-  theme(
-    legend.position = "bottom"
-  ) +
-  labs(
-    fill = "Ecosection"
-  )
-```
-
-
-The data we have covers a total of 14 provinces, 68 eco-sections, and 480 eco-subsections. The hierarchical structure of the data and nested nature of the eco-subsections within eco-sections within eco-provinces lends itself to be able to create hierarchical models which borrow strength from surrounding areas. 
-
-While this data contains a multitude of variables, the analyses done in this thesis focus on four key response variables and one explanatory variable. The response variables used are basal area (square-foot), trees per acre, above-ground biomass (lbs), and net volume ($\text{ft}^3$). These variables are coded as `BALIVE_TPA`, `CNTLIVE_TPA`, `BIOLIVE_TPA`, and `VOLNLIVE_TPA`, respectively. We can look at the average of these variables across the Interior West region by eco-subsection in the four following maps of the interior west. 
-
-```{r, fig.align="center", out.width='65%', echo = FALSE, fig.cap="Mean basal area in Interior West eco-subsections"}
-knitr::include_graphics("figure/basal.png")
-```
-```{r, fig.align="center", out.width='65%', echo = FALSE, fig.cap="Mean biomass in Interior West eco-subsections"}
-knitr::include_graphics("figure/biomass.png")
-```
-```{r, fig.align="center", out.width='65%', echo = FALSE, fig.cap="Mean tree count per acre in Interior West eco-subsections"}
-knitr::include_graphics("figure/count.png")
-```
-```{r, fig.align="center", out.width='65%', echo = FALSE, fig.cap="Mean net volume in Interior West eco-subsections"}
-knitr::include_graphics("figure/voln.png")
-```
-
-
-While we have four variables which we will model as response variables throughout the analyses, we also have one predictor variables which will be of much use to us. In particular, total tree canopy cover (coded as `nlcd11`.) This variable is remotely sensed, meaning that they were not collected by FIA crew members, but rather with aerial photography and/or satellite imagery. However, we will be using these variables to attempt to predict our response variables in order to understand how good of estimates we can make with this remote data that does not require as much effort to collect. Notably, we can consider this variable to contain the population totals for total canopy cover as the data is collected for the entire Interior West region. 
-
-To get a sense of a our predictor variable `nlcd11`, we will look at its distribution in the Northern Rocky Forest subset of our data compared to its distribution across the entire Interior West:
-```{r hists, message = FALSE, warning=FALSE, echo = FALSE, fig.align="center", fig.retina=4, fig.height=4, fig.width=6, fig.cap="Distribution of total canopy cover in the M333 eco-province (left) and the entire Interior West (right)", fig.scap="Total canopy cover in the M333 eco-province and Interior West"}
-m333 <- dat_small %>%
-  filter(province == "M333")
-hist1 <- ggplot(m333) +
-  geom_histogram(mapping = aes(x = nlcd11, y = ..count.. / 1000), color = "black", fill = "#80BCA2", bins = 30) +
+x <- seq(from = -90, to = 90, by = 1)
+data <- dnorm(x, mean = 40, sd = 5)
+prior <- dnorm(x, mean = 10, sd = 10)
+posterior <- dnorm(x, 25, 4)
+bayes_df <- tibble(
+  x = rep(x,3),
+  distributions = c(prior, data, posterior),
+  which_one = c(rep("Prior", 181), rep("Likelihood", 181), rep("Posterior", 181))
+)
+ggplot(bayes_df, aes(x = x, y = distributions, color = which_one)) +
+  geom_line() +
   theme_bw() +
-  labs(y = "count (1000's)")
-hist2 <- ggplot(dat_small) +
-  geom_histogram(mapping = aes(x = nlcd11, y = ..count.. / 1000), color = "black", fill = "#80BCA2", bins = 30) +
-  theme_bw() +
-  labs(y = "count (1000's)")
-
-hist1 + hist2 
+  scale_color_manual(values = c("steelblue", "#BF4C27", "#E7AB26")) +
+  theme(legend.position = "bottom",
+        axis.ticks = element_blank(),
+        axis.text = element_blank()) +
+  labs(x = "", y = "", color = "Distribution")
 ```
+Here we can see that our estimate is informed by both the data and the prior distribution, rather than in the frequentist paradigm where only the data is used. We also see that if the prior is "flat", our posterior would just be our likelihood function, leading us to the same result as we achieve through a frequentist analysis, just though a different method. 
 
-Notably, the Northern Rocky Forest Province (M333) is much more forested than the Interior West, so we see much different distributions of total canopy cover in this subset of the data. Apart from making these histograms, we can also summarize the entire, unit-level data and see some summary statistics of our five key variables:
+These are the concepts and basics of Bayesian statistics applied to the problem at hand: estimating $\mu_{y_j}$. We introduce two methods which estimate $\hat\mu_{y_j}$: the unit-level hierarchical Bayesian estimator and the area-level hierarchical Bayesian estimator. These estimators are analogous to the unit-level EBLUP and the area-level EBLUP, respectively. Notably, when our variance parameters are known and we use flat priors to attain our posterior the hierarchical Bayesian approach and EBLUPs give the same estimates and measures of variability [@rao2014]. However, we of course do not know the underlying parameter values of our variances. We now introduce each estimator. 
 
-```{r var-tab, message = FALSE, warning=FALSE, echo = FALSE, fig.align="center", fig.retina=4}
-vars <- list(dat_small$nlcd11, dat_small$BIOLIVE_TPA,
-             dat_small$BALIVE_TPA, dat_small$CNTLIVE_TPA, dat_small$VOLNLIVE_TPA)
-kable(dat_small %>%
-  summarize(
-    variable = c("nlcd11", "BIOLIVE_TPA", "BALIVE_TPA", "CNTLIVE_TPA", "VOLNLIVE_TPA"),
-    mean = unlist(lapply(vars, mean, na.rm = T)),
-    sd = unlist(lapply(vars, sd, na.rm = T)),
-    median = unlist(lapply(vars, median, na.rm = T)),
-    quantile_75 = unlist(lapply(vars, quantile, na.rm = T, probs = 0.75)),
-    min = unlist(lapply(vars, min, na.rm = T)),
-    max = unlist(lapply(vars, max, na.rm = T))),
-   # na_count = unlist(lapply(vars, FUN = swfscMisc::na.count))),
-  digits = 2,
-  col.names = c("Variable", "Mean", "SD", "Median", "75th Percentile", "Min", "Max"),
-  caption = "Summary Statistics of Relevant Variables",
-  caption.short = "Summary Statistics of Relevant Variables",
-  longtable = TRUE,
-  booktabs = TRUE)
-```
+### The Unit-level Hierarchical Bayesian Estimator
 
-From this table, we can see how heavily skewed these key variables are, with all the variables having median of zero. This does not stop us from doing meaningful analyses though, as the sample size of this dataset is so large ($n = 86085$) and thus we have plenty of data to create models with. 
+For the unit-level hierarchical Bayesian estimator, we start with Equation \@ref(eq:unit-mod) as we did for the unit-level frequentist EBLUP. We now just apply a hierarchical Bayesian approach to this equation. We must assume a prior distribution on $\beta$, $\sigma^2_\nu$, and $\sigma^2_e$. We now specify Equation \@ref(eq:unit-mod) as a hierarchical Bayesian model:
+\begin{align}
+&y_{ij} ~\vert~ \beta,~ \nu_j, \sigma^2_e \sim \text{N}(x_{ij}\beta + \nu_j,~ \sigma^2_e), \nonumber \\
+&\nu_j ~\vert~ \sigma^2_\nu \sim \text{N}(0,~ \sigma^2_\nu),\nonumber \\
+&f(\beta,~ \sigma^2_\nu, ~\sigma^2_e) = f(\beta)\cdot f(\sigma^2_\nu) \cdot f(\sigma^2_e).
+\end{align}
+where $f(\beta)$, $f(\sigma^2_\nu)$, and $f(\sigma^2_e)$ are priors specified below:
+\begin{align*}
+&f(\beta) \propto 1, \\
+&\frac{f(\sigma^2_e)}{f(\sigma^2_\nu)} = \text{Inv-Gamma}(\text{df} = 0,~ \text{scale} = 0).
+\end{align*}
+Now that we have specified the estimator, it is easy to attain the small area estimate and variance. For the estimate, we have:
+\begin{align}
+\hat\mu_{y_j}^{HBU} = \overline X_j \beta + \nu_j
+\end{align}
+where $\overline X_j$ is the population mean in the $j$th small area. Finally, for the variance we have:
+\begin{align}
+V(\hat \mu_{y_j}^{HBU} ~\vert~ \sigma^2_\nu,~ \sigma^2_e) = \text{MSE}(\hat\mu_{y_j}^{HBU}).
+\end{align}
 
-Finally, we also have population data showing the proportion of each eco-subsection that is forested. This data allows us to create our post-stratified estimates which are discussed in detail in the following chapter.  
+### The Area-level Hierarichical Bayesian Estimator
 
-## Data Structure & Hierarchy
-
-As hinted at throughout earlier parts of the chapter, the data used in this thesis has a hierarchical structure, where eco-subsections are nested within eco-sections which are in turn nested within eco-provinces. Every plot has each level of granularity of location data recorded and this is what allows us to choose how far to borrow strength from other plots. We can see this structure of nested data by looking at a diagram depicting this data structure:
-<!-- looking at an example up close of Idaho's eco-subsections colored by their province, and then their eco-sections: -->
-
-```{r, fig.align="center", out.width='100%', echo = FALSE, fig.cap="The nested data structure of the Interior West. The green area is the eco-province which is divided into eco-sections (red area) which is in turn divided into eco-subsections (beige area).", fig.scap="The nested data structure of the Interior West"}
-knitr::include_graphics("figure/data-structure.png")
-# idaho <- us_boundaries(type = "state",
-#                          states = "ID")
-# 
-# id <- st_intersection(idaho, subsections)
-# idsection <- ggplot() +
-#   geom_sf(data = id,
-#           mapping = aes(fill = SECTION)) +
-#   scale_fill_viridis_d(option = "A") +
-#   theme_void() +
-#   theme(legend.position = "none")
-# idprov <- ggplot() +
-#   geom_sf(data = id,
-#           mapping = aes(fill = PROVINC)) +
-#   scale_fill_viridis_d(option = "A") +
-#   theme_void() +
-#   theme(legend.position = "none") 
-# 
-# idprov + idsection
-
-```
+For the area-level hierarchical Bayesian estimator, we start with Equation \@ref(eq:area-mod) as we did for the area-level frequentist EBLUP. We now just apply a hierarchical Bayesian approach to this equation. We must assume a prior distribution on $\beta$ and $\sigma^2_\nu$. We now specify Equation \@ref(eq:area-mod) as a hierarchical Bayesian model:
+\begin{align}
+&\hat\mu_{y_j}^{PS} ~\vert~ \mu_{y_j},~ \beta,~ \sigma^2_\nu \sim \text{N}(\mu_{y_j},~ \psi_j), \nonumber \\
+&\mu_{y_j} ~\vert~ \beta,~ \sigma^2_\nu \sim \text{N}(x_j\beta,~ b_j^2 \sigma^2_\nu),\nonumber \\
+&f(\beta,~ \sigma^2_\nu) = f(\beta)\cdot f(\sigma^2_\nu).
+\end{align}
+where $f(\beta)$ and $f(\sigma^2_\nu)$ and $f(\sigma^2_e)$ are priors specified below:
+\begin{align*}
+&f(\beta) \propto 1, \\
+&f(\sigma^2_\nu) = \text{Inv-Gamma}(\text{df} = 10000 \cdot m,~ \text{scale} = 1).
+\end{align*}
+where $m$ is the number of small areas in the eco-province we fit the estimator in. Now that we have specified the estimator, it is easy to attain the small area estimate and variance. For the estimate, we have:
+\begin{align}
+\hat\mu_{y_j}^{HBA} = E[\mu_{y_j} ~\vert~ \hat\mu_{y_j}^{PS}] = 
+\end{align}
+Finally, for the variance we have:
+\begin{align}
+V() = 
+\end{align}
 
 
-The largest motivation for hierarchical modeling in this particular application is that observations are more similar within the hierarchies which we split them into. To understand if this is true, we can do a preliminary analysis on the data by performing three-way ANOVAs for each key variable with predictors `province`, `section`, and `subsection`. For succinctness, we can look at the ANOVA results for one of the response variables, `BIOLIVE_TPA`, but the other variables tell a very similar story in terms of homogeneity. By just looking at the MSE of the ANOVA results, we can see that we should expect more homogeneity within eco-subsections:
+<!-- Depending on the functional form of the densities we must integrate to obtain our posterior, it is often easier to approximate the distribution with MCMC methods. However, in the case of this thesis, we use numerical integration to extract exact posterior densities from our likelihood and priors. We will now give the form of both the unit- and area-level hierarchical Bayesian models used in this thesis.  -->
 
-```{r, echo=F, message=F, warning=F}
-load("data/anova_BIOLIVE_TPA.rds")
 
-knitr::kable(broom::tidy(anova_BIOLIVE_TPA),
-               caption = "Analysis of Variance Model (Biomass Response)",
-               longtable = TRUE,
-               booktabs = TRUE)
-```
+<!-- \begin{align} -->
+<!-- Y_{i,j} &\sim \text{N}(\nu_j + \vec\beta\vec X_i,~ \sigma^2) \\ -->
+<!-- \nu_j &\sim \text{N}(\mu_\nu,~ \sigma^2_\nu) \\ -->
+<!-- \mu_\nu &\sim \text{N}(a,~b) \\ -->
+<!-- \sigma &\sim \text{Inv-Gamma}(c,~d) -->
+<!-- \end{align} -->
+<!-- In this model, we have the response variable, $Y$, which is modeled to have a Gaussian posterior distribution with mean $\nu_j + \vec\beta\vec X_i$ which can change intercept based on the level that a given observation is in. Note that $\mu_\nu$ is given a hyperprior distribution where $a$ and $b$ are numbers that often specify a weakly informative or uninformative prior. Often we will set $a=0$ and $b$ equal to some large number to specify a very small amount of prior information. Also, we give the within-area variance a regularizing prior with the Inverse Gamma.  -->
 
-These results allow us to conclude that it is reasonable to believe that observations within a given eco-province are more homogeneous than observations throughout the Interior West. Thus, if we want eco-subsection level estimates of variables, it makes sense to borrow information from other eco-subsections within the same province as each other. This data structure and homogeneity within provinces is what drives the analyses done henceforth in this thesis. 
 
+<!-- These are models which are often fit by maximum likelihood estimation and other methods of maximizing the likelihood function such are restricted maximum likelihood estimation. The likelihood can be written as -->
+<!-- $$ -->
+<!-- P(X ~\vert ~ \theta) -->
+<!-- $$ -->
+<!-- where $X$ is the data and $\theta$ is the parameter of interest. Note that the likelihood function allows the value of $X$ to vary while the parameter, $\theta$, is considered a fixed value. The other school of statistical thought, Bayesian statistics, considers the parameter of interest as varying while the considering the data as fixed. We call this the posterior distribution of $\theta$, and Bayes' theorem gives us the following relation -->
+<!-- $$ -->
+<!-- P(\theta ~\vert ~ X) = \frac{P(X ~\vert ~ \theta) P(\theta)}{P(X)} -->
+<!-- $$ -->
