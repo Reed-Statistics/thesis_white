@@ -321,10 +321,7 @@ knitr::kable(
   longtable = TRUE,
   booktabs = TRUE)
 ```
-We immediately see that the unit-level hierarchical Bayesian estimator is extremely similar to the unit-level EBLUP. 
-
-[talk about how similar the unit-level hb is the same as the unit-level freq]
-
+We immediately see that the unit-level hierarchical Bayesian estimator is extremely similar to the unit-level EBLUP. That is, many of their estimates are within just a few percent difference compared to the unit-level EBLUP. This is because the data (or, likelihood) outweighs any prior information we gave the this model to a large degree. At the unit level we have so many observations that any reasonable prior has a negligible effect on the estimator's results. This illustrates the idea that under "flat" or "uninformative" priors that the hierarchical Bayesian estimates will converge to the analogous EBLUP estimator's estimates. Also, recall that not only the estimates should converge to the same point, but the variance should as well. We can see this illustrated in Figure \@ref(fig:cov-violin) and below:
 ```{r, warning = F, message = F, echo = F, fig.align="center", fig.cap = "The unit-level hierarcical Bayesian estimator's coefficient of variation compared with the coefficient of variation for the post-stratified estimator (left) and unit-level EBLUP (right). Eco-subsections in seafoam green indicate areas where the coefficient of variation is lower for the unit-level hierarchical Bayesian estimator, red areas indicate that the coefficient of variation of the hierarchical Bayesian estimator is greater than the estimator we are comparing it to. Grey areas indicate areas where we did not fit these estimators.", fig.scap = "Unit-level coefficient of variation comparison across the Interior West"}
 p3 <- res_sf %>%
   mutate(hb_area_l_dirps = cov_hb_unit < cov_dirps) %>%
@@ -349,8 +346,4 @@ p4 <- res_sf %>%
         plot.title = element_text(hjust = 0.5)) 
 (p3 + p4) + plot_layout(guides = 'collect') & theme(legend.position = "bottom")
 ```
-
-
-
-... then some concluding thoughts to lead into the discussion chapter
-
+The distribution of areas where the hierarchical Bayesian unit-level estimator has lower variance than the unit-level EBLUP appears to be very random. Just under 46% of areas have the hierarchical Bayesian unit-level model with lower variance than the unit-level EBLUP. We are not making any significant variance gains by implementing the unit-level hierarchical Bayesian estimator, however there are benefits of the implementation of this estimator. First, we now have a case study of a hierarchical Bayesian estimator converging in variance and estimates to the analogous frequentist model. This allows us to verify a statement often made in Bayesian statistics courses and textbooks with a real world example rather than a mathematical proof. Second, we now have access to a much more flexible estimator than the unit-level EBLUP that does a very similar job to the unit-level EBLUP. We can "tweak" the behavior of this estimator through the use of priors, or even a different linking model if needed. These changes could allow for a more successful estimator at the unit-level without changes many processes computationally. If we were to attempt to approach improving the unit-level model starting with the EBLUP we would be met with restrictions due to the rigidity of the EBLUP's mathematics, and we would have to construct a new estimator entirely.
