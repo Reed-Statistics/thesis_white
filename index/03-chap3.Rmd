@@ -22,7 +22,7 @@ What might be the most intuitive approach to estimating the population mean $\mu
 \end{align}
 Ignoring the finite population correction, the variance estimate for Horvitz-Thompson estimator is calculated by:
 \begin{align}
-V\Big(\hat\mu_{y_j}^{HT}\Big) = \frac{1}{n_j-1} \sum_{i \in s_j} \Big(y_{ij} - \hat\mu_{y_j}^{HT}\Big)^2
+\hat V\Big(\hat\mu_{y_j}^{HT}\Big) = \frac{1}{n_j-1} \sum_{i \in s_j} \Big(y_{ij} - \hat\mu_{y_j}^{HT}\Big)^2
 \end{align}
 Recall that the Horvitz-Thompson estimator is just taking the mean of the study variable of interest, $y$. Note that $y_i$ represents the value of the study variable in the $i$th unit sampled of eco-subsection $j$. This estimator is useful as it is easy to compute and does not require any auxiliary information. However, the Horvitz-Thompson estimator high variance relative to other estimators we will discuss. The post-stratified estimator begins to address the variance of the Horvitz-Thompson estimator.
 
@@ -30,13 +30,13 @@ Recall that the Horvitz-Thompson estimator is just taking the mean of the study 
 
 The post-stratified estimator is very similar to the Horvitz-Thompson estimator however, as stated above, it addresses variance that occurred from using the Horvitz-Thompson estimator. While decreasing variance seems like a no cost solution to some of our problems, the post-stratified estimator requires auxiliary information in order to be used. The post-stratified estimator is a weighted sum of two Horvitz-Thompson estimators: one Horvitz-Thompson estimator giving the estimate of the mean in sampled units which are forested and the other Horvitz-Thompson estimator in non-forested areas. We then weight these estimates by the true proportion of area in the eco-subsection of interest that is forested. Note that while we are using auxiliary information such as the true proportion of forested area in the eco-subsection of interest and whether or not the sampled units were forested areas or not, both of these pieces of information only consider the eco-subsection of interest. Therefore, since information is not used from outside of the eco-subsection of interest, the post-stratified estimator is still within the family of direct estimators. We can represent the post-stratified estimator as follows:
 \begin{align}
-\hat\mu_{y_j}^{PS} = \sum_{k=1}^{2} w_k \cdot \hat\mu_{y_{jk}}^{HT}
+\hat\mu_{y_j}^{PS} = \sum_{k=1}^{2} w_{jk} \cdot \hat\mu_{y_{jk}}^{HT}
 \end{align}
 Ignoring the finite population correction, the variance estimate for post-stratified estimator is calculated by:
 $$
-V\Big(\hat \mu_{y_j}^{PS}\Big) = 
-\frac{1}{n_j} \Bigg( \sum_{k=1}^{2} w_k n_k V\Big(\hat\mu_{y_{jk}}^{HT}\Big) + 
-\sum_{k=1}^{2} (1 - w_k) \frac{n_k}{n_j} V\Big(\hat\mu_{y_{jk}}^{HT}\Big) \Bigg)
+\hat V\Big(\hat \mu_{y_j}^{PS}\Big) = 
+\frac{1}{n_j} \Bigg( \sum_{k=1}^{2} w_{jk} n_{jk} \hat V\Big(\hat\mu_{y_{jk}}^{HT}\Big) + 
+\sum_{k=1}^{2} (1 - w_{jk}) \frac{n_{jk}}{n_j} \hat V\Big(\hat\mu_{y_{jk}}^{HT}\Big) \Bigg)
 $$
 Recall that $k$ indexes over our strata, which in this case is forested and non-forested sampled units. We also have $w_k$, which is a survey weight entirely decided by the true proportion of eco-subsection $j$ which is forested. For example, if eco-subsection $j$ was 80% forested, we would have $w_1 = 0.8$ and $w_2 = 0.2$. Therefore if we had under-sampled forests at only 60% of our samples, we correct this under-sampling with our survey weights and this results in a better estimate of $\mu_{y_j}$ that is less variable. 
 
@@ -46,7 +46,7 @@ The post-stratified estimator is a great alternative to the Horvitz-Thompson est
 
 Another direct estimator that is often used for small area estimation is the survey regression estimator. While we do not implement in this estimator, the unit-level frequentist EBLUP estimator can be written as a weighted average of the survey regression estimator and a regression-synthetic estimator. Thus, it is important to understand the intuition behind this estimator in order to fully understand how the unit-level frequentist EBLUP estimator works. We can represent the survey regression estimator as follows:
 \begin{align}
-\hat \mu_{y_j}^{SR} = \frac{1}{N_j} \sum_{i \in U_j} (\hat y_{ji}) +
+\hat \mu_{y_j}^{SR} = \frac{1}{N_j} \sum_{i \in U_j} \hat y_{ji} +
 \frac{1}{n_j} \sum_{i \in s_j} (y_{ji} - \hat y_{ji})
 \end{align}
 where $N_j$ is the population size in the $j$th area. The survey regression estimator has a particular subtlety which makes it arguably not a direct estimator. Particularly, the $\hat y_{j,i}$ is calculated through linear regression with $\beta$'s fit by ordinary least squares across the study region, rather than the small area. This is the case for this particular survey regression estimator, as it is the estimator which we can partially represent the unit-level EBLUP estimator by. One may make a quite legitimate argument that this estimator then should in fact be considered an implicit model-based estimator, however Rao (2014) sticks to the convention that this estimator is in fact still a direct estimator. He argues that we should consider this estimator to be a direct estimator as the strength we are borrowing does not increase the "effective" sample size. Making a final decision on this estimator's class is left as an exercise to the reader.  
