@@ -22,7 +22,7 @@
 \contentsline {subsection}{\numberline {4.4.2}The Area-level Hierarichical Bayesian Estimator}{32}{subsection.4.4.2}%
 \contentsline {chapter}{Chapter 5: Results}{35}{chapter.5}%
 \contentsline {section}{\numberline {5.1}The Big Picture}{36}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Zooming In: The Northern Rocky Forest}{40}{section.5.2}%
+\contentsline {section}{\numberline {5.2}Zooming In: The Northern Rocky Forest}{41}{section.5.2}%
 \contentsline {section}{\numberline {5.3}Stepping Back}{43}{section.5.3}%
 \contentsline {chapter}{Chapter 6: Discussion and Conclusion}{49}{chapter.6}%
 \contentsline {chapter}{Appendix A: Code Appendix}{51}{appendix.A}%
