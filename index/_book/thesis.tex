@@ -570,18 +570,18 @@ y_{i,j} = x_{ij} \beta + \nu_j + e_{ij} \label{eq:unit-mod}
 where \(\beta\) is calculated from data across the eco-province and will stay constant for each eco-subsection. However, \(\nu_j\), the ``random effect,'' will be different for each eco-subsection. This random effect helps account for variation between eco-subsections that the auxiliary data does not account for. The random effects \(\nu\) and sampling errors \(e\) are assumed to be distributed as follows:
 \[
  \newcommand\myeq{\stackrel{\mathclap{\normalfont\mbox{s}}}{~}}
-\nu_j \stackrel{\text{iid}}{\sim} \text{N}(0,~ \sigma^2_{\nu}), \quad
-e_{ij} \stackrel{\text{ind}}{\sim}\text{N}(0,~\sigma^2_e).
+\nu_j \stackrel{\text{iid}}{\sim} \text{N}(0,~ \hat\sigma^2_{\nu}), \quad
+e_{ij} \stackrel{\text{ind}}{\sim}\text{N}(0,~\hat\sigma^2_e).
 \]
-Intuitively, we can think of the variance of the random effect, \(\sigma^2_\nu\), as the heterogeneity between our small areas \(j\) after we account for our fixed effects (Breidenbach \& Astrup, 2012). From our mixed model, Rao (2014) derives the unit-level EBLUP estimator fit in the frequentist paradigm as the weighted average of the survey regression estimator and the regression-synthetic estimator:
+Intuitively, we can think of the variance of the random effect, \(\hat\sigma^2_\nu\), as an estimate of the heterogeneity between our small areas \(j\) after we account for our fixed effects (Breidenbach \& Astrup, 2012). From our mixed model, Rao (2014) derives the unit-level EBLUP estimator fit in the frequentist paradigm as the weighted average of the survey regression estimator and the regression-synthetic estimator:
 \begin{align}
 \hat \mu_{y_j}^{FRU} = \hat \gamma_j \hat\mu_{y_j}^{SR} + (1 - \hat \gamma_j) \hat\mu_{y_j}^{RSU}
 \end{align}
 where
 \begin{align}
-\hat\gamma_j = \frac{\sigma^2_\nu}{\sigma^2_\nu + \sigma^2_e}
+\hat\gamma_j = \frac{\hat\sigma^2_\nu}{\hat\sigma^2_\nu + \hat\sigma^2_e}
 \end{align}
-This \(\hat\gamma_j\) can be broken down into two parts: the numerator and denominator. The numerator measures the between-area variation, and the denominator measures the total variability. Thus, when a large proportion of the overall variation is between-area variation, the unit-level EBLUP will put more weight on the survey regression estimator.
+It is easy to think about \(\hat\gamma_j\) if we break it down into two parts: it's numerator and denominator. The numerator measures the between-area variation, and the denominator measures the total variability. Thus, when a large proportion of the overall variation is between-area variation, the unit-level EBLUP will put more weight on the survey regression estimator.
 
 For this thesis, in order to compute the variance of the unit-level EBLUP estimator we chose to bootstrap. Bootstrapping is the process taking repeated samples of our data with replacement, computing our statistic on that new bootstrap sample, and then repeating this process many times (Efron, 1992). The property of the bootstrap which is useful to us is that it produces good estimates for the variance of our estimator. For our application, we bootstrap within each small area to compute the variance. For each eco-subsection \(j\), we sample \(n_j\) plots with replacement. Next, we fit the unit-level EBLUP estimator to the bootstrapped eco-subsections and produce our mean estimate on our first bootstrap sample (we denote each bootstrap sample with \(b\), so in this case \(b=1\)).
 \[
@@ -607,37 +607,39 @@ We can also fit the EBLUP at the area-level. In order to do this, we fit the fol
 where we assume
 \[
  \newcommand\myeq{\stackrel{\mathclap{\normalfont\mbox{s}}}{~}}
-\nu_j \stackrel{\text{iid}}{\sim} \text{N}(0,~ \sigma^2_{\nu}), \quad e_{j} \stackrel{\text{ind}}{\sim}\text{N}(0, \sigma^2_e).
+\nu_j \stackrel{\text{iid}}{\sim} \text{N}(0,~ \hat\sigma^2_{\nu}), \quad e_{j} \stackrel{\text{ind}}{\sim}\text{N}(0, \sigma^2_j).
 \]
-
-Next, Rao (2014) derives the commonly expressed form of the EBLUP estimator:
-
 The area-level EBLUP estimator is expressed by Rao (2014) as a weighted average of the direct estimator and the regression-synthetic estimator:
 \begin{align}
 \hat \mu_j^{FRA} = \hat\gamma_j \hat\mu_j^{PS} + (1 - \hat\gamma_j) \hat\mu_j^{RS} \label{eq:eblup-area-weight}
 \end{align}
 where
 \begin{align}
-\hat \gamma_j = \hat \sigma_\nu^2 b_j^2 / (\psi_j + \hat\sigma_\nu^2 b_j^2)
+\hat \gamma_j = \hat \sigma_\nu^2 / (\sigma^2_j + \hat\sigma_\nu^2)
 \end{align}
 We compute the variance of this estimator by using the MSE of this estimator. The MSE is expressed by the following equation (Hidiroglou \& You, 2016):
 \begin{align}
-V(\hat\mu_j^{FRA}) = MSE(\hat\mu_j^{FRA}) = g_{1j} + g_{2j} + 2g_{3j}
+\hat V(\hat\mu_j^{FRA}) = MSE(\hat\mu_j^{FRA}) = g_{1j} + g_{2j} + 2g_{3j}
 \end{align}
 where
 \begin{align*}
-g_{1j} = \hat\gamma_j \sigma^2_e, \\
-g_{2j} = \text{figure this out... wls beta?} \\
-g_{3j} = (\sigma^2_e)^2 \cdot (\sigma^2_\nu + \sigma^2_e)^{-3} \cdot 2(\sum_{j} (\sigma^2_\nu + \sigma^2_e)^{-2})^{-1}
+&g_{1j} = \hat\gamma_j \sigma^2_j, \\
+&g_{2j} = \hat\sigma^2_\nu (1 - \hat\gamma_j)^2 \mathbf{z_j'} \Big(\sum_{j} \hat\gamma_j \mathbf{z_j} \mathbf{z_j'}\Big)^{-1} \mathbf{z_j}, \\
+&g_{3j} = (\sigma^2_j)^2 \cdot (\hat\sigma^2_\nu + \sigma^2_j)^{-3} \cdot 2(\sum_{j} (\hat\sigma^2_\nu + \sigma^2_j)^{-2})^{-1}
 \end{align*}
-(I need to define a lot of these quantities. Trying to find the best way to do this without pulling every little thing from Rao)
+where
+\[
+\mathbf{z_j} = \begin{bmatrix}
+1 \\ \overline X_j
+\end{bmatrix}
+\]
 
 \hypertarget{a-hierarchical-bayesian-approach}{%
 \section{A Hierarchical Bayesian Approach}\label{a-hierarchical-bayesian-approach}}
 
 So far in this chapter, we have explored common frequentist approaches to small area estimation. However, the research goal of this thesis is to study the performance of the hierarchical Bayesian model for small area estimation. With a hierarchical Bayesian model, we derive the posterior distribution of our variable of interest with either Markov Chain Monte Carlo (MCMC) methods or through numerical integration. We do this by considering both the data (likelihood) and prior distributions. This allows us to use Bayes' Theorem in order to attain our posterior.
 
-Before introducing a slew of notation regarding Bayesian statistics, let's take a step back to recall the type of questions we have been asking so far. Each estimator in this chapter so far has attempted to quantify the mean of our response variable \(y\) in each eco-subsection \(j\), that is estimating \(\mu_{y_j}\). The way in which we attain our estimate \(\hat\mu_{y_j}\) and its variance \(V\Big(\hat\mu_{y_j}\Big)\) is by asking the question: what sort of \(\hat\mu_{y_j}\) would we expect to get under hypothetical resampling? This question is the basis of the name ``frequentist'' as our estimates in this frequentist paradigm rely on the hypothetical repeated (frequent) sampling. When we choose to use Bayesian methods to estimate \(\mu_{y_j}\), we ask a different question: What is our knowledge of \(\mu_{y_j}\) based on the data and prior information?
+Before introducing a slew of notation regarding Bayesian statistics, let's take a step back to recall the type of questions we have been asking so far. Each estimator in this chapter so far has attempted to quantify the mean of our response variable \(y\) in each eco-subsection \(j\), that is estimating \(\mu_{y_j}\). The way in which we attain our estimate \(\hat\mu_{y_j}\) and its variance is by asking the question: what sort of \(\hat\mu_{y_j}\) would we expect to get under hypothetical resampling? This question is the basis of the name ``frequentist'' as our estimates in this frequentist paradigm rely on the hypothetical repeated (frequent) sampling. When we choose to use Bayesian methods to estimate \(\mu_{y_j}\), we ask a different question: What is our knowledge of \(\mu_{y_j}\) based on the data and prior information?
 
 These questions bring up a philosophical difference between Bayesian and frequentist statistics about the addition of prior information. One may object to this, however in this thesis we add very little prior information and rely quite heavily on the data to much of the work for us. Secondly, the addition of prior information allows us to attain a posterior distribution for our estimate of \(\mu_{y_j}\), rather than a point estimate. Now with this philosophical difference in mind, recall Bayes' Theorem below:
 \begin{align}
