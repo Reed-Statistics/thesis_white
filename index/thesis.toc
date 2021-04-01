@@ -1,41 +1,40 @@
-\contentsline {chapter}{Introduction}{1}{chapter*.8}%
-\contentsline {chapter}{Chapter 1: Context}{3}{chapter.1}%
-\contentsline {chapter}{Chapter 2: Data}{11}{chapter.2}%
-\contentsline {section}{\numberline {2.1}The Forest Inventory \& Analysis Program}{11}{section.2.1}%
-\contentsline {section}{\numberline {2.2}The Interior West}{12}{section.2.2}%
-\contentsline {section}{\numberline {2.3}Our Data: Specifics}{13}{section.2.3}%
-\contentsline {section}{\numberline {2.4}Data Structure \& Hierarchy}{18}{section.2.4}%
-\contentsline {chapter}{Chapter 3: Methods}{21}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Direct Estimation}{22}{section.3.1}%
-\contentsline {subsection}{\numberline {3.1.1}The Horvitz-Thompson Estimator}{22}{subsection.3.1.1}%
-\contentsline {subsection}{\numberline {3.1.2}The Post-Stratified Estimator}{23}{subsection.3.1.2}%
-\contentsline {subsection}{\numberline {3.1.3}The Survey Regression Estimator}{23}{subsection.3.1.3}%
-\contentsline {section}{\numberline {3.2}Implicit Model-Based Indirect Estimation}{24}{section.3.2}%
-\contentsline {subsection}{\numberline {3.2.1}The Area-level Regression-Synthetic Estimator}{24}{subsection.3.2.1}%
-\contentsline {subsection}{\numberline {3.2.2}The Unit-level Regression-Synthetic Estimator}{25}{subsection.3.2.2}%
-\contentsline {section}{\numberline {3.3}Explicit Model-Based Indirect Estimation}{25}{section.3.3}%
-\contentsline {subsection}{\numberline {3.3.1}The Unit-level EBLUP}{26}{subsection.3.3.1}%
-\contentsline {subsection}{\numberline {3.3.2}The Area-level EBLUP}{27}{subsection.3.3.2}%
-\contentsline {section}{\numberline {3.4}A Hierarchical Bayesian Approach}{28}{section.3.4}%
-\contentsline {subsection}{\numberline {3.4.1}The Unit-level Hierarchical Bayesian Estimator}{29}{subsection.3.4.1}%
-\contentsline {subsection}{\numberline {3.4.2}The Area-level Hierarichical Bayesian Estimator}{30}{subsection.3.4.2}%
-\contentsline {chapter}{Chapter 4: Results}{31}{chapter.4}%
-\contentsline {section}{\numberline {4.1}The Big Picture}{32}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Zooming In: The Northern Rocky Forest}{37}{section.4.2}%
-\contentsline {section}{\numberline {4.3}Stepping Back}{39}{section.4.3}%
-\contentsline {chapter}{Chapter 5: Discussion and Conclusion}{45}{chapter.5}%
-\contentsline {chapter}{Appendix A: Code Appendix}{47}{appendix.A}%
-\contentsline {section}{\numberline {A.1}Helper Functions}{47}{section.A.1}%
-\contentsline {subsection}{\numberline {A.1.1}The Sample Mean}{47}{subsection.A.1.1}%
-\contentsline {subsection}{\numberline {A.1.2}Post-Stratification}{47}{subsection.A.1.2}%
-\contentsline {subsection}{\numberline {A.1.3}Hierarchical Bayesian Unit-Level}{48}{subsection.A.1.3}%
-\contentsline {subsection}{\numberline {A.1.4}Hierarchical Bayesian Area-Level}{50}{subsection.A.1.4}%
-\contentsline {subsection}{\numberline {A.1.5}Frequentist Unit-Level}{51}{subsection.A.1.5}%
-\contentsline {subsection}{\numberline {A.1.6}Frequentist Area-Level}{52}{subsection.A.1.6}%
-\contentsline {subsection}{\numberline {A.1.7}Coeffiicent of Variation Functions}{53}{subsection.A.1.7}%
-\contentsline {section}{\numberline {A.2}Fitting Models}{54}{section.A.2}%
-\contentsline {subsection}{\numberline {A.2.1}Data Set-up \& Preprocessing}{54}{subsection.A.2.1}%
-\contentsline {subsection}{\numberline {A.2.2}Direct Estimation}{55}{subsection.A.2.2}%
-\contentsline {subsection}{\numberline {A.2.3}Model-Based Estimation}{58}{subsection.A.2.3}%
-\contentsline {subsection}{\numberline {A.2.4}Writing Data Files \& Pivoting to Tidy Format}{64}{subsection.A.2.4}%
-\contentsline {chapter}{References}{67}{appendix*.29}%
+\contentsline {chapter}{Chapter 1: Context}{1}{chapter.1}%
+\contentsline {chapter}{Chapter 2: Data}{9}{chapter.2}%
+\contentsline {section}{\numberline {2.1}The Forest Inventory \& Analysis Program}{9}{section.2.1}%
+\contentsline {section}{\numberline {2.2}The Interior West}{10}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Our Data: Specifics}{11}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Data Structure \& Hierarchy}{16}{section.2.4}%
+\contentsline {chapter}{Chapter 3: Methods}{19}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Direct Estimation}{20}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}The Horvitz-Thompson Estimator}{20}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}The Post-Stratified Estimator}{21}{subsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.1.3}The Survey Regression Estimator}{21}{subsection.3.1.3}%
+\contentsline {section}{\numberline {3.2}Implicit Model-Based Indirect Estimation}{22}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}The Area-level Regression-Synthetic Estimator}{22}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}The Unit-level Regression-Synthetic Estimator}{23}{subsection.3.2.2}%
+\contentsline {section}{\numberline {3.3}Explicit Model-Based Indirect Estimation}{23}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}The Unit-level EBLUP}{24}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}The Area-level EBLUP}{25}{subsection.3.3.2}%
+\contentsline {section}{\numberline {3.4}A Hierarchical Bayesian Approach}{26}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}The Unit-level Hierarchical Bayesian Estimator}{27}{subsection.3.4.1}%
+\contentsline {subsection}{\numberline {3.4.2}The Area-level Hierarichical Bayesian Estimator}{28}{subsection.3.4.2}%
+\contentsline {chapter}{Chapter 4: Results}{29}{chapter.4}%
+\contentsline {section}{\numberline {4.1}The Big Picture}{30}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Zooming In: The Northern Rocky Forest}{35}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Stepping Back}{37}{section.4.3}%
+\contentsline {chapter}{Chapter 5: Discussion and Conclusion}{43}{chapter.5}%
+\contentsline {chapter}{Appendix A: Code Appendix}{45}{appendix.A}%
+\contentsline {section}{\numberline {A.1}Helper Functions}{45}{section.A.1}%
+\contentsline {subsection}{\numberline {A.1.1}The Sample Mean}{45}{subsection.A.1.1}%
+\contentsline {subsection}{\numberline {A.1.2}Post-Stratification}{45}{subsection.A.1.2}%
+\contentsline {subsection}{\numberline {A.1.3}Hierarchical Bayesian Unit-Level}{46}{subsection.A.1.3}%
+\contentsline {subsection}{\numberline {A.1.4}Hierarchical Bayesian Area-Level}{48}{subsection.A.1.4}%
+\contentsline {subsection}{\numberline {A.1.5}Frequentist Unit-Level}{49}{subsection.A.1.5}%
+\contentsline {subsection}{\numberline {A.1.6}Frequentist Area-Level}{50}{subsection.A.1.6}%
+\contentsline {subsection}{\numberline {A.1.7}Coeffiicent of Variation Functions}{51}{subsection.A.1.7}%
+\contentsline {section}{\numberline {A.2}Fitting Models}{52}{section.A.2}%
+\contentsline {subsection}{\numberline {A.2.1}Data Set-up \& Preprocessing}{52}{subsection.A.2.1}%
+\contentsline {subsection}{\numberline {A.2.2}Direct Estimation}{53}{subsection.A.2.2}%
+\contentsline {subsection}{\numberline {A.2.3}Model-Based Estimation}{56}{subsection.A.2.3}%
+\contentsline {subsection}{\numberline {A.2.4}Writing Data Files \& Pivoting to Tidy Format}{62}{subsection.A.2.4}%
+\contentsline {chapter}{References}{65}{appendix*.28}%

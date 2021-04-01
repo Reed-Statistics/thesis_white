@@ -82,6 +82,6 @@ options(width = 70)
 
 ```
 
-# Introduction {.unnumbered}
+<!-- # Introduction {.unnumbered} -->
 
-This is the introduction to my thesis.
+<!-- This is the introduction to my thesis. -->
