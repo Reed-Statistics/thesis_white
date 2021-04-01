@@ -22,7 +22,8 @@
 \contentsline {section}{\numberline {4.1}The Big Picture}{32}{section.4.1}%
 \contentsline {section}{\numberline {4.2}Zooming In: The Northern Rocky Forest}{37}{section.4.2}%
 \contentsline {section}{\numberline {4.3}Stepping Back}{39}{section.4.3}%
-\contentsline {chapter}{Chapter 5: Discussion and Conclusion}{45}{chapter.5}%
+\contentsline {chapter}{Chapter 5: Discussion}{45}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Possible Extensions}{45}{section.5.1}%
 \contentsline {chapter}{Appendix A: Code Appendix}{47}{appendix.A}%
 \contentsline {section}{\numberline {A.1}Helper Functions}{47}{section.A.1}%
 \contentsline {subsection}{\numberline {A.1.1}The Sample Mean}{47}{subsection.A.1.1}%

@@ -634,7 +634,7 @@ We can intuitively think about each \(g_{\#j}\) as follows: \(g_{1j}\) accounts 
 
 So far in this chapter, we have explored common frequentist approaches to small area estimation. However, the research goal of this thesis is to study the performance of the hierarchical Bayesian model for small area estimation. With a hierarchical Bayesian model, we derive the posterior distribution of our variable of interest with either Markov Chain Monte Carlo (MCMC) methods or through numerical integration. We do this by considering both the likelihood (data given unknown parameters) and prior distributions. This allows us to use Bayes' Theorem in order to attain our posterior.
 
-Before introducing a slew of notation regarding Bayesian statistics, let's take a step back to recall the type of questions we have been asking so far. Each estimator in this chapter so far has attempted to quantify the mean of our response variable \(y\) in each eco-subsection \(j\), that is estimating \(\mu_{y_j}\). The way in which we attain our estimate \(\hat\mu_{y_j}\) and its variance is by asking the question: what sort of \(\hat\mu_{y_j}\) would we expect to get under hypothetical resampling? This question is the basis of the name ``frequentist'' as our estimates in this frequentist paradigm rely on the hypothetical repeated (frequent) sampling. When we choose to use Bayesian methods to estimate \(\mu_{y_j}\), we ask a different question: What is our knowledge of \(\mu_{y_j}\) based on the data and prior information?
+Before introducing a slew of notation regarding Bayesian statistics, let's take a step back to recall the type of questions we have been asking so far. Each estimator in this chapter so far has attempted to quantify the mean of our response variable \(y\) in each eco-subsection \(j\), that is estimating \(\mu_{y_j}\). The way in which we attain our estimate \(\hat\mu_{y_j}\) and its variance is by asking the question: ``What sort of \(\hat\mu_{y_j}\) would we expect to get under hypothetical resampling?'' This question is the basis of the name ``frequentist'' as our estimates in this frequentist paradigm rely on the hypothetical repeated (frequent) sampling. When we choose to use Bayesian methods to estimate \(\mu_{y_j}\), we ask a different question: ``What is our knowledge of \(\mu_{y_j}\) based on the data and prior information?'' (Bray, 2020).
 
 These questions bring up a philosophical difference between Bayesian and frequentist statistics about the addition of prior information. One may object to this, however in this thesis we add very little prior information and rely quite heavily on the data to much of the work for us. Secondly, the addition of prior information allows us to attain a posterior distribution for our estimate of \(\mu_{y_j}\), rather than a point estimate. Now with this philosophical difference in mind, recall Bayes' Theorem below:
 \begin{align}
@@ -863,15 +863,32 @@ We immediately see that the unit-level hierarchical Bayesian estimator is extrem
 \end{figure}
 The distribution of areas where the hierarchical Bayesian unit-level estimator has lower variance than the unit-level EBLUP appears to be very random. Just under 46\% of areas have the hierarchical Bayesian unit-level model with lower variance than the unit-level EBLUP. We are not making any significant variance gains by implementing the unit-level hierarchical Bayesian estimator, however there are benefits of the implementation of this estimator. First, we now have a case study of a hierarchical Bayesian estimator converging in variance and estimates to the analogous frequentist model. This allows us to verify a statement often made in Bayesian statistics courses and textbooks with a real world example rather than a mathematical proof. Second, we now have access to a much more flexible estimator than the unit-level EBLUP that does a very similar job to the unit-level EBLUP. We can ``tweak'' the behavior of this estimator through the use of priors, or even a different linking model if needed. These changes could allow for a more successful estimator at the unit-level without changes many processes computationally. If we were to attempt to approach improving the unit-level model starting with the EBLUP we would be met with restrictions due to the rigidity of the EBLUP's mathematics, and we would have to construct a new estimator entirely.
 
-\hypertarget{discussion-and-conclusion}{%
-\chapter{Discussion and Conclusion}\label{discussion-and-conclusion}}
+\hypertarget{discussion}{%
+\chapter{Discussion}\label{discussion}}
 
-If we don't want Conclusion to have a chapter number next to it, we can add the \texttt{\{-\}} attribute.
+We have introduced, fit, and presented the results of six small area estimators across the Interior West with four forestry-related response variables. Particularly, we introduce two estimators which are uncommon in forestry research: the hierarchical Bayesian unit- and area-level estimators. The area-level hierarchical Bayesian estimator reduces variance in estimates significantly compared to common direct estimators, frequentist model-based approaches (EBLUPs), and the unit-level hierarchical Bayesian estimator. We see reduction in variance compared to the area-level frequentist estimator and post-stratification in the great majority of small areas when implementing the hierarchical Bayesian area-level estimator. In extremely non-forested small areas, the hierarchical Bayesian area-level estimator consistently has higher variance than post-stratification or the area-level EBLUP. This is likely due to the way in which the area-level hierarchical Bayesian estimator borrows strength.
 
-\textbf{More info}
+\hypertarget{possible-extensions}{%
+\section{Possible Extensions}\label{possible-extensions}}
 
-And here's some other random info: the first paragraph after a chapter title or section head \emph{shouldn't be} indented, because indents are to tell the reader that you're starting a new paragraph. Since that's obvious after a chapter or section title, proper typesetting doesn't add an indent there.
+Now we turn to possible extensions to the work which has been done in this thesis. We explore ideas for further research on adjacent topics and possibilities for applying these methods in other locations.
 
+First, attempting to understand the performance of these hierarchical Bayesian estimators outside of the Interior West region of the United States through implementing these methods across the country would be insightful to the generalization of these estimators. Outside of the Interior West, the Forest Inventory and Analysis Programs has research stations in the Pacific Northwest region, Northern region, and Southern region. The hierarchical Bayesian area-level estimator is also a great candidate for estimation in Alaska. The reasons for its great candidacy are twofold: first, it is expensive and difficult to send foresters to collect data in Alaska due to the extreme rurality of the area; second, Alaska is very forested and we thus would likely see a large reduction in variance of estimates when using the hierarchical Bayesian area-level estimator.
+\begin{itemize}
+\tightlist
+\item
+  some sort of hybrid estimator: rely on eblup area when it does well (desert), and bayes otherwise (talk about how bayes performance was very non-random)\\
+\item
+  explicit spatial analysis\\
+\item
+  simulation study to understand the bias of these estimators\\
+\item
+  different regions of the united states: list all FIA regions\\
+\item
+  improved software for bayesian sae, more flexible software, non-normal response? (gamma or tweedie)\\
+\item
+  different aux data, desert/non-desert could be helpful
+\end{itemize}
 \appendix
 
 \hypertarget{code-appendix}{%
@@ -1763,6 +1780,9 @@ Bayes, T. (1763). LII. An essay towards solving a problem in the doctrine of cha
 
 \leavevmode\vadjust pre{\hypertarget{ref-hbsae-package}{}}%
 Boonstra, H. J. (2012). \emph{Hbsae: Hierarchical bayesian small area estimation}. Retrieved from \url{https://CRAN.R-project.org/package=hbsae}
+
+\leavevmode\vadjust pre{\hypertarget{ref-andrew-392}{}}%
+Bray, A. (2020). Math 392: Mathematical statistics.
 
 \leavevmode\vadjust pre{\hypertarget{ref-breidenbach2012}{}}%
 Breidenbach, J., \& Astrup, R. (2012). Small area estimation of forest attributes in the norwegian national forest inventory. \emph{European Journal of Forest Research}, \emph{131}(4), 1255--1267.
