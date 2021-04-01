@@ -567,7 +567,7 @@ where \(\beta\) is calculated from data across the eco-province and will stay co
 \nu_j \stackrel{\text{iid}}{\sim} \text{N}(0,~ \hat\sigma^2_{\nu}), \quad
 e_{ij} \stackrel{\text{ind}}{\sim}\text{N}(0,~\hat\sigma^2_e).
 \]
-Intuitively, we can think of the variance of the random effect, \(\hat\sigma^2_\nu\), as an estimate of the heterogeneity between our small areas \(j\) after we account for our fixed effects (Breidenbach \& Astrup, 2012). From our mixed model, Rao (2014) derives the unit-level EBLUP estimator fit in the frequentist paradigm as the weighted average of the survey regression estimator and the regression-synthetic estimator:
+Intuitively, we can think of the variance of the random effect, \(\hat\sigma^2_\nu\), as an estimate of the heterogeneity between our small areas \(j\) after we account for our fixed effects (Breidenbach \& Astrup, 2012). We can also think of the estimate of the variance for the sampling errors as a measurement of within-area variability. From our mixed model, Rao (2014) derives the unit-level EBLUP estimator fit in the frequentist paradigm as the weighted average of the survey regression estimator and the regression-synthetic estimator:
 \begin{align}
 \hat \mu_{y_j}^{FRU} = \hat \gamma_j \hat\mu_{y_j}^{SR} + (1 - \hat \gamma_j) \hat\mu_{y_j}^{RSU}
 \end{align}
@@ -575,7 +575,7 @@ where
 \begin{align}
 \hat\gamma_j = \frac{\hat\sigma^2_\nu}{\hat\sigma^2_\nu + \hat\sigma^2_e}
 \end{align}
-It is easy to think about \(\hat\gamma_j\) if we break it down into two parts: it's numerator and denominator. The numerator measures the between-area variation, and the denominator measures the total variability. Thus, when a large proportion of the overall variation is between-area variation, the unit-level EBLUP will put more weight on the survey regression estimator.
+It is easy to think about \(\hat\gamma_j\) if we break it down into two parts: it's numerator and denominator. The numerator measures the between-area variation, and the denominator measures the between-area variation plus the within-area variation, i.e.~total variability. Thus, when a large proportion of the overall variation is between-area variation, the unit-level EBLUP will put more weight on the survey regression estimator.
 
 For this thesis, in order to compute the variance of the unit-level EBLUP estimator we chose to bootstrap. Bootstrapping is the process taking repeated samples of our data with replacement, computing our statistic on that new bootstrap sample, and then repeating this process many times (Efron, 1992). The property of the bootstrap which is useful to us is that it produces good estimates for the variance of our estimator. For our application, we bootstrap within each small area to compute the variance. For each eco-subsection \(j\), we sample \(n_j\) plots with replacement. Next, we fit the unit-level EBLUP estimator to the bootstrapped eco-subsections and produce our mean estimate on our first bootstrap sample (we denote each bootstrap sample with \(b\), so in this case \(b=1\)).
 \[
@@ -603,15 +603,15 @@ where we assume
  \newcommand\myeq{\stackrel{\mathclap{\normalfont\mbox{s}}}{~}}
 \nu_j \stackrel{\text{iid}}{\sim} \text{N}(0,~ \hat\sigma^2_{\nu}), \quad e_{j} \stackrel{\text{ind}}{\sim}\text{N}(0, \sigma^2_j).
 \]
-The area-level EBLUP estimator is expressed by Rao (2014) as a weighted average of the direct estimator and the regression-synthetic estimator:
+In the case of the area-level EBLUP, the within-area variation, \(\sigma^2_j\) is assumed to be known and is not a quantity we estimate. However, we still estimate the between-area variation, \(\hat\sigma_\nu^2\). The area-level EBLUP estimator is expressed by Rao (2014) as a weighted average of the direct estimator and the regression-synthetic estimator:
 \begin{align}
-\hat \mu_j^{FRA} = \hat\gamma_j \hat\mu_j^{PS} + (1 - \hat\gamma_j) \hat\mu_j^{RS} \label{eq:eblup-area-weight}
+\hat \mu_j^{FRA} = \hat\gamma_j \hat\mu_j^{PS} + (1 - \hat\gamma_j) \hat\mu_j^{RSA} \label{eq:eblup-area-weight}
 \end{align}
 where
 \begin{align}
-\hat \gamma_j = \hat \sigma_\nu^2 / (\sigma^2_j + \hat\sigma_\nu^2)
+\hat \gamma_j = \frac{\hat \sigma_\nu^2}{\sigma^2_j + \hat\sigma_\nu^2}
 \end{align}
-We compute the variance of this estimator by using the MSE of this estimator. The MSE is expressed by the following equation (Hidiroglou \& You, 2016):
+Again, \(\hat\gamma\) is the ratio of between-area variation and total variation. We note that when most of the variation is between-area variation, the area-level EBLUP will rely on the post-stratified estimator and otherwise it will rely more heavily on the area-level regression-synthetic estimator. We compute the variance of this estimator by using the MSE of this estimator. The MSE is expressed by the following equation (Hidiroglou \& You, 2016):
 \begin{align}
 \hat V(\hat\mu_j^{FRA}) = MSE(\hat\mu_j^{FRA}) = g_{1j} + g_{2j} + 2g_{3j}
 \end{align}
@@ -627,6 +627,7 @@ where
 1 \\ \overline X_j
 \end{bmatrix}
 \]
+We can intuitively think about each \(g_{\#j}\) as follows: \(g_{1j}\) accounts of for within-area variation, \(g_{2j}\) accounts for variation in estimating the regression parameter \(\beta\), and \(g_{3j}\) accounts for model variance estimation (Hidiroglou \& You, 2016).
 
 \hypertarget{a-hierarchical-bayesian-approach}{%
 \section{A Hierarchical Bayesian Approach}\label{a-hierarchical-bayesian-approach}}
