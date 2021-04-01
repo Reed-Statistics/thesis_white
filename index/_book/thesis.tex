@@ -570,19 +570,18 @@ y_{i,j} = x_{ij} \beta + \nu_j + e_{ij} \label{eq:unit-mod}
 where \(\beta\) is calculated from data across the eco-province and will stay constant for each eco-subsection. However, \(\nu_j\), the ``random effect,'' will be different for each eco-subsection. This random effect helps account for variation between eco-subsections that the auxiliary data does not account for. The random effects \(\nu\) and sampling errors \(e\) are assumed to be distributed as follows:
 \[
  \newcommand\myeq{\stackrel{\mathclap{\normalfont\mbox{s}}}{~}}
-\nu_j \stackrel{\text{iid}}{\sim} \text{N}(0,~ \sigma^2_{\nu}), \quad e_{ij} \stackrel{\text{ind}}{\sim}\text{N}(0, k^2_{ij}\sigma^2_e).
+\nu_j \stackrel{\text{iid}}{\sim} \text{N}(0,~ \sigma^2_{\nu}), \quad
+e_{ij} \stackrel{\text{ind}}{\sim}\text{N}(0,~\sigma^2_e).
 \]
-Intuitively, we can think of the variance of the random effect, \(\sigma^2_\nu\), as the heterogeneity between our small areas \(j\) after we account for our fixed effects (Breidenbach \& Astrup, 2012). {[}NEED TO TALK ABOUT WHAT K IS\ldots{} cant find explanation in Rao{]}.
-From our mixed model, Rao (2014) derives the unit-level EBLUP estimator fit in the frequentist paradigm as the weighted average of the survey regression estimator and the regression-synthetic estimator:
+Intuitively, we can think of the variance of the random effect, \(\sigma^2_\nu\), as the heterogeneity between our small areas \(j\) after we account for our fixed effects (Breidenbach \& Astrup, 2012). From our mixed model, Rao (2014) derives the unit-level EBLUP estimator fit in the frequentist paradigm as the weighted average of the survey regression estimator and the regression-synthetic estimator:
 \begin{align}
 \hat \mu_{y_j}^{FRU} = \hat \gamma_j \hat\mu_{y_j}^{SR} + (1 - \hat \gamma_j) \hat\mu_{y_j}^{RSU}
 \end{align}
 where
 \begin{align}
-\hat\gamma_j = \frac{\sigma^2_\nu}{(\sigma^2_\nu + \sigma^2_e / a_i)}
+\hat\gamma_j = \frac{\sigma^2_\nu}{\sigma^2_\nu + \sigma^2_e}
 \end{align}
 This \(\hat\gamma_j\) can be broken down into two parts: the numerator and denominator. The numerator measures the between-area variation, and the denominator measures the total variability. Thus, when a large proportion of the overall variation is between-area variation, the unit-level EBLUP will put more weight on the survey regression estimator.
-(say what \(a_i\) is from Rao around 7.1.3, 7.1.4)
 
 For this thesis, in order to compute the variance of the unit-level EBLUP estimator we chose to bootstrap. Bootstrapping is the process taking repeated samples of our data with replacement, computing our statistic on that new bootstrap sample, and then repeating this process many times (Efron, 1992). The property of the bootstrap which is useful to us is that it produces good estimates for the variance of our estimator. For our application, we bootstrap within each small area to compute the variance. For each eco-subsection \(j\), we sample \(n_j\) plots with replacement. Next, we fit the unit-level EBLUP estimator to the bootstrapped eco-subsections and produce our mean estimate on our first bootstrap sample (we denote each bootstrap sample with \(b\), so in this case \(b=1\)).
 \[
@@ -594,7 +593,7 @@ Next, we repeat this sampling \(B\) times, and in our case we choose \(B = 500\)
 \]
 Finally, we compute our estimate of the variance:
 \begin{align}
-\hat V(\hat\mu_j) = \frac{1}{B-1} \sum_{b=1}^{B}\Big(\hat\mu_j(b) - \overline\mu_j^B\Big)
+\hat V(\hat\mu_j) = \frac{1}{B-1} \sum_{b=1}^{B}\Big(\hat\mu^{FRU}_j(b) - \overline\mu_j^B\Big)^2
 \end{align}
 where \(\overline\mu_j^B\) denotes the sample mean of the bootstrap estimates of \(\mu_j\).
 
