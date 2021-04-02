@@ -677,8 +677,8 @@ where \(\mathbf{y_j}\) is the vector of response values for sampled units in the
 \begin{align}
 \hat V(\hat \mu_{y_j}^{HBU}) = V(\mu_{y_j} ~\vert~ \mathbf{y_j}).
 \end{align}
-\hypertarget{the-area-level-hierarichical-bayesian-estimator}{%
-\subsection{The Area-level Hierarichical Bayesian Estimator}\label{the-area-level-hierarichical-bayesian-estimator}}
+\hypertarget{the-area-level-hierarchical-bayesian-estimator}{%
+\subsection{The Area-level Hierarchical Bayesian Estimator}\label{the-area-level-hierarchical-bayesian-estimator}}
 
 For the area-level hierarchical Bayesian estimator, we start with Equation \eqref{eq:area-mod} as we did for the area-level frequentist EBLUP. We now just apply a hierarchical Bayesian approach to this equation. We must assume a prior distribution on \(\beta\) and \(\sigma^2_\nu\). We now specify Equation \eqref{eq:area-mod} as a hierarchical Bayesian model:
 \begin{align}
@@ -873,11 +873,11 @@ We have introduced, fit, and presented the results of six small area estimators 
 
 Now we turn to possible extensions to the work which has been done in this thesis. We explore ideas for further research on adjacent topics and possibilities for applying these methods in other locations.
 
-First, attempting to understand the performance of these hierarchical Bayesian estimators outside of the Interior West region of the United States through implementing these methods across the country would be insightful to the generalization of these estimators. Outside of the Interior West, the Forest Inventory and Analysis Programs has research stations in the Pacific Northwest region, Northern region, and Southern region. The hierarchical Bayesian area-level estimator is also a great candidate for estimation in Alaska. The reasons for its great candidacy are twofold: first, it is expensive and difficult to send foresters to collect data in Alaska due to the extreme rurality of the area; second, Alaska is very forested and we thus would likely see a large reduction in variance of estimates when using the hierarchical Bayesian area-level estimator.
+First, attempting to understand the performance of these hierarchical Bayesian estimators outside of the Interior West region of the United States through implementing these methods across the country would be insightful to the generalization of these estimators. Outside of the Interior West, the Forest Inventory and Analysis Programs has research stations in the Pacific Northwest region, Northern region, and Southern region. The hierarchical Bayesian area-level estimator is also a great candidate for estimation in Alaska. The reasons for its great candidacy are twofold: first, it is expensive and difficult to send foresters to collect data in Alaska due to the extreme rurality of the area; second, Alaska is very forested and we thus would likely see a large reduction in variance of estimates when using the hierarchical Bayesian area-level estimator. The area-level hierarchical Bayesian estimator reduced variance in forested areas quite well, and applying this technique to data in Alaska could help mitigate our smaller sample size.
+
+Another possibility for extending the research done in this thesis would be to adapt these hierarchical Bayesian estimators to produce estimates with lower variance under a variety of conditions. First, an implementation of a hybrid estimator could mitigate high variance in heavily non-forested areas. A hybrid estimator including both area-level model-based estimators which relies on the EBLUP's estimates in less-forested areas and the hierarchical Bayesian's estimates in more forested areas might result in lower variance across the board. The small areas in which the area-level hierarchical Bayesian estimator had higher variance than the area-level EBLUP were clearly non-random. A further analysis of these areas could lead to an insightful weighting system for this hybrid estimator. Another approach to mitigating the high
 \begin{itemize}
 \tightlist
-\item
-  some sort of hybrid estimator: rely on eblup area when it does well (desert), and bayes otherwise (talk about how bayes performance was very non-random)\\
 \item
   explicit spatial analysis\\
 \item

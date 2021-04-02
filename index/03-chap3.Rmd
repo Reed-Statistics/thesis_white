@@ -217,7 +217,7 @@ where $\mathbf{y_j}$ is the vector of response values for sampled units in the $
 \hat V(\hat \mu_{y_j}^{HBU}) = V(\mu_{y_j} ~\vert~ \mathbf{y_j}).
 \end{align}
 
-### The Area-level Hierarichical Bayesian Estimator
+### The Area-level Hierarchical Bayesian Estimator
 
 For the area-level hierarchical Bayesian estimator, we start with Equation \@ref(eq:area-mod) as we did for the area-level frequentist EBLUP. We now just apply a hierarchical Bayesian approach to this equation. We must assume a prior distribution on $\beta$ and $\sigma^2_\nu$. We now specify Equation \@ref(eq:area-mod) as a hierarchical Bayesian model:
 \begin{align}
