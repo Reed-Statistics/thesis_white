@@ -1,4 +1,6 @@
 \contentsline {chapter}{Chapter 1: Context}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Small Area Estimation: A Brief Introduction}{1}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Overview}{7}{section.1.2}%
 \contentsline {chapter}{Chapter 2: Data}{9}{chapter.2}%
 \contentsline {section}{\numberline {2.1}The Forest Inventory \& Analysis Program}{9}{section.2.1}%
 \contentsline {section}{\numberline {2.2}The Interior West}{10}{section.2.2}%
