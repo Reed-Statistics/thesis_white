@@ -256,6 +256,8 @@ In order to implement and fully explore the behavior of these hierarchical Bayes
 \begin{itemize}
 \tightlist
 \item
+  Chapter \ref{context} introduces the problem at hand, our research question, and discusses current common approaches for estimation of forest attributions. We also introduce the hierarchical Bayesian approach which this thesis takes. We introduce the idea of borrowing strength, and discuss how different estimators borrow strength.
+\item
   Chapter \ref{data} introduces the data used to accomplish our research goal. We discuss the nested structure of the data and how it lends itself to hierarchical modeling. We explore the spatial aspects of our response variables and the distributions of these variables. We also introduce the data used for our explanatory variable and the data used for strata weighting.
 \item
   Chapter \ref{methods} builds up the theory and mathematics behind the estimators used in this thesis. Starting at the simplest case of the sample mean, we progressively introduce new estimators which take varying levels of information into account. We also introduce some theory regarding Bayesian statistics in order to build intuition for our hierarchical Bayesian estimators.
@@ -627,9 +629,9 @@ where
 \begin{align}
 \hat \gamma_j = \frac{\hat \sigma_\nu^2}{\sigma^2_j + \hat\sigma_\nu^2}
 \end{align}
-Again, \(\hat\gamma\) is the ratio of between-area variation and total variation. We note that when most of the variation is between-area variation, the area-level EBLUP will rely on the post-stratified estimator and otherwise it will rely more heavily on the area-level regression-synthetic estimator. We compute the variance of this estimator by using the MSE of this estimator. The MSE is expressed by the following equation (Hidiroglou \& You, 2016):
+Again, \(\hat\gamma\) is the ratio of between-area variation and total variation. We note that when most of the variation is between-area variation, the area-level EBLUP will rely on the post-stratified estimator and otherwise it will rely more heavily on the area-level regression-synthetic estimator. We compute the variance of this estimator by using the derived equation. The variance is expressed by the following equation (Hidiroglou \& You, 2016):
 \begin{align}
-\hat V(\hat\mu_j^{FRA}) = MSE(\hat\mu_j^{FRA}) = g_{1j} + g_{2j} + 2g_{3j}
+\hat V(\hat\mu_j^{FRA}) = g_{1j} + g_{2j} + 2g_{3j}
 \end{align}
 where
 \begin{align*}
@@ -698,11 +700,11 @@ where \(\mathbf{y_j}\) is the vector of response values for sampled units in the
 
 For the area-level hierarchical Bayesian estimator, we start with Equation \eqref{eq:area-mod} as we did for the area-level frequentist EBLUP. We now just apply a hierarchical Bayesian approach to this equation. We must assume a prior distribution on \(\beta\) and \(\sigma^2_\nu\). We now specify Equation \eqref{eq:area-mod} as a hierarchical Bayesian model:
 \begin{align}
-&\hat\mu_{y_j}^{PS} ~\vert~ \mu_{y_j},~ \beta,~ \sigma^2_\nu \sim \text{N}(\mu_{y_j},~ \psi_j), \nonumber \\
-&\mu_{y_j} ~\vert~ \beta,~ \sigma^2_\nu \sim \text{N}(x_j\beta,~ b_j^2 \sigma^2_\nu),\nonumber \\
+&\hat\mu_{y_j}^{PS} ~\vert~ \mu_{y_j},~ \beta,~ \sigma^2_\nu \sim \text{N}(\mu_{y_j},~ \sigma^2_j), \nonumber \\
+&\mu_{y_j} ~\vert~ \beta,~ \sigma^2_\nu \sim \text{N}(x_j\beta,~ \sigma^2_\nu),\nonumber \\
 &f(\beta,~ \sigma^2_\nu) = f(\beta)\cdot f(\sigma^2_\nu).
 \end{align}
-where \(f(\beta)\) and \(f(\sigma^2_\nu)\) and \(f(\sigma^2_e)\) are priors specified below:
+where \(f(\beta)\) and \(f(\sigma^2_\nu)\) are priors specified below:
 \begin{align*}
 &f(\beta) \propto 1, \\
 &f(\sigma^2_\nu) = \text{IG}(\text{df} = 10000 \cdot m,~ \text{scale} = 1).
