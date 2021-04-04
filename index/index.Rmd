@@ -82,12 +82,8 @@ options(width = 70)
 
 ```
 
-# Introduction {.unnumbered}
+<!-- # Introduction {.unnumbered} -->
 
-In order to implement and fully explore the behavior of these hierarchical Bayesian estimators, we must introduce concepts, theory, and specifics related to the research question at hand. An overview of how we approach the research throughout this thesis is below:
+<!-- This thesis aims to introduce novel ways to estimate forest attributes.  -->
 
-* Chapter \@ref(context) introduces the problem at hand, our research question, and discusses current common approaches for estimation of forest attributions. We also introduce the hierarchical Bayesian approach which this thesis takes. We introduce the idea of borrowing strength, and discuss how different estimators borrow strength.
-* Chapter \@ref(data) introduces the data used to accomplish our research goal. We discuss the nested structure of the data and how it lends itself to hierarchical modeling. We explore the spatial aspects of our response variables and the distributions of these variables. We also introduce the data used for our explanatory variable and the data used for strata weighting.
-* Chapter \@ref(methods) builds up the theory and mathematics behind the estimators used in this thesis. Starting at the simplest case of the sample mean, we progressively introduce new estimators which take varying levels of information into account. We also introduce some theory regarding Bayesian statistics in order to build intuition for our hierarchical Bayesian estimators.
-* Chapter \@ref(results) showcases the results of each estimator's performance. We discuss strengths and weaknesses of estimators implemented. These results are explored spatially and we gain insight into regions where particular estimators reduce variance more than others.
-* Chapter \@ref(discussion) discusses the key findings of this thesis, the limitations regarding these findings, and possible extensions of the work done in this thesis.
+<!-- * Chapter \@ref(context) introduces the problem at hand, our research question, and discusses current common approaches for estimation of forest attributions. We also introduce less common approaches to performing this estimation, such as the hierarchical Bayesian approach. We introduce the idea of borrowing strength and discuss how different estimators borrow strength. -->

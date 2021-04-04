@@ -248,24 +248,6 @@ Second paragraph of abstract starts here.
 \mainmatter % here the regular arabic numbering starts
 \pagestyle{fancyplain} % turns page numbering back on
 
-\hypertarget{introduction}{%
-\chapter*{Introduction}\label{introduction}}
-\addcontentsline{toc}{chapter}{Introduction}
-
-In order to implement and fully explore the behavior of these hierarchical Bayesian estimators, we must introduce concepts, theory, and specifics related to the research question at hand. An overview of how we approach the research throughout this thesis is below:
-\begin{itemize}
-\tightlist
-\item
-  Chapter \ref{context} introduces the problem at hand, our research question, and discusses current common approaches for estimation of forest attributions. We also introduce the hierarchical Bayesian approach which this thesis takes. We introduce the idea of borrowing strength, and discuss how different estimators borrow strength.
-\item
-  Chapter \ref{data} introduces the data used to accomplish our research goal. We discuss the nested structure of the data and how it lends itself to hierarchical modeling. We explore the spatial aspects of our response variables and the distributions of these variables. We also introduce the data used for our explanatory variable and the data used for strata weighting.
-\item
-  Chapter \ref{methods} builds up the theory and mathematics behind the estimators used in this thesis. Starting at the simplest case of the sample mean, we progressively introduce new estimators which take varying levels of information into account. We also introduce some theory regarding Bayesian statistics in order to build intuition for our hierarchical Bayesian estimators.
-\item
-  Chapter \ref{results} showcases the results of each estimator's performance. We discuss strengths and weaknesses of estimators implemented. These results are explored spatially and we gain insight into regions where particular estimators reduce variance more than others.
-\item
-  Chapter \ref{discussion} discusses the key findings of this thesis, the limitations regarding these findings, and possible extensions of the work done in this thesis.
-\end{itemize}
 \hypertarget{context}{%
 \chapter{Context}\label{context}}
 
@@ -336,6 +318,18 @@ That is, the expected value of the estimator, \(\hat\mu_{y_j}\), is in fact the 
 \end{align}
 This thesis explores this trade-off between bias and variance in depth. We implement hierarchical Bayesian unit- and area-level models which allow for the estimates to be slightly biased while reducing variance. Throughout this thesis, we compare these techniques to small area estimations methods such as the EBLUP and the post-stratified direct estimator. By applying these models on four response variables across the entire Interior West at the eco-subsection level, we can add a great deal of understanding to the usefulness of hierarchical Bayesian models in a small area estimation context, especially when considering its usefulness to the FIA and other forestry organizations. We only have been able to source one paper which uses hierarchical Bayesian modeling for small area estimation with a forestry application, and they only consider the area-level model with a particular response variable in particular forest (Ver Planck, Finley, \& Huff, 2017). This thesis thus adds significantly to our understanding of the usefulness of hierarchical Bayesian small area estimation in a forestry setting due to the introduction of the unit-level estimator, the vast number of response variables studied, and the vast range of area where we test the usefulness of these estimators.
 
+The remainder of the content within this thesis is organized as follows:
+\begin{itemize}
+\tightlist
+\item
+  Chapter \ref{data} introduces the data used to accomplish our research goal. We discuss the nested structure of the data and how it lends itself to hierarchical modeling. We explore the spatial aspects of our response variables and the distributions of these variables. We also introduce the data used for our explanatory variable and the data used for strata weighting.
+\item
+  Chapter \ref{methods} builds up the theory and mathematics behind the estimators used in this thesis. Starting at the simplest case of the sample mean, we progressively introduce new estimators which take varying levels of information into account. We also introduce some theory regarding Bayesian statistics in order to build intuition for our hierarchical Bayesian estimators.
+\item
+  Chapter \ref{results} showcases the results of each estimator's performance. We discuss strengths and weaknesses of estimators implemented. These results are explored spatially and we gain insight into regions where particular estimators reduce variance more than others.
+\item
+  Chapter \ref{discussion} discusses the key findings of this thesis, the limitations regarding these findings, and possible extensions of the work done in this thesis.
+\end{itemize}
 \hypertarget{data}{%
 \chapter{Data}\label{data}}
 
@@ -889,8 +883,14 @@ The distribution of areas where the hierarchical Bayesian unit-level estimator h
 
 We have introduced, fitted, and presented the results of six small area estimators across the Interior West with four forestry-related response variables. Particularly, we introduce two estimators which are uncommon in forestry research: the hierarchical Bayesian unit- and area-level estimators. The area-level hierarchical Bayesian estimator reduces variance in estimates significantly compared to common direct estimators, frequentist model-based approaches (EBLUPs), and the unit-level hierarchical Bayesian estimator. We see a reduction in variance compared to the area-level frequentist estimator and post-stratification in the great majority of small areas when implementing the hierarchical Bayesian area-level estimator. In extremely non-forested small areas, the hierarchical Bayesian area-level estimator consistently has higher variance than post-stratification or the area-level EBLUP. This is likely due to the way in which the area-level hierarchical Bayesian estimator borrows strength.
 
+The area-level hierarchical Bayesian estimator produces very promising, low variance, results in the Interior West, particularly in forested areas. This leads us to believe that if we applied this estimator to data in the Pacific Northwest or Alaska that it may reduce variance even more than it did in the Interior West region. The unit-level hierarchical Bayesian estimator produces very similar estimates to the unit-level EBLUP, however, modifications to this estimator discussed later in this chapter could allow us to decrease variance further.
+
 \hypertarget{limitations}{%
 \section{Limitations}\label{limitations}}
+
+We now consider the scope of the research done in this thesis. While we broadly applied hierarchical Bayesian small area estimators across the Interior West, we also dealt with some small areas where our estimators produced NAs. This was due to either the hierarchical Bayesian unit- or area-level estimator producing errors when including these small areas in their estimation. After spending a great deal of time investigating which areas would produce these errors, we found that it was almost entirely areas which only had zero values for their response variables (or only a tiny number of plots which had non-zero response values). When aggregating our data to the area-level we then had tiny initial within-area variances for these estimators, which produced an error in the integration when computing the estimates. This is a limitation of numerical integration as a means towards a posterior distribution and the \texttt{hbsae} package, not one of the application of hierarchical Bayesian models for small area estimation. Using an R package such as \texttt{rstanarm} to compute our results would mitigate this problem as we could use MCMC methods to attain our posterior (Goodrich, Gabry, Ali, \& Brilleman, 2020). We must remember that while this limitation is one of numerical integration and \texttt{hbsae}, we are also limited in understanding the scope of our results fully without attaining estimates in every small area within the Interior West.
+
+Another limitations of the research done in this thesis is the lack of population data for response variables. Without know the true mean of our response variables in eco-subsections of interest it is hard to understand how much bias each estimator is implementing. Attaining population data for any of our response variables in even one eco-subsection would be extremely expensive and impractical. However, a simulation study could be done to help understand bias of these estimators. This is discussed further in the following subsection.
 
 \hypertarget{possible-extensions}{%
 \section{Possible Extensions}\label{possible-extensions}}
@@ -903,7 +903,7 @@ Another possibility for extending the research done in this thesis would be to a
 
 An approach to understanding the performance of these hierarchical Bayesian estimators would be to create a simulation study where data is generated from known distributions. This allows us to know the parameter values of \(\mu_{y_j}\), and we could better quantify the bias introduced by these estimators. This would be a great research project for a thesis student and would greatly help in the understanding of the overall performance of these estimators.
 
-Finally, another large project worth exploring would be to embark on the development, testing, and documenting of a new R software package which allows for more flexible hierarchical Bayesian small area estimators. The package used in this thesis, \texttt{hbsae}, has some nice features such as its speed due to the use of numerical integration rather than sampling from the posterior using Markov Chain Monte Carlo methods. However, this limits our functional forms of the distributions used in the estimators. With \texttt{hbsae} we are limited to Inverse-Gamma distributions on the prior for variability, and more importantly: Gaussian response. The unit-level hierarchical Bayesian estimator may produce estimates with lower variance given that we model its response variable as something right-skewed: potentially either a Gamma distribution or a Tweedie distribution. The Tweedie distribution is often used for data which is zero-inflated and is often used for generalized linear modeling (Jorgensen, 1997). These attributes make it a great candidate for modeling the response variable of unit-level estimators. Outside of gaining flexibility, implementing new software with better documentation, consistent updates/patches, and a user-friendly manual would allow for researchers to implement these hierarchical Bayesian small area estimators more broadly and with ease.
+Finally, another large project worth exploring would be to embark on the development, testing, and documenting of a new R software package which allows for more flexible hierarchical Bayesian small area estimators. The package used in this thesis, \texttt{hbsae}, has some nice features such as its speed due to the use of numerical integration rather than sampling from the posterior using Markov Chain Monte Carlo methods. However, this limits our functional forms of the distributions used in the estimators. With \texttt{hbsae} we are limited to Inverse-Gamma distributions on the prior for variability, and more importantly: Gaussian response. The unit-level hierarchical Bayesian estimator may produce estimates with lower variance given that we model its response variable as something right-skewed: potentially either a Gamma distribution or a Tweedie distribution. The Tweedie distribution is often used in generalized linear modeling for data which is zero-inflated(Jorgensen, 1997). This makes it a great candidate for modeling the response variable of unit-level estimators. Outside of gaining flexibility, implementing new software with better documentation, consistent updates/patches, and a user-friendly manual would allow for researchers to implement these hierarchical Bayesian small area estimators more broadly and with ease.
 
 \appendix
 
@@ -1808,6 +1808,9 @@ Efron, B. (1992). Bootstrap methods: Another look at the jackknife. In \emph{Bre
 
 \leavevmode\vadjust pre{\hypertarget{ref-whatisfia}{}}%
 FIA. (2020). Forest inventory and analysis national program. \emph{What is FIA?} Retrieved from \url{https://www.fia.fs.fed.us/about/about_us/}
+
+\leavevmode\vadjust pre{\hypertarget{ref-rstanarm}{}}%
+Goodrich, B., Gabry, J., Ali, I., \& Brilleman, S. (2020). Rstanarm: {Bayesian} applied regression modeling via {Stan}. Retrieved from \url{https://mc-stan.org/rstanarm}
 
 \leavevmode\vadjust pre{\hypertarget{ref-mse-area}{}}%
 Hidiroglou, M., \& You, Y. (2016). Comparison of unit level and area level small area estimators, \emph{42}, 41--61.
