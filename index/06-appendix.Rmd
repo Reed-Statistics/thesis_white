@@ -12,7 +12,7 @@ This appendix includes the code used to create the estimates used in this thesis
 ### The Sample Mean
 
 ```{r include = FALSE}
-knitr::opts_chunk$set(eval = FALSE, message = FALSE, warning = FALSE)
+knitr::opts_chunk$set(eval = FALSE, message = FALSE, warning = FALSE, highlight=FALSE)
 ```
 
 ```{r}

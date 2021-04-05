@@ -71,46 +71,6 @@
 % \usepackage{times} % other fonts are available like times, bookman, charter, palatino
 
 % Syntax highlighting #22
-  \usepackage{color}
-  \usepackage{fancyvrb}
-  \newcommand{\VerbBar}{|}
-  \newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
-  \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
-  % Add ',fontsize=\small' for more characters per line
-  \usepackage{framed}
-  \definecolor{shadecolor}{RGB}{248,248,248}
-  \newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
-  \newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
-  \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-  \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
-  \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-  \newcommand{\BuiltInTok}[1]{#1}
-  \newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-  \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
-  \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-  \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-  \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
-  \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
-  \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-  \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-  \newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
-  \newcommand{\ExtensionTok}[1]{#1}
-  \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-  \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-  \newcommand{\ImportTok}[1]{#1}
-  \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-  \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
-  \newcommand{\NormalTok}[1]{#1}
-  \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
-  \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
-  \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
-  \newcommand{\RegionMarkerTok}[1]{#1}
-  \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-  \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-  \newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-  \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-  \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-  \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 
 % To pass between YAML and LaTeX the dollar signs are added by CII
 \title{A Hierarchical Bayesian Approach to Small Area Estimation of Forest Attributes}
@@ -927,864 +887,818 @@ This appendix includes the code used to create the estimates used in this thesis
 
 \hypertarget{the-sample-mean}{%
 \subsection{The Sample Mean}\label{the-sample-mean}}
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{direct\_estimate }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(data, response, small\_area) \{}
-  \CommentTok{\# Load packages}
-  \FunctionTok{library}\NormalTok{(sae)}
+\begin{verbatim}
+direct_estimate <- function(data, response, small_area) {
+  # Load packages
+  library(sae)
   
-  \CommentTok{\# Create dataframe}
-\NormalTok{  dat }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
-    \AttributeTok{y =}\NormalTok{ data[[response]],}
-    \AttributeTok{small\_area =}\NormalTok{ data[[small\_area]]}
-\NormalTok{  )}
+  # Create dataframe
+  dat <- data.frame(
+    y = data[[response]],
+    small_area = data[[small_area]]
+  )
   
-  \CommentTok{\# Compute estimate}
-\NormalTok{  sae}\SpecialCharTok{::}\FunctionTok{direct}\NormalTok{(}\AttributeTok{y =}\NormalTok{ dat}\SpecialCharTok{$}\NormalTok{y,}
-              \AttributeTok{dom =}\NormalTok{ dat}\SpecialCharTok{$}\NormalTok{small\_area,}
-              \AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{)}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
+  # Compute estimate
+  sae::direct(y = dat$y,
+              dom = dat$small_area,
+              replace = TRUE)
+}
+\end{verbatim}
 \hypertarget{post-stratification}{%
 \subsection{Post-Stratification}\label{post-stratification}}
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{postStrat2\_bio }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(data, strata) \{}
-\NormalTok{  est }\OtherTok{\textless{}{-}}\NormalTok{ mase}\SpecialCharTok{::}\FunctionTok{postStrat}\NormalTok{(}\AttributeTok{y =}\NormalTok{ data[[}\StringTok{"BIOLIVE\_TPA"}\NormalTok{]],}
-                  \AttributeTok{x\_sample =}\NormalTok{ data[[}\StringTok{"FIAstrat"}\NormalTok{]],}
-                  \AttributeTok{x\_pop =}\NormalTok{ strata,}
-                  \AttributeTok{data\_type =} \StringTok{"totals"}\NormalTok{,}
-                  \AttributeTok{var\_est =}\NormalTok{ T)}
-  \FunctionTok{return}\NormalTok{(}\FunctionTok{data.frame}\NormalTok{(}\AttributeTok{ps\_est =}\NormalTok{ est}\SpecialCharTok{$}\NormalTok{pop\_mean,}
-                    \AttributeTok{sd =} \FunctionTok{sqrt}\NormalTok{(est}\SpecialCharTok{$}\NormalTok{pop\_mean\_var)))}
-\NormalTok{\}}
-\NormalTok{postStrat2\_ba }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(data, strata) \{}
-\NormalTok{  est }\OtherTok{\textless{}{-}}\NormalTok{ mase}\SpecialCharTok{::}\FunctionTok{postStrat}\NormalTok{(}\AttributeTok{y =}\NormalTok{ data[[}\StringTok{"BALIVE\_TPA"}\NormalTok{]],}
-                  \AttributeTok{x\_sample =}\NormalTok{ data[[}\StringTok{"FIAstrat"}\NormalTok{]],}
-                  \AttributeTok{x\_pop =}\NormalTok{ strata,}
-                  \AttributeTok{data\_type =} \StringTok{"totals"}\NormalTok{,}
-                  \AttributeTok{var\_est =}\NormalTok{ T)}
-  \FunctionTok{return}\NormalTok{(}\FunctionTok{data.frame}\NormalTok{(}\AttributeTok{ps\_est =}\NormalTok{ est}\SpecialCharTok{$}\NormalTok{pop\_mean,}
-                    \AttributeTok{sd =} \FunctionTok{sqrt}\NormalTok{(est}\SpecialCharTok{$}\NormalTok{pop\_mean\_var)))}
-\NormalTok{\}}
+\begin{verbatim}
+postStrat2_bio <- function(data, strata) {
+  est <- mase::postStrat(y = data[["BIOLIVE_TPA"]],
+                  x_sample = data[["FIAstrat"]],
+                  x_pop = strata,
+                  data_type = "totals",
+                  var_est = T)
+  return(data.frame(ps_est = est$pop_mean,
+                    sd = sqrt(est$pop_mean_var)))
+}
+postStrat2_ba <- function(data, strata) {
+  est <- mase::postStrat(y = data[["BALIVE_TPA"]],
+                  x_sample = data[["FIAstrat"]],
+                  x_pop = strata,
+                  data_type = "totals",
+                  var_est = T)
+  return(data.frame(ps_est = est$pop_mean,
+                    sd = sqrt(est$pop_mean_var)))
+}
 
-\NormalTok{postStrat2\_voln }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(data, strata) \{}
-\NormalTok{  est }\OtherTok{\textless{}{-}}\NormalTok{ mase}\SpecialCharTok{::}\FunctionTok{postStrat}\NormalTok{(}\AttributeTok{y =}\NormalTok{ data[[}\StringTok{"VOLNLIVE\_TPA"}\NormalTok{]],}
-                  \AttributeTok{x\_sample =}\NormalTok{ data[[}\StringTok{"FIAstrat"}\NormalTok{]],}
-                  \AttributeTok{x\_pop =}\NormalTok{ strata,}
-                  \AttributeTok{data\_type =} \StringTok{"totals"}\NormalTok{,}
-                  \AttributeTok{var\_est =}\NormalTok{ T)}
-  \FunctionTok{return}\NormalTok{(}\FunctionTok{data.frame}\NormalTok{(}\AttributeTok{ps\_est =}\NormalTok{ est}\SpecialCharTok{$}\NormalTok{pop\_mean,}
-                    \AttributeTok{sd =} \FunctionTok{sqrt}\NormalTok{(est}\SpecialCharTok{$}\NormalTok{pop\_mean\_var)))}
-\NormalTok{\}}
+postStrat2_voln <- function(data, strata) {
+  est <- mase::postStrat(y = data[["VOLNLIVE_TPA"]],
+                  x_sample = data[["FIAstrat"]],
+                  x_pop = strata,
+                  data_type = "totals",
+                  var_est = T)
+  return(data.frame(ps_est = est$pop_mean,
+                    sd = sqrt(est$pop_mean_var)))
+}
 
-\NormalTok{postStrat2\_cnt }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(data, strata) \{}
-\NormalTok{  est }\OtherTok{\textless{}{-}}\NormalTok{ mase}\SpecialCharTok{::}\FunctionTok{postStrat}\NormalTok{(}\AttributeTok{y =}\NormalTok{ data[[}\StringTok{"CNTLIVE\_TPA"}\NormalTok{]],}
-                  \AttributeTok{x\_sample =}\NormalTok{ data[[}\StringTok{"FIAstrat"}\NormalTok{]],}
-                  \AttributeTok{x\_pop =}\NormalTok{ strata,}
-                  \AttributeTok{data\_type =} \StringTok{"totals"}\NormalTok{,}
-                  \AttributeTok{var\_est =}\NormalTok{ T)}
-  \FunctionTok{return}\NormalTok{(}\FunctionTok{data.frame}\NormalTok{(}\AttributeTok{ps\_est =}\NormalTok{ est}\SpecialCharTok{$}\NormalTok{pop\_mean,}
-                    \AttributeTok{sd =} \FunctionTok{sqrt}\NormalTok{(est}\SpecialCharTok{$}\NormalTok{pop\_mean\_var)))}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
+postStrat2_cnt <- function(data, strata) {
+  est <- mase::postStrat(y = data[["CNTLIVE_TPA"]],
+                  x_sample = data[["FIAstrat"]],
+                  x_pop = strata,
+                  data_type = "totals",
+                  var_est = T)
+  return(data.frame(ps_est = est$pop_mean,
+                    sd = sqrt(est$pop_mean_var)))
+}
+\end{verbatim}
 \hypertarget{hierarchical-bayesian-unit-level}{%
 \subsection{Hierarchical Bayesian Unit-Level}\label{hierarchical-bayesian-unit-level}}
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{hb\_unit }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(data, formula, small\_area, pop\_data) \{}
-  \CommentTok{\# Load packages}
-  \FunctionTok{library}\NormalTok{(tidyverse)}
-  \FunctionTok{library}\NormalTok{(hbsae)}
+\begin{verbatim}
+hb_unit <- function(data, formula, small_area, pop_data) {
+  # Load packages
+  library(tidyverse)
+  library(hbsae)
   
-  \CommentTok{\# Create model frame}
-\NormalTok{  model\_frame }\OtherTok{\textless{}{-}} \FunctionTok{model.frame}\NormalTok{(formula, data) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{mutate}\NormalTok{(}\AttributeTok{small\_area =}\NormalTok{ data[[small\_area]])}
-  \FunctionTok{colnames}\NormalTok{(model\_frame) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"y"}\NormalTok{, }\StringTok{"x"}\NormalTok{, }\StringTok{"small\_area"}\NormalTok{)}
+  # Create model frame
+  model_frame <- model.frame(formula, data) %>%
+    dplyr::mutate(small_area = data[[small_area]])
+  colnames(model_frame) <- c("y", "x", "small_area")
   
-  \CommentTok{\# Area population sizes}
-\NormalTok{  pop\_size }\OtherTok{\textless{}{-}}\NormalTok{ pop\_data }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(zoneid }\SpecialCharTok{\%in\%}\NormalTok{ model\_frame}\SpecialCharTok{$}\NormalTok{small\_area) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(zoneid, sum) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{rename}\NormalTok{(}\AttributeTok{pop\_size =}\NormalTok{ sum) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(pop\_size)}
+  # Area population sizes
+  pop_size <- pop_data %>%
+    dplyr::filter(zoneid %in% model_frame$small_area) %>%
+    dplyr::select(zoneid, sum) %>%
+    dplyr::rename(pop_size = sum) %>%
+    dplyr::select(pop_size)
   
-  \CommentTok{\# Create population means matrix}
-\NormalTok{  pop\_means }\OtherTok{\textless{}{-}}\NormalTok{ pop\_data }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(zoneid }\SpecialCharTok{\%in\%}\NormalTok{ model\_frame}\SpecialCharTok{$}\NormalTok{small\_area) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(zoneid, mean) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{rename}\NormalTok{(}\AttributeTok{x =}\NormalTok{ mean) }\SpecialCharTok{\%\textgreater{}\%}
-    \FunctionTok{column\_to\_rownames}\NormalTok{(}\StringTok{"zoneid"}\NormalTok{)}
+  # Create population means matrix
+  pop_means <- pop_data %>%
+    dplyr::filter(zoneid %in% model_frame$small_area) %>%
+    dplyr::select(zoneid, mean) %>%
+    dplyr::rename(x = mean) %>%
+    column_to_rownames("zoneid")
   
-  \CommentTok{\# Create lambda}
-\NormalTok{  anova }\OtherTok{\textless{}{-}} \FunctionTok{aov}\NormalTok{(y }\SpecialCharTok{\textasciitilde{}}\NormalTok{ small\_area, }\AttributeTok{data =}\NormalTok{ model\_frame)}
-\NormalTok{  l }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(anova)[[}\DecValTok{1}\NormalTok{]][}\StringTok{"small\_area"}\NormalTok{, }\StringTok{"F value"}\NormalTok{]}
+  # Create lambda
+  anova <- aov(y ~ small_area, data = model_frame)
+  l <- summary(anova)[[1]]["small_area", "F value"]
   
-  \CommentTok{\# Fit the model}
-\NormalTok{  mod }\OtherTok{\textless{}{-}} \FunctionTok{fSAE.Unit}\NormalTok{(}
-    \AttributeTok{y =} \FunctionTok{model.frame}\NormalTok{(formula, }\AttributeTok{data =}\NormalTok{ data)[, }\DecValTok{1}\NormalTok{],}
-    \AttributeTok{X =} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{X =} \FunctionTok{model.frame}\NormalTok{(formula, }\AttributeTok{data =}\NormalTok{ data)[,}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{]),}
-    \AttributeTok{area =}\NormalTok{ data[[small\_area]],}
-    \AttributeTok{Narea =}\NormalTok{ pop\_size}\SpecialCharTok{$}\NormalTok{pop\_size,}
-    \AttributeTok{Xpop =}\NormalTok{ pop\_means,}
-    \AttributeTok{fpc =} \ConstantTok{TRUE}\NormalTok{,}
-    \AttributeTok{lambda0 =}\NormalTok{ l,}
-    \AttributeTok{silent =}\NormalTok{ T}
-\NormalTok{  )}
+  # Fit the model
+  mod <- fSAE.Unit(
+    y = model.frame(formula, data = data)[, 1],
+    X = data.frame(X = model.frame(formula, data = data)[,-1]),
+    area = data[[small_area]],
+    Narea = pop_size$pop_size,
+    Xpop = pop_means,
+    fpc = TRUE,
+    lambda0 = l,
+    silent = T
+  )
 
-  \CommentTok{\# Calculate CoV}
-\NormalTok{  mean\_y }\OtherTok{\textless{}{-}}\NormalTok{ model\_frame }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{group\_by}\NormalTok{(small\_area) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{summarise}\NormalTok{(}\AttributeTok{mean\_y =} \FunctionTok{mean}\NormalTok{(y))}
-\NormalTok{  CoV }\OtherTok{\textless{}{-}}\NormalTok{ hbsae}\SpecialCharTok{::}\FunctionTok{SE}\NormalTok{(mod) }\SpecialCharTok{/}\NormalTok{ mean\_y}\SpecialCharTok{$}\NormalTok{mean\_y}
+  # Calculate CoV
+  mean_y <- model_frame %>%
+    dplyr::group_by(small_area) %>%
+    dplyr::summarise(mean_y = mean(y))
+  CoV <- hbsae::SE(mod) / mean_y$mean_y
 
-  \DocumentationTok{\#\# Add to model object}
-\NormalTok{  mod}\SpecialCharTok{$}\NormalTok{CoV }\OtherTok{\textless{}{-}}\NormalTok{ CoV}
+  ## Add to model object
+  mod$CoV <- CoV
 
-  \CommentTok{\# Print model}
-\NormalTok{  mod}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
+  # Print model
+  mod
+}
+\end{verbatim}
 \hypertarget{hierarchical-bayesian-area-level}{%
 \subsection{Hierarchical Bayesian Area-Level}\label{hierarchical-bayesian-area-level}}
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{hb\_area }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(data, formula, small\_area,}
-\NormalTok{                    pop\_data, post\_strat\_data) \{}
-  \CommentTok{\# Load packages}
-  \FunctionTok{library}\NormalTok{(tidyverse)}
-  \FunctionTok{library}\NormalTok{(hbsae)}
+\begin{verbatim}
+hb_area <- function(data, formula, small_area,
+                    pop_data, post_strat_data) {
+  # Load packages
+  library(tidyverse)
+  library(hbsae)
   
-  \CommentTok{\# Create unnamed model frame (to call correct y var in a filter)}
-\NormalTok{  mf }\OtherTok{\textless{}{-}} \FunctionTok{model.frame}\NormalTok{(formula, data)}
+  # Create unnamed model frame (to call correct y var in a filter)
+  mf <- model.frame(formula, data)
   
-  \CommentTok{\# Create model frame}
-\NormalTok{  model\_frame }\OtherTok{\textless{}{-}} \FunctionTok{model.frame}\NormalTok{(formula, data) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{mutate}\NormalTok{(}\AttributeTok{small\_area =}\NormalTok{ data[[small\_area]])}
-  \FunctionTok{colnames}\NormalTok{(model\_frame) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"y"}\NormalTok{, }\StringTok{"x"}\NormalTok{, }\StringTok{"small\_area"}\NormalTok{)}
+  # Create model frame
+  model_frame <- model.frame(formula, data) %>%
+    dplyr::mutate(small_area = data[[small_area]])
+  colnames(model_frame) <- c("y", "x", "small_area")
   
-  \CommentTok{\# Direct X}
-\NormalTok{  X }\OtherTok{\textless{}{-}}\NormalTok{ pop\_data }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(zoneid }\SpecialCharTok{\%in\%}\NormalTok{ model\_frame}\SpecialCharTok{$}\NormalTok{small\_area) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(zoneid, mean) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{rename}\NormalTok{(}\AttributeTok{mean\_x =}\NormalTok{ mean,}
-                  \AttributeTok{small\_area =}\NormalTok{ zoneid) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{arrange}\NormalTok{(small\_area)}
+  # Direct X
+  X <- pop_data %>%
+    dplyr::filter(zoneid %in% model_frame$small_area) %>%
+    dplyr::select(zoneid, mean) %>%
+    dplyr::rename(mean_x = mean,
+                  small_area = zoneid) %>%
+    dplyr::arrange(small_area)
 
-  \CommentTok{\# Compute direct estimate}
-\NormalTok{  mean }\OtherTok{\textless{}{-}} \FunctionTok{direct\_estimate}\NormalTok{(model\_frame, }\StringTok{"y"}\NormalTok{, }\StringTok{"small\_area"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{mutate}\NormalTok{(}\AttributeTok{var =}\NormalTok{ SD}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+  # Compute direct estimate
+  mean <- direct_estimate(model_frame, "y", "small_area") %>%
+    dplyr::mutate(var = SD^2)
   
-\NormalTok{  dir }\OtherTok{\textless{}{-}}\NormalTok{ post\_strat\_data }\SpecialCharTok{\%\textgreater{}\%}
-    \FunctionTok{filter}\NormalTok{(response }\SpecialCharTok{\%in\%} \FunctionTok{colnames}\NormalTok{(mf)[}\DecValTok{1}\NormalTok{],}
-\NormalTok{           province }\SpecialCharTok{\%in\%} \FunctionTok{unique}\NormalTok{(data}\SpecialCharTok{$}\NormalTok{province)) }\SpecialCharTok{\%\textgreater{}\%}
-    \FunctionTok{arrange}\NormalTok{(subsection)}
+  dir <- post_strat_data %>%
+    filter(response %in% colnames(mf)[1],
+           province %in% unique(data$province)) %>%
+    arrange(subsection)
   
-  \CommentTok{\# Create lambda}
-\NormalTok{  anova }\OtherTok{\textless{}{-}} \FunctionTok{aov}\NormalTok{(y }\SpecialCharTok{\textasciitilde{}}\NormalTok{ small\_area, }\AttributeTok{data =}\NormalTok{ model\_frame)}
-\NormalTok{  l }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(anova)[[}\DecValTok{1}\NormalTok{]][}\StringTok{"small\_area"}\NormalTok{, }\StringTok{"F value"}\NormalTok{]}
+  # Create lambda
+  anova <- aov(y ~ small_area, data = model_frame)
+  l <- summary(anova)[[1]]["small_area", "F value"]
 
-  \CommentTok{\# Fit the model}
-\NormalTok{  mod }\OtherTok{\textless{}{-}} \FunctionTok{fSAE.Area}\NormalTok{(}
-    \AttributeTok{est.init =}\NormalTok{ dir}\SpecialCharTok{$}\NormalTok{est,}
-    \AttributeTok{var.init =}\NormalTok{ dir}\SpecialCharTok{$}\NormalTok{var,}
-    \AttributeTok{X =}\NormalTok{ X }\SpecialCharTok{\%\textgreater{}\%}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(mean\_x),}
-    \AttributeTok{lambda0 =}\NormalTok{ l}
-\NormalTok{  )}
+  # Fit the model
+  mod <- fSAE.Area(
+    est.init = dir$est,
+    var.init = dir$var,
+    X = X %>% dplyr::select(mean_x),
+    lambda0 = l
+  )
 
-  \CommentTok{\# Calculate CoV}
-\NormalTok{   CoV }\OtherTok{\textless{}{-}}\NormalTok{ hbsae}\SpecialCharTok{::}\FunctionTok{SE}\NormalTok{(mod) }\SpecialCharTok{/}\NormalTok{ mean}\SpecialCharTok{$}\NormalTok{Direct}
-\NormalTok{   mod}\SpecialCharTok{$}\NormalTok{CoV }\OtherTok{\textless{}{-}}\NormalTok{ CoV}
+  # Calculate CoV
+   CoV <- hbsae::SE(mod) / mean$Direct
+   mod$CoV <- CoV
 
-  \CommentTok{\# Print model}
-\NormalTok{  mod}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
+  # Print model
+  mod
+}
+\end{verbatim}
 \hypertarget{frequentist-unit-level}{%
 \subsection{Frequentist Unit-Level}\label{frequentist-unit-level}}
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{freq\_unit }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(data, formula, small\_area, pop\_data) \{}
-  \CommentTok{\# Load packages}
-  \FunctionTok{library}\NormalTok{(tidyverse)}
-  \FunctionTok{library}\NormalTok{(sae)}
+\begin{verbatim}
+freq_unit <- function(data, formula, small_area, pop_data) {
+  # Load packages
+  library(tidyverse)
+  library(sae)
   
-  \CommentTok{\# Create model frame}
-\NormalTok{  model\_frame }\OtherTok{\textless{}{-}} \FunctionTok{model.frame}\NormalTok{(formula, data) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{mutate}\NormalTok{(}\AttributeTok{small\_area =}\NormalTok{ data[[small\_area]])}
-  \FunctionTok{colnames}\NormalTok{(model\_frame) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"y"}\NormalTok{, }\StringTok{"x"}\NormalTok{, }\StringTok{"small\_area"}\NormalTok{)}
+  # Create model frame
+  model_frame <- model.frame(formula, data) %>%
+    dplyr::mutate(small_area = data[[small_area]])
+  colnames(model_frame) <- c("y", "x", "small_area")
   
-  \CommentTok{\# Area population sizes}
-\NormalTok{  pop\_size }\OtherTok{\textless{}{-}}\NormalTok{ pop\_data }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(zoneid }\SpecialCharTok{\%in\%}\NormalTok{ model\_frame}\SpecialCharTok{$}\NormalTok{small\_area) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(zoneid, sum) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{rename}\NormalTok{(}\AttributeTok{pop\_size =}\NormalTok{ sum,}
-                  \AttributeTok{small\_area =}\NormalTok{ zoneid)}
+  # Area population sizes
+  pop_size <- pop_data %>%
+    dplyr::filter(zoneid %in% model_frame$small_area) %>%
+    dplyr::select(zoneid, sum) %>%
+    dplyr::rename(pop_size = sum,
+                  small_area = zoneid)
   
-  \CommentTok{\# Create population means matrix}
-\NormalTok{  meanxpop }\OtherTok{\textless{}{-}}\NormalTok{ pop\_data }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(zoneid }\SpecialCharTok{\%in\%}\NormalTok{ model\_frame}\SpecialCharTok{$}\NormalTok{small\_area) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(zoneid, mean) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{rename}\NormalTok{(}\AttributeTok{x =}\NormalTok{ mean,}
-                  \AttributeTok{small\_area =}\NormalTok{ zoneid)}
+  # Create population means matrix
+  meanxpop <- pop_data %>%
+    dplyr::filter(zoneid %in% model_frame$small_area) %>%
+    dplyr::select(zoneid, mean) %>%
+    dplyr::rename(x = mean,
+                  small_area = zoneid)
   
-  \CommentTok{\# Fit the model}
-\NormalTok{  mod }\OtherTok{\textless{}{-}} \FunctionTok{eblupBHF}\NormalTok{(}
-    \AttributeTok{formula =}\NormalTok{ model\_frame}\SpecialCharTok{$}\NormalTok{y }\SpecialCharTok{\textasciitilde{}}\NormalTok{ model\_frame}\SpecialCharTok{$}\NormalTok{x,}
-    \AttributeTok{dom =}\NormalTok{ model\_frame}\SpecialCharTok{$}\NormalTok{small\_area,}
-    \AttributeTok{meanxpop =}\NormalTok{ meanxpop,}
-    \AttributeTok{popnsize =}\NormalTok{ pop\_size}
-\NormalTok{  )}
-\NormalTok{  mod}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
+  # Fit the model
+  mod <- eblupBHF(
+    formula = model_frame$y ~ model_frame$x,
+    dom = model_frame$small_area,
+    meanxpop = meanxpop,
+    popnsize = pop_size
+  )
+  mod
+}
+\end{verbatim}
 \hypertarget{frequentist-area-level}{%
 \subsection{Frequentist Area-Level}\label{frequentist-area-level}}
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{freq\_area }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(data, formula, small\_area,}
-\NormalTok{                      pop\_data, post\_strat\_data) \{}
-  \CommentTok{\# Load packages}
-  \FunctionTok{library}\NormalTok{(tidyverse)}
-  \FunctionTok{library}\NormalTok{(sae)}
+\begin{verbatim}
+freq_area <- function(data, formula, small_area,
+                      pop_data, post_strat_data) {
+  # Load packages
+  library(tidyverse)
+  library(sae)
   
-  \CommentTok{\# Create model frame}
-\NormalTok{  model\_frame }\OtherTok{\textless{}{-}} \FunctionTok{model.frame}\NormalTok{(formula, data) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{mutate}\NormalTok{(}\AttributeTok{small\_area =}\NormalTok{ data[[small\_area]])}
-  \FunctionTok{colnames}\NormalTok{(model\_frame) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"y"}\NormalTok{, }\StringTok{"x"}\NormalTok{, }\StringTok{"small\_area"}\NormalTok{)}
-\NormalTok{  model\_frame}
+  # Create model frame
+  model_frame <- model.frame(formula, data) %>%
+    dplyr::mutate(small_area = data[[small_area]])
+  colnames(model_frame) <- c("y", "x", "small_area")
+  model_frame
   
-\NormalTok{  mf }\OtherTok{\textless{}{-}} \FunctionTok{model.frame}\NormalTok{(formula, data)}
+  mf <- model.frame(formula, data)
   
-\NormalTok{  dir }\OtherTok{\textless{}{-}}\NormalTok{ post\_strat\_data }\SpecialCharTok{\%\textgreater{}\%} 
-    \FunctionTok{filter}\NormalTok{(response }\SpecialCharTok{\%in\%} \FunctionTok{colnames}\NormalTok{(mf)[}\DecValTok{1}\NormalTok{],}
-\NormalTok{           province }\SpecialCharTok{\%in\%} \FunctionTok{unique}\NormalTok{(data}\SpecialCharTok{$}\NormalTok{province)) }\SpecialCharTok{\%\textgreater{}\%}
-    \FunctionTok{arrange}\NormalTok{(subsection)}
+  dir <- post_strat_data %>% 
+    filter(response %in% colnames(mf)[1],
+           province %in% unique(data$province)) %>%
+    arrange(subsection)
   
-  \CommentTok{\# Direct X}
-\NormalTok{  X }\OtherTok{\textless{}{-}}\NormalTok{ pop\_data }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(zoneid }\SpecialCharTok{\%in\%}\NormalTok{ model\_frame}\SpecialCharTok{$}\NormalTok{small\_area) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(zoneid, mean) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{rename}\NormalTok{(}\AttributeTok{mean\_x =}\NormalTok{ mean,}
-                  \AttributeTok{small\_area =}\NormalTok{ zoneid) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{arrange}\NormalTok{(small\_area)}
+  # Direct X
+  X <- pop_data %>%
+    dplyr::filter(zoneid %in% model_frame$small_area) %>%
+    dplyr::select(zoneid, mean) %>%
+    dplyr::rename(mean_x = mean,
+                  small_area = zoneid) %>%
+    dplyr::arrange(small_area)
   
-  \CommentTok{\# Join pop and dir}
-\NormalTok{  dat }\OtherTok{\textless{}{-}}\NormalTok{ dir }\SpecialCharTok{\%\textgreater{}\%}
-    \FunctionTok{left\_join}\NormalTok{(X, }\AttributeTok{by =} \FunctionTok{c}\NormalTok{(}\StringTok{"subsection"} \OtherTok{=} \StringTok{"small\_area"}\NormalTok{))}
+  # Join pop and dir
+  dat <- dir %>%
+    left_join(X, by = c("subsection" = "small_area"))
 
-  \CommentTok{\# Fit the model}
-\NormalTok{  mod }\OtherTok{\textless{}{-}}\NormalTok{ sae}\SpecialCharTok{::}\FunctionTok{mseFH}\NormalTok{(}\AttributeTok{formula =}\NormalTok{ dat}\SpecialCharTok{$}\NormalTok{est }\SpecialCharTok{\textasciitilde{}}\NormalTok{ dat}\SpecialCharTok{$}\NormalTok{mean\_x,}
-                      \AttributeTok{vardir =}\NormalTok{ dat}\SpecialCharTok{$}\NormalTok{var)}
-\NormalTok{  mod}
+  # Fit the model
+  mod <- sae::mseFH(formula = dat$est ~ dat$mean_x,
+                      vardir = dat$var)
+  mod
   
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
+}
+\end{verbatim}
 \hypertarget{coeffiicent-of-variation-functions}{%
 \subsection{Coeffiicent of Variation Functions}\label{coeffiicent-of-variation-functions}}
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{hb\_CoV }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(data) \{}
-  \CommentTok{\# Load packages}
-  \FunctionTok{library}\NormalTok{(tidyverse)}
-  \FunctionTok{library}\NormalTok{(hbsae)}
+\begin{verbatim}
+hb_CoV <- function(data) {
+  # Load packages
+  library(tidyverse)
+  library(hbsae)
   
-  \CommentTok{\# Grab CoV}
-\NormalTok{  data}\SpecialCharTok{$}\NormalTok{CoV}
-\NormalTok{\}}
+  # Grab CoV
+  data$CoV
+}
 
-\NormalTok{freq\_unit\_CoV }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(data, formula, small\_area,}
-\NormalTok{                          pop\_data, }\AttributeTok{B =} \DecValTok{100}\NormalTok{) \{}
-  \CommentTok{\# Load packages}
-  \FunctionTok{library}\NormalTok{(tidyverse)}
-  \FunctionTok{library}\NormalTok{(sae)}
+freq_unit_CoV <- function(data, formula, small_area,
+                          pop_data, B = 100) {
+  # Load packages
+  library(tidyverse)
+  library(sae)
   
-  \CommentTok{\# Create empty items for looping}
-\NormalTok{  boots }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{()}
-\NormalTok{  fit }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{()}
-\NormalTok{  mean\_df }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{()}
-\NormalTok{  final }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{()}
+  # Create empty items for looping
+  boots <- list()
+  fit <- list()
+  mean_df <- list()
+  final <- data.frame()
   
-  \CommentTok{\# Create model frame}
-\NormalTok{  model\_frame }\OtherTok{\textless{}{-}} \FunctionTok{model.frame}\NormalTok{(formula, data) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{mutate}\NormalTok{(}\AttributeTok{small\_area =}\NormalTok{ data[[small\_area]])}
-  \FunctionTok{colnames}\NormalTok{(model\_frame) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"y"}\NormalTok{, }\StringTok{"x"}\NormalTok{, }\StringTok{"small\_area"}\NormalTok{)}
+  # Create model frame
+  model_frame <- model.frame(formula, data) %>%
+    dplyr::mutate(small_area = data[[small_area]])
+  colnames(model_frame) <- c("y", "x", "small_area")
   
-  \CommentTok{\# Nest by small area}
-\NormalTok{  data\_nested }\OtherTok{\textless{}{-}}\NormalTok{ model\_frame }\SpecialCharTok{\%\textgreater{}\%}
-    \FunctionTok{mutate}\NormalTok{(}\AttributeTok{id =}\NormalTok{ small\_area) }\SpecialCharTok{\%\textgreater{}\%}
-    \FunctionTok{group\_by}\NormalTok{(small\_area) }\SpecialCharTok{\%\textgreater{}\%}
-    \FunctionTok{nest}\NormalTok{()}
+  # Nest by small area
+  data_nested <- model_frame %>%
+    mutate(id = small_area) %>%
+    group_by(small_area) %>%
+    nest()
   
-  \CommentTok{\# Bootstrap}
-  \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{B)\{}
-    \ControlFlowTok{for}\NormalTok{(j }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(}\FunctionTok{unique}\NormalTok{(model\_frame}\SpecialCharTok{$}\NormalTok{small\_area))) \{}
-\NormalTok{      boots[[j]] }\OtherTok{\textless{}{-}} \FunctionTok{sample\_n}\NormalTok{(}
-\NormalTok{        data\_nested[[}\DecValTok{2}\NormalTok{]][[j]],}
-        \AttributeTok{size =} \FunctionTok{length}\NormalTok{(data\_nested[[}\DecValTok{2}\NormalTok{]][[j]]}\SpecialCharTok{$}\NormalTok{y),}
-        \AttributeTok{replace =} \ConstantTok{TRUE}
-\NormalTok{      )}
-\NormalTok{      boots\_df }\OtherTok{\textless{}{-}} \FunctionTok{bind\_rows}\NormalTok{(boots) }
-\NormalTok{    \}}
+  # Bootstrap
+  for(i in 1:B){
+    for(j in 1:length(unique(model_frame$small_area))) {
+      boots[[j]] <- sample_n(
+        data_nested[[2]][[j]],
+        size = length(data_nested[[2]][[j]]$y),
+        replace = TRUE
+      )
+      boots_df <- bind_rows(boots) 
+    }
     
-\NormalTok{    fit[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{freq\_unit}\NormalTok{(boots\_df, y }\SpecialCharTok{\textasciitilde{}}\NormalTok{ x, }\StringTok{"id"}\NormalTok{, pop\_data)}
+    fit[[i]] <- freq_unit(boots_df, y ~ x, "id", pop_data)
     
-\NormalTok{    mean\_df[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{fitted =}\NormalTok{ fit[[i]]}\SpecialCharTok{$}\NormalTok{eblup}\SpecialCharTok{$}\NormalTok{eblup,}
-                               \AttributeTok{subsection =}\NormalTok{ fit[[i]]}\SpecialCharTok{$}\NormalTok{eblup}\SpecialCharTok{$}\NormalTok{domain)}
-    \ControlFlowTok{if}\NormalTok{ (i }\SpecialCharTok{\%\%} \DecValTok{50} \SpecialCharTok{==} \DecValTok{1}\NormalTok{) \{}
-      \FunctionTok{print}\NormalTok{(i)}
-\NormalTok{    \}}
-\NormalTok{  \}}
+    mean_df[[i]] <- data.frame(fitted = fit[[i]]$eblup$eblup,
+                               subsection = fit[[i]]$eblup$domain)
+    if (i %% 50 == 1) {
+      print(i)
+    }
+  }
   
-  \CommentTok{\# Create final output}
-\NormalTok{  final }\OtherTok{\textless{}{-}} \FunctionTok{bind\_rows}\NormalTok{(mean\_df) }\SpecialCharTok{\%\textgreater{}\%}
-    \FunctionTok{group\_by}\NormalTok{(subsection) }\SpecialCharTok{\%\textgreater{}\%}
-    \FunctionTok{summarize}\NormalTok{(}\AttributeTok{sd =} \FunctionTok{sd}\NormalTok{(fitted, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{))}
-\NormalTok{  mean\_y }\OtherTok{\textless{}{-}}\NormalTok{ model\_frame }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{group\_by}\NormalTok{(small\_area) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{summarise}\NormalTok{(}\AttributeTok{mean\_y =} \FunctionTok{mean}\NormalTok{(y, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{))}
+  # Create final output
+  final <- bind_rows(mean_df) %>%
+    group_by(subsection) %>%
+    summarize(sd = sd(fitted, na.rm = TRUE))
+  mean_y <- model_frame %>%
+    dplyr::group_by(small_area) %>%
+    dplyr::summarise(mean_y = mean(y, na.rm = TRUE))
   
-\NormalTok{  COV }\OtherTok{\textless{}{-}}\NormalTok{ final}\SpecialCharTok{$}\NormalTok{sd }\SpecialCharTok{/}\NormalTok{ mean\_y}\SpecialCharTok{$}\NormalTok{mean\_y}
-  \FunctionTok{names}\NormalTok{(COV) }\OtherTok{\textless{}{-}}\NormalTok{ final}\SpecialCharTok{$}\NormalTok{subsection}
+  COV <- final$sd / mean_y$mean_y
+  names(COV) <- final$subsection
   
-\NormalTok{  COV}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
+  COV
+}
+\end{verbatim}
 \hypertarget{fitting-models}{%
 \section{Fitting Models}\label{fitting-models}}
 
 \hypertarget{data-set-up-preprocessing}{%
 \subsection{Data Set-up \& Preprocessing}\label{data-set-up-preprocessing}}
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{library}\NormalTok{(tidyverse)}
-\FunctionTok{library}\NormalTok{(mase)}
-\FunctionTok{library}\NormalTok{(hbsae)}
-\FunctionTok{library}\NormalTok{(sae)}
-\end{Highlighting}
-\end{Shaded}
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{intwest }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{"data/subsets/df.csv"}\NormalTok{)}
-\NormalTok{tccpop }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{"data/population/tcc\_pop.csv"}\NormalTok{)}
-\NormalTok{strata }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{"data/population/strata.csv"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# Set{-}up strata:}
-\NormalTok{intwest }\OtherTok{\textless{}{-}}\NormalTok{ intwest }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{FIAstrat =} \FunctionTok{case\_when}\NormalTok{(}
-\NormalTok{    FIAstrat }\SpecialCharTok{==} \StringTok{"1"} \SpecialCharTok{\textasciitilde{}} \StringTok{"Sampled{-}Forest"}\NormalTok{,}
-\NormalTok{    FIAstrat }\SpecialCharTok{==} \StringTok{"2"} \SpecialCharTok{\textasciitilde{}} \StringTok{"Sampled{-}Nonforest"}\NormalTok{,}
-\NormalTok{    FIAstrat }\SpecialCharTok{==} \StringTok{"0"} \SpecialCharTok{\textasciitilde{}} \StringTok{"Sampled{-}Nonforest"}\NormalTok{,}
-\NormalTok{    FIAstrat }\SpecialCharTok{==} \StringTok{"3"} \SpecialCharTok{\textasciitilde{}} \StringTok{"Sampled{-}Nonforest"}\NormalTok{,}
-\NormalTok{  )) }
-\end{Highlighting}
-\end{Shaded}
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# Filter out subsections that cause errors in computation}
-\NormalTok{no0\_subsections }\OtherTok{\textless{}{-}}\NormalTok{ intwest }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{group\_by}\NormalTok{(subsection) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{summarize}\NormalTok{(}\AttributeTok{mean\_y =} \FunctionTok{mean}\NormalTok{(BIOLIVE\_TPA),}
-            \AttributeTok{mean\_x =} \FunctionTok{mean}\NormalTok{(nlcd11)) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{filter}\NormalTok{(mean\_y }\SpecialCharTok{\textgreater{}} \DecValTok{0} \SpecialCharTok{\&}\NormalTok{ mean\_x }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
-\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(subsection) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{pull}\NormalTok{()}
+\begin{verbatim}
+library(tidyverse)
+library(mase)
+library(hbsae)
+library(sae)
+\end{verbatim}
+\begin{verbatim}
+intwest <- read_csv("data/subsets/df.csv")
+tccpop <- read_csv("data/population/tcc_pop.csv")
+strata <- read_csv("data/population/strata.csv")
+\end{verbatim}
+\begin{verbatim}
+# Set-up strata:
+intwest <- intwest %>%
+  mutate(FIAstrat = case_when(
+    FIAstrat == "1" ~ "Sampled-Forest",
+    FIAstrat == "2" ~ "Sampled-Nonforest",
+    FIAstrat == "0" ~ "Sampled-Nonforest",
+    FIAstrat == "3" ~ "Sampled-Nonforest",
+  )) 
+\end{verbatim}
+\begin{verbatim}
+# Filter out subsections that cause errors in computation
+no0_subsections <- intwest %>%
+  group_by(subsection) %>%
+  summarize(mean_y = mean(BIOLIVE_TPA),
+            mean_x = mean(nlcd11)) %>%
+  filter(mean_y > 0 & mean_x > 0) %>% 
+  dplyr::select(subsection) %>%
+  pull()
 
-\NormalTok{intwest\_no0 }\OtherTok{\textless{}{-}}\NormalTok{ intwest }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{filter}\NormalTok{(subsection }\SpecialCharTok{\%in\%}\NormalTok{ no0\_subsections) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\NormalTok{(province }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"M261"}\NormalTok{, }\StringTok{"M334"}\NormalTok{))) }\SpecialCharTok{\%\textgreater{}\%} 
-  \FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\NormalTok{(subsection }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"342Fi"}\NormalTok{, }\StringTok{"331Kj"}\NormalTok{, }\StringTok{"342Dh"}\NormalTok{, }\StringTok{"341Dc"}\NormalTok{))) }
-\end{Highlighting}
-\end{Shaded}
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# Create list of dataframes}
-\NormalTok{iw }\OtherTok{\textless{}{-}} \FunctionTok{split}\NormalTok{(intwest\_no0, }\AttributeTok{f =}\NormalTok{ intwest\_no0}\SpecialCharTok{$}\NormalTok{province)}
-\end{Highlighting}
-\end{Shaded}
+intwest_no0 <- intwest %>%
+  filter(subsection %in% no0_subsections) %>%
+  filter(!(province %in% c("M261", "M334"))) %>% 
+  filter(!(subsection %in% c("342Fi", "331Kj", "342Dh", "341Dc"))) 
+\end{verbatim}
+\begin{verbatim}
+# Create list of dataframes
+iw <- split(intwest_no0, f = intwest_no0$province)
+\end{verbatim}
 \hypertarget{direct-estimation-1}{%
 \subsection{Direct Estimation}\label{direct-estimation-1}}
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{strata }\OtherTok{\textless{}{-}}\NormalTok{ strata }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{filter}\NormalTok{(zoneid }\SpecialCharTok{\%in\%} \FunctionTok{unique}\NormalTok{(intwest\_no0}\SpecialCharTok{$}\NormalTok{subsection)) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{mutate}\NormalTok{(}
-    \AttributeTok{fnf\_no\_water =} \FunctionTok{case\_when}\NormalTok{(}
-\NormalTok{      fnf\_no\_water }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\textasciitilde{}} \StringTok{"Sampled{-}Forest"}\NormalTok{,}
-\NormalTok{      fnf\_no\_water }\SpecialCharTok{==} \DecValTok{2} \SpecialCharTok{\textasciitilde{}} \StringTok{"Sampled{-}Nonforest"}
-\NormalTok{    )}
-\NormalTok{  )}
-\NormalTok{strata }\OtherTok{\textless{}{-}}\NormalTok{ strata }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{zoneprop)}
+\begin{verbatim}
+strata <- strata %>%
+  filter(zoneid %in% unique(intwest_no0$subsection)) %>%
+  mutate(
+    fnf_no_water = case_when(
+      fnf_no_water == 1 ~ "Sampled-Forest",
+      fnf_no_water == 2 ~ "Sampled-Nonforest"
+    )
+  )
+strata <- strata %>%
+  dplyr::select(-zoneprop)
 
-\CommentTok{\# split strata into list and drop column split by}
-\NormalTok{strata\_list }\OtherTok{\textless{}{-}} \FunctionTok{lapply}\NormalTok{(}
-  \FunctionTok{split}\NormalTok{(strata, }\AttributeTok{f =}\NormalTok{ strata}\SpecialCharTok{$}\NormalTok{zoneid),}
-  \ControlFlowTok{function}\NormalTok{(strata) \{ strata}\SpecialCharTok{$}\NormalTok{zoneid }\OtherTok{\textless{}{-}} \ConstantTok{NULL}\NormalTok{; strata\}}
-\NormalTok{  )}
+# split strata into list and drop column split by
+strata_list <- lapply(
+  split(strata, f = strata$zoneid),
+  function(strata) { strata$zoneid <- NULL; strata}
+  )
 
-\CommentTok{\# split subsections into list}
-\NormalTok{subsection\_list }\OtherTok{\textless{}{-}} \FunctionTok{split}\NormalTok{(intwest\_no0,}
-\NormalTok{                         intwest\_no0}\SpecialCharTok{$}\NormalTok{subsection)}
+# split subsections into list
+subsection_list <- split(intwest_no0,
+                         intwest_no0$subsection)
 
 
-\NormalTok{post\_strat\_bio }\OtherTok{\textless{}{-}} \FunctionTok{map2}\NormalTok{(}\AttributeTok{.x =}\NormalTok{ subsection\_list,}
-                       \AttributeTok{.y =}\NormalTok{ strata\_list,}
-                       \AttributeTok{.f =}\NormalTok{ postStrat2\_bio)}
-\NormalTok{post\_strat\_ba }\OtherTok{\textless{}{-}} \FunctionTok{map2}\NormalTok{(}\AttributeTok{.x =}\NormalTok{ subsection\_list,}
-                      \AttributeTok{.y =}\NormalTok{ strata\_list,}
-                      \AttributeTok{.f =}\NormalTok{ postStrat2\_ba)}
-\NormalTok{post\_strat\_voln }\OtherTok{\textless{}{-}} \FunctionTok{map2}\NormalTok{(}\AttributeTok{.x =}\NormalTok{ subsection\_list,}
-                        \AttributeTok{.y =}\NormalTok{ strata\_list,}
-                        \AttributeTok{.f =}\NormalTok{ postStrat2\_voln)}
-\NormalTok{post\_strat\_cnt }\OtherTok{\textless{}{-}} \FunctionTok{map2}\NormalTok{(}\AttributeTok{.x =}\NormalTok{ subsection\_list,}
-                       \AttributeTok{.y =}\NormalTok{ strata\_list,}
-                       \AttributeTok{.f =}\NormalTok{ postStrat2\_cnt)}
+post_strat_bio <- map2(.x = subsection_list,
+                       .y = strata_list,
+                       .f = postStrat2_bio)
+post_strat_ba <- map2(.x = subsection_list,
+                      .y = strata_list,
+                      .f = postStrat2_ba)
+post_strat_voln <- map2(.x = subsection_list,
+                        .y = strata_list,
+                        .f = postStrat2_voln)
+post_strat_cnt <- map2(.x = subsection_list,
+                       .y = strata_list,
+                       .f = postStrat2_cnt)
 
-\NormalTok{results }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
-  \AttributeTok{ps\_est =} \FunctionTok{c}\NormalTok{(}\FunctionTok{bind\_rows}\NormalTok{(post\_strat\_bio)}\SpecialCharTok{$}\NormalTok{ps\_est,}
-             \FunctionTok{bind\_rows}\NormalTok{(post\_strat\_ba)}\SpecialCharTok{$}\NormalTok{ps\_est,}
-             \FunctionTok{bind\_rows}\NormalTok{(post\_strat\_cnt)}\SpecialCharTok{$}\NormalTok{ps\_est,}
-             \FunctionTok{bind\_rows}\NormalTok{(post\_strat\_voln)}\SpecialCharTok{$}\NormalTok{ps\_est),}
-  \AttributeTok{ps\_sd =} \FunctionTok{c}\NormalTok{(}\FunctionTok{bind\_rows}\NormalTok{(post\_strat\_bio)}\SpecialCharTok{$}\NormalTok{sd,}
-             \FunctionTok{bind\_rows}\NormalTok{(post\_strat\_ba)}\SpecialCharTok{$}\NormalTok{sd,}
-             \FunctionTok{bind\_rows}\NormalTok{(post\_strat\_cnt)}\SpecialCharTok{$}\NormalTok{sd,}
-             \FunctionTok{bind\_rows}\NormalTok{(post\_strat\_voln)}\SpecialCharTok{$}\NormalTok{sd),}
-  \AttributeTok{subsection =} \FunctionTok{rep}\NormalTok{(}\FunctionTok{names}\NormalTok{(post\_strat\_bio), }\DecValTok{4}\NormalTok{),}
-  \AttributeTok{response =} \FunctionTok{c}\NormalTok{(}
-    \FunctionTok{rep}\NormalTok{(}\StringTok{"BIOLIVE\_TPA"}\NormalTok{, }\FunctionTok{length}\NormalTok{(post\_strat\_bio)),}
-    \FunctionTok{rep}\NormalTok{(}\StringTok{"BALIVE\_TPA"}\NormalTok{, }\FunctionTok{length}\NormalTok{(post\_strat\_ba)),}
-    \FunctionTok{rep}\NormalTok{(}\StringTok{"CNTLIVE\_TPA"}\NormalTok{, }\FunctionTok{length}\NormalTok{(post\_strat\_cnt)),}
-    \FunctionTok{rep}\NormalTok{(}\StringTok{"VOLNLIVE\_TPA"}\NormalTok{, }\FunctionTok{length}\NormalTok{(post\_strat\_voln)))}
-\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{dirmean }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{()}
-\NormalTok{dirmean[}\DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(iw)] }\OtherTok{\textless{}{-}} 
-  \FunctionTok{lapply}\NormalTok{(iw,}
-\NormalTok{         direct\_estimate,}
-         \AttributeTok{response =} \StringTok{"BIOLIVE\_TPA"}\NormalTok{, }
-         \StringTok{"subsection"}\NormalTok{)}
-\NormalTok{dirmean[(}\FunctionTok{length}\NormalTok{(iw) }\SpecialCharTok{+} \DecValTok{1}\NormalTok{)}\SpecialCharTok{:}\NormalTok{(}\DecValTok{2} \SpecialCharTok{*} \FunctionTok{length}\NormalTok{(iw))] }\OtherTok{\textless{}{-}} 
-  \FunctionTok{lapply}\NormalTok{(iw,}
-\NormalTok{        direct\_estimate,}
-        \AttributeTok{response =} \StringTok{"BALIVE\_TPA"}\NormalTok{,}
-        \StringTok{"subsection"}\NormalTok{)}
-\NormalTok{dirmean[(}\DecValTok{2}\SpecialCharTok{*}\FunctionTok{length}\NormalTok{(iw) }\SpecialCharTok{+} \DecValTok{1}\NormalTok{)}\SpecialCharTok{:}\NormalTok{(}\DecValTok{3}\SpecialCharTok{*}\FunctionTok{length}\NormalTok{(iw))] }\OtherTok{\textless{}{-}} 
-  \FunctionTok{lapply}\NormalTok{(iw,}
-\NormalTok{         direct\_estimate,}
-         \AttributeTok{response =} \StringTok{"CNTLIVE\_TPA"}\NormalTok{,}
-         \StringTok{"subsection"}\NormalTok{)}
-\NormalTok{dirmean[(}\DecValTok{3}\SpecialCharTok{*}\FunctionTok{length}\NormalTok{(iw) }\SpecialCharTok{+} \DecValTok{1}\NormalTok{)}\SpecialCharTok{:}\NormalTok{(}\DecValTok{4}\SpecialCharTok{*}\FunctionTok{length}\NormalTok{(iw))] }\OtherTok{\textless{}{-}} 
-  \FunctionTok{lapply}\NormalTok{(iw,}
-\NormalTok{         direct\_estimate,}
-         \AttributeTok{response =} \StringTok{"VOLNLIVE\_TPA"}\NormalTok{,}
-         \StringTok{"subsection"}\NormalTok{)}
+results <- data.frame(
+  ps_est = c(bind_rows(post_strat_bio)$ps_est,
+             bind_rows(post_strat_ba)$ps_est,
+             bind_rows(post_strat_cnt)$ps_est,
+             bind_rows(post_strat_voln)$ps_est),
+  ps_sd = c(bind_rows(post_strat_bio)$sd,
+             bind_rows(post_strat_ba)$sd,
+             bind_rows(post_strat_cnt)$sd,
+             bind_rows(post_strat_voln)$sd),
+  subsection = rep(names(post_strat_bio), 4),
+  response = c(
+    rep("BIOLIVE_TPA", length(post_strat_bio)),
+    rep("BALIVE_TPA", length(post_strat_ba)),
+    rep("CNTLIVE_TPA", length(post_strat_cnt)),
+    rep("VOLNLIVE_TPA", length(post_strat_voln)))
+)
+\end{verbatim}
+\begin{verbatim}
+dirmean <- list()
+dirmean[1:length(iw)] <- 
+  lapply(iw,
+         direct_estimate,
+         response = "BIOLIVE_TPA", 
+         "subsection")
+dirmean[(length(iw) + 1):(2 * length(iw))] <- 
+  lapply(iw,
+        direct_estimate,
+        response = "BALIVE_TPA",
+        "subsection")
+dirmean[(2*length(iw) + 1):(3*length(iw))] <- 
+  lapply(iw,
+         direct_estimate,
+         response = "CNTLIVE_TPA",
+         "subsection")
+dirmean[(3*length(iw) + 1):(4*length(iw))] <- 
+  lapply(iw,
+         direct_estimate,
+         response = "VOLNLIVE_TPA",
+         "subsection")
 
-\NormalTok{dir }\OtherTok{\textless{}{-}} \FunctionTok{bind\_rows}\NormalTok{(dirmean) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(Domain, Direct, CV) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{cov\_dirmean =}\NormalTok{ CV }\SpecialCharTok{/} \DecValTok{100}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{rename}\NormalTok{(}\AttributeTok{est\_dirmean =}\NormalTok{ Direct) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{CV) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{response =} \FunctionTok{c}\NormalTok{(}
-    \FunctionTok{rep}\NormalTok{(}\StringTok{"BIOLIVE\_TPA"}\NormalTok{, }\FunctionTok{length}\NormalTok{(post\_strat\_bio)),}
-    \FunctionTok{rep}\NormalTok{(}\StringTok{"BALIVE\_TPA"}\NormalTok{, }\FunctionTok{length}\NormalTok{(post\_strat\_ba)),}
-    \FunctionTok{rep}\NormalTok{(}\StringTok{"CNTLIVE\_TPA"}\NormalTok{, }\FunctionTok{length}\NormalTok{(post\_strat\_cnt)),}
-    \FunctionTok{rep}\NormalTok{(}\StringTok{"VOLNLIVE\_TPA"}\NormalTok{, }\FunctionTok{length}\NormalTok{(post\_strat\_voln))))}
+dir <- bind_rows(dirmean) %>%
+  dplyr::select(Domain, Direct, CV) %>%
+  mutate(cov_dirmean = CV / 100) %>%
+  rename(est_dirmean = Direct) %>%
+  dplyr::select(-CV) %>%
+  mutate(response = c(
+    rep("BIOLIVE_TPA", length(post_strat_bio)),
+    rep("BALIVE_TPA", length(post_strat_ba)),
+    rep("CNTLIVE_TPA", length(post_strat_cnt)),
+    rep("VOLNLIVE_TPA", length(post_strat_voln))))
 
-\NormalTok{results }\OtherTok{\textless{}{-}}\NormalTok{ results }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{left\_join}\NormalTok{(dir, }\AttributeTok{by =} \FunctionTok{c}\NormalTok{(}\StringTok{"subsection"} \OtherTok{=} \StringTok{"Domain"}\NormalTok{,}
-                        \StringTok{"response"} \OtherTok{=} \StringTok{"response"}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# Create CoV for ps{-}estimator}
-\NormalTok{results }\OtherTok{\textless{}{-}}\NormalTok{ results }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{mutate}\NormalTok{(}
-    \AttributeTok{cov\_dirps =}\NormalTok{ ps\_sd }\SpecialCharTok{/}\NormalTok{ est\_dirmean}
-\NormalTok{  )}
+results <- results %>%
+  left_join(dir, by = c("subsection" = "Domain",
+                        "response" = "response"))
+\end{verbatim}
+\begin{verbatim}
+# Create CoV for ps-estimator
+results <- results %>%
+  mutate(
+    cov_dirps = ps_sd / est_dirmean
+  )
 
-\CommentTok{\# change names and rearrange }
-\NormalTok{results }\OtherTok{\textless{}{-}}\NormalTok{ results }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{rename}\NormalTok{(}\AttributeTok{est\_dirps =}\NormalTok{ ps\_est,}
-         \AttributeTok{sd\_dirps =}\NormalTok{ ps\_sd) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{relocate}\NormalTok{(}\StringTok{"subsection"}\NormalTok{, }\StringTok{"response"}\NormalTok{,}
-           \StringTok{"est\_dirps"}\NormalTok{, }\StringTok{"cov\_dirps"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
+# change names and rearrange 
+results <- results %>%
+  rename(est_dirps = ps_est,
+         sd_dirps = ps_sd) %>%
+  relocate("subsection", "response",
+           "est_dirps", "cov_dirps")
+\end{verbatim}
 \hypertarget{model-based-estimation}{%
 \subsection{Model-Based Estimation}\label{model-based-estimation}}
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# set up list for area level models}
-\NormalTok{ps\_dat }\OtherTok{\textless{}{-}}\NormalTok{ results }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(est\_dirps, sd\_dirps,}
-\NormalTok{                subsection, response) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{mutate}\NormalTok{(}\AttributeTok{var =}\NormalTok{ sd\_dirps}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{rename}\NormalTok{(}\AttributeTok{est =}\NormalTok{ est\_dirps) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(est, var, subsection, response) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{mutate}\NormalTok{(}
-    \AttributeTok{section =} \FunctionTok{str\_remove\_all}\NormalTok{(subsection, }\StringTok{"[:lower:]"}\NormalTok{),}
-    \AttributeTok{province =} \FunctionTok{str\_sub}\NormalTok{(section, }\AttributeTok{end =} \SpecialCharTok{{-}}\DecValTok{2}\NormalTok{))}
+\begin{verbatim}
+# set up list for area level models
+ps_dat <- results %>%
+  dplyr::select(est_dirps, sd_dirps,
+                subsection, response) %>%
+  dplyr::mutate(var = sd_dirps^2) %>%
+  dplyr::rename(est = est_dirps) %>%
+  dplyr::select(est, var, subsection, response) %>%
+  dplyr::mutate(
+    section = str_remove_all(subsection, "[:lower:]"),
+    province = str_sub(section, end = -2))
 
-\NormalTok{ps\_l }\OtherTok{\textless{}{-}} \FunctionTok{split}\NormalTok{(ps\_dat, }\FunctionTok{list}\NormalTok{(ps\_dat}\SpecialCharTok{$}\NormalTok{province))}
-\end{Highlighting}
-\end{Shaded}
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# HB Unit}
-\FunctionTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
-\NormalTok{bayes\_unit }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{()}
-\NormalTok{bayes\_unit[}\DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(iw)] }\OtherTok{\textless{}{-}} \FunctionTok{lapply}\NormalTok{(}
-\NormalTok{  iw,}
-\NormalTok{  hb\_unit,}
-  \AttributeTok{formula =}\NormalTok{ BIOLIVE\_TPA }\SpecialCharTok{\textasciitilde{}}\NormalTok{ nlcd11,}
-  \AttributeTok{small\_area =} \StringTok{"subsection"}\NormalTok{,}
-  \AttributeTok{pop\_data =}\NormalTok{ tccpop}
-\NormalTok{)}
-\NormalTok{bayes\_unit[(}\FunctionTok{length}\NormalTok{(iw) }\SpecialCharTok{+} \DecValTok{1}\NormalTok{)}\SpecialCharTok{:}\NormalTok{(}\DecValTok{2} \SpecialCharTok{*} \FunctionTok{length}\NormalTok{(iw))] }\OtherTok{\textless{}{-}}
-  \FunctionTok{lapply}\NormalTok{(}
-\NormalTok{    iw,}
-\NormalTok{    hb\_unit,}
-    \AttributeTok{formula =}\NormalTok{ BALIVE\_TPA }\SpecialCharTok{\textasciitilde{}}\NormalTok{ nlcd11,}
-    \AttributeTok{small\_area =} \StringTok{"subsection"}\NormalTok{,}
-    \AttributeTok{pop\_data =}\NormalTok{ tccpop}
-\NormalTok{  )}
-\NormalTok{bayes\_unit[(}\DecValTok{2} \SpecialCharTok{*} \FunctionTok{length}\NormalTok{(iw) }\SpecialCharTok{+} \DecValTok{1}\NormalTok{)}\SpecialCharTok{:}\NormalTok{(}\DecValTok{3} \SpecialCharTok{*} \FunctionTok{length}\NormalTok{(iw))] }\OtherTok{\textless{}{-}}
-  \FunctionTok{lapply}\NormalTok{(}
-\NormalTok{    iw,}
-\NormalTok{    hb\_unit,}
-    \AttributeTok{formula =}\NormalTok{ CNTLIVE\_TPA }\SpecialCharTok{\textasciitilde{}}\NormalTok{ nlcd11,}
-    \AttributeTok{small\_area =} \StringTok{"subsection"}\NormalTok{,}
-    \AttributeTok{pop\_data =}\NormalTok{ tccpop}
-\NormalTok{  )}
-\NormalTok{bayes\_unit[(}\DecValTok{3} \SpecialCharTok{*} \FunctionTok{length}\NormalTok{(iw) }\SpecialCharTok{+} \DecValTok{1}\NormalTok{)}\SpecialCharTok{:}\NormalTok{(}\DecValTok{4} \SpecialCharTok{*} \FunctionTok{length}\NormalTok{(iw))] }\OtherTok{\textless{}{-}}
-  \FunctionTok{lapply}\NormalTok{(}
-\NormalTok{    iw,}
-\NormalTok{    hb\_unit,}
-    \AttributeTok{formula =}\NormalTok{ VOLNLIVE\_TPA }\SpecialCharTok{\textasciitilde{}}\NormalTok{ nlcd11,}
-    \AttributeTok{small\_area =} \StringTok{"subsection"}\NormalTok{,}
-    \AttributeTok{pop\_data =}\NormalTok{ tccpop}
-\NormalTok{  )}
+ps_l <- split(ps_dat, list(ps_dat$province))
+\end{verbatim}
+\begin{verbatim}
+# HB Unit
+set.seed(1)
+bayes_unit <- list()
+bayes_unit[1:length(iw)] <- lapply(
+  iw,
+  hb_unit,
+  formula = BIOLIVE_TPA ~ nlcd11,
+  small_area = "subsection",
+  pop_data = tccpop
+)
+bayes_unit[(length(iw) + 1):(2 * length(iw))] <-
+  lapply(
+    iw,
+    hb_unit,
+    formula = BALIVE_TPA ~ nlcd11,
+    small_area = "subsection",
+    pop_data = tccpop
+  )
+bayes_unit[(2 * length(iw) + 1):(3 * length(iw))] <-
+  lapply(
+    iw,
+    hb_unit,
+    formula = CNTLIVE_TPA ~ nlcd11,
+    small_area = "subsection",
+    pop_data = tccpop
+  )
+bayes_unit[(3 * length(iw) + 1):(4 * length(iw))] <-
+  lapply(
+    iw,
+    hb_unit,
+    formula = VOLNLIVE_TPA ~ nlcd11,
+    small_area = "subsection",
+    pop_data = tccpop
+  )
 
-\NormalTok{res\_hbu }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
-  \AttributeTok{subsection =} \FunctionTok{names}\NormalTok{(}\FunctionTok{unlist}\NormalTok{(}\FunctionTok{lapply}\NormalTok{(bayes\_unit, EST))),}
-\AttributeTok{response =} \FunctionTok{c}\NormalTok{(}
-    \FunctionTok{rep}\NormalTok{(}\StringTok{"BIOLIVE\_TPA"}\NormalTok{, }\FunctionTok{length}\NormalTok{(post\_strat\_bio)),}
-    \FunctionTok{rep}\NormalTok{(}\StringTok{"BALIVE\_TPA"}\NormalTok{, }\FunctionTok{length}\NormalTok{(post\_strat\_ba)),}
-    \FunctionTok{rep}\NormalTok{(}\StringTok{"CNTLIVE\_TPA"}\NormalTok{, }\FunctionTok{length}\NormalTok{(post\_strat\_cnt)),}
-    \FunctionTok{rep}\NormalTok{(}\StringTok{"VOLNLIVE\_TPA"}\NormalTok{, }\FunctionTok{length}\NormalTok{(post\_strat\_voln))),}
-  \AttributeTok{est\_hb\_unit =} \FunctionTok{unlist}\NormalTok{(}\FunctionTok{lapply}\NormalTok{(bayes\_unit, EST)),}
-  \AttributeTok{cov\_hb\_unit =} \FunctionTok{unlist}\NormalTok{(}\FunctionTok{lapply}\NormalTok{(bayes\_unit, hb\_CoV))}
-\NormalTok{)}
+res_hbu <- data.frame(
+  subsection = names(unlist(lapply(bayes_unit, EST))),
+response = c(
+    rep("BIOLIVE_TPA", length(post_strat_bio)),
+    rep("BALIVE_TPA", length(post_strat_ba)),
+    rep("CNTLIVE_TPA", length(post_strat_cnt)),
+    rep("VOLNLIVE_TPA", length(post_strat_voln))),
+  est_hb_unit = unlist(lapply(bayes_unit, EST)),
+  cov_hb_unit = unlist(lapply(bayes_unit, hb_CoV))
+)
 
-\NormalTok{results }\OtherTok{\textless{}{-}}\NormalTok{ results }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{left\_join}\NormalTok{(res\_hbu, }\AttributeTok{by =} \FunctionTok{c}\NormalTok{(}\StringTok{"subsection"} \OtherTok{=} \StringTok{"subsection"}\NormalTok{,}
-                        \StringTok{"response"} \OtherTok{=} \StringTok{"response"}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# HB Area}
-\FunctionTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
-\NormalTok{bayes\_area }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{()}
-\NormalTok{bayes\_area[}\DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(iw)] }\OtherTok{\textless{}{-}}
-  \FunctionTok{lapply}\NormalTok{(}
-\NormalTok{    iw,}
-\NormalTok{    hb\_area,}
-    \AttributeTok{formula =}\NormalTok{ BIOLIVE\_TPA }\SpecialCharTok{\textasciitilde{}}\NormalTok{ nlcd11,}
-    \AttributeTok{small\_area =} \StringTok{"subsection"}\NormalTok{,}
-    \AttributeTok{pop\_data =}\NormalTok{ tccpop,}
-    \AttributeTok{post\_strat\_data =}\NormalTok{ ps\_dat}
-\NormalTok{  )}
-\NormalTok{bayes\_area[(}\FunctionTok{length}\NormalTok{(iw) }\SpecialCharTok{+} \DecValTok{1}\NormalTok{)}\SpecialCharTok{:}\NormalTok{(}\DecValTok{2} \SpecialCharTok{*} \FunctionTok{length}\NormalTok{(iw))] }\OtherTok{\textless{}{-}}
-  \FunctionTok{lapply}\NormalTok{(}
-\NormalTok{    iw,}
-\NormalTok{    hb\_area,}
-    \AttributeTok{formula =}\NormalTok{ BALIVE\_TPA }\SpecialCharTok{\textasciitilde{}}\NormalTok{ nlcd11,}
-    \AttributeTok{small\_area =} \StringTok{"subsection"}\NormalTok{,}
-    \AttributeTok{pop\_data =}\NormalTok{ tccpop,}
-    \AttributeTok{post\_strat\_data =}\NormalTok{ ps\_dat}
-\NormalTok{  )}
-\NormalTok{bayes\_area[(}\DecValTok{2} \SpecialCharTok{*} \FunctionTok{length}\NormalTok{(iw) }\SpecialCharTok{+} \DecValTok{1}\NormalTok{)}\SpecialCharTok{:}\NormalTok{(}\DecValTok{3} \SpecialCharTok{*} \FunctionTok{length}\NormalTok{(iw))] }\OtherTok{\textless{}{-}}
-  \FunctionTok{lapply}\NormalTok{(}
-\NormalTok{    iw,}
-\NormalTok{    hb\_area,}
-    \AttributeTok{formula =}\NormalTok{ CNTLIVE\_TPA }\SpecialCharTok{\textasciitilde{}}\NormalTok{ nlcd11,}
-    \AttributeTok{small\_area =} \StringTok{"subsection"}\NormalTok{,}
-    \AttributeTok{pop\_data =}\NormalTok{ tccpop,}
-    \AttributeTok{post\_strat\_data =}\NormalTok{ ps\_dat}
-\NormalTok{  )}
-\NormalTok{bayes\_area[(}\DecValTok{3} \SpecialCharTok{*} \FunctionTok{length}\NormalTok{(iw) }\SpecialCharTok{+} \DecValTok{1}\NormalTok{)}\SpecialCharTok{:}\NormalTok{(}\DecValTok{4} \SpecialCharTok{*} \FunctionTok{length}\NormalTok{(iw))] }\OtherTok{\textless{}{-}}
-  \FunctionTok{lapply}\NormalTok{(}
-\NormalTok{    iw,}
-\NormalTok{    hb\_area,}
-    \AttributeTok{formula =}\NormalTok{ VOLNLIVE\_TPA }\SpecialCharTok{\textasciitilde{}}\NormalTok{ nlcd11,}
-    \AttributeTok{small\_area =} \StringTok{"subsection"}\NormalTok{,}
-    \AttributeTok{pop\_data =}\NormalTok{ tccpop,}
-    \AttributeTok{post\_strat\_data =}\NormalTok{ ps\_dat}
-\NormalTok{  )}
+results <- results %>%
+  left_join(res_hbu, by = c("subsection" = "subsection",
+                        "response" = "response"))
+\end{verbatim}
+\begin{verbatim}
+# HB Area
+set.seed(1)
+bayes_area <- list()
+bayes_area[1:length(iw)] <-
+  lapply(
+    iw,
+    hb_area,
+    formula = BIOLIVE_TPA ~ nlcd11,
+    small_area = "subsection",
+    pop_data = tccpop,
+    post_strat_data = ps_dat
+  )
+bayes_area[(length(iw) + 1):(2 * length(iw))] <-
+  lapply(
+    iw,
+    hb_area,
+    formula = BALIVE_TPA ~ nlcd11,
+    small_area = "subsection",
+    pop_data = tccpop,
+    post_strat_data = ps_dat
+  )
+bayes_area[(2 * length(iw) + 1):(3 * length(iw))] <-
+  lapply(
+    iw,
+    hb_area,
+    formula = CNTLIVE_TPA ~ nlcd11,
+    small_area = "subsection",
+    pop_data = tccpop,
+    post_strat_data = ps_dat
+  )
+bayes_area[(3 * length(iw) + 1):(4 * length(iw))] <-
+  lapply(
+    iw,
+    hb_area,
+    formula = VOLNLIVE_TPA ~ nlcd11,
+    small_area = "subsection",
+    pop_data = tccpop,
+    post_strat_data = ps_dat
+  )
 
-\NormalTok{aranged\_df }\OtherTok{\textless{}{-}}\NormalTok{ intwest\_no0 }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{filter}\NormalTok{(province }\SpecialCharTok{\%in\%} \FunctionTok{names}\NormalTok{(iw)) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{arrange}\NormalTok{(province) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{arrange}\NormalTok{(subsection)}
-\NormalTok{hb\_area\_res }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
-  \AttributeTok{subsection =} \FunctionTok{rep}\NormalTok{(}\FunctionTok{unique}\NormalTok{(aranged\_df}\SpecialCharTok{$}\NormalTok{subsection), }\DecValTok{4}\NormalTok{),}
-  \AttributeTok{est\_hb\_area =} \FunctionTok{unlist}\NormalTok{(}\FunctionTok{lapply}\NormalTok{(bayes\_area, EST)),}
-  \AttributeTok{cov\_hb\_area =} \FunctionTok{unlist}\NormalTok{(}\FunctionTok{lapply}\NormalTok{(bayes\_area, hb\_CoV)),}
-  \AttributeTok{response =} \FunctionTok{c}\NormalTok{(}
-    \FunctionTok{rep}\NormalTok{(}\StringTok{"BIOLIVE\_TPA"}\NormalTok{, }\FunctionTok{length}\NormalTok{(post\_strat\_bio)),}
-    \FunctionTok{rep}\NormalTok{(}\StringTok{"BALIVE\_TPA"}\NormalTok{, }\FunctionTok{length}\NormalTok{(post\_strat\_ba)),}
-    \FunctionTok{rep}\NormalTok{(}\StringTok{"CNTLIVE\_TPA"}\NormalTok{, }\FunctionTok{length}\NormalTok{(post\_strat\_cnt)),}
-    \FunctionTok{rep}\NormalTok{(}\StringTok{"VOLNLIVE\_TPA"}\NormalTok{, }\FunctionTok{length}\NormalTok{(post\_strat\_voln))}
-\NormalTok{  )}
-\NormalTok{)}
+aranged_df <- intwest_no0 %>%
+  filter(province %in% names(iw)) %>%
+  arrange(province) %>%
+  arrange(subsection)
+hb_area_res <- data.frame(
+  subsection = rep(unique(aranged_df$subsection), 4),
+  est_hb_area = unlist(lapply(bayes_area, EST)),
+  cov_hb_area = unlist(lapply(bayes_area, hb_CoV)),
+  response = c(
+    rep("BIOLIVE_TPA", length(post_strat_bio)),
+    rep("BALIVE_TPA", length(post_strat_ba)),
+    rep("CNTLIVE_TPA", length(post_strat_cnt)),
+    rep("VOLNLIVE_TPA", length(post_strat_voln))
+  )
+)
 
-\NormalTok{results }\OtherTok{\textless{}{-}}\NormalTok{ results }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{left\_join}\NormalTok{(hb\_area\_res, }\AttributeTok{by =} \FunctionTok{c}\NormalTok{(}\StringTok{"subsection"} \OtherTok{=} \StringTok{"subsection"}\NormalTok{,}
-                                \StringTok{"response"} \OtherTok{=} \StringTok{"response"}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# Freq Unit}
-\FunctionTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
-\NormalTok{frequnit }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{()}
-\NormalTok{frequnit[}\DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(iw)] }\OtherTok{\textless{}{-}}
-  \FunctionTok{lapply}\NormalTok{(iw,}
-\NormalTok{         freq\_unit,}
-         \AttributeTok{formula =}\NormalTok{ BIOLIVE\_TPA }\SpecialCharTok{\textasciitilde{}}\NormalTok{ nlcd11,}
-         \StringTok{"subsection"}\NormalTok{,}
-\NormalTok{         tccpop)}
-\NormalTok{frequnit[(}\FunctionTok{length}\NormalTok{(iw) }\SpecialCharTok{+} \DecValTok{1}\NormalTok{)}\SpecialCharTok{:}\NormalTok{(}\DecValTok{2} \SpecialCharTok{*} \FunctionTok{length}\NormalTok{(iw))] }\OtherTok{\textless{}{-}}
-  \FunctionTok{lapply}\NormalTok{(iw,}
-\NormalTok{         freq\_unit,}
-         \AttributeTok{formula =}\NormalTok{ BALIVE\_TPA }\SpecialCharTok{\textasciitilde{}}\NormalTok{ nlcd11,}
-         \StringTok{"subsection"}\NormalTok{,}
-\NormalTok{         tccpop)}
-\NormalTok{frequnit[(}\DecValTok{2} \SpecialCharTok{*} \FunctionTok{length}\NormalTok{(iw) }\SpecialCharTok{+} \DecValTok{1}\NormalTok{)}\SpecialCharTok{:}\NormalTok{(}\DecValTok{3} \SpecialCharTok{*} \FunctionTok{length}\NormalTok{(iw))] }\OtherTok{\textless{}{-}}
-  \FunctionTok{lapply}\NormalTok{(iw, }
-\NormalTok{         freq\_unit,}
-         \AttributeTok{formula =}\NormalTok{ CNTLIVE\_TPA }\SpecialCharTok{\textasciitilde{}}\NormalTok{ nlcd11,}
-         \StringTok{"subsection"}\NormalTok{, }
-\NormalTok{         tccpop)}
-\NormalTok{frequnit[(}\DecValTok{3} \SpecialCharTok{*} \FunctionTok{length}\NormalTok{(iw) }\SpecialCharTok{+} \DecValTok{1}\NormalTok{)}\SpecialCharTok{:}\NormalTok{(}\DecValTok{4} \SpecialCharTok{*} \FunctionTok{length}\NormalTok{(iw))] }\OtherTok{\textless{}{-}}
-  \FunctionTok{lapply}\NormalTok{(iw,}
-\NormalTok{         freq\_unit,}
-         \AttributeTok{formula =}\NormalTok{ VOLNLIVE\_TPA }\SpecialCharTok{\textasciitilde{}}\NormalTok{ nlcd11,}
-         \StringTok{"subsection"}\NormalTok{,}
-\NormalTok{         tccpop)}
+results <- results %>%
+  left_join(hb_area_res, by = c("subsection" = "subsection",
+                                "response" = "response"))
+\end{verbatim}
+\begin{verbatim}
+# Freq Unit
+set.seed(1)
+frequnit <- list()
+frequnit[1:length(iw)] <-
+  lapply(iw,
+         freq_unit,
+         formula = BIOLIVE_TPA ~ nlcd11,
+         "subsection",
+         tccpop)
+frequnit[(length(iw) + 1):(2 * length(iw))] <-
+  lapply(iw,
+         freq_unit,
+         formula = BALIVE_TPA ~ nlcd11,
+         "subsection",
+         tccpop)
+frequnit[(2 * length(iw) + 1):(3 * length(iw))] <-
+  lapply(iw, 
+         freq_unit,
+         formula = CNTLIVE_TPA ~ nlcd11,
+         "subsection", 
+         tccpop)
+frequnit[(3 * length(iw) + 1):(4 * length(iw))] <-
+  lapply(iw,
+         freq_unit,
+         formula = VOLNLIVE_TPA ~ nlcd11,
+         "subsection",
+         tccpop)
 
-\NormalTok{frequnit\_list }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{()}
-  \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{(}\DecValTok{4} \SpecialCharTok{*} \FunctionTok{length}\NormalTok{(iw))) \{}
-\NormalTok{    frequnit\_list[[i]] }\OtherTok{\textless{}{-}}\NormalTok{ frequnit[[i]]}\SpecialCharTok{$}\NormalTok{eblup}
-\NormalTok{  \}}
+frequnit_list <- list()
+  for(i in 1:(4 * length(iw))) {
+    frequnit_list[[i]] <- frequnit[[i]]$eblup
+  }
 
-\NormalTok{frequnit\_df }\OtherTok{\textless{}{-}}\NormalTok{ frequnit\_list }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{bind\_rows}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{response =} \FunctionTok{c}\NormalTok{(}
-    \FunctionTok{rep}\NormalTok{(}\StringTok{"BIOLIVE\_TPA"}\NormalTok{, }\FunctionTok{length}\NormalTok{(post\_strat\_bio)),}
-    \FunctionTok{rep}\NormalTok{(}\StringTok{"BALIVE\_TPA"}\NormalTok{, }\FunctionTok{length}\NormalTok{(post\_strat\_ba)),}
-    \FunctionTok{rep}\NormalTok{(}\StringTok{"CNTLIVE\_TPA"}\NormalTok{, }\FunctionTok{length}\NormalTok{(post\_strat\_cnt)),}
-    \FunctionTok{rep}\NormalTok{(}\StringTok{"VOLNLIVE\_TPA"}\NormalTok{, }\FunctionTok{length}\NormalTok{(post\_strat\_voln)))) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{rename}\NormalTok{(}
-    \AttributeTok{subsection =}\NormalTok{ domain,}
-    \AttributeTok{est\_freq\_unit =}\NormalTok{ eblup}
-\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{sampsize)}
+frequnit_df <- frequnit_list %>%
+  bind_rows() %>%
+  mutate(response = c(
+    rep("BIOLIVE_TPA", length(post_strat_bio)),
+    rep("BALIVE_TPA", length(post_strat_ba)),
+    rep("CNTLIVE_TPA", length(post_strat_cnt)),
+    rep("VOLNLIVE_TPA", length(post_strat_voln)))) %>%
+  rename(
+    subsection = domain,
+    est_freq_unit = eblup
+  ) %>%
+  dplyr::select(-sampsize)
 
-\CommentTok{\# Coef of variation}
-\NormalTok{frequnitcov }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{()}
-\NormalTok{frequnitcov }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}
-  \FunctionTok{Reduce}\NormalTok{(c,}
-       \FunctionTok{lapply}\NormalTok{(iw,}
-\NormalTok{       freq\_unit\_CoV,}
-       \AttributeTok{formula =}\NormalTok{ BIOLIVE\_TPA }\SpecialCharTok{\textasciitilde{}}\NormalTok{ nlcd11,}
-       \AttributeTok{small\_area =} \StringTok{"subsection"}\NormalTok{,}
-       \AttributeTok{pop\_data =}\NormalTok{ tccpop,}
-       \AttributeTok{B =} \DecValTok{500}\NormalTok{)),}
-  \FunctionTok{Reduce}\NormalTok{(c,}
-       \FunctionTok{lapply}\NormalTok{(iw,}
-\NormalTok{       freq\_unit\_CoV,}
-       \AttributeTok{formula =}\NormalTok{ BALIVE\_TPA }\SpecialCharTok{\textasciitilde{}}\NormalTok{ nlcd11,}
-       \AttributeTok{small\_area =} \StringTok{"subsection"}\NormalTok{,}
-       \AttributeTok{pop\_data =}\NormalTok{ tccpop,}
-       \AttributeTok{B =} \DecValTok{500}\NormalTok{)),}
-  \FunctionTok{Reduce}\NormalTok{(c,}
-       \FunctionTok{lapply}\NormalTok{(iw,}
-\NormalTok{       freq\_unit\_CoV,}
-       \AttributeTok{formula =}\NormalTok{ CNTLIVE\_TPA }\SpecialCharTok{\textasciitilde{}}\NormalTok{ nlcd11,}
-       \AttributeTok{small\_area =} \StringTok{"subsection"}\NormalTok{,}
-       \AttributeTok{pop\_data =}\NormalTok{ tccpop,}
-       \AttributeTok{B =} \DecValTok{500}\NormalTok{)),}
-  \FunctionTok{Reduce}\NormalTok{(c,}
-       \FunctionTok{lapply}\NormalTok{(iw,}
-\NormalTok{       freq\_unit\_CoV,}
-       \AttributeTok{formula =}\NormalTok{ VOLNLIVE\_TPA }\SpecialCharTok{\textasciitilde{}}\NormalTok{ nlcd11,}
-       \AttributeTok{small\_area =} \StringTok{"subsection"}\NormalTok{,}
-       \AttributeTok{pop\_data =}\NormalTok{ tccpop,}
-       \AttributeTok{B =} \DecValTok{500}\NormalTok{))}
-\NormalTok{)}
+# Coef of variation
+frequnitcov <- c()
+frequnitcov <- c(
+  Reduce(c,
+       lapply(iw,
+       freq_unit_CoV,
+       formula = BIOLIVE_TPA ~ nlcd11,
+       small_area = "subsection",
+       pop_data = tccpop,
+       B = 500)),
+  Reduce(c,
+       lapply(iw,
+       freq_unit_CoV,
+       formula = BALIVE_TPA ~ nlcd11,
+       small_area = "subsection",
+       pop_data = tccpop,
+       B = 500)),
+  Reduce(c,
+       lapply(iw,
+       freq_unit_CoV,
+       formula = CNTLIVE_TPA ~ nlcd11,
+       small_area = "subsection",
+       pop_data = tccpop,
+       B = 500)),
+  Reduce(c,
+       lapply(iw,
+       freq_unit_CoV,
+       formula = VOLNLIVE_TPA ~ nlcd11,
+       small_area = "subsection",
+       pop_data = tccpop,
+       B = 500))
+)
 
-\NormalTok{frequnitcov\_df }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
-  \AttributeTok{cov\_freq\_unit =}\NormalTok{ frequnitcov,}
-  \AttributeTok{subsection =} \FunctionTok{names}\NormalTok{(frequnitcov),}
-  \AttributeTok{response =} \FunctionTok{c}\NormalTok{(}
-    \FunctionTok{rep}\NormalTok{(}\StringTok{"BIOLIVE\_TPA"}\NormalTok{, }\FunctionTok{length}\NormalTok{(post\_strat\_bio)),}
-    \FunctionTok{rep}\NormalTok{(}\StringTok{"BALIVE\_TPA"}\NormalTok{, }\FunctionTok{length}\NormalTok{(post\_strat\_ba)),}
-    \FunctionTok{rep}\NormalTok{(}\StringTok{"CNTLIVE\_TPA"}\NormalTok{, }\FunctionTok{length}\NormalTok{(post\_strat\_cnt)),}
-    \FunctionTok{rep}\NormalTok{(}\StringTok{"VOLNLIVE\_TPA"}\NormalTok{, }\FunctionTok{length}\NormalTok{(post\_strat\_voln))}
-\NormalTok{  )}
-\NormalTok{)}
+frequnitcov_df <- data.frame(
+  cov_freq_unit = frequnitcov,
+  subsection = names(frequnitcov),
+  response = c(
+    rep("BIOLIVE_TPA", length(post_strat_bio)),
+    rep("BALIVE_TPA", length(post_strat_ba)),
+    rep("CNTLIVE_TPA", length(post_strat_cnt)),
+    rep("VOLNLIVE_TPA", length(post_strat_voln))
+  )
+)
 
-\NormalTok{frequnit\_df }\OtherTok{\textless{}{-}}\NormalTok{ frequnit\_df }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{left\_join}\NormalTok{(frequnitcov\_df,}
-            \AttributeTok{by =} \FunctionTok{c}\NormalTok{(}\StringTok{"subsection"} \OtherTok{=} \StringTok{"subsection"}\NormalTok{,}
-                   \StringTok{"response"} \OtherTok{=} \StringTok{"response"}\NormalTok{))}
+frequnit_df <- frequnit_df %>%
+  left_join(frequnitcov_df,
+            by = c("subsection" = "subsection",
+                   "response" = "response"))
 
-\NormalTok{results }\OtherTok{\textless{}{-}}\NormalTok{ results }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{left\_join}\NormalTok{(frequnit\_df,}
-            \AttributeTok{by =} \FunctionTok{c}\NormalTok{(}\StringTok{"subsection"} \OtherTok{=} \StringTok{"subsection"}\NormalTok{,}
-                   \StringTok{"response"} \OtherTok{=} \StringTok{"response"}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# Freq Area}
-\FunctionTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
-\NormalTok{freqarea }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{()}
-\NormalTok{freqarea[}\DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(iw)] }\OtherTok{\textless{}{-}}
-  \FunctionTok{lapply}\NormalTok{(}
-\NormalTok{    iw,}
-\NormalTok{    freq\_area,}
-    \AttributeTok{formula =}\NormalTok{ BIOLIVE\_TPA }\SpecialCharTok{\textasciitilde{}}\NormalTok{ nlcd11,}
-    \StringTok{"subsection"}\NormalTok{,}
-\NormalTok{    tccpop,}
-    \AttributeTok{post\_strat\_data =}\NormalTok{ ps\_dat}
-\NormalTok{)}
-\NormalTok{freqarea[(}\FunctionTok{length}\NormalTok{(iw) }\SpecialCharTok{+} \DecValTok{1}\NormalTok{)}\SpecialCharTok{:}\NormalTok{(}\DecValTok{2} \SpecialCharTok{*} \FunctionTok{length}\NormalTok{(iw))] }\OtherTok{\textless{}{-}} 
-  \FunctionTok{lapply}\NormalTok{(}
-\NormalTok{    iw,}
-\NormalTok{    freq\_area,}
-    \AttributeTok{formula =}\NormalTok{ BALIVE\_TPA }\SpecialCharTok{\textasciitilde{}}\NormalTok{ nlcd11,}
-    \StringTok{"subsection"}\NormalTok{,}
-\NormalTok{    tccpop,}
-    \AttributeTok{post\_strat\_data =}\NormalTok{ ps\_dat}
-\NormalTok{)}
-\NormalTok{freqarea[(}\DecValTok{2} \SpecialCharTok{*} \FunctionTok{length}\NormalTok{(iw) }\SpecialCharTok{+} \DecValTok{1}\NormalTok{)}\SpecialCharTok{:}\NormalTok{(}\DecValTok{3} \SpecialCharTok{*} \FunctionTok{length}\NormalTok{(iw))] }\OtherTok{\textless{}{-}}
-  \FunctionTok{lapply}\NormalTok{(}
-\NormalTok{    iw,}
-\NormalTok{    freq\_area,}
-    \AttributeTok{formula =}\NormalTok{ CNTLIVE\_TPA }\SpecialCharTok{\textasciitilde{}}\NormalTok{ nlcd11,}
-    \StringTok{"subsection"}\NormalTok{,}
-\NormalTok{    tccpop,}
-    \AttributeTok{post\_strat\_data =}\NormalTok{ ps\_dat}
-\NormalTok{)}
-\NormalTok{freqarea[(}\DecValTok{3} \SpecialCharTok{*} \FunctionTok{length}\NormalTok{(iw) }\SpecialCharTok{+} \DecValTok{1}\NormalTok{)}\SpecialCharTok{:}\NormalTok{(}\DecValTok{4} \SpecialCharTok{*} \FunctionTok{length}\NormalTok{(iw))] }\OtherTok{\textless{}{-}}
-  \FunctionTok{lapply}\NormalTok{(}
-\NormalTok{    iw,}
-\NormalTok{    freq\_area,}
-    \AttributeTok{formula =}\NormalTok{ VOLNLIVE\_TPA }\SpecialCharTok{\textasciitilde{}}\NormalTok{ nlcd11,}
-    \StringTok{"subsection"}\NormalTok{,}
-\NormalTok{    tccpop,}
-    \AttributeTok{post\_strat\_data =}\NormalTok{ ps\_dat}
-\NormalTok{)}
+results <- results %>%
+  left_join(frequnit_df,
+            by = c("subsection" = "subsection",
+                   "response" = "response"))
+\end{verbatim}
+\begin{verbatim}
+# Freq Area
+set.seed(1)
+freqarea <- list()
+freqarea[1:length(iw)] <-
+  lapply(
+    iw,
+    freq_area,
+    formula = BIOLIVE_TPA ~ nlcd11,
+    "subsection",
+    tccpop,
+    post_strat_data = ps_dat
+)
+freqarea[(length(iw) + 1):(2 * length(iw))] <- 
+  lapply(
+    iw,
+    freq_area,
+    formula = BALIVE_TPA ~ nlcd11,
+    "subsection",
+    tccpop,
+    post_strat_data = ps_dat
+)
+freqarea[(2 * length(iw) + 1):(3 * length(iw))] <-
+  lapply(
+    iw,
+    freq_area,
+    formula = CNTLIVE_TPA ~ nlcd11,
+    "subsection",
+    tccpop,
+    post_strat_data = ps_dat
+)
+freqarea[(3 * length(iw) + 1):(4 * length(iw))] <-
+  lapply(
+    iw,
+    freq_area,
+    formula = VOLNLIVE_TPA ~ nlcd11,
+    "subsection",
+    tccpop,
+    post_strat_data = ps_dat
+)
 
-\NormalTok{freqarea\_list }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{()}
-\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{(}\DecValTok{4} \SpecialCharTok{*} \FunctionTok{length}\NormalTok{(iw))) \{}
-\NormalTok{  freqarea\_list[[i]] }\OtherTok{\textless{}{-}}\NormalTok{ freqarea[[i]]}\SpecialCharTok{$}\NormalTok{est}\SpecialCharTok{$}\NormalTok{eblup}
-\NormalTok{\}}
-\NormalTok{freqarea\_cov\_list }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{()}
-\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{(}\DecValTok{4} \SpecialCharTok{*} \FunctionTok{length}\NormalTok{(iw))) \{}
-\NormalTok{  freqarea\_cov\_list[[i]] }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(freqarea[[i]]}\SpecialCharTok{$}\NormalTok{mse)}
-\NormalTok{\}}
+freqarea_list <- list()
+for (i in 1:(4 * length(iw))) {
+  freqarea_list[[i]] <- freqarea[[i]]$est$eblup
+}
+freqarea_cov_list <- list()
+for (i in 1:(4 * length(iw))) {
+  freqarea_cov_list[[i]] <- sqrt(freqarea[[i]]$mse)
+}
 
-\NormalTok{freq\_area\_res }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
-  \AttributeTok{subsection =} \FunctionTok{rep}\NormalTok{(}\FunctionTok{unique}\NormalTok{(aranged\_df}\SpecialCharTok{$}\NormalTok{subsection), }\DecValTok{4}\NormalTok{),}
-  \AttributeTok{est\_freq\_area =} \FunctionTok{unlist}\NormalTok{(freqarea\_list),}
-  \AttributeTok{se\_freq\_area =} \FunctionTok{unlist}\NormalTok{(freqarea\_cov\_list),}
-  \AttributeTok{response =} \FunctionTok{c}\NormalTok{(}
-    \FunctionTok{rep}\NormalTok{(}\StringTok{"BIOLIVE\_TPA"}\NormalTok{, }\FunctionTok{length}\NormalTok{(post\_strat\_bio)),}
-    \FunctionTok{rep}\NormalTok{(}\StringTok{"BALIVE\_TPA"}\NormalTok{, }\FunctionTok{length}\NormalTok{(post\_strat\_ba)),}
-    \FunctionTok{rep}\NormalTok{(}\StringTok{"CNTLIVE\_TPA"}\NormalTok{, }\FunctionTok{length}\NormalTok{(post\_strat\_cnt)),}
-    \FunctionTok{rep}\NormalTok{(}\StringTok{"VOLNLIVE\_TPA"}\NormalTok{, }\FunctionTok{length}\NormalTok{(post\_strat\_voln))}
-\NormalTok{  )}
-\NormalTok{)}
-\NormalTok{results }\OtherTok{\textless{}{-}}\NormalTok{ results }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{left\_join}\NormalTok{(freq\_area\_res,}
-            \AttributeTok{by =} \FunctionTok{c}\NormalTok{(}\StringTok{"subsection"} \OtherTok{=} \StringTok{"subsection"}\NormalTok{,}
-                   \StringTok{"response"} \OtherTok{=} \StringTok{"response"}\NormalTok{))}
-\NormalTok{results }\OtherTok{\textless{}{-}}\NormalTok{ results }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{cov\_freq\_area =}\NormalTok{ se\_freq\_area }\SpecialCharTok{/}\NormalTok{ est\_dirmean)}
-\end{Highlighting}
-\end{Shaded}
+freq_area_res <- data.frame(
+  subsection = rep(unique(aranged_df$subsection), 4),
+  est_freq_area = unlist(freqarea_list),
+  se_freq_area = unlist(freqarea_cov_list),
+  response = c(
+    rep("BIOLIVE_TPA", length(post_strat_bio)),
+    rep("BALIVE_TPA", length(post_strat_ba)),
+    rep("CNTLIVE_TPA", length(post_strat_cnt)),
+    rep("VOLNLIVE_TPA", length(post_strat_voln))
+  )
+)
+results <- results %>%
+  left_join(freq_area_res,
+            by = c("subsection" = "subsection",
+                   "response" = "response"))
+results <- results %>%
+  mutate(cov_freq_area = se_freq_area / est_dirmean)
+\end{verbatim}
 \hypertarget{writing-data-files-pivoting-to-tidy-format}{%
 \subsection{Writing Data Files \& Pivoting to Tidy Format}\label{writing-data-files-pivoting-to-tidy-format}}
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{write.csv}\NormalTok{(results, }
-          \StringTok{"data/results/final\_results.csv"}\NormalTok{)}
-\FunctionTok{saveRDS}\NormalTok{(results,}
-        \AttributeTok{file =} \StringTok{"data/results/final\_results.rds"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{estimates\_long }\OtherTok{\textless{}{-}}\NormalTok{ results }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{pivot\_longer}\NormalTok{(}\AttributeTok{cols =} \FunctionTok{c}\NormalTok{(}\StringTok{"est\_hb\_unit"}\NormalTok{, }\StringTok{"est\_hb\_area"}\NormalTok{,}
-                        \StringTok{"est\_freq\_unit"}\NormalTok{, }\StringTok{"est\_freq\_area"}\NormalTok{, }
-                        \StringTok{"est\_dirmean"}\NormalTok{, }\StringTok{"est\_dirps"}\NormalTok{),}
-               \AttributeTok{names\_to =} \StringTok{"estimator"}\NormalTok{,}
-               \AttributeTok{values\_to =} \StringTok{"estimate"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{cov\_hb\_unit, }\SpecialCharTok{{-}}\NormalTok{cov\_hb\_area,}
-                \SpecialCharTok{{-}}\NormalTok{cov\_freq\_unit, }\SpecialCharTok{{-}}\NormalTok{cov\_freq\_area,}
-                \SpecialCharTok{{-}}\NormalTok{cov\_dirmean, }\SpecialCharTok{{-}}\NormalTok{cov\_dirps) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{estimator =}\NormalTok{ stringr}\SpecialCharTok{::}\FunctionTok{str\_sub}\NormalTok{(estimator, }\AttributeTok{start =} \DecValTok{5}\NormalTok{))}
+\begin{verbatim}
+write.csv(results, 
+          "data/results/final_results.csv")
+saveRDS(results,
+        file = "data/results/final_results.rds")
+\end{verbatim}
+\begin{verbatim}
+estimates_long <- results %>%
+  pivot_longer(cols = c("est_hb_unit", "est_hb_area",
+                        "est_freq_unit", "est_freq_area", 
+                        "est_dirmean", "est_dirps"),
+               names_to = "estimator",
+               values_to = "estimate") %>%
+  dplyr::select(-cov_hb_unit, -cov_hb_area,
+                -cov_freq_unit, -cov_freq_area,
+                -cov_dirmean, -cov_dirps) %>%
+  mutate(estimator = stringr::str_sub(estimator, start = 5))
 
-\NormalTok{cov\_long }\OtherTok{\textless{}{-}}\NormalTok{ results }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{pivot\_longer}\NormalTok{(}\AttributeTok{cols =} \FunctionTok{c}\NormalTok{(}\StringTok{"cov\_hb\_unit"}\NormalTok{, }\StringTok{"cov\_hb\_area"}\NormalTok{,}
-                        \StringTok{"cov\_freq\_unit"}\NormalTok{, }\StringTok{"cov\_freq\_area"}\NormalTok{,}
-                        \StringTok{"cov\_dirmean"}\NormalTok{, }\StringTok{"cov\_dirps"}\NormalTok{),}
-               \AttributeTok{names\_to =} \StringTok{"estimator"}\NormalTok{,}
-               \AttributeTok{values\_to =} \StringTok{"cov"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{est\_hb\_unit, }\SpecialCharTok{{-}}\NormalTok{est\_hb\_area,}
-                \SpecialCharTok{{-}}\NormalTok{est\_freq\_unit, }\SpecialCharTok{{-}}\NormalTok{est\_freq\_area,}
-                \SpecialCharTok{{-}}\NormalTok{est\_dirmean, }\SpecialCharTok{{-}}\NormalTok{est\_dirps) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{estimator =}\NormalTok{ stringr}\SpecialCharTok{::}\FunctionTok{str\_sub}\NormalTok{(estimator, }\AttributeTok{start =} \DecValTok{5}\NormalTok{))}
+cov_long <- results %>%
+  pivot_longer(cols = c("cov_hb_unit", "cov_hb_area",
+                        "cov_freq_unit", "cov_freq_area",
+                        "cov_dirmean", "cov_dirps"),
+               names_to = "estimator",
+               values_to = "cov") %>%
+  dplyr::select(-est_hb_unit, -est_hb_area,
+                -est_freq_unit, -est_freq_area,
+                -est_dirmean, -est_dirps) %>%
+  mutate(estimator = stringr::str_sub(estimator, start = 5))
 
-\NormalTok{final\_results\_long }\OtherTok{\textless{}{-}}\NormalTok{ estimates\_long }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{full\_join}\NormalTok{(cov\_long) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{mutate}\NormalTok{(}
-    \AttributeTok{section =} \FunctionTok{str\_remove\_all}\NormalTok{(subsection, }\StringTok{"[:lower:]"}\NormalTok{),}
-    \AttributeTok{province =} \FunctionTok{str\_sub}\NormalTok{(section, }\AttributeTok{end =} \SpecialCharTok{{-}}\DecValTok{2}\NormalTok{)}
-\NormalTok{  )}
+final_results_long <- estimates_long %>%
+  full_join(cov_long) %>%
+  mutate(
+    section = str_remove_all(subsection, "[:lower:]"),
+    province = str_sub(section, end = -2)
+  )
 
-\NormalTok{final\_results\_long }\OtherTok{\textless{}{-}}\NormalTok{ final\_results\_long }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{sd\_dirps, }\SpecialCharTok{{-}}\NormalTok{se\_freq\_area)}
-\end{Highlighting}
-\end{Shaded}
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{write.csv}\NormalTok{(final\_results\_long,}
-          \StringTok{"data/results/final\_results\_long.csv"}\NormalTok{)}
-\FunctionTok{saveRDS}\NormalTok{(final\_results\_long,}
-        \AttributeTok{file =} \StringTok{"data/results/final\_results\_long.rds"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
+final_results_long <- final_results_long %>%
+  dplyr::select(-sd_dirps, -se_freq_area)
+\end{verbatim}
+\begin{verbatim}
+write.csv(final_results_long,
+          "data/results/final_results_long.csv")
+saveRDS(final_results_long,
+        file = "data/results/final_results_long.rds")
+\end{verbatim}
 \backmatter
 
 \hypertarget{references}{%

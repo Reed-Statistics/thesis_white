@@ -35,10 +35,10 @@
 \contentsline {subsection}{\numberline {A.1.4}Hierarchical Bayesian Area-Level}{54}{subsection.A.1.4}%
 \contentsline {subsection}{\numberline {A.1.5}Frequentist Unit-Level}{55}{subsection.A.1.5}%
 \contentsline {subsection}{\numberline {A.1.6}Frequentist Area-Level}{56}{subsection.A.1.6}%
-\contentsline {subsection}{\numberline {A.1.7}Coeffiicent of Variation Functions}{57}{subsection.A.1.7}%
+\contentsline {subsection}{\numberline {A.1.7}Coeffiicent of Variation Functions}{56}{subsection.A.1.7}%
 \contentsline {section}{\numberline {A.2}Fitting Models}{58}{section.A.2}%
 \contentsline {subsection}{\numberline {A.2.1}Data Set-up \& Preprocessing}{58}{subsection.A.2.1}%
 \contentsline {subsection}{\numberline {A.2.2}Direct Estimation}{59}{subsection.A.2.2}%
-\contentsline {subsection}{\numberline {A.2.3}Model-Based Estimation}{62}{subsection.A.2.3}%
+\contentsline {subsection}{\numberline {A.2.3}Model-Based Estimation}{61}{subsection.A.2.3}%
 \contentsline {subsection}{\numberline {A.2.4}Writing Data Files \& Pivoting to Tidy Format}{68}{subsection.A.2.4}%
-\contentsline {chapter}{References}{71}{appendix*.29}%
+\contentsline {chapter}{References}{69}{appendix*.29}%
