@@ -258,10 +258,26 @@ Overall, we can see that the frequentist area-level estimator performs much more
 
 When we narrow our vision to the Northern Rocky Forest it does seem like the area-level hierarchical Bayesian estimator clearly outperforms the analogous frequentist estimator. However, we must return to the Interior West in order to understand trends of estimator performance over space. To do this, we simply examine the eco-subsections in which the area-level hierarchical Bayesian estimator has lower variance than the post-stratified estimator and the area-level EBLUP:
 
-```{r, warning = F, message = F, echo = F, fig.align="center", fig.cap = "The area-level hierarcical Bayesian estimator's coefficient of variation compared with the coefficient of variation for the post-stratified estimator (left) and area-level EBLUP (right). Eco-subsections in seafoam green indicate areas where the coefficient of variation is lower for the area-level hierarchical Bayesian estimator, red areas indicate that the coefficient of variation of the hierarchical Bayesian estimator is greater than the estimator we are comparing it to. Grey areas indicate areas where we did not fit these estimators.", fig.scap = "Area-level coefficient of variation comparison across the Interior West"}
-p1 <- res_sf %>%
-  mutate(hb_area_l_dirps = cov_hb_area < cov_dirps) %>%
-  ggplot(mapping = aes(fill = hb_area_l_dirps,
+```{r, warning = F, message = F, echo = F, fig.align="center", fig.cap = "The area-level hierarcical Bayesian estimator's coefficient of variation compared with the coefficient of variation for the post-stratified estimator (left) and area-level EBLUP (right). These are the average coefficient of variation across the four response variables studied. Eco-subsections in seafoam green indicate areas where the coefficient of variation is lower for the area-level hierarchical Bayesian estimator, red areas indicate that the coefficient of variation of the hierarchical Bayesian estimator is greater than the estimator we are comparing it to. Grey areas indicate areas where we did not fit these estimators.", fig.scap = "Area-level coefficient of variation comparison across the Interior West"}
+comparison_df <- res %>%
+  group_by(subsection) %>%
+  summarize(cov_hb_area = mean(cov_hb_area),
+            cov_dirps = mean(cov_dirps),
+            cov_hb_unit = mean(cov_hb_unit),
+            cov_freq_area = mean(cov_freq_area),
+            cov_freq_unit = mean(cov_freq_unit)) %>%
+  mutate(hba_ps = cov_hb_area < cov_dirps,
+         hba_fra = cov_hb_area < cov_freq_area,
+         hbu_ps = cov_hb_unit < cov_dirps,
+         hbu_fru = cov_hb_unit < cov_freq_unit) 
+
+comparison_geometry <- res_sf %>%
+  filter(response %in% c("BIOLIVE_TPA", NA)) %>% #get down to one response variable
+  select(subsection, geometry) %>%
+  full_join(comparison_df)
+
+p1 <- comparison_geometry %>%
+  ggplot(mapping = aes(fill = hba_ps,
                        geometry = geometry)) +
   geom_sf(color = "grey30") +
   scale_fill_manual(values = c("#BF4C27", "#80BCA2"), na.value = "grey") +
@@ -271,9 +287,8 @@ p1 <- res_sf %>%
   theme(legend.position = "bottom",
         plot.title = element_text(hjust = 0.5)) 
 
-p2 <- res_sf %>%
-  mutate(hb_area_l_freq_area = cov_hb_area < cov_freq_area) %>%
-  ggplot(mapping = aes(fill = hb_area_l_freq_area,
+p2 <- comparison_geometry %>%
+  ggplot(mapping = aes(fill = hba_fra,
                        geometry = geometry)) +
   geom_sf(color = "grey30") +
   scale_fill_manual(values = c("#BF4C27", "#80BCA2"), na.value = "grey") +
@@ -284,7 +299,7 @@ p2 <- res_sf %>%
 
 (p1 + p2) + plot_layout(guides = 'collect') & theme(legend.position = "bottom")
 ```
-Generally, we continue to see the trend in Figure \@ref(fig:cv-map) where the area-level hierarchical Bayesian estimator producing estimates with higher variance in heavily deserted areas in the southern parts of the Interior West and deserts in the north parts of Nevada. The areas in which the area-level hierarchical Bayesian estimator has more variation than the post-stratified estimator and the area-level EBLUP are clearly non-randomly distributed across the Interior West. This gives us great insight as to where we may want to use this hierarchical Bayesian estimator and further supports our idea that the area-level hierarchical Bayesian estimator has a high coefficient of variation in non-forested areas. 
+Generally, we continue to see the trend in Figure \@ref(fig:cv-map) where the area-level hierarchical Bayesian estimator producing estimates with higher variance in heavily deserted areas such as the southern parts of the Interior West and deserts in parts of Nevada. The areas in which the area-level hierarchical Bayesian estimator has more variation than the post-stratified estimator and the area-level EBLUP are clearly non-randomly distributed across the Interior West. This gives us great insight as to where we may want to use this hierarchical Bayesian estimator and further supports our idea that the area-level hierarchical Bayesian estimator has a high coefficient of variation in non-forested areas. These estimates are of the average coefficient of variation across our four response variables for each eco-subsection, and notably in 83.5% and 82.5% of these areas we see a decrease in the average coefficient of variation from the area-level hierarchical Bayesian estimator to the post-stratified estimator and the area-level EBLUP, respectively. 
 
 We have largely discussed the variance of these estimators thus far, as we cannot know the true bias of an estimator without knowing the population parameters $\mu_{y_j}$ in each eco-subsection. However, in an attempt to quantify the magnitude of difference between two estimators we introduce percent relative difference, which we define below.
 \begin{align*}
@@ -324,10 +339,9 @@ knitr::kable(
 ```
 \clearpage
 We immediately see that the unit-level hierarchical Bayesian estimator is extremely similar to the unit-level EBLUP. That is, many of their estimates are within just a few percent difference compared to the unit-level EBLUP. This is because the data (or, likelihood) outweighs any prior information we gave the this model to a large degree. At the unit level we have so many observations that any reasonable prior has a negligible effect on the estimator's results. This illustrates the idea that under "flat" or "uninformative" priors that the hierarchical Bayesian estimates will converge to the analogous EBLUP estimator's estimates. Also, recall that not only the estimates should converge to the same point, but the variance should as well. We can see this illustrated in Figure \@ref(fig:cov-violin) and below:
-```{r, warning = F, message = F, echo = F, fig.align="center", fig.cap = "The unit-level hierarcical Bayesian estimator's coefficient of variation compared with the coefficient of variation for the post-stratified estimator (left) and unit-level EBLUP (right). Eco-subsections in seafoam green indicate areas where the coefficient of variation is lower for the unit-level hierarchical Bayesian estimator, red areas indicate that the coefficient of variation of the hierarchical Bayesian estimator is greater than the estimator we are comparing it to. Grey areas indicate areas where we did not fit these estimators.", fig.scap = "Unit-level coefficient of variation comparison across the Interior West"}
-p3 <- res_sf %>%
-  mutate(hb_area_l_dirps = cov_hb_unit < cov_dirps) %>%
-  ggplot(mapping = aes(fill = hb_area_l_dirps,
+```{r, warning = F, message = F, echo = F, fig.align="center", fig.cap = "The unit-level hierarcical Bayesian estimator's coefficient of variation compared with the coefficient of variation for the post-stratified estimator (left) and unit-level EBLUP (right). These are the average coefficient of variation across the four response variables studied. Eco-subsections in seafoam green indicate areas where the coefficient of variation is lower for the unit-level hierarchical Bayesian estimator, red areas indicate that the coefficient of variation of the hierarchical Bayesian estimator is greater than the estimator we are comparing it to. Grey areas indicate areas where we did not fit these estimators.", fig.scap = "Unit-level coefficient of variation comparison across the Interior West"}
+p3 <- comparison_geometry %>%
+  ggplot(mapping = aes(fill = hbu_ps,
                        geometry = geometry)) +
   geom_sf(color = "grey30") +
   scale_fill_manual(values = c("#BF4C27", "#80BCA2"), na.value = "grey") +
@@ -336,9 +350,8 @@ p3 <- res_sf %>%
   theme(legend.position = "bottom",
         plot.title = element_text(hjust = 0.5)) 
 
-p4 <- res_sf %>%
-  mutate(hb_area_l_freq_area = cov_hb_unit < cov_freq_unit) %>%
-  ggplot(mapping = aes(fill = hb_area_l_freq_area,
+p4 <- comparison_geometry %>%
+  ggplot(mapping = aes(fill = hbu_fru,
                        geometry = geometry)) +
   geom_sf(color = "grey30") +
   scale_fill_manual(values = c("#BF4C27", "#80BCA2"), na.value = "grey") +
