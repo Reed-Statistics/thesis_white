@@ -43,7 +43,6 @@ csl: csl/apa.csl
 lot: true
 lof: true
 ---
-
 ```{r include_packages, include=FALSE}
 # This chunk ensures that the thesisdown package is
 # installed and loaded. This thesisdown package includes
