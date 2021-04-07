@@ -23,7 +23,6 @@
 \contentsline {chapter}{Chapter 4: Results}{31}{chapter.4}%
 \contentsline {section}{\numberline {4.1}The Big Picture}{32}{section.4.1}%
 \contentsline {section}{\numberline {4.2}Zooming In: The Northern Rocky Forest}{37}{section.4.2}%
-\contentsline {section}{\numberline {4.3}Stepping Back}{39}{section.4.3}%
 \contentsline {chapter}{Chapter 5: Discussion}{45}{chapter.5}%
 \contentsline {section}{\numberline {5.1}Findings and Takeaways}{45}{section.5.1}%
 \contentsline {section}{\numberline {5.2}Limitations}{45}{section.5.2}%

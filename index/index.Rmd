@@ -1,5 +1,8 @@
 ---
-title: 'A Hierarchical Bayesian Approach to Small Area Estimation of Forest Attributes'
+title: |- 
+  A Hierarchical Bayesian Approach to 
+  
+  Small Area Estimation of Forest Attributes
 author: 'Grayson White'
 date: 'May 2021'
 institution: 'Reed College'

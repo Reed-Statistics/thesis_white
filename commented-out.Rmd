@@ -1,0 +1,40 @@
+---
+title: "Commented Out Ideas"
+output: html_document
+---
+
+Context:
+
+<!-- The remainder of the content within this thesis is organized as follows:  -->
+
+
+
+<!-- The amount of information used from outside areas is decided by the posterior density of ratio of the between-area variance and the within-area variance. -->
+
+<!-- *provides background material on the topic and other approaches, and identifies what is added by this thesis* -->
+<!-- To implement these models, there are two statistical schools of thought: frequentist methods and Bayesian methods. Frequentist models are the most common for estimation of forest attributes in small area estimation [CITE LOTS OF PAPERS HERE]. However, Bayesian methods have been used at the area-level for small area estunation of of forest attributes [@ver2017]. While frequentist methods are often viewed as the "default" method for doing small area estimation, there are many benefits of tackling these problems from a Bayesian perspective. Notably, Bayesian estimation utilizes prior distributions which allow us to quantify our prior uncertainty about the values of each parameter.  -->
+
+Data:
+
+(Instead of the data structures figure)
+
+# idaho <- us_boundaries(type = "state",
+#                          states = "ID")
+# 
+# id <- st_intersection(idaho, subsections)
+# idsection <- ggplot() +
+#   geom_sf(data = id,
+#           mapping = aes(fill = SECTION)) +
+#   scale_fill_viridis_d(option = "A") +
+#   theme_void() +
+#   theme(legend.position = "none")
+# idprov <- ggplot() +
+#   geom_sf(data = id,
+#           mapping = aes(fill = PROVINC)) +
+#   scale_fill_viridis_d(option = "A") +
+#   theme_void() +
+#   theme(legend.position = "none") 
+# 
+# idprov + idsection
+
+

@@ -14,8 +14,6 @@ states <- data.frame(state.abb) %>%
 
 dat_small <- read_csv("data/subsets/dat_small.csv")
 ```
-
-
 # Data {#data}
 
 ## The Forest Inventory & Analysis Program
@@ -23,6 +21,7 @@ dat_small <- read_csv("data/subsets/dat_small.csv")
 The FIA is a program within the United States Forest Service which aims to collect information and data in order to assess the country's forests. The FIA has been continuously operating since 1930 and their official mission is to "make and keep current a comprehensive inventory and analysis of the present and prospective conditions of and requirements for the renewable resources of the forest and rangelands of the US" [@whatisfia].
 
 The FIA collects data all throughout the United States by completing a survey each year of many plots of land. The units measured by the FIA and their ground crews are approximately 30 meter by 30 meter hexagonal units. Due to the vast size of the United States and immense amount of forested land, it would be nearly impossible for the FIA to attain population data for the country, so they use sampling instead. The FIA samples from the population of 30 meter by 30 meter hexagonal units by using a geographically-based systematic sampling design [@mcconville2020]. The FIA chooses these samples by first overlaying a hexagonal grid over the United States where each hexagon contains approximately 6000 acres of land. Then, they fill these hexagons with much smaller hexagons and randomly sample from the population of small hexagons. Then, ground crews go to these sampled small hexagons and collect variables such as basal area, trees per acre, etc. Along with this hand-collected data from FIA ground crews, the FIA also uses remotely sensed data to gain more information about the areas which they collect data. For example, the `nlcd11` variable, which measures total percent tree canopy cover of a plot, is collected via remote sensing by the Multi-Resolution Land Characteristics Consortium [@nlcd11]. Throughout the duration of the thesis, we will be working to predict ground-collected data with remotely sensed variables, such as `nlcd11`. Having remotely sensed variables like `nlcd11` is useful to us and the FIA because if our models can predict ground-collected variables well, the FIA can collect less data and have a larger effective sample size. 
+\clearpage
 
 ## The Interior West
 
@@ -35,6 +34,7 @@ knitr::include_graphics("figure/interior-west-on-usa.png")
 The IW-FIA collects annual inventories of the Interior West, with the goal of covering 10% of the region each year, so every decade the IW-FIA should have measurement of 100% of each Interior West state's forests.
 
 The Interior West region itself contains the states which encompass the Rocky Mountains along with some other smaller mountain ranges. The Interior West contains 855,767 square miles of land which has an extremely diverse landscape ranging from the high mountain peaks of the Rockies to flat desert plains in Nevada and other Interior West states. Along with desert and mountains, the Interior West also includes parts of the Great Plains. Throughout this diverse landscape, there is a similarly diverse range of forested areas. The forested areas range from areas that are humid and temperate to areas like the Northern Rocky Mountain Forest which is dry and considered a temperate desert. 
+\clearpage
 
 ## Our Data: Specifics
 
@@ -120,6 +120,7 @@ hist1 + hist2
 ```
 
 Notably, the Northern Rocky Forest Province (M333) is much more forested than the Interior West, so we see much different distributions of total canopy cover in this subset of the data. Apart from making these histograms, we can also summarize the entire, unit-level data and see some summary statistics of our five key variables:
+\clearpage
 
 ```{r var-tab, message = FALSE, warning=FALSE, echo = FALSE, fig.align="center", fig.retina=4}
 vars <- list(dat_small$nlcd11, dat_small$BIOLIVE_TPA,
@@ -149,29 +150,9 @@ Finally, we also have population data showing the proportion of each eco-subsect
 ## Data Structure & Hierarchy
 
 As hinted at throughout earlier parts of the chapter, the data used in this thesis has a hierarchical structure, where eco-subsections are nested within eco-sections which are in turn nested within eco-provinces. Every plot has each level of granularity of location data recorded and this is what allows us to choose how far to borrow strength from other plots. We can see this structure of nested data by looking at a diagram depicting this data structure:
-<!-- looking at an example up close of Idaho's eco-subsections colored by their province, and then their eco-sections: -->
-
+\clearpage
 ```{r, fig.align="center", out.width='100%', echo = FALSE, fig.cap="The nested data structure of the Interior West. The green area is the eco-province which is divided into eco-sections (red area) which is in turn divided into eco-subsections (beige area).", fig.scap="The nested data structure of the Interior West"}
 knitr::include_graphics("figure/data-structure.png")
-# idaho <- us_boundaries(type = "state",
-#                          states = "ID")
-# 
-# id <- st_intersection(idaho, subsections)
-# idsection <- ggplot() +
-#   geom_sf(data = id,
-#           mapping = aes(fill = SECTION)) +
-#   scale_fill_viridis_d(option = "A") +
-#   theme_void() +
-#   theme(legend.position = "none")
-# idprov <- ggplot() +
-#   geom_sf(data = id,
-#           mapping = aes(fill = PROVINC)) +
-#   scale_fill_viridis_d(option = "A") +
-#   theme_void() +
-#   theme(legend.position = "none") 
-# 
-# idprov + idsection
-
 ```
 
 
@@ -187,4 +168,3 @@ knitr::kable(broom::tidy(anova_BIOLIVE_TPA),
 ```
 
 These results allow us to conclude that it is reasonable to believe that observations within a given eco-province are more homogeneous than observations throughout the Interior West. Thus, if we want eco-subsection level estimates of variables, it makes sense to borrow information from other eco-subsections within the same province as each other. This data structure and homogeneity within provinces is what drives the analyses done henceforth in this thesis. 
-
