@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2021.3.24)  12 APR 2021 22:00
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2021.3.24)  13 APR 2021 14:33
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -752,7 +752,10 @@ Chapter 3.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[19] [20] [21] [22]
+[19] [20]
+Underfull \vbox (badness 2781) has occurred while \output is active []
+
+[21] [22]
 Underfull \hbox (badness 1337) in paragraph at lines 518--519
 \T1/lmr/m/n/12 The unit-level regression-synthetic es-ti-ma-tor is very sim-i-l
 ar to the area-level
@@ -773,14 +776,14 @@ Overfull \hbox (10.0364pt too wide) in paragraph at lines 630--630
 
 [28
 
- <./thesis_files/figure-latex/unnamed-chunk-10-1.pdf>] [29] [30
-
-]
+ <./thesis_files/figure-latex/unnamed-chunk-10-1.pdf>] [29] [30]
 Chapter 4.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[31] [32]
+[31
+
+] [32]
 <thesis_files/figure-latex/cov-violin-1.pdf, id=622, 463.7325pt x 310.15875pt>
 File: thesis_files/figure-latex/cov-violin-1.pdf Graphic file (type pdf)
 <use thesis_files/figure-latex/cov-violin-1.pdf>
@@ -905,7 +908,7 @@ Package rerunfilecheck Info: File `thesis.out' has not changed.
 Here is how much of TeX's memory you used:
  12045 strings out of 480962
  186526 string characters out of 5906599
- 491235 words of memory out of 5000000
+ 490235 words of memory out of 5000000
  28763 multiletter control sequences out of 15000+600000
  463883 words of font info for 65 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
@@ -930,7 +933,7 @@ ic/lm/lmro12.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1/pu
 blic/lm/lmsy10.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1/
 public/lm/lmsy8.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1
 /public/lm/lmtt12.pfb>
-Output written on thesis.pdf (84 pages, 14188192 bytes).
+Output written on thesis.pdf (84 pages, 14188579 bytes).
 PDF statistics:
  1007 PDF objects out of 1200 (max. 8388607)
  849 compressed objects within 9 object streams
