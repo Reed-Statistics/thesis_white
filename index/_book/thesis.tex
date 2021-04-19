@@ -312,24 +312,22 @@ This thesis explores this trade-off between bias and variance in depth. I implem
 \hypertarget{the-forest-inventory-analysis-program}{%
 \section{The Forest Inventory \& Analysis Program}\label{the-forest-inventory-analysis-program}}
 
-The FIA is a program within the United States Forest Service that aims to collect information and data in order to assess the health of the country's forests. The FIA has been continuously operating since 1930, and its official mission is to ``make and keep current a comprehensive inventory and analysis of the present and prospective conditions of and requirements for the renewable resources of the forest and rangelands of the US.'' (FIA, 2020).
+The FIA has been continuously operating since 1930, and its official mission is to ``make and keep current a comprehensive inventory and analysis of the present and prospective conditions of and requirements for the renewable resources of the forest and rangelands of the US.'' (FIA, 2020). The FIA collects data all throughout the United States by completing a survey each year of many plots of land. The areas measured by the FIA and their ground crews are approximately 30 meter by 30 meter hexagonal units. Due to the vast size of the United States and immense amount of forested land, it would be nearly impossible for the FIA to attain population data for the entire country, so it uses sampling instead. The FIA samples from the population of 30 meter by 30 meter hexagonal units by using a geographically-based systematic sampling design (Bechtold \& Patterson, 2005). The FIA chooses these samples by first overlaying a hexagonal grid over the United States in which each hexagon contains approximately 6000 acres of land. Then it fills these hexagons with much smaller hexagons and randomly samples from the population of small hexagons. Next, ground crews go to these sampled regions and collect variables such as basal area, trees per acre, etc.
 
-The FIA collects data all throughout the United States by completing a survey each year of many plots of land. The areas measured by the FIA and their ground crews are approximately 30 meter by 30 meter hexagonal units. Due to the vast size of the United States and immense amount of forested land, it would be nearly impossible for the FIA to attain population data for the entire country, so it uses sampling instead. The FIA samples from the population of 30 meter by 30 meter hexagonal units by using a geographically-based systematic sampling design (K. S. McConville et al., 2020). The FIA chooses these samples by first overlaying a hexagonal grid over the United States in which each hexagon contains approximately 6000 acres of land. Then it fills these hexagons with much smaller hexagons and randomly samples from the population of small hexagons. Next, ground crews go to these sampled regions and collect variables such as basal area, trees per acre, etc.
-
-Along with this hand-collected data from ground crews, the FIA also uses remotely-sensed data to gain more information about the areas for which it collects data. For example, the \texttt{nlcd11} variable, which measures total percent tree canopy cover of a plot, is collected via remote sensing by the Multi-Resolution Land Characteristics Consortium (Homer, 2015). Throughout the duration of the thesis, I will be working to predict ground-collected data with remotely-sensed variables, such as \texttt{nlcd11}. Having remotely-sensed variables like \texttt{nlcd11} is useful to the FIA because if our models can predict ground-collected variables well, the FIA can collect less data and have a larger effective sample size.
+Along with this hand-collected data from ground crews, the FIA also uses remotely-sensed data to gain more information. For example, the \texttt{nlcd11} variable, which measures total percent tree canopy cover of a plot, is collected via remote sensing by the Multi-Resolution Land Characteristics Consortium (Homer, 2015). Throughout the duration of the thesis, I will be working to predict ground-collected data with remotely-sensed variables, such as \texttt{nlcd11}. Having remotely-sensed variables like \texttt{nlcd11} is useful to the FIA because if our models can predict ground-collected variables well, the FIA can collect less data and have a larger effective sample size. The \texttt{nlcd11} variable is particularly useful as the data is available at a very fine (pixel-level) resolution across the entire Interior West.
 \clearpage
 
 \hypertarget{the-interior-west}{%
 \section{The Interior West}\label{the-interior-west}}
 
-While the FIA collects data in all regions of the United States, the analyses in this thesis use data from the Interior West Forest Inventory and Analysis Unit (IW-FIA). Data from this unit will henceforth be referred to as data from ``the Interior West.'' The Interior West is defined as a broad region of the United States, covering the states of Arizona, Colorado, Idaho, Montana, Nevada, New Mexico, Utah, and Wyoming. For reference I have provided the Interior West colored green on a map of the continental United States:
+While the FIA collects data in all regions of the United States, the analyses in this thesis use data from the Interior West Forest Inventory and Analysis Unit (IW-FIA). Data from this unit will henceforth be referred to as data from ``the Interior West.'' The Interior West is defined as a broad region of the United States, covering the states of Arizona, Colorado, Idaho, Montana, Nevada, New Mexico, Utah, and Wyoming. For reference I have provided the Interior West colored green on a map of the continental United States in Figure \ref{fig:usa-map}:
 \begin{figure}
 
 {\centering \includegraphics[width=1\linewidth]{figure/interior-west-on-usa} 
 
 }
 
-\caption{The Interior West region of the United States}\label{fig:unnamed-chunk-3}
+\caption{The Interior West region of the United States}\label{fig:usa-map}
 \end{figure}
 The Interior West region contains the states that encompass the Rocky Mountains along with some other smaller mountain ranges. The Interior West is comprised of 855,767 square miles of extremely diverse landscapes ranging from the high mountain peaks of the Rockies to flat desert plains in Nevada and other Interior West states. Along with desert and mountains, the Interior West also includes parts of the Great Plains. Throughout this varied landscape, there is a similarly diverse range of forested areas. These areas range from regions that are humid and temperate to areas such as the Northern Rocky Mountain Forest, which is dry and considered a temperate desert.
 \clearpage
@@ -341,40 +339,40 @@ The data used in this thesis was collected by the FIA in the span of 10 years fr
 
 The dataframe used in this thesis is a joined dataframe derived from two FIA datasets of the Interior West: \texttt{spatial} and \texttt{response}. The \texttt{spatial} dataframe contains 89,444 observations and 70 variables, most notably the remotely-sensed predictor variable (\texttt{nlcd11}), location information, and eco-subsection. The \texttt{nlcd11} variable was collected by the Multi-Resolution Land Characteristics Consortium (Homer, 2015). This variable measures percent tree canopy cover in a given plot.
 
-The \texttt{response} dataframe contains 86,085 observations and 67 variables, most notably four response variables collected by FIA crew members (\texttt{BALIVE\_TPA}, \texttt{CNTLIVE\_TPA}, \texttt{BIOLIVE\_TPA}, and \texttt{VOLNLIVE\_TPA}), location information, and eco-subsection. The response variables noted above measure basal area, tree count, biomass, and volume, respectively. I joined these dataframes by their unique plot number and subsetted the number of variables significantly to 19 that contain plot information, longitude and latitude, elevation, the predictor variable, response variables, eco-subsection, eco-section, and eco-province. The resulting joined dataframe has 86,085 rows that share the same plots between the \texttt{response} and \texttt{spatial} dataframes. Shown here are a few rows of the dataframe with relevant columns selected and values rounded to the second decimal place:
+The \texttt{response} dataframe contains 86,085 observations and 67 variables, most notably four response variables collected by FIA crew members (\texttt{BALIVE}, \texttt{CNTLIVE}, \texttt{BIOLIVE}, and \texttt{VOLNLIVE}), location information, and eco-subsection. The response variables noted above measure basal area, tree count, biomass, and volume, respectively. I joined these dataframes by their unique plot number and subsetted the number of variables significantly to 19 that contain plot information, longitude and latitude, elevation, the predictor variable, response variables, eco-subsection, eco-section, and eco-province. The resulting joined dataframe has 86,085 rows that share the same plots between the \texttt{response} and \texttt{spatial} dataframes. Shown here are a few rows of the dataframe with relevant columns selected and values rounded to the second decimal place:
 \begin{longtable}[t]{rrrrrl}
-\caption[Relevant Glimpse of Data]{\label{tab:unnamed-chunk-4}Relevant Glimpse of Data}\\
+\caption[Relevant Glimpse of Data]{\label{tab:unnamed-chunk-3}Relevant Glimpse of Data}\\
 \toprule
-Plot & Latitude & Longitude & nlcd11 & BIOLIVE\_TPA & subsection\\
+BIOLIVE & BALIVE & CNTLIVE & VOLNLIVE & nlcd11 & subsection\\
 \midrule
-83574 & -109.71 & 32.85 & 21 & 0.00 & 321Af\\
-84904 & -109.88 & 32.99 & 0 & 0.00 & 321Af\\
-83021 & -109.88 & 32.81 & 0 & 0.00 & 321Aj\\
-82635 & -109.89 & 32.65 & 26 & 14.74 & 321Am\\
-90381 & -109.83 & 32.62 & 41 & 31.50 & 321Am\\
+0.00 & 0.00 & 0.00 & 0.00 & 21 & 321Af\\
+0.00 & 0.00 & 0.00 & 0.00 & 0 & 321Af\\
+0.00 & 0.00 & 0.00 & 0.00 & 0 & 321Aj\\
+14.74 & 98.13 & 648.39 & 622.42 & 26 & 321Am\\
+31.50 & 96.68 & 186.56 & 1613.72 & 41 & 321Am\\
 \addlinespace
-81801 & -109.79 & 32.35 & 0 & 0.00 & 321Aj\\
+0.00 & 0.00 & 0.00 & 0.00 & 0 & 321Aj\\
 \bottomrule
 \end{longtable}
-While the data covers the Interior West as a whole, the data contains very granular information, as each row represents a plot sampled by the FIA. The data also includes variables that subset the Interior West into eco-provinces that contain eco-sections, and these eco-sections contain eco-subsections. In the data, on average, each eco-section contains approximately 7.06 eco-subsections, and each province contains an average of 4.86 eco-sections. So, an average province then contains just over 34 eco-subsections. We can take a look at the Northern Rocky Forest province, colored by eco-section, with lines dividing each eco-subsection, to see this structure in action:
+While the data covers the Interior West as a whole, the data contains very granular information, as each row represents a plot sampled by the FIA. The data also includes variables that subset the Interior West into eco-provinces that contain eco-sections, and these eco-sections contain eco-subsections. In the data, on average, each eco-section contains approximately 7.06 eco-subsections, and each province contains an average of 4.86 eco-sections. So, an average province then contains just over 34 eco-subsections. We can take a look at the Northern Rocky Forest province, colored by eco-section, with lines dividing each eco-subsection, to see this structure in action as shown in Figure \ref{fig:northern-rocky}:
 \begin{figure}
 
 {\centering \includegraphics{thesis_files/figure-latex/northern-rocky-1} 
 
 }
 
-\caption{The Northern Rocky Forest colored by eco-section}\label{fig:northern-rocky}
+\caption[The Northern Rocky Forest colored by eco-section]{The Northern Rocky Forest colored by eco-section. The black lines divide the eco-subsections of the Northern Rocky Forest.}\label{fig:northern-rocky}
 \end{figure}
-The data covers a total of 14 provinces, 68 eco-sections, and 480 eco-subsections. The hierarchical structure of the data and nested nature of the eco-subsections within eco-sections within eco-provinces lends itself to the creation of hierarchical models that borrow strength from surrounding areas.
+The data cover a total of 14 provinces, 68 eco-sections, and 480 eco-subsections. The hierarchical structure of the data and nested nature of the eco-subsections within eco-sections within eco-provinces lends itself to the creation of hierarchical models that borrow strength from surrounding areas.
 
-While this data contains a multitude of variables, the analyses in this thesis focus on four key response variables and one explanatory variable. The response variables used are basal area (square-foot), trees per acre, above-ground biomass (lbs), and net volume (\(\text{ft}^3\)). These variables are coded as \texttt{BALIVE\_TPA}, \texttt{CNTLIVE\_TPA}, \texttt{BIOLIVE\_TPA}, and \texttt{VOLNLIVE\_TPA}, respectively. We can look at the average of these variables across the Interior West region by eco-subsection in the four following maps of the Interior West.
+While these data contains a multitude of variables, the analyses in this thesis focus on four key response variables and one explanatory variable. The response variables used are basal area (\(\text{ft}^2\)), trees per acre, above-ground biomass (lbs), and net volume (\(\text{ft}^3\)). Figures \ref{fig:m1}, \ref{fig:m2}, \ref{fig:m3}, and \ref{fig:m4} explore the average of these variables across the Interior West region by eco-subsection in the four following maps of the Interior West.
 \begin{figure}
 
 {\centering \includegraphics[width=0.65\linewidth]{figure/basal} 
 
 }
 
-\caption{Mean basal area in Interior West eco-subsections}\label{fig:unnamed-chunk-5}
+\caption{Mean basal area in Interior West eco-subsections}\label{fig:m1}
 \end{figure}
 \begin{figure}
 
@@ -382,7 +380,7 @@ While this data contains a multitude of variables, the analyses in this thesis f
 
 }
 
-\caption{Mean biomass in Interior West eco-subsections}\label{fig:unnamed-chunk-6}
+\caption{Mean biomass in Interior West eco-subsections}\label{fig:m2}
 \end{figure}
 \begin{figure}
 
@@ -390,7 +388,7 @@ While this data contains a multitude of variables, the analyses in this thesis f
 
 }
 
-\caption{Mean tree count per acre in Interior West eco-subsections}\label{fig:unnamed-chunk-7}
+\caption{Mean tree count per acre in Interior West eco-subsections}\label{fig:m3}
 \end{figure}
 \begin{figure}
 
@@ -398,7 +396,7 @@ While this data contains a multitude of variables, the analyses in this thesis f
 
 }
 
-\caption{Mean net volume in Interior West eco-subsections}\label{fig:unnamed-chunk-8}
+\caption{Mean net volume in Interior West eco-subsections}\label{fig:m4}
 \end{figure}
 While there are four variables which I will model as response variables throughout the analyses, there also is one predictor variable which will be of much use: total tree canopy cover (coded as \texttt{nlcd11}). This variable is remotely-sensed, meaning that it was not collected by FIA ground crew members but rather with aerial photography and/or satellite imagery. I will be using this variable to attempt to predict the response variables in order to understand how accurate of estimates that can be made with this remote data (which does not require as much effort to collect). Notably, this variable is considered to contain the population totals for total canopy cover, as the data are collected for the entire Interior West region.
 
@@ -419,10 +417,10 @@ Notably, the Northern Rocky Forest Province (M333) is more heavily forested than
 Variable & Mean & SD & Median & 75th Percentile & Min & Max\\
 \midrule
 nlcd11 & 8.73 & 18.57 & 0 & 0.00 & 0 & 95.00\\
-BIOLIVE\_TPA & 6.23 & 16.84 & 0 & 1.98 & 0 & 244.35\\
-BALIVE\_TPA & 22.75 & 48.06 & 0 & 14.75 & 0 & 469.39\\
-CNTLIVE\_TPA & 98.60 & 283.09 & 0 & 30.09 & 0 & 6677.93\\
-VOLNLIVE\_TPA & 342.32 & 972.78 & 0 & 74.69 & 0 & 16435.55\\
+BIOLIVE & 6.23 & 16.84 & 0 & 1.98 & 0 & 244.35\\
+BALIVE & 22.75 & 48.06 & 0 & 14.75 & 0 & 469.39\\
+CNTLIVE & 98.60 & 283.09 & 0 & 30.09 & 0 & 6677.93\\
+VOLNLIVE & 342.32 & 972.78 & 0 & 74.69 & 0 & 16435.55\\
 \bottomrule
 \end{longtable}
 Table \ref{tab:var-tab} shows how heavily skewed these key variables are, with all the variables having a median of zero. This does not prevent meaningful analyses however, as the sample size of this dataset is so large (\(n = 86,085\)) and thus there is plenty of data to create models.
@@ -442,9 +440,9 @@ As hinted at throughout earlier parts of this chapter, the data used in this the
 
 \caption[The nested data structure of the Interior West]{The nested data structure of the Interior West. The green area is the eco-province that is divided into eco-sections (red area) which is in turn divided into eco-subsections (beige area).}\label{fig:data-structure}
 \end{figure}
-The largest motivation for hierarchical modeling in this particular application is that observations are more similar within the hierarchies into which they are split. To understand if this is true, I perform a preliminary analysis of the data by calculating three-way ANOVAs for each key variable with predictors \texttt{province}, \texttt{section}, and \texttt{subsection}. For succinctness, we can look at the ANOVA results for one of the response variables, \texttt{BIOLIVE\_TPA}, but the other variables tell a very similar story in terms of homogeneity. Just by looking at the MSE of the ANOVA results, we can see that we should expect more homogeneity within eco-subsections:
+The largest motivation for hierarchical modeling in this particular application is that observations are more similar within the hierarchies into which they are split. To understand if this is true, I perform a preliminary analysis of the data by calculating three-way ANOVAs for each key variable with predictors \texttt{province}, \texttt{section}, and \texttt{subsection}. For succinctness, we can look at the ANOVA results for one of the response variables, \texttt{BIOLIVE}, but the other variables tell a very similar story in terms of homogeneity. Just by looking at the MSE of the ANOVA results, we can see that we should expect more homogeneity within eco-subsections:
 \begin{longtable}[t]{lrrrrr}
-\caption{\label{tab:unnamed-chunk-9}Analysis of Variance Model (Biomass Response)}\\
+\caption{\label{tab:unnamed-chunk-4}Analysis of Variance Model (Biomass Response)}\\
 \toprule
 term & df & sumsq & meansq & statistic & p.value\\
 \midrule
@@ -641,7 +639,7 @@ f(\mu_{y_j} ~\vert~ \text{data}) \propto P(\text{data} ~\vert~ \mu_{y_j}) \cdot 
 In the application of this thesis, inferences are made about \(\mu_{y_j}\) given the data. This is represented on the lefthand side of Equation \eqref{eq:bayes-thm}. This quantity is called the posterior distribution of \(\mu_{y_j}\) given the data. As one continues to read left to right, one sees the likelihood (or, data) multiplied with the distribution of \(\mu_{y_j}\). Clearly, the true value of \(\mu_{y_j}\) is unknown or else there would be no need to attempt to estimate \(\mu_{y_j}\). In order to estimate the posterior distribution one must multiply something with the likelihood function, so a ``prior'' distribution is chosen which reflects one's prior belief of the distribution of \(\mu_{y_j}\). I now visualize obtaining a posterior distribution below:
 \clearpage
 \begin{figure}
-\includegraphics{thesis_files/figure-latex/unnamed-chunk-10-1} \caption[Prior, likelihood, and posterior distributions.]{Hypothetical prior, likelihood, and posterior distributions. The posterior is in between the prior and likelihood as it is the normalized product of these distributions.}\label{fig:unnamed-chunk-10}
+\includegraphics{thesis_files/figure-latex/unnamed-chunk-5-1} \caption[Prior, likelihood, and posterior distributions.]{Hypothetical prior, likelihood, and posterior distributions. The posterior is in between the prior and likelihood as it is the normalized product of these distributions.}\label{fig:unnamed-chunk-5}
 \end{figure}
 Here one can see that the estimate is informed by both the data and the prior distribution, rather than in the frequentist paradigm in which only the data is used. One can also see that if the prior is ``flat,'' the posterior would just be the likelihood function, leading to the same result achieved through a frequentist analysis, just though a different method.
 
@@ -782,22 +780,22 @@ The three estimators which have coefficient of variation values higher than one 
 In order to take a closer look at \emph{how} borrowing of strength differs between the area-level hierarchical Bayesian estimator and the area-level EBLUP estimator, I chose to zoom in to basal area in the Northern Rocky Forest. Immediately, when examining the Northern Rocky Forest, one can see the behavior of the hierarchical Bayesian area-level estimator ``pulling up'' lower valued eco-subsections compared to their post-stratified estimate:
 \begin{figure}
 
-{\centering \includegraphics[width=1\linewidth]{thesis_files/figure-latex/unnamed-chunk-12-1} 
+{\centering \includegraphics[width=1\linewidth]{thesis_files/figure-latex/unnamed-chunk-7-1} 
 
 }
 
-\caption[HB Area and Post-stratified estimates in M333]{The hierarchical Bayesian area-level estimator and post-stratified estimator predicting basal area in the Northern Rocky Forest. The error bars depict two standard errors above and below the estimate of the response variable.}\label{fig:unnamed-chunk-12}
+\caption[HB Area and Post-stratified estimates in M333]{The hierarchical Bayesian area-level estimator and post-stratified estimator predicting basal area in the Northern Rocky Forest. The error bars depict two standard errors above and below the estimate of the response variable.}\label{fig:unnamed-chunk-7}
 \end{figure}
 One can also observe that the eco-subsections with high response values will get ``pulled down.'' However, the coefficient of variation does not increase significantly here, as the sample mean is still relatively high. The pulling up and down of estimates is a trait expected of these hierarchical Bayesian models, and it is the realization of ``borrowing strength'' or ``pooling information'' (McElreath, 2020).
 
 The frequentist area-level estimator takes a different approach to making these estimates. Notably, in the case of small within-area variation, the EBLUP will put a heavy weight on the post-stratified estimate from Equation \eqref{eq:eblup-area-weight}. One can see this occur by comparing the area-level frequentist estimator to the post-stratified estimate with the same eco-province and response variable as above:
 \begin{figure}
 
-{\centering \includegraphics[width=1\linewidth]{thesis_files/figure-latex/unnamed-chunk-13-1} 
+{\centering \includegraphics[width=1\linewidth]{thesis_files/figure-latex/unnamed-chunk-8-1} 
 
 }
 
-\caption[EBLUP area-level and Post-stratified estimates in M333]{The frequentist area-level estimator and post-stratified estimator predicting basal area in the Northern Rocky Forest. The error bars depict two standard errors above and below the estimate of the response variable.}\label{fig:unnamed-chunk-13}
+\caption[EBLUP area-level and Post-stratified estimates in M333]{The frequentist area-level estimator and post-stratified estimator predicting basal area in the Northern Rocky Forest. The error bars depict two standard errors above and below the estimate of the response variable.}\label{fig:unnamed-chunk-8}
 \end{figure}
 Overall, the frequentist area-level estimator performs much more similarly to the post-stratified estimator, a trait that may or may not be appealing based on the confidence one has the sampling process. However, it is important to note that the frequentist area-level estimator is still borrowing strength; it just appears that it will often borrow less strength than the hierarchical Bayesian area-level estimator. This is expected. Recall Equation \eqref{eq:eblup-area-weight} and note that when a large proportion of the total variation is between-area variation, the area-level EBLUP will rely heavily on the post-stratified estimate. Thus, in eco-subsections with low within-area variation, the area-level EBLUP will produce an estimate very similar to the post-stratified estimate. It is important to recall that much of the data contains many observations which equal zero (Figure \ref{fig:hists} and Table \ref{tab:var-tab}). So, in eco-subsections with a low number of sampled plots and a high proportion of sampled plots with response values equal to zero, artificially low variance may occur. The hierarchical Bayesian estimators have the unique property of considering the uncertainty in the variance estimate when producing estimates rather than relying on just a point value.
 \clearpage
@@ -808,11 +806,11 @@ Overall, the frequentist area-level estimator performs much more similarly to th
 When vision is narrowed to the Northern Rocky Forest, it does appear that the area-level hierarchical Bayesian estimator clearly outperforms the analogous frequentist estimator in all dimensions. However, I will now return to the Interior West in order to understand trends of estimator performance over space. To do this, I simply examine the eco-subsections in which the area-level hierarchical Bayesian estimator has lower variance than the post-stratified estimator and the area-level EBLUP:
 \begin{figure}
 
-{\centering \includegraphics{thesis_files/figure-latex/unnamed-chunk-14-1} 
+{\centering \includegraphics{thesis_files/figure-latex/unnamed-chunk-9-1} 
 
 }
 
-\caption[Area-level coefficient of variation comparison across the Interior West]{The area-level hierarchical Bayesian estimator's coefficient of variation compared with the coefficient of variation for the post-stratified estimator (left) and area-level EBLUP (right). These are the average coefficient of variation across the four response variables studied. Eco-subsections in seafoam indicate areas in which the coefficient of variation is lower for the area-level hierarchical Bayesian estimator. Red areas indicate that the coefficient of variation of the hierarchical Bayesian estimator is greater than the estimator to which it is compared. Gray areas indicate areas in which we these estimators were not fit.}\label{fig:unnamed-chunk-14}
+\caption[Area-level coefficient of variation comparison across the Interior West]{The area-level hierarchical Bayesian estimator's coefficient of variation compared with the coefficient of variation for the post-stratified estimator (left) and area-level EBLUP (right). These are the average coefficient of variation across the four response variables studied. Eco-subsections in seafoam indicate areas in which the coefficient of variation is lower for the area-level hierarchical Bayesian estimator. Red areas indicate that the coefficient of variation of the hierarchical Bayesian estimator is greater than the estimator to which it is compared. Gray areas indicate areas in which we these estimators were not fit.}\label{fig:unnamed-chunk-9}
 \end{figure}
 Generally, one is able to see the trend in Figure \ref{fig:cv-map} in which the area-level hierarchical Bayesian estimator produces estimates with higher variance in heavily deserted areas such as the southern parts of the Interior West and deserts in parts of Nevada. The areas in which the area-level hierarchical Bayesian estimator has more variation than the post-stratified estimator and the area-level EBLUP are clearly non-randomly distributed across the Interior West. This gives a great insight as to when one may want to use this hierarchical Bayesian estimator and further supports the idea that the area-level hierarchical Bayesian estimator has a high coefficient of variation in non-forested areas. These estimates are of the average coefficient of variation across our four response variables for each eco-subsection, and notably in 83.5\% and 82.5\% of these areas there is a decrease in the average coefficient of variation from the area-level hierarchical Bayesian estimator to the post-stratified estimator and the area-level EBLUP, respectively.
 
@@ -848,11 +846,11 @@ One can immediately see that the unit-level hierarchical Bayesian estimator is e
 \clearpage
 \begin{figure}
 
-{\centering \includegraphics{thesis_files/figure-latex/unnamed-chunk-15-1} 
+{\centering \includegraphics{thesis_files/figure-latex/unnamed-chunk-10-1} 
 
 }
 
-\caption[Unit-level coefficient of variation comparison across the Interior West]{The unit-level hierarchical Bayesian estimator's coefficient of variation compared with the coefficient of variation for the post-stratified estimator (left) and unit-level EBLUP (right). These are the average coefficient of variation across the four response variables studied. Eco-subsections in seafoam indicate areas in which the coefficient of variation is lower for the unit-level hierarchical Bayesian estimator. Red areas indicate that the coefficient of variation of the hierarchical Bayesian estimator is greater than the estimator to which it is compared. Gray areas indicate areas in which we these estimators were not fit.}\label{fig:unnamed-chunk-15}
+\caption[Unit-level coefficient of variation comparison across the Interior West]{The unit-level hierarchical Bayesian estimator's coefficient of variation compared with the coefficient of variation for the post-stratified estimator (left) and unit-level EBLUP (right). These are the average coefficient of variation across the four response variables studied. Eco-subsections in seafoam indicate areas in which the coefficient of variation is lower for the unit-level hierarchical Bayesian estimator. Red areas indicate that the coefficient of variation of the hierarchical Bayesian estimator is greater than the estimator to which it is compared. Gray areas indicate areas in which we these estimators were not fit.}\label{fig:unnamed-chunk-10}
 \end{figure}
 The distribution of areas in which the hierarchical Bayesian unit-level estimator has lower variance than the unit-level EBLUP appears to be very random. Just under 46\% of areas have the hierarchical Bayesian unit-level model with lower variance than the unit-level EBLUP. In the case of this thesis, significant variance gains by implementing the unit-level hierarchical Bayesian estimator are not made; however, there are benefits of the implementation of this estimator. First, this piece of this thesis can serve as a case study of a hierarchical Bayesian estimator converging in variance and estimates to the analogous frequentist estimator. This allows for the verification of a statement often made in Bayesian statistics courses and textbooks with a real world example rather than a mathematical proof. Second, the unit-level hierarchical Bayesian estimator is much more flexible than the unit-level EBLUP and it does a very similar job to the unit-level EBLUP. One can ``tweak'' the behavior of this estimator through the use of priors, or even a different linking model if preferred. These changes could allow for a more successful estimator at the unit-level without changing many processes computationally. If one were to attempt to approach improving the unit-level model starting with the EBLUP, they would be met with restrictions due to the rigidity of the EBLUP's mathematics, and they would have to construct a new estimator entirely.
 
@@ -1728,6 +1726,9 @@ saveRDS(final_results_long,
 \begin{CSLReferences}{1}{0}
 \leavevmode\vadjust pre{\hypertarget{ref-bayes-orig}{}}%
 Bayes, T. (1763). LII. An essay towards solving a problem in the doctrine of chances. By the late rev. Mr. Bayes, FRS communicated by mr. Price, in a letter to john canton, AMFR s. \emph{Philosophical Transactions of the Royal Society of London}, (53), 370--418.
+
+\leavevmode\vadjust pre{\hypertarget{ref-greenbook}{}}%
+Bechtold, W. A., \& Patterson, P. L. (2005). \emph{The enhanced forest inventory and analysis program--national sampling design and estimation procedures} (Vol. 80). USDA Forest Service, Southern Research Station.
 
 \leavevmode\vadjust pre{\hypertarget{ref-hbsae-package}{}}%
 Boonstra, H. J. (2012). \emph{Hbsae: Hierarchical bayesian small area estimation}. Retrieved from \url{https://CRAN.R-project.org/package=hbsae}
