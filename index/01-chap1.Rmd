@@ -48,13 +48,17 @@ It is important to note that while Figures \@ref(fig:hbu-diagram) and \@ref(fig:
 
 Explicit model-based estimation has been increasing in popularity in the realm of applications to the FIA and forestry data in general. As the FIA requires a reduction in variance for their estimates of increasingly smaller areas, it becomes inevitable that borrowing strength from surrounding areas, the use of auxiliary data, and the explicit use of a model are needed to maintain a satisfactory amount of variance. Commonly, frequentist model-based estimators are used for model-based small area estimation, such as the EBLUP estimator. Models such as the EBLUP have some very nice properties. Most notably, they are "unbiased" if the assumed model is correct. To understand what it means to have an "unbiased" estimator, we must first define bias of some estimator $\hat\mu_{y_j}$ of a parameter $\mu_{y_j}$: 
 \begin{align}
-\text{Bias}(\hat\mu_{y_j}) = E[\hat\mu_{y_j}] - \mu_{y_j}
+\text{Bias}(\hat\mu_{y_j}) = E[\hat\mu_{y_j}] - \mu_{y_j} (\#eq:bias)
 \end{align}
 It intuitively follows that if the modeling assumptions are met and our estimator $\hat\mu_{y_j}$ is unbiased that we will have the following property:
 \begin{align}
 \text{Bias}(\hat\mu_{y_j}) = E[\hat\mu_{y_j}] - \mu_{y_j} = 0
 \end{align}
-That is, the expected value of the estimator, $\hat\mu_{y_j}$, is in fact the true value of the forest attribute of interest. It is clear why this is a trait we would want in our model and why it is so commonly used; however, what is not clear is the cost of this trait. By only focusing on reducing the bias in our estimates, we must ignore the second piece of the mean squared error: the variance. While it is important for bias to be low, we can often reduce our mean squared error by a large amount by increasing bias slightly, as bias and variance are inversely related. To understand this fully, we must explore the mean squared error in depth. First, the mean squared error (MSE) measures the average squared deviation from the true value of the underlying parameter value:
+That is, the expected value of the estimator, $\hat\mu_{y_j}$, is in fact the true value of the forest attribute of interest. It is clear why this is a trait we would want in our model and why it is so commonly used; however, what is not clear is the cost of this trait. By only focusing on reducing the bias in our estimates, we must ignore the second piece of the mean squared error: the variance. The variance of an estimator can be defined as follows:
+\begin{align}
+\text{Var}(\hat\mu_{y_j}) = E\Big[\Big(\hat\mu_{y_j} - E[\hat\mu_{y_j}]\Big)^2 \Big] (\#eq:variance)
+\end{align}
+While it is important for bias to be low, we can often reduce our mean squared error by a large amount by increasing bias slightly, as bias and variance are inversely related. From Equations \@ref(eq:bias) and \@ref(eq:variance) it may not be clear why or how these quantities are inversely related and to understand this fully we must explore the mean squared error in depth. First, the mean squared error (MSE) measures the average squared deviation from the true value of the underlying parameter value:
 \begin{align}
 \text{MSE}(\hat\mu_{y_j}) = E\Big[(\hat\mu_{y_j} - \mu_{y_j})^2\Big].
 \end{align}
@@ -62,7 +66,7 @@ Through algebra and rules of expectation it can be shown that the MSE simplifies
 \begin{align}
 \text{MSE}(\hat\mu_{y_j}) = E\Big[\Big(\hat\mu_{y_j} - E[\hat\mu_{y_j}]\Big)^2 \Big] + \Big(E[\hat\mu_{y_j}] - \mu_{y_j}\Big)^2;
 \end{align}
-which, by the definitions of variance and bias, is the sum of the variance and squared bias of our estimator as shown below:
+which, by Equations \@ref(eq:bias) and \@ref(eq:variance), is the sum of the variance and squared bias of the estimator as shown below:
 \begin{align}
 \text{MSE}(\hat\mu_{y_j}) = \text{Var}(\hat\mu_{y_j}) + \text{Bias}(\hat\mu_{y_j},~ \mu_{y_j})^2.
 \end{align}
