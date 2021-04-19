@@ -73,7 +73,7 @@ It is notable that when the mean of the variable of interest is small, the coeff
 \clearpage
 In order to visualize the coefficients of variation in an appealing way, I have filtered out all observations greater than one in the following plot:  
 
-```{r cov-violin, fig.align="center", out.width='100%', echo = FALSE, warning = F, message = F, fig.scap="Distribution of the coefficient of variation of each eastimator", fig.cap = "Distribution of the coefficient of variation of each eastimator. The black dot in each violin segment represents the median coefficient of variation value. The width of the violin segments corresponds to the density of points in the given value range. Values greater than one are truncated in plot but still considered in median calculation."}
+```{r cov-violin, fig.align="center", out.width='100%', echo = FALSE, warning = F, message = F, fig.scap="Distribution of the coefficient of variation of each estimator", fig.cap = "Distribution of the coefficient of variation of each estimator. The black dot in each violin segment represents the median coefficient of variation value. The width of the violin segments corresponds to the density of points in the given value range. Values greater than one are truncated in plot but still considered in median calculation."}
 med <- res_long %>%
   group_by(estimator) %>%
   summarize(median_cov = median(cov))

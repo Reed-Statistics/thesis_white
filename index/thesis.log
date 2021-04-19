@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2021.3.24)  13 APR 2021 21:22
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2021.3.24)  19 APR 2021 10:45
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -911,11 +911,11 @@ Package rerunfilecheck Info: File `thesis.out' has not changed.
 Here is how much of TeX's memory you used:
  12049 strings out of 480962
  186578 string characters out of 5906599
- 490228 words of memory out of 5000000
+ 490311 words of memory out of 5000000
  28765 multiletter control sequences out of 15000+600000
  463883 words of font info for 65 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 71i,12n,74p,1795b,514s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 71i,12n,74p,1856b,514s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}
 {/Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/
 Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}
@@ -936,7 +936,7 @@ ic/lm/lmro12.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1/pu
 blic/lm/lmsy10.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1/
 public/lm/lmsy8.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1
 /public/lm/lmtt12.pfb>
-Output written on thesis.pdf (84 pages, 14188071 bytes).
+Output written on thesis.pdf (84 pages, 14188244 bytes).
 PDF statistics:
  1015 PDF objects out of 1200 (max. 8388607)
  857 compressed objects within 9 object streams
