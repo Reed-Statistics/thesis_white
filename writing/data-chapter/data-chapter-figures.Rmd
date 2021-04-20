@@ -72,7 +72,8 @@ plot1 <- ggplot() +
                        low = "#FBE1BB",
                        midpoint = 30) +
   theme_void() +
-  labs(fill = "Average Biomass")
+  labs(fill = "Average Biomass") +
+  theme(legend.key.size = unit(2, "cm"))
 
 plot2 <- ggplot() +
   geom_sf(data = intersection,
