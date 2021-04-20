@@ -84,23 +84,23 @@ The data cover a total of 14 provinces, 68 eco-sections, and 480 eco-subsections
 
 While these data contains a multitude of variables, the analyses in this thesis focus on four key response variables and one explanatory variable. The response variables used are basal area ($\text{ft}^2$), trees per acre, above-ground biomass (lbs), and net volume ($\text{ft}^3$). Figures \@ref(fig:m1), \@ref(fig:m2), \@ref(fig:m3), and \@ref(fig:m4) explore the average of these variables across the Interior West region by eco-subsection in the four following maps of the Interior West. 
 
-```{r m1, fig.align="center", out.width='65%', echo = FALSE, fig.cap="Mean basal area in Interior West eco-subsections"}
-knitr::include_graphics("figure/basal.png")
+```{r m1, fig.align="center", out.width='65%', echo = FALSE, fig.scap="Mean basal area in Interior West eco-subsections", fig.cap="Mean basal area in Interior West eco-subsections."}
+knitr::include_graphics("figure/basal_new.png")
 ```
-```{r m2, fig.align="center", out.width='65%', echo = FALSE, fig.cap="Mean biomass in Interior West eco-subsections"}
-knitr::include_graphics("figure/biomass.png")
+```{r m2, fig.align="center", out.width='65%', echo = FALSE, fig.scap="Mean biomass in Interior West eco-subsections", fig.cap="Mean biomass in Interior West eco-subsections."}
+knitr::include_graphics("figure/biomass_new.png")
 ```
-```{r m3, fig.align="center", out.width='65%', echo = FALSE, fig.cap="Mean tree count per acre in Interior West eco-subsections"}
-knitr::include_graphics("figure/count.png")
+```{r m3, fig.align="center", out.width='65%', echo = FALSE, fig.scap="Mean tree count per acre in Interior West eco-subsections", fig.cap="Mean tree count per acre in Interior West eco-subsections."}
+knitr::include_graphics("figure/count_new.png")
 ```
-```{r m4, fig.align="center", out.width='65%', echo = FALSE, fig.cap="Mean net volume in Interior West eco-subsections"}
-knitr::include_graphics("figure/voln.png")
+```{r m4, fig.align="center", out.width='65%', echo = FALSE, fig.scap="Mean net volume in Interior West eco-subsections", fig.cap="Mean net volume in Interior West eco-subsections."}
+knitr::include_graphics("figure/voln_new.png")
 ```
 
 
-While there are four variables which I will model as response variables throughout the analyses, there also is one predictor variable which will be of much use: total tree canopy cover (coded as `nlcd11`). This variable is remotely-sensed, meaning that it was not collected by FIA ground crew members but rather with aerial photography and/or satellite imagery. I will be using this variable to attempt to predict the response variables in order to understand how accurate of estimates that can be made with this remote data (which does not require as much effort to collect). Notably, this variable is considered to contain the population totals for total canopy cover, as the data are collected for the entire Interior West region. 
+While there are four variables which I will model as response variables throughout the analyses, there also is one explanatory variable which will be of much use: total tree canopy cover (coded as `nlcd11`). This variable is remotely-sensed, meaning that it was not collected by FIA ground crew members but rather with aerial photography and/or satellite imagery. I will be using this variable to attempt to predict the response variables in order to understand how accurate of estimates that can be made with this remote data (which does not require as much effort to collect). Notably, this variable is considered to contain the population totals for total canopy cover, as the data are collected for the entire Interior West region. 
 
-Below we have the distribution of the predictor variable `nlcd11` in the Northern Rocky Forest subset of our data compared to its distribution across the entire Interior West:
+Figure \@ref(fig:hists) displays the distribution of the explanatory variable `nlcd11` in the Northern Rocky Forest subset of our data compared to its distribution across the entire Interior West.
 ```{r hists, message = FALSE, warning=FALSE, echo = FALSE, fig.align="center", fig.retina=4, fig.height=4, fig.width=6, fig.cap="Distribution of total canopy cover in the M333 eco-province (left) and the entire Interior West (right)", fig.scap="Total canopy cover in the M333 eco-province and Interior West"}
 m333 <- dat_small %>%
   filter(province == "M333")
@@ -116,7 +116,7 @@ hist2 <- ggplot(dat_small) +
 hist1 + hist2 
 ```
 
-Notably, the Northern Rocky Forest Province (M333) is more heavily forested than the Interior West, so the distribution of total canopy cover in this subset of the data is quite different than the the distribution across the Interior West. Apart from making these histograms, Table \@ref(tab:var-tab) summarizes the entire unit-level data and shows some summary statistics of the five key variables:
+Notably, the Northern Rocky Forest Province (M333) is more heavily forested than the Interior West, so the distribution of total canopy cover in this subset of the data is quite different than the the distribution across the Interior West. Apart from making these histograms, Table \@ref(tab:var-tab) summarizes the entire unit-level data and shows some summary statistics of the five key variables.
 \clearpage
 
 ```{r var-tab, message = FALSE, warning=FALSE, echo = FALSE, fig.align="center", fig.retina=4}
@@ -142,12 +142,52 @@ kable(dat_small %>%
 
 Table \@ref(tab:var-tab) shows how heavily skewed these key variables are, with all the variables having a median of zero. This does not prevent meaningful analyses however, as the sample size of this dataset is so large ($n = 86,085$) and thus there is plenty of data to create models. 
 
-Finally, there is also population data showing the proportion of each eco-subsection that is forested. This data allows for the creation of the post-stratified estimates which are discussed in detail in the following chapter.  
+Finally, there is also population data showing the proportion of each eco-subsection that is forested. This data allows for the creation of the post-stratified estimates which are discussed in detail in the following chapter. Figure \@ref(fig:strata-plot) displays the proportion of sampled areas in each eco-subsection that are forested.
+```{r, message = FALSE, warning = FALSE, fig.retina = 4, fig.align = 'center', fig.height=4, fig.width=6, eval = F, include=F}
+strat <- read_csv("data/population/strata.csv") %>%
+  filter(fnf_no_water == 1)
+
+subsections <- st_read("data/SA_eco_subsection/SA_eco_subsection.shp", quiet = TRUE)
+
+subsections1 <- subsections %>%
+  filter(SUBSECT %in% strat$zoneid)
+
+int_west_sf <- us_boundaries(type = "state",
+                         states = interior_west)
+
+intersection <- st_intersection(int_west_sf, subsections1)
+
+intersection <- left_join(intersection, strat, by = c("SUBSECT" = "zoneid"))
+
+
+strat_plot <- ggplot() +
+  geom_sf(data = intersection,
+          mapping = aes(fill = zoneprop)) +
+  geom_sf(data = us_boundaries(type = "state",
+                               states = interior_west),
+          color = "black",
+          alpha = 0,
+          size = 0.25) +
+  scale_fill_gradient2(high = "#2A5043",
+                       mid = "#80BCA2",
+                       low = "#FBE1BB",
+                       midpoint = 0.5) +
+  theme_void() +
+  labs(fill = TeX("Proportion of Area\nthat is Forested")) +
+  theme(legend.key.size = unit(1.05, "cm"),
+        legend.text = element_text(size = 14),
+        legend.title = element_text(size = 14))
+
+ggsave("figure/strata_plot.png", strat_plot)
+```
+```{r strata-plot, fig.align="center", out.width='65%', echo = FALSE, fig.cap="Proportion of areas that are forested in Interior West eco-subsections.", fig.scap="Proportion of areas that are forested in Interior West eco-subsections"}
+knitr::include_graphics("figure/strata_plot.png")
+```
+\clearpage
 
 ## Data Structure & Hierarchy
 
 As hinted at throughout earlier parts of this chapter, the data used in this thesis has a hierarchical structure, in which eco-subsections are nested within eco-sections which are in turn nested within eco-provinces. Every plot has each level of granularity of location data recorded, and this is what allows for the decision of how far to borrow strength from other plots to occur. Figure @\ref(fig:data-structure) is a diagram depicting the nested data structure:
-\clearpage
 ```{r data-structure, fig.align="center", out.width='100%', echo = FALSE, fig.cap="The nested data structure of the Interior West. The green area is the eco-province that is divided into eco-sections (red area) which is in turn divided into eco-subsections (beige area).", fig.scap="The nested data structure of the Interior West"}
 knitr::include_graphics("figure/data-structure.png")
 ```

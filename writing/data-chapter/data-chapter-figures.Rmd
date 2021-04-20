@@ -11,6 +11,7 @@ library(tidyverse)
 library(sf)
 library(USAboundaries)
 library(patchwork)
+library(latex2exp)
 `%ni%` <- Negate(`%in%`)
 
 interior_west <- c("AZ", "CO", "ID", "MT", "NV", "NM", "UT", "WY")
@@ -55,7 +56,8 @@ dat_summary <- dat_small %>%
   summarize(mean_bio = mean(BIOLIVE_TPA),
             mean_cnt = mean(CNTLIVE_TPA),
             mean_vol = mean(VOLNLIVE_TPA),
-            mean_bas = mean(BALIVE_TPA))
+            mean_bas = mean(BALIVE_TPA),
+            mean_nlcd = mean(nlcd11))
 
 intersection <- left_join(intersection, dat_summary, by = c("SUBSECT" = "subsection"))
 
@@ -72,8 +74,10 @@ plot1 <- ggplot() +
                        low = "#FBE1BB",
                        midpoint = 30) +
   theme_void() +
-  labs(fill = "Average Biomass") +
-  theme(legend.key.size = unit(2, "cm"))
+  labs(fill = TeX("Mean Biomass (lbs)")) +
+  theme(legend.key.size = unit(1.05, "cm"),
+        legend.text = element_text(size = 14),
+        legend.title = element_text(size = 14))
 
 plot2 <- ggplot() +
   geom_sf(data = intersection,
@@ -88,7 +92,10 @@ plot2 <- ggplot() +
                        low = "#FBE1BB",
                        midpoint = 400) +
   theme_void() +
-  labs(fill = "Average Tree Count")
+  labs(fill = "Mean Tree Count\n(trees/acre)") +
+  theme(legend.key.size = unit(1.05, "cm"),
+        legend.text = element_text(size = 14),
+        legend.title = element_text(size = 14))
 
 plot3 <- ggplot() +
   geom_sf(data = intersection,
@@ -103,7 +110,10 @@ plot3 <- ggplot() +
                        low = "#FBE1BB",
                        midpoint = 1750) +
   theme_void() +
-  labs(fill = "Average Volume")
+  labs(fill = TeX("Mean Volume (ft$^3$)")) +
+  theme(legend.key.size = unit(1.05, "cm"),
+        legend.text = element_text(size = 14),
+        legend.title = element_text(size = 14))
 
 plot4 <- ggplot() +
   geom_sf(data = intersection,
@@ -118,11 +128,35 @@ plot4 <- ggplot() +
                        low = "#FBE1BB",
                        midpoint = 77) +
   theme_void() +
-  labs(fill = "Average Basal Area")
+  labs(fill = TeX("Mean Basal Area (ft$^2$)")) +
+  theme(legend.key.size = unit(1.05, "cm"),
+        legend.text = element_text(size = 14),
+        legend.title = element_text(size = 14))
+
+plot5 <- ggplot() +
+  geom_sf(data = intersection,
+          mapping = aes(fill = mean_nlcd)) +
+  geom_sf(data = us_boundaries(type = "state",
+                               states = interior_west),
+          color = "black",
+          alpha = 0,
+          size = 0.25) +
+  scale_fill_gradient2(high = "#2A5043",
+                       mid = "#80BCA2",
+                       low = "#FBE1BB",
+                       midpoint = 30) +
+  theme_void() +
+  labs(fill = TeX("Mean Percent\nCanopy Cover")) +
+  theme(legend.key.size = unit(1.05, "cm"),
+        legend.text = element_text(size = 14),
+        legend.title = element_text(size = 14))
+
 # ggsave("biomass_new.png", plot1)
 # ggsave("count_new.png", plot2)
 # ggsave("voln_new.png", plot3)
 # ggsave("basal_new.png", plot4)
+# ggsave("nlcd_new.png", plot5)
 ```
+
 
 

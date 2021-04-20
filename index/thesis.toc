@@ -5,7 +5,7 @@
 \contentsline {section}{\numberline {2.1}The Forest Inventory \& Analysis Program}{11}{section.2.1}%
 \contentsline {section}{\numberline {2.2}The Interior West}{12}{section.2.2}%
 \contentsline {section}{\numberline {2.3}The Data: Specifics}{13}{section.2.3}%
-\contentsline {section}{\numberline {2.4}Data Structure \& Hierarchy}{18}{section.2.4}%
+\contentsline {section}{\numberline {2.4}Data Structure \& Hierarchy}{19}{section.2.4}%
 \contentsline {chapter}{Chapter 3: Methods}{21}{chapter.3}%
 \contentsline {section}{\numberline {3.1}Direct Estimation}{22}{section.3.1}%
 \contentsline {subsection}{\numberline {3.1.1}The Horvitz-Thompson Estimator}{22}{subsection.3.1.1}%
@@ -42,4 +42,4 @@
 \contentsline {subsection}{\numberline {A.2.2}Direct Estimation}{59}{subsection.A.2.2}%
 \contentsline {subsection}{\numberline {A.2.3}Model-Based Estimation}{61}{subsection.A.2.3}%
 \contentsline {subsection}{\numberline {A.2.4}Writing Data Files \& Pivoting to Tidy Format}{68}{subsection.A.2.4}%
-\contentsline {chapter}{References}{69}{appendix*.27}%
+\contentsline {chapter}{References}{69}{appendix*.28}%
