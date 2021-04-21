@@ -187,14 +187,16 @@ knitr::include_graphics("figure/strata_plot.png")
 
 ## Data Structure & Hierarchy
 
-As hinted at throughout earlier parts of this chapter, the data used in this thesis has a hierarchical structure, in which eco-subsections are nested within eco-sections which are in turn nested within eco-provinces. Every plot has each level of granularity of location data recorded, and this is what allows for the decision of how far to borrow strength from other plots to occur. Figure @\ref(fig:data-structure) is a diagram depicting the nested data structure:
-```{r data-structure, fig.align="center", out.width='100%', echo = FALSE, fig.cap="The nested data structure of the Interior West. The green area is the eco-province that is divided into eco-sections (red area) which is in turn divided into eco-subsections (beige area).", fig.scap="The nested data structure of the Interior West"}
-knitr::include_graphics("figure/data-structure.png")
+As hinted at throughout earlier parts of this chapter, the data used in this thesis has a hierarchical structure, in which eco-subsections are nested within eco-sections which are in turn nested within eco-provinces. Every plot has each level of granularity of location data recorded, and this is what allows for the decision of how far to borrow strength from other plots to occur. Figure \@ref(fig:data-structure) is a diagram depicting the nested data structure.
+```{r data-structure, fig.align="center", out.width='100%', echo = FALSE, fig.cap="The nested data structure of the Interior West. The seafoam area is the eco-province that is divided into eco-sections (red area) which is in turn divided into eco-subsections (beige area).", fig.scap="The nested data structure of the Interior West"}
+knitr::include_graphics("figure/data-structure-new.png")
 ```
 
-The largest motivation for hierarchical modeling in this particular application is that observations are more similar within the hierarchies into which they are split. To understand if this is true, I perform a preliminary analysis of the data by calculating three-way ANOVAs for each key variable with predictors `province`, `section`, and `subsection`. For succinctness, we can look at the ANOVA results for one of the response variables, `BIOLIVE`, but the other variables tell a very similar story in terms of homogeneity. Just by looking at the MSE of the ANOVA results, we can see that we should expect more homogeneity within eco-subsections:
+The largest motivation for hierarchical modeling in this particular application is that observations are more similar within the hierarchies into which they are split. To understand if this is true, I perform a preliminary analysis of the data by calculating three-way ANOVAs for each key variable with predictors `province`, `section`, and `subsection`. For succinctness, we can look at the ANOVA results for one of the response variables, `BIOLIVE`, but the other variables tell a very similar story in terms of homogeneity. Table \@ref(tab:anova) displays the results of ANOVA, and just by looking at the MSE of the ANOVA results we can see that we should expect more homogeneity within eco-subsections. 
 
-```{r, echo=F, message=F, warning=F}
+\clearpage
+
+```{r anova, echo=F, message=F, warning=F}
 load("data/anova_BIOLIVE_TPA.rds")
 
 knitr::kable(broom::tidy(anova_BIOLIVE_TPA),
@@ -203,4 +205,4 @@ knitr::kable(broom::tidy(anova_BIOLIVE_TPA),
                booktabs = TRUE)
 ```
 
-These results allow for the conclusion that it is reasonable to believe that observations within a given eco-province are more homogeneous than observations throughout the Interior West. Thus, if eco-subsection level estimates of variables are required, it makes sense to borrow information from other eco-subsections that are within the same eco-province. This data structure and homogeneity within provinces is what drives the analyses performed henceforth in this thesis. 
+The results in Table \@ref(tab:anova) allow for the conclusion that it is reasonable to believe that observations within a given eco-province are more homogeneous than observations throughout the Interior West. Thus, if eco-subsection level estimates of variables are required, it makes sense to borrow information from other eco-subsections that are within the same eco-province. This data structure and homogeneity within provinces is what drives the analyses performed henceforth in this thesis. 

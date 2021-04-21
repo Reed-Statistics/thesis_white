@@ -439,18 +439,20 @@ Finally, there is also population data showing the proportion of each eco-subsec
 \hypertarget{data-structure-hierarchy}{%
 \section{Data Structure \& Hierarchy}\label{data-structure-hierarchy}}
 
-As hinted at throughout earlier parts of this chapter, the data used in this thesis has a hierarchical structure, in which eco-subsections are nested within eco-sections which are in turn nested within eco-provinces. Every plot has each level of granularity of location data recorded, and this is what allows for the decision of how far to borrow strength from other plots to occur. Figure @\ref(fig:data-structure) is a diagram depicting the nested data structure:
+As hinted at throughout earlier parts of this chapter, the data used in this thesis has a hierarchical structure, in which eco-subsections are nested within eco-sections which are in turn nested within eco-provinces. Every plot has each level of granularity of location data recorded, and this is what allows for the decision of how far to borrow strength from other plots to occur. Figure \ref{fig:data-structure} is a diagram depicting the nested data structure.
 \begin{figure}
 
-{\centering \includegraphics[width=1\linewidth]{figure/data-structure} 
+{\centering \includegraphics[width=1\linewidth]{figure/data-structure-new} 
 
 }
 
-\caption[The nested data structure of the Interior West]{The nested data structure of the Interior West. The green area is the eco-province that is divided into eco-sections (red area) which is in turn divided into eco-subsections (beige area).}\label{fig:data-structure}
+\caption[The nested data structure of the Interior West]{The nested data structure of the Interior West. The seafoam area is the eco-province that is divided into eco-sections (red area) which is in turn divided into eco-subsections (beige area).}\label{fig:data-structure}
 \end{figure}
-The largest motivation for hierarchical modeling in this particular application is that observations are more similar within the hierarchies into which they are split. To understand if this is true, I perform a preliminary analysis of the data by calculating three-way ANOVAs for each key variable with predictors \texttt{province}, \texttt{section}, and \texttt{subsection}. For succinctness, we can look at the ANOVA results for one of the response variables, \texttt{BIOLIVE}, but the other variables tell a very similar story in terms of homogeneity. Just by looking at the MSE of the ANOVA results, we can see that we should expect more homogeneity within eco-subsections:
+The largest motivation for hierarchical modeling in this particular application is that observations are more similar within the hierarchies into which they are split. To understand if this is true, I perform a preliminary analysis of the data by calculating three-way ANOVAs for each key variable with predictors \texttt{province}, \texttt{section}, and \texttt{subsection}. For succinctness, we can look at the ANOVA results for one of the response variables, \texttt{BIOLIVE}, but the other variables tell a very similar story in terms of homogeneity. Table \ref{tab:anova} displays the results of ANOVA, and just by looking at the MSE of the ANOVA results we can see that we should expect more homogeneity within eco-subsections.
+
+\clearpage
 \begin{longtable}[t]{lrrrrr}
-\caption{\label{tab:unnamed-chunk-5}Analysis of Variance Model (Biomass Response)}\\
+\caption{\label{tab:anova}Analysis of Variance Model (Biomass Response)}\\
 \toprule
 term & df & sumsq & meansq & statistic & p.value\\
 \midrule
@@ -460,7 +462,7 @@ subsection & 412 & 2247964.7 & 5456.2249 & 31.81928 & 0\\
 Residuals & 85605 & 14679153.5 & 171.4754 & NA & NA\\
 \bottomrule
 \end{longtable}
-These results allow for the conclusion that it is reasonable to believe that observations within a given eco-province are more homogeneous than observations throughout the Interior West. Thus, if eco-subsection level estimates of variables are required, it makes sense to borrow information from other eco-subsections that are within the same eco-province. This data structure and homogeneity within provinces is what drives the analyses performed henceforth in this thesis.
+The results in Table \ref{tab:anova} allow for the conclusion that it is reasonable to believe that observations within a given eco-province are more homogeneous than observations throughout the Interior West. Thus, if eco-subsection level estimates of variables are required, it makes sense to borrow information from other eco-subsections that are within the same eco-province. This data structure and homogeneity within provinces is what drives the analyses performed henceforth in this thesis.
 
 \hypertarget{methods}{%
 \chapter{Methods}\label{methods}}
@@ -647,7 +649,7 @@ f(\mu_{y_j} ~\vert~ \text{data}) \propto P(\text{data} ~\vert~ \mu_{y_j}) \cdot 
 In the application of this thesis, inferences are made about \(\mu_{y_j}\) given the data. This is represented on the lefthand side of Equation \eqref{eq:bayes-thm}. This quantity is called the posterior distribution of \(\mu_{y_j}\) given the data. As one continues to read left to right, one sees the likelihood (or, data) multiplied with the distribution of \(\mu_{y_j}\). Clearly, the true value of \(\mu_{y_j}\) is unknown or else there would be no need to attempt to estimate \(\mu_{y_j}\). In order to estimate the posterior distribution one must multiply something with the likelihood function, so a ``prior'' distribution is chosen which reflects one's prior belief of the distribution of \(\mu_{y_j}\). I now visualize obtaining a posterior distribution below:
 \clearpage
 \begin{figure}
-\includegraphics{thesis_files/figure-latex/unnamed-chunk-6-1} \caption[Prior, likelihood, and posterior distributions.]{Hypothetical prior, likelihood, and posterior distributions. The posterior is in between the prior and likelihood as it is the normalized product of these distributions.}\label{fig:unnamed-chunk-6}
+\includegraphics{thesis_files/figure-latex/unnamed-chunk-5-1} \caption[Prior, likelihood, and posterior distributions.]{Hypothetical prior, likelihood, and posterior distributions. The posterior is in between the prior and likelihood as it is the normalized product of these distributions.}\label{fig:unnamed-chunk-5}
 \end{figure}
 Here one can see that the estimate is informed by both the data and the prior distribution, rather than in the frequentist paradigm in which only the data is used. One can also see that if the prior is ``flat,'' the posterior would just be the likelihood function, leading to the same result achieved through a frequentist analysis, just though a different method.
 
@@ -788,22 +790,22 @@ The three estimators which have coefficient of variation values higher than one 
 In order to take a closer look at \emph{how} borrowing of strength differs between the area-level hierarchical Bayesian estimator and the area-level EBLUP estimator, I chose to zoom in to basal area in the Northern Rocky Forest. Immediately, when examining the Northern Rocky Forest, one can see the behavior of the hierarchical Bayesian area-level estimator ``pulling up'' lower valued eco-subsections compared to their post-stratified estimate:
 \begin{figure}
 
-{\centering \includegraphics[width=1\linewidth]{thesis_files/figure-latex/unnamed-chunk-8-1} 
+{\centering \includegraphics[width=1\linewidth]{thesis_files/figure-latex/unnamed-chunk-7-1} 
 
 }
 
-\caption[HB Area and Post-stratified estimates in M333]{The hierarchical Bayesian area-level estimator and post-stratified estimator predicting basal area in the Northern Rocky Forest. The error bars depict two standard errors above and below the estimate of the response variable.}\label{fig:unnamed-chunk-8}
+\caption[HB Area and Post-stratified estimates in M333]{The hierarchical Bayesian area-level estimator and post-stratified estimator predicting basal area in the Northern Rocky Forest. The error bars depict two standard errors above and below the estimate of the response variable.}\label{fig:unnamed-chunk-7}
 \end{figure}
 One can also observe that the eco-subsections with high response values will get ``pulled down.'' However, the coefficient of variation does not increase significantly here, as the sample mean is still relatively high. The pulling up and down of estimates is a trait expected of these hierarchical Bayesian models, and it is the realization of ``borrowing strength'' or ``pooling information'' (McElreath, 2020).
 
 The frequentist area-level estimator takes a different approach to making these estimates. Notably, in the case of small within-area variation, the EBLUP will put a heavy weight on the post-stratified estimate from Equation \eqref{eq:eblup-area-weight}. One can see this occur by comparing the area-level frequentist estimator to the post-stratified estimate with the same eco-province and response variable as above:
 \begin{figure}
 
-{\centering \includegraphics[width=1\linewidth]{thesis_files/figure-latex/unnamed-chunk-9-1} 
+{\centering \includegraphics[width=1\linewidth]{thesis_files/figure-latex/unnamed-chunk-8-1} 
 
 }
 
-\caption[EBLUP area-level and Post-stratified estimates in M333]{The frequentist area-level estimator and post-stratified estimator predicting basal area in the Northern Rocky Forest. The error bars depict two standard errors above and below the estimate of the response variable.}\label{fig:unnamed-chunk-9}
+\caption[EBLUP area-level and Post-stratified estimates in M333]{The frequentist area-level estimator and post-stratified estimator predicting basal area in the Northern Rocky Forest. The error bars depict two standard errors above and below the estimate of the response variable.}\label{fig:unnamed-chunk-8}
 \end{figure}
 Overall, the frequentist area-level estimator performs much more similarly to the post-stratified estimator, a trait that may or may not be appealing based on the confidence one has the sampling process. However, it is important to note that the frequentist area-level estimator is still borrowing strength; it just appears that it will often borrow less strength than the hierarchical Bayesian area-level estimator. This is expected. Recall Equation \eqref{eq:eblup-area-weight} and note that when a large proportion of the total variation is between-area variation, the area-level EBLUP will rely heavily on the post-stratified estimate. Thus, in eco-subsections with low within-area variation, the area-level EBLUP will produce an estimate very similar to the post-stratified estimate. It is important to recall that much of the data contains many observations which equal zero (Figure \ref{fig:hists} and Table \ref{tab:var-tab}). So, in eco-subsections with a low number of sampled plots and a high proportion of sampled plots with response values equal to zero, artificially low variance may occur. The hierarchical Bayesian estimators have the unique property of considering the uncertainty in the variance estimate when producing estimates rather than relying on just a point value.
 \clearpage
@@ -814,11 +816,11 @@ Overall, the frequentist area-level estimator performs much more similarly to th
 When vision is narrowed to the Northern Rocky Forest, it does appear that the area-level hierarchical Bayesian estimator clearly outperforms the analogous frequentist estimator in all dimensions. However, I will now return to the Interior West in order to understand trends of estimator performance over space. To do this, I simply examine the eco-subsections in which the area-level hierarchical Bayesian estimator has lower variance than the post-stratified estimator and the area-level EBLUP:
 \begin{figure}
 
-{\centering \includegraphics{thesis_files/figure-latex/unnamed-chunk-10-1} 
+{\centering \includegraphics{thesis_files/figure-latex/unnamed-chunk-9-1} 
 
 }
 
-\caption[Area-level coefficient of variation comparison across the Interior West]{The area-level hierarchical Bayesian estimator's coefficient of variation compared with the coefficient of variation for the post-stratified estimator (left) and area-level EBLUP (right). These are the average coefficient of variation across the four response variables studied. Eco-subsections in seafoam indicate areas in which the coefficient of variation is lower for the area-level hierarchical Bayesian estimator. Red areas indicate that the coefficient of variation of the hierarchical Bayesian estimator is greater than the estimator to which it is compared. Gray areas indicate areas in which we these estimators were not fit.}\label{fig:unnamed-chunk-10}
+\caption[Area-level coefficient of variation comparison across the Interior West]{The area-level hierarchical Bayesian estimator's coefficient of variation compared with the coefficient of variation for the post-stratified estimator (left) and area-level EBLUP (right). These are the average coefficient of variation across the four response variables studied. Eco-subsections in seafoam indicate areas in which the coefficient of variation is lower for the area-level hierarchical Bayesian estimator. Red areas indicate that the coefficient of variation of the hierarchical Bayesian estimator is greater than the estimator to which it is compared. Gray areas indicate areas in which we these estimators were not fit.}\label{fig:unnamed-chunk-9}
 \end{figure}
 Generally, one is able to see the trend in Figure \ref{fig:cv-map} in which the area-level hierarchical Bayesian estimator produces estimates with higher variance in heavily deserted areas such as the southern parts of the Interior West and deserts in parts of Nevada. The areas in which the area-level hierarchical Bayesian estimator has more variation than the post-stratified estimator and the area-level EBLUP are clearly non-randomly distributed across the Interior West. This gives a great insight as to when one may want to use this hierarchical Bayesian estimator and further supports the idea that the area-level hierarchical Bayesian estimator has a high coefficient of variation in non-forested areas. These estimates are of the average coefficient of variation across our four response variables for each eco-subsection, and notably in 83.5\% and 82.5\% of these areas there is a decrease in the average coefficient of variation from the area-level hierarchical Bayesian estimator to the post-stratified estimator and the area-level EBLUP, respectively.
 
@@ -854,11 +856,11 @@ One can immediately see that the unit-level hierarchical Bayesian estimator is e
 \clearpage
 \begin{figure}
 
-{\centering \includegraphics{thesis_files/figure-latex/unnamed-chunk-11-1} 
+{\centering \includegraphics{thesis_files/figure-latex/unnamed-chunk-10-1} 
 
 }
 
-\caption[Unit-level coefficient of variation comparison across the Interior West]{The unit-level hierarchical Bayesian estimator's coefficient of variation compared with the coefficient of variation for the post-stratified estimator (left) and unit-level EBLUP (right). These are the average coefficient of variation across the four response variables studied. Eco-subsections in seafoam indicate areas in which the coefficient of variation is lower for the unit-level hierarchical Bayesian estimator. Red areas indicate that the coefficient of variation of the hierarchical Bayesian estimator is greater than the estimator to which it is compared. Gray areas indicate areas in which we these estimators were not fit.}\label{fig:unnamed-chunk-11}
+\caption[Unit-level coefficient of variation comparison across the Interior West]{The unit-level hierarchical Bayesian estimator's coefficient of variation compared with the coefficient of variation for the post-stratified estimator (left) and unit-level EBLUP (right). These are the average coefficient of variation across the four response variables studied. Eco-subsections in seafoam indicate areas in which the coefficient of variation is lower for the unit-level hierarchical Bayesian estimator. Red areas indicate that the coefficient of variation of the hierarchical Bayesian estimator is greater than the estimator to which it is compared. Gray areas indicate areas in which we these estimators were not fit.}\label{fig:unnamed-chunk-10}
 \end{figure}
 The distribution of areas in which the hierarchical Bayesian unit-level estimator has lower variance than the unit-level EBLUP appears to be very random. Just under 46\% of areas have the hierarchical Bayesian unit-level model with lower variance than the unit-level EBLUP. In the case of this thesis, significant variance gains by implementing the unit-level hierarchical Bayesian estimator are not made; however, there are benefits of the implementation of this estimator. First, this piece of this thesis can serve as a case study of a hierarchical Bayesian estimator converging in variance and estimates to the analogous frequentist estimator. This allows for the verification of a statement often made in Bayesian statistics courses and textbooks with a real world example rather than a mathematical proof. Second, the unit-level hierarchical Bayesian estimator is much more flexible than the unit-level EBLUP and it does a very similar job to the unit-level EBLUP. One can ``tweak'' the behavior of this estimator through the use of priors, or even a different linking model if preferred. These changes could allow for a more successful estimator at the unit-level without changing many processes computationally. If one were to attempt to approach improving the unit-level model starting with the EBLUP, they would be met with restrictions due to the rigidity of the EBLUP's mathematics, and they would have to construct a new estimator entirely.
 
