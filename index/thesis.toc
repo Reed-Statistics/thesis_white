@@ -23,7 +23,7 @@
 \contentsline {chapter}{Chapter 4: Results}{33}{chapter.4}%
 \contentsline {section}{\numberline {4.1}The Big Picture}{34}{section.4.1}%
 \contentsline {section}{\numberline {4.2}Zooming In: The Northern Rocky Forest}{39}{section.4.2}%
-\contentsline {section}{\numberline {4.3}Stepping Back}{41}{section.4.3}%
+\contentsline {section}{\numberline {4.3}Stepping Back}{40}{section.4.3}%
 \contentsline {chapter}{Chapter 5: Discussion}{47}{chapter.5}%
 \contentsline {section}{\numberline {5.1}Findings and Takeaways}{47}{section.5.1}%
 \contentsline {section}{\numberline {5.2}Limitations}{47}{section.5.2}%
@@ -42,4 +42,4 @@
 \contentsline {subsection}{\numberline {A.2.2}Direct Estimation}{59}{subsection.A.2.2}%
 \contentsline {subsection}{\numberline {A.2.3}Model-Based Estimation}{61}{subsection.A.2.3}%
 \contentsline {subsection}{\numberline {A.2.4}Writing Data Files \& Pivoting to Tidy Format}{68}{subsection.A.2.4}%
-\contentsline {chapter}{References}{69}{appendix*.28}%
+\contentsline {chapter}{References}{69}{appendix*.27}%
