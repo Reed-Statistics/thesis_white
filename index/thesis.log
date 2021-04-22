@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2021.3.24)  21 APR 2021 14:22
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2021.3.24)  22 APR 2021 10:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -829,12 +829,11 @@ put line 795.
 [39
 
  <./thesis_files/figure-latex/m333-basal-1.pdf>] [40]
-<thesis_files/figure-latex/unnamed-chunk-7-1.pdf, id=738, 439.6425pt x 268.0012
-5pt>
-File: thesis_files/figure-latex/unnamed-chunk-7-1.pdf Graphic file (type pdf)
-<use thesis_files/figure-latex/unnamed-chunk-7-1.pdf>
-Package pdftex.def Info: thesis_files/figure-latex/unnamed-chunk-7-1.pdf  used 
-on input line 812.
+<thesis_files/figure-latex/boolmap1-1.pdf, id=739, 439.6425pt x 268.00125pt>
+File: thesis_files/figure-latex/boolmap1-1.pdf Graphic file (type pdf)
+<use thesis_files/figure-latex/boolmap1-1.pdf>
+Package pdftex.def Info: thesis_files/figure-latex/boolmap1-1.pdf  used on inpu
+t line 812.
 (pdftex.def)             Requested size: 439.64142pt x 268.00058pt.
 
 Overfull \hbox (6.02142pt too wide) in paragraph at lines 812--813
@@ -846,13 +845,12 @@ Underfull \vbox (badness 1769) has occurred while \output is active []
 
 [41
 
- <./thesis_files/figure-latex/unnamed-chunk-7-1.pdf>] [42] [43]
-<thesis_files/figure-latex/unnamed-chunk-8-1.pdf, id=762, 439.6425pt x 268.0012
-5pt>
-File: thesis_files/figure-latex/unnamed-chunk-8-1.pdf Graphic file (type pdf)
-<use thesis_files/figure-latex/unnamed-chunk-8-1.pdf>
-Package pdftex.def Info: thesis_files/figure-latex/unnamed-chunk-8-1.pdf  used 
-on input line 852.
+ <./thesis_files/figure-latex/boolmap1-1.pdf>] [42] [43]
+<thesis_files/figure-latex/boolmap2-1.pdf, id=766, 439.6425pt x 268.00125pt>
+File: thesis_files/figure-latex/boolmap2-1.pdf Graphic file (type pdf)
+<use thesis_files/figure-latex/boolmap2-1.pdf>
+Package pdftex.def Info: thesis_files/figure-latex/boolmap2-1.pdf  used on inpu
+t line 852.
 (pdftex.def)             Requested size: 439.64142pt x 268.00058pt.
 
 Overfull \hbox (6.02142pt too wide) in paragraph at lines 852--853
@@ -864,7 +862,7 @@ Underfull \vbox (badness 1769) has occurred while \output is active []
 
 [44
 
- <./thesis_files/figure-latex/unnamed-chunk-8-1.pdf>] [45] [46
+ <./thesis_files/figure-latex/boolmap2-1.pdf>] [45] [46
 
 ]
 Chapter 5.
@@ -917,7 +915,7 @@ Package rerunfilecheck Info: File `thesis.out' has not changed.
  ) 
 Here is how much of TeX's memory you used:
  12061 strings out of 480962
- 186555 string characters out of 5906599
+ 186443 string characters out of 5906599
  490519 words of memory out of 5000000
  28769 multiletter control sequences out of 15000+600000
  463883 words of font info for 65 fonts, out of 8000000 for 9000
@@ -943,10 +941,10 @@ ic/lm/lmro12.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1/pu
 blic/lm/lmsy10.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1/
 public/lm/lmsy8.pfb></Users/graysonwhite/Library/TinyTeX/texmf-dist/fonts/type1
 /public/lm/lmtt12.pfb>
-Output written on thesis.pdf (86 pages, 14922080 bytes).
+Output written on thesis.pdf (86 pages, 14922167 bytes).
 PDF statistics:
- 1055 PDF objects out of 1200 (max. 8388607)
- 896 compressed objects within 9 object streams
+ 1059 PDF objects out of 1200 (max. 8388607)
+ 900 compressed objects within 9 object streams
  262 named destinations out of 1000 (max. 500000)
  461 words of extra memory for PDF output out of 10000 (max. 10000000)
 
