@@ -36,7 +36,7 @@ The Interior West region contains the states that encompass the Rocky Mountains 
 
 ## The Data: Specifics
 
-The data used in this thesis was collected by the FIA in the span of 10 years from 2007 to 2017. While the data were collected over this 10 year period, the analyses throughout this thesis are employed under the assumption that this is a "snapshot" of the Interior West at some moment in time. Thus, no temporal features of this dataset are considered; however, the inventory year information is available. These data are plot-level (sometimes referred to as "unit-level") for the Interior West region of the United States, in which each plot consists of both ground and remotely-sensed data.
+The data used in this thesis were collected by the FIA in the span of 10 years from 2007 to 2017. While the data were collected over this 10 year period, the analyses throughout this thesis are employed under the assumption that this is a "snapshot" of the Interior West at some moment in time. Thus, no temporal features of this dataset are considered; however, the inventory year information is available. These data are plot-level (sometimes referred to as "unit-level") for the Interior West region of the United States, in which each plot consists of both ground and remotely-sensed data.
 
 The dataframe used in this thesis is a joined dataframe derived from two FIA datasets of the Interior West: `spatial` and `response`. The `spatial` dataframe contains 89,444 observations and 70 variables, most notably the remotely-sensed predictor variable (`nlcd11`), location information, and eco-subsection. The `nlcd11` variable was collected by the Multi-Resolution Land Characteristics Consortium [@nlcd11]. This variable measures percent tree canopy cover in a given plot. 
 
@@ -80,7 +80,7 @@ ggplot() +
   )
 ```
 
-The data cover a total of 14 provinces, 68 eco-sections, and 480 eco-subsections. The hierarchical structure of the data and nested nature of the eco-subsections within eco-sections within eco-provinces lends itself to the creation of hierarchical models that borrow strength from surrounding areas. 
+The data cover a total of 14 provinces, 68 eco-sections, and 480 eco-subsections. The hierarchical structure of the data and nested nature of the eco-subsections within eco-sections within eco-provinces allows for the creation of hierarchical models that borrow strength from surrounding areas. 
 
 While these data contains a multitude of variables, the analyses in this thesis focus on four key response variables and one explanatory variable. The response variables used are basal area ($\text{ft}^2$), trees per acre, above-ground biomass (lbs), and net volume ($\text{ft}^3$). Figures \@ref(fig:m1), \@ref(fig:m2), \@ref(fig:m3), and \@ref(fig:m4) explore the average of these variables across the Interior West region by eco-subsection in the four following maps of the Interior West. 
 
@@ -100,7 +100,7 @@ knitr::include_graphics("figure/voln_new.png")
 
 While there are four variables which I will model as response variables throughout the analyses, there also is one explanatory variable which will be of much use: total tree canopy cover (coded as `nlcd11`). This variable is remotely-sensed, meaning that it was not collected by FIA ground crew members but rather with aerial photography and/or satellite imagery. I will be using this variable to attempt to predict the response variables in order to understand how accurate of estimates that can be made with this remote data (which does not require as much effort to collect). Notably, this variable is considered to contain the population totals for total canopy cover, as the data are collected for the entire Interior West region. 
 
-Figure \@ref(fig:hists) displays the distribution of the explanatory variable `nlcd11` in the Northern Rocky Forest subset of our data compared to its distribution across the entire Interior West.
+Figure \@ref(fig:hists) displays the distribution of the explanatory variable `nlcd11` in the Northern Rocky Forest subset of the data compared to its distribution across the entire Interior West.
 ```{r hists, message = FALSE, warning=FALSE, echo = FALSE, fig.align="center", fig.retina=4, fig.height=4, fig.width=6, fig.cap="Distribution of total canopy cover in the M333 eco-province (left) and the entire Interior West (right)", fig.scap="Total canopy cover in the M333 eco-province and Interior West"}
 m333 <- dat_small %>%
   filter(province == "M333")
@@ -140,9 +140,9 @@ kable(dat_small %>%
   booktabs = TRUE)
 ```
 
-Table \@ref(tab:var-tab) shows how heavily skewed these key variables are, with all the variables having a median of zero. This does not prevent meaningful analyses however, as the sample size of this dataset is so large ($n = 86,085$) and thus there is plenty of data to create models. 
+Table \@ref(tab:var-tab) shows how heavily skewed these key variables are, with all the variables having a median of zero. This does not prevent meaningful analyses however, as the sample size of this dataset is so large ($n = 86,085$) and thus there are plenty of data to create models. 
 
-Finally, there is also population data showing the proportion of each eco-subsection that is forested. This data allows for the creation of the post-stratified estimates which are discussed in detail in the following chapter. Figure \@ref(fig:strata-plot) displays the proportion of sampled areas in each eco-subsection that are forested.
+Finally, there are also population data showing the proportion of each eco-subsection that is forested. These data allow for the creation of the post-stratified estimates which are discussed in detail in the following chapter. Figure \@ref(fig:strata-plot) displays the proportion of sampled areas in each eco-subsection that are forested.
 ```{r, message = FALSE, warning = FALSE, fig.retina = 4, fig.align = 'center', fig.height=4, fig.width=6, eval = F, include=F}
 strat <- read_csv("data/population/strata.csv") %>%
   filter(fnf_no_water == 1)
@@ -187,7 +187,7 @@ knitr::include_graphics("figure/strata_plot.png")
 
 ## Data Structure & Hierarchy
 
-As hinted at throughout earlier parts of this chapter, the data used in this thesis has a hierarchical structure, in which eco-subsections are nested within eco-sections which are in turn nested within eco-provinces. Every plot has each level of granularity of location data recorded, and this is what allows for the decision of how far to borrow strength from other plots to occur. Figure \@ref(fig:data-structure) is a diagram depicting the nested data structure.
+As hinted at throughout earlier parts of this chapter, the data used in this thesis have a hierarchical structure, in which eco-subsections are nested within eco-sections which are in turn nested within eco-provinces. Every plot has each level of granularity of location data recorded, and this is what allows for the decision of how far to borrow strength from other plots to occur. Figure \@ref(fig:data-structure) is a diagram depicting the nested data structure.
 ```{r data-structure, fig.align="center", out.width='100%', echo = FALSE, fig.cap="The nested data structure of the Interior West. The seafoam area is the eco-province that is divided into eco-sections (red area) which is in turn divided into eco-subsections (beige area).", fig.scap="The nested data structure of the Interior West"}
 knitr::include_graphics("figure/data-structure-new.png")
 ```
