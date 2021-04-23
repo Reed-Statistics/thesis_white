@@ -5,7 +5,7 @@
 
 # Code Appendix
 
-This appendix includes the code used to create the estimates used in this thesis. We include both the helper functions created to run the analyses and the implementation of these helper functions.
+This appendix includes the code used to create the estimates used in this thesis. Both the helper functions created to run the analyses and the implementation of these helper functions are included.
 
 ## Helper Functions
 

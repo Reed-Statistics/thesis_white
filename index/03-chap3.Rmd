@@ -91,18 +91,18 @@ y_{i,j} = x_{ij} \beta + \nu_j + e_{ij} (\#eq:unit-mod)
 where $\beta$ is calculated from data across the eco-province and will stay constant for each eco-subsection. However, $\nu_j$, the "random effect", will be different for each eco-subsection. This random effect helps account for variation between eco-subsections that the auxiliary data does not account for. The random effects $\nu$ and sampling errors $e$ are assumed to be distributed as follows:
 $$
  \newcommand\myeq{\stackrel{\mathclap{\normalfont\mbox{s}}}{~}}
-\nu_j \stackrel{\text{iid}}{\sim} \text{N}(0,~ \hat\sigma^2_{\nu}), \quad
-e_{ij} \stackrel{\text{ind}}{\sim}\text{N}(0,~\hat\sigma^2_e).
+\nu_j \stackrel{\text{iid}}{\sim} \text{N}(0,~ \sigma^2_{\nu}), \quad
+e_{ij} \stackrel{\text{ind}}{\sim}\text{N}(0,~ \sigma^2_e).
 $$
-Intuitively, one can think of the variance of the random effect, $\hat\sigma^2_\nu$, as an estimate of the heterogeneity between our small areas $j$ after we account for our fixed effects [@breidenbach2012]. One can also think of the estimate of the variance for the sampling errors as a measurement of within-area variability. From the mixed model, Rao (2014) derives the unit-level EBLUP estimator fit in the frequentist paradigm as the weighted average of the survey regression estimator and the regression-synthetic estimator:
+Intuitively, one can think of the variance of the random effect, $\sigma^2_\nu$, as an estimate of the heterogeneity between our small areas $j$ after we account for our fixed effects [@breidenbach2012]. One can also think of the estimate of the variance for the sampling errors as a measurement of within-area variability. From the mixed model, Rao (2014) derives the unit-level EBLUP estimator fit in the frequentist paradigm as the weighted average of the survey regression estimator and the regression-synthetic estimator:
 \begin{align}
-\hat \mu_{y_j}^{FRU} = \hat \gamma_j \hat\mu_{y_j}^{SR} + (1 - \hat \gamma_j) \hat\mu_{y_j}^{RSU}
+\hat \mu_{y_j}^{FRU} = \hat \gamma_j \hat\mu_{y_j}^{SR} + (1 - \hat \gamma_j) \hat\mu_{y_j}^{RSU} (\#eq:fru-weight)
 \end{align}
 where
 \begin{align}
-\hat\gamma_j = \frac{\hat\sigma^2_\nu}{\hat\sigma^2_\nu + \hat\sigma^2_e}
+\hat\gamma_j = \frac{\hat\sigma^2_\nu}{\hat\sigma^2_\nu + \hat\sigma^2_e} (\#eq:gamma-fru)
 \end{align}
-It is easy to think about $\hat\gamma_j$ if it is broken down into two parts: its numerator and denominator. The numerator measures the between-area variation, and the denominator measures the between-area variation plus the within-area variation, i.e. total variability. Thus, when a large proportion of the overall variation is between-area variation, the unit-level EBLUP will put more weight on the survey regression estimator.
+It is easy to think about $\hat\gamma_j$ if it is broken down into two parts: its numerator and denominator. The numerator measures the between-area variation, and the denominator measures the between-area variation plus the within-area variation, i.e. total variability. Thus, when a large proportion of the overall variation is between-area variation, the unit-level EBLUP will put more weight on the survey regression estimator. This is because Equation \@ref(eq:gamma-fru) will be closer to one when a large proportion of the overall bariation is between-area, and thus Equation \@ref(eq:fru-weight) more heavily weights the survey regression estimator. 
 
 For this thesis, in order to compute the variance of the unit-level EBLUP estimator, I chose to bootstrap. Bootstrapping is the process of taking repeated samples of the data with replacement, computing the statistic on that new bootstrap sample, and then repeating this process many times [@bootstrap]. The property of the bootstrap which is useful for the analyses in this thesis is that it produces good estimates for the variance of the estimator. For the application of this thesis, I bootstrap within each small area to compute the variance. For each eco-subsection $j$, I sample $n_j$ plots with replacement. Next, I fit the unit-level EBLUP estimator to the bootstrapped eco-subsections and produce the mean estimate on the first bootstrap sample (I denote each bootstrap sample with $b$, so in this case $b=1$). 
 $$
@@ -127,9 +127,9 @@ The EBLUP can also be fit at the area-level. In order to do this, the following 
 where it is assumed that
 $$
  \newcommand\myeq{\stackrel{\mathclap{\normalfont\mbox{s}}}{~}}
-\nu_j \stackrel{\text{iid}}{\sim} \text{N}(0,~ \hat\sigma^2_{\nu}), \quad e_{j} \stackrel{\text{ind}}{\sim}\text{N}(0, \sigma^2_j).
+\nu_j \stackrel{\text{iid}}{\sim} \text{N}(0,~ \sigma^2_{\nu}), \quad e_{j} \stackrel{\text{ind}}{\sim}\text{N}(0, \sigma^2_j).
 $$
-In the case of the area-level EBLUP, the within-area variation, $\sigma^2_j$ is assumed to be known and is not a quantity to estimate. However, estimation of the between-area variation, $\hat\sigma_\nu^2$ still occurs. The area-level EBLUP estimator is expressed by Rao (2014) as a weighted average of the direct estimator and the regression-synthetic estimator:
+In the case of the area-level EBLUP the within-area variation, $\sigma^2_j$, is assumed to be known and is not a quantity to estimate. However, estimation of the between-area variation, $\sigma_\nu^2$, still occurs. The area-level EBLUP estimator is expressed by Rao (2014) as a weighted average of the direct estimator and the regression-synthetic estimator:
 \begin{align}
 \hat \mu_j^{FRA} = \hat\gamma_j \hat\mu_j^{PS} + (1 - \hat\gamma_j) \hat\mu_j^{RSA} (\#eq:eblup-area-weight)
 \end{align}
