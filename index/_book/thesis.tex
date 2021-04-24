@@ -499,11 +499,11 @@ The post-stratified estimator is very similar to the Horvitz-Thompson estimator;
 \hat\mu_{y_j}^{PS} = \sum_{k=1}^{2} w_{jk} \cdot \hat\mu_{y_{jk}}^{HT}
 \end{align}
 Ignoring the finite population correction, the variance estimate for post-stratified estimator is calculated by:
-\[
+\begin{align}
 \hat V\Big(\hat \mu_{y_j}^{PS}\Big) = 
 \frac{1}{n_j} \Bigg( \sum_{k=1}^{2} w_{jk} n_{jk} \hat V\Big(\hat\mu_{y_{jk}}^{HT}\Big) + 
 \sum_{k=1}^{2} (1 - w_{jk}) \frac{n_{jk}}{n_j} \hat V\Big(\hat\mu_{y_{jk}}^{HT}\Big) \Bigg)
-\]
+\end{align}
 Recall that \(k\) indexes over the strata, which in this case is forested and non-forested sampled units. The quantity \(w_{jk}\) is a survey weight entirely decided by the true proportion of forested area in eco-subsection \(j\). For example, if eco-subsection \(j\) was 80\% forested, the weights would be calculated as \(w_{j1} = 0.8\) and \(w_{j2} = 0.2\). Therefore if under-sampling of forests had occurred (say, if only 60\% of our samples were forested), this under-sampling is corrected with the survey weights, and this results in a better estimate of \(\mu_{y_j}\) that is less variable.
 
 The post-stratified estimator is a great alternative to the Horvitz-Thompson estimator when auxiliary information related to the response variable of interest is available, and in that situation there is not a justifiable reason to pick the Horvitz-Thompson estimator over the post-stratified estimator as the direct estimator of choice. The data needed to compute the post-stratified estimate in the Interior West is available, so we will primarily be comparing the indirect estimators to the post-stratified estimator in the results. Also, the area-level indirect model-based estimators will be based on the post-stratified estimate.
@@ -530,7 +530,11 @@ Now I will introduce two implicit model-based indirect estimators commonly used 
 \hypertarget{the-area-level-regression-synthetic-estimator}{%
 \subsection{The Area-level Regression-Synthetic Estimator}\label{the-area-level-regression-synthetic-estimator}}
 
-The area-level regression-synthetic estimator is a commonly used implicit model-based indirect estimator. This estimator uses an ordinary least squares linear regression that is fit to the auxiliary variable in order to estimate the parameter of interest, \(\mu_{y_j}\). Notably, I use \(\bar X_j\) to denote the auxiliary data population mean in the \(j\)th small area.
+The area-level regression-synthetic estimator is a commonly used implicit model-based indirect estimator. This estimator uses an ordinary least squares linear regression that is fit to the auxiliary variable in order to estimate the parameter of interest, \(\mu_{y_j}\). In this case, the ordinary least squares regression is specified with the post-stratified estimate as the response value and the population data as the explanatory variable. Notably, I use \(\bar X_j\) to denote the auxiliary data population mean in the \(j\)th small area. The model specification is as follows:
+\begin{align}
+\hat\mu_{y_j}^{PS} = \beta_0 + \beta_1 \bar X_{j} + e_j.
+\end{align}
+The area-level regression-synthetic estimator is then fit to the data:
 \begin{align}
 \hat\mu_{y_j}^{RSA} = \hat\beta_0 + \hat\beta_1 \bar X_{j}
 \end{align}
@@ -539,13 +543,17 @@ Note that the \(\hat \beta\)'s are calculated through standard methods of ordina
 \hypertarget{the-unit-level-regression-synthetic-estimator}{%
 \subsection{The Unit-level Regression-Synthetic Estimator}\label{the-unit-level-regression-synthetic-estimator}}
 
-The unit-level regression-synthetic estimator is very similar to the area-level regression-synthetic estimator. Rather than the ordinary least squares model being fit at the area-level, it is fit at the unit-level. The unit-level model is fit as follows:
-\[
-\hat y_{ji} = \hat\beta_0 + \hat\beta_1 X_{ji}
-\]
+The unit-level regression-synthetic estimator is very similar to the area-level regression-synthetic estimator. Rather than the ordinary least squares model being fit at the area-level, it is fit at the unit-level. The unit-level model is specified as follows:
+\begin{align}
+y_{ji} = \beta_0 + \beta_1 X_{ji} + e_{ji}.
+\end{align}
+This unit-level model is then fit to the data:
+\begin{align}
+\hat y_{ji} = \hat\beta_0 + \hat\beta_1 X_{ji}.
+\end{align}
 Note that I use capital \(X\) to denote the population mean of the explanatory variable at the unit-level. The unit-level regression-synthetic estimator is expressed below:
 \begin{align}
-\hat\mu_{y_j}^{RSU} = \frac{1}{n_j} \sum_{i \in s_j} \hat y_{ji}
+\hat\mu_{y_j}^{RSU} = \frac{1}{N_j} \sum_{i \in U_j} \hat y_{ji}
 \end{align}
 This estimator is very similar to the area-level regression-synthetic estimator, as it fits an ordinarily least squares model over the eco-province the small area is in, and the auxiliary information has the same effect on each small area.
 
@@ -569,7 +577,7 @@ where \(\beta\) is calculated from data across the eco-province and will stay co
 \nu_j \stackrel{\text{iid}}{\sim} \text{N}(0,~ \sigma^2_{\nu}), \quad
 e_{ij} \stackrel{\text{ind}}{\sim}\text{N}(0,~ \sigma^2_e).
 \]
-Intuitively, one can think of the variance of the random effect, \(\sigma^2_\nu\), as an estimate of the heterogeneity between our small areas \(j\) after we account for our fixed effects (Breidenbach \& Astrup, 2012). One can also think of the estimate of the variance for the sampling errors as a measurement of within-area variability. From the mixed model, Rao (2014) derives the unit-level EBLUP estimator fit in the frequentist paradigm as the weighted average of the survey regression estimator and the regression-synthetic estimator:
+Intuitively, one can think of the variance of the random effect, \(\sigma^2_\nu\), as an estimate of the heterogeneity between our small areas \(j\) after we account for our fixed effects (Breidenbach \& Astrup, 2012). One can also think of the estimate of the variance for the sampling errors as a measurement of within-area variability. Rao (2014) explains that the quantities \(\sigma^2_\nu\) and \(\sigma^2_e\) are estimated through the method of moments to get unbiased estimators of \(\sigma^2_\nu\) and \(\sigma^2_e\). From the mixed model, Rao (2014) derives the unit-level EBLUP estimator fit in the frequentist paradigm as the weighted average of the survey regression estimator and the regression-synthetic estimator:
 \begin{align}
 \hat \mu_{y_j}^{FRU} = \hat \gamma_j \hat\mu_{y_j}^{SR} + (1 - \hat \gamma_j) \hat\mu_{y_j}^{RSU} \label{eq:fru-weight}
 \end{align}
@@ -636,11 +644,11 @@ One can intuitively think about each \(g_{\#j}\) as follows: \(g_{1j}\) accounts
 
 So far in this chapter, I have explored common frequentist approaches to small area estimation. However, the research goal of this thesis is to study the performance of the hierarchical Bayesian model for small area estimation. With a hierarchical Bayesian model, one must derive the posterior distribution of the variable of interest with either Markov Chain Monte Carlo (MCMC) methods or through numerical integration. One does this by considering both the likelihood (data given unknown parameters) and prior distributions on the parameters. This allows for the use of Bayes' Theorem in order to attain the posterior distribution for the parameter of interest, the mean value of a forest attribute within a given eco-subsection.
 
-Before introducing a slew of notation regarding Bayesian statistics, let's take a step back to recall the type of statistical questions asked thus far in this chapter. Each estimator in this chapter has attempted to quantify the mean of the response variable \(y\) in each eco-subsection \(j\), that is estimating \(\mu_{y_j}\). The way in which the estimator \(\hat\mu_{y_j}\) and its variance estimator are obtained is by asking the question: ``What sort of \(\hat\mu_{y_j}\) would we expect to get under hypothetical resampling?'' This question is the basis of the name ``frequentist,'' as the estimates in this frequentist paradigm rely on the hypothetical repeated (frequent) sampling. When Bayesian methods are used to estimate \(\mu_{y_j}\), one asks a different question: ``What is our knowledge of \(\mu_{y_j}\) based on the data and prior information?'' (Bray, 2020).
+Before introducing a slew of notation regarding Bayesian statistics, let's take a step back to recall the type of statistical questions asked thus far in this chapter. Each estimator in this chapter has attempted to quantify the mean of the response variable \(y\) in each eco-subsection \(j\), that is estimating \(\mu_{y_j}\). The way in which the estimator \(\hat\mu_{y_j}\) and its variance estimator are obtained is by asking the question: ``What sort of \(\hat\mu_{y_j}\) would we expect to get under hypothetical resampling?'' This question is the basis of the name ``frequentist,'' as the estimates in this frequentist paradigm rely on the hypothetical repeated (frequent) sampling from a theoretical population. When Bayesian methods are used to estimate \(\mu_{y_j}\), one asks a different question: ``What is our knowledge of \(\mu_{y_j}\) based on the data and prior information?'' (Bray, 2020).
 
 These questions bring up a philosophical difference between Bayesian and frequentist statistics about the addition of prior information. One may object to this philosophical difference; however, in this thesis I add very little prior information and rely quite heavily on the data to do much of the work. Secondly, the addition of prior information allows for a posterior distribution to be attained for estimation of \(\mu_{y_j}\), rather than a point estimate. Having a posterior distribution can be helpful in further understanding the uncertainty of the estimate of the parameter, especially when the posterior distribution is skewed. Now, with this philosophical difference in mind, recall Bayes' Theorem for events \(A\) and \(B\) below:
 \begin{align}
-P(A ~\vert~ B) &= \frac{P(B ~\vert~ A) \cdot P(A)}{P(B)} \\
+P(A ~\vert~ B) &= \frac{P(B ~\vert~ A) \cdot P(A)}{P(B)} \nonumber \\
 &\propto P(B ~\vert~ A) \cdot P(A)
 \end{align}
 Bayes' Theorem allows for the derivation of one conditional probability, \(P(A ~\vert~ B)\), given the inverse conditional probability and each marginal distribution are known (Bayes, 1763). This theorem is the basis of hierarchical Bayesian models. Replacing \(A\) with our parameter of interest, \(\mu_{y_j}\), and \(B\) with the data, the following equation is derived:
@@ -660,7 +668,7 @@ These are the concepts and basics of Bayesian statistics applied to the problem 
 \hypertarget{the-unit-level-hierarchical-bayesian-estimator}{%
 \subsection{The Unit-level Hierarchical Bayesian Estimator}\label{the-unit-level-hierarchical-bayesian-estimator}}
 
-For the unit-level hierarchical Bayesian estimator, I start with Equation \eqref{eq:unit-mod} as I did for the unit-level frequentist EBLUP. Now, a hierarchical Bayesian approach can be applied to this equation. To do this I specify Equation \eqref{eq:unit-mod} as a hierarchical Bayesian model:
+For the unit-level hierarchical Bayesian estimator, I start with Equation \eqref{eq:unit-mod} as I did for the unit-level frequentist EBLUP. Now, a hierarchical Bayesian approach can be applied to this equation. To do this I specify Equation \eqref{eq:unit-mod} as a hierarchical Bayesian model with prior distributions of parameters assumed to be independent of each other:
 \begin{align}
 &y_{ij} ~\vert~ \beta,~ \nu_j, \sigma^2_e \sim \text{N}(x_{ij}\beta + \nu_j,~ \sigma^2_e), \nonumber \\
 &\nu_j ~\vert~ \sigma^2_\nu \sim \text{N}(0,~ \sigma^2_\nu),\nonumber \\
@@ -682,7 +690,7 @@ where \(\mathbf{y_j}\) is the vector of response values for sampled units in the
 \hypertarget{the-area-level-hierarchical-bayesian-estimator}{%
 \subsection{The Area-level Hierarchical Bayesian Estimator}\label{the-area-level-hierarchical-bayesian-estimator}}
 
-For the area-level hierarchical Bayesian estimator, I start with Equation \eqref{eq:area-mod}, as was done for the area-level frequentist EBLUP, and apply a hierarchical Bayesian approach to this equation. To do this, I now specify Equation \eqref{eq:area-mod} as a hierarchical Bayesian model:
+For the area-level hierarchical Bayesian estimator, I start with Equation \eqref{eq:area-mod}, as was done for the area-level frequentist EBLUP, and apply a hierarchical Bayesian approach to this equation. To do this, I now specify Equation \eqref{eq:area-mod} as a hierarchical Bayesian model with prior distributions of parameters assumed to be independent of each other:
 \begin{align}
 &\hat\mu_{y_j}^{PS} ~\vert~ \mu_{y_j},~ \beta,~ \sigma^2_\nu \sim \text{N}(\mu_{y_j},~ \sigma^2_j), \nonumber \\
 &\mu_{y_j} ~\vert~ \beta,~ \sigma^2_\nu \sim \text{N}(x_j\beta,~ \sigma^2_\nu),\nonumber \\
