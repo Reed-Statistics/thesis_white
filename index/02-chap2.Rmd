@@ -21,7 +21,6 @@ dat_small <- read_csv("data/subsets/dat_small.csv")
 The FIA has been continuously operating since 1930, and its official mission is to "make and keep current a comprehensive inventory and analysis of the present and prospective conditions of and requirements for the renewable resources of the forest and rangelands of the US." [@whatisfia]. The FIA collects data all throughout the United States by completing a survey each year of many plots of land. The areas measured by the FIA and their ground crews are approximately 30 meter by 30 meter hexagonal units. Due to the vast size of the United States and immense amount of forested land, it would be nearly impossible for the FIA to attain population data for the entire country, so it uses sampling instead. The FIA samples from the population of 30 meter by 30 meter hexagonal units by using a geographically-based systematic sampling design [@greenbook]. The FIA chooses these samples by first overlaying a hexagonal grid over the United States in which each hexagon contains approximately 6000 acres of land. It then fills these hexagons with much smaller hexagons and randomly samples from the population of small hexagons. Next, ground crews go to these sampled regions and collect variables such as basal area, trees per acre, etc. 
 
 Along with this hand-collected data from ground crews, the FIA also uses remotely-sensed data to gain more information. For example, the `nlcd11` variable, which measures total percent tree canopy cover of a plot, is collected via remote sensing by the Multi-Resolution Land Characteristics Consortium [@nlcd11]. Throughout the duration of the thesis, I will be working to predict ground-collected data with remotely-sensed variables, such as `nlcd11`. Having remotely-sensed variables like `nlcd11` is useful to the FIA because if these variables can predict ground-collected variables well, the FIA can collect less data and have a larger effective sample size. The `nlcd11` variable is particularly useful as the data is available at a very fine (pixel-level) resolution across the entire Interior West.
-\clearpage
 
 ## The Interior West
 
@@ -32,7 +31,6 @@ knitr::include_graphics("figure/interior-west-on-usa.png")
 ```
 <!-- The IW-FIA collects annual inventories of the Interior West, with the goal of covering 10% of the region each year, so every decade the IW-FIA should have a measurement of 100% of each Interior West state's forests. -->
 The Interior West region contains the states that encompass the Rocky Mountains along with some other smaller mountain ranges. The Interior West is comprised of 855,767 square miles of extremely diverse landscapes ranging from the high mountain peaks of the Rockies to flat desert plains in Nevada and other Interior West states. Along with desert and mountains, the Interior West also includes parts of the Great Plains. Throughout this varied landscape, there is a similarly diverse range of forested areas. These areas range from regions that are very humid to areas such as the Northern Rocky Mountain Forest, which is dry and considered a temperate desert. 
-\clearpage
 
 ## The Data: Specifics
 
@@ -40,9 +38,10 @@ The data used in this thesis were collected by the FIA in the span of 10 years f
 
 The dataframe used in this thesis is a joined dataframe derived from two FIA datasets of the Interior West: `spatial` and `response`. The `spatial` dataframe contains 89,444 observations and 70 variables, most notably the remotely-sensed explanatory variable (`nlcd11`), location information, and eco-subsection. 
 
-The `response` dataframe contains 86,085 observations and 67 variables, most notably four response variables collected by FIA crew members (`BALIVE`, `CNTLIVE`, `BIOLIVE`, and `VOLNLIVE`), location information, and eco-subsection. The response variables noted above measure basal area, tree count, biomass, and volume, respectively. I joined these dataframes by their unique plot number and subsetted the number of variables significantly, retaining variables such as plot number, longitude and latitude, elevation, the explanatory variable, response variables, eco-subsection, eco-section, and eco-province. The resulting joined dataframe has 86,085 rows that share the same plots between the `response` and `spatial` dataframes. Shown here are a few rows of the dataframe with relevant columns selected and values rounded to the second decimal place:
+The `response` dataframe contains 86,085 observations and 67 variables, most notably four response variables collected by FIA crew members (`BALIVE`, `CNTLIVE`, `BIOLIVE`, and `VOLNLIVE`), location information, and eco-subsection. The response variables noted above measure basal area, tree count, biomass, and volume, respectively. I joined these dataframes by their unique plot number and subsetted the number of variables significantly, retaining variables such as plot number, longitude and latitude, elevation, the explanatory variable, response variables, eco-subsection, eco-section, and eco-province. The resulting joined dataframe has 86,085 rows that share the same plots between the `response` and `spatial` dataframes. Table \@ref(tab:firsttab) displays a few rows of the dataframe with relevant columns selected and values rounded to the second decimal place.
+\clearpage
 
-```{r, results="asis", message = F, warning = F, echo = F}
+```{r firsttab, results="asis", message = F, warning = F, echo = F}
 library(knitr)
 kable(dat_small %>%
         dplyr::select(BIOLIVE_TPA, BALIVE_TPA, CNTLIVE_TPA, VOLNLIVE_TPA, nlcd11, subsection) %>%
@@ -56,6 +55,7 @@ kable(dat_small %>%
 ```
 
 While the data cover the Interior West as a whole, the data contain very granular information, as each row represents a plot sampled by the FIA. The data also include variables that subset the Interior West into eco-provinces that contain eco-sections, and these eco-sections contain eco-subsections. In the data, on average, each eco-section contains approximately 7.06 eco-subsections, and each eco-province contains an average of 4.86 eco-sections. So, an average eco-province then contains just over 34 eco-subsections. We can take a look at the Northern Rocky Forest eco-province, colored by eco-section, with lines dividing each eco-subsection, to see this structure in action as shown in Figure \@ref(fig:northern-rocky).
+\clearpage
 
 ```{r northern-rocky, echo = F, message = F, warning = F, fig.align="center", fig.cap="The Northern Rocky Forest colored by eco-section. The black lines divide the eco-subsections of the Northern Rocky Forest.", fig.scap="The Northern Rocky Forest colored by eco-section"}
 subsections <- st_read("../data/SA_eco_subsection/SA_eco_subsection.shp", quiet = TRUE)

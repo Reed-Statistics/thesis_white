@@ -38,7 +38,6 @@ Ignoring the finite population correction, the variance estimate for post-strati
 Recall that $k$ indexes over the strata, which in this case is forested and non-forested sampled units. The quantity $w_{jk}$ is a survey weight entirely decided by the true proportion of forested area in eco-subsection $j$. For example, if eco-subsection $j$ was 80% forested, the weights would be calculated as $w_{j1} = 0.8$ and $w_{j2} = 0.2$. Therefore if under-sampling of forests had occurred (say, if only 60% of our samples were forested), this under-sampling is corrected with the survey weights, and this results in a better estimate of $\mu_{y_j}$ that is less variable. 
 
 The post-stratified estimator is a great alternative to the Horvitz-Thompson estimator when auxiliary information related to the response variable of interest is available, and in that situation there is not a justifiable reason to pick the Horvitz-Thompson estimator over the post-stratified estimator as the direct estimator of choice. The data needed to compute the post-stratified estimate in the Interior West is available, so we will primarily be comparing the indirect estimators to the post-stratified estimator in the results. Also, the area-level indirect model-based estimators will be based on the post-stratified estimate. 
-\clearpage
 
 ### The Survey Regression Estimator
 
@@ -181,7 +180,7 @@ f(\mu_{y_j} ~\vert~ \text{data}) \propto P(\text{data} ~\vert~ \mu_{y_j}) \cdot 
 (\#eq:bayes-thm)
 \end{align}
 In the application of this thesis, inferences are made about $\mu_{y_j}$ given the data. This is represented on the lefthand side of Equation \@ref(eq:bayes-thm). This quantity is called the posterior distribution of $\mu_{y_j}$ given the data. As one continues to read left to right, one sees the likelihood (i.e. data given parameters) multiplied with the distribution of $\mu_{y_j}$. Clearly, the true value of $\mu_{y_j}$ is unknown or else there would be no need to attempt to estimate $\mu_{y_j}$. In order to estimate the posterior distribution one must multiply something with the likelihood function, so a "prior" distribution is chosen which reflects one's prior belief of the distribution of $\mu_{y_j}$. Figure \@ref(fig:bayes-dists) visualizes obtaining a posterior distribution from the prior distribution and likelihood function.
-\clearpage
+
 ```{r bayes-dists, warning = F, message = F, echo = F, fig.cap="Hypothetical prior, likelihood, and posterior distributions. The posterior is in between the prior and likelihood as it is the normalized product of these distributions.", fig.scap = "Prior, likelihood, and posterior distributions."}
 library(tidyverse)
 x <- seq(from = -90, to = 90, by = 1)
