@@ -159,7 +159,7 @@ Small Area Estimation of Forest Attributes}
 \emph{To \textbf{Brittney}, \textbf{Thomas}, \textbf{Elliot}, and \textbf{Theo}: I am so grateful to have spent the last four years living in the same city as you all. Thank you for the countless meals and all the love and support you have given me. Brittney, thank you for your contributions in editing this thesis, my first HUM paper, and just about everything in between. I love you all so much.}
 \newline
 \newline
-\emph{To \textbf{Simon (and Millie)}: thank you for being my best friend. I am so glad we were able to spend a great deal of this year together and share our thesis experiences despite the pandemic. I can't wait to being spending time in Baltimore and wherever else is next for you.}
+\emph{To \textbf{Simon (and Millie)}: thank you for being my best friend. I am so glad we were able to spend a great deal of this year together and share our thesis experiences despite the pandemic. I can't wait to be spending time in Baltimore and wherever else is next for you.}
 \newline
 \newline
 \emph{To \textbf{Maurvie}: thank you for being such an amazing friend and for spending so much great time over the last few years. Your significant contribution to the creation of the color palette used in this thesis brought my plots to a whole new level. I hope to find many more co-ops in the future with you.}
@@ -172,7 +172,10 @@ Small Area Estimation of Forest Attributes}
 \emph{To \textbf{Ben} and \textbf{Emma}: thank you for sharing your house with me for the last bit of this year. It's been so great to get closer to you both, and I hope we stay in touch after Reed.}
 \newline
 \newline
-\emph{To everyone on or associated with the \textbf{Reed College Basketball Team}: thank you for being my community and a place that felt like home at Reed. I hope in the not-too-distant future Sunday ball will return and we will get to be together again.}
+\emph{To \textbf{Shisham}: the time spent collaborating on assignments through the years has been so much fun. I'm so excited to visit you in Davis!}
+\newline
+\newline
+\emph{To \textbf{Reed College Basketball}: thank you for being my community and a place that felt like home at Reed. I hope in the not-too-distant future Sunday ball will return and we will get to be together again.}
 \newline
 \newline
 \emph{To my sisters, \textbf{Erin} and \textbf{Willow}: you mean the world to me, and I love you both so much. Thanks for all the phone calls and for visiting me as much as possible.}
@@ -222,7 +225,7 @@ The U.S. Forest Inventory and Analysis Program (FIA) collects plot data on many 
     \emph{To \textbf{Brittney}, \textbf{Thomas}, \textbf{Elliot}, and \textbf{Theo}: I am so grateful to have spent the last four years living in the same city as you all. Thank you for the countless meals and all the love and support you have given me. Brittney, thank you for your contributions in editing this thesis, my first HUM paper, and just about everything in between. I love you all so much.}
     \newline
     \newline
-    \emph{To \textbf{Simon (and Millie)}: thank you for being my best friend. I am so glad we were able to spend a great deal of this year together and share our thesis experiences despite the pandemic. I can't wait to being spending time in Baltimore and wherever else is next for you.}
+    \emph{To \textbf{Simon (and Millie)}: thank you for being my best friend. I am so glad we were able to spend a great deal of this year together and share our thesis experiences despite the pandemic. I can't wait to be spending time in Baltimore and wherever else is next for you.}
     \newline
     \newline
     \emph{To \textbf{Maurvie}: thank you for being such an amazing friend and for spending so much great time over the last few years. Your significant contribution to the creation of the color palette used in this thesis brought my plots to a whole new level. I hope to find many more co-ops in the future with you.}
@@ -235,7 +238,10 @@ The U.S. Forest Inventory and Analysis Program (FIA) collects plot data on many 
     \emph{To \textbf{Ben} and \textbf{Emma}: thank you for sharing your house with me for the last bit of this year. It's been so great to get closer to you both, and I hope we stay in touch after Reed.}
     \newline
     \newline
-    \emph{To everyone on or associated with the \textbf{Reed College Basketball Team}: thank you for being my community and a place that felt like home at Reed. I hope in the not-too-distant future Sunday ball will return and we will get to be together again.}
+    \emph{To \textbf{Shisham}: the time spent collaborating on assignments through the years has been so much fun. I'm so excited to visit you in Davis!}
+    \newline
+    \newline
+    \emph{To \textbf{Reed College Basketball}: thank you for being my community and a place that felt like home at Reed. I hope in the not-too-distant future Sunday ball will return and we will get to be together again.}
     \newline
     \newline
     \emph{To my sisters, \textbf{Erin} and \textbf{Willow}: you mean the world to me, and I love you both so much. Thanks for all the phone calls and for visiting me as much as possible.}
@@ -303,7 +309,7 @@ In order to produce estimates for the mean of forest attributes at some sub-popu
 
 \caption[An ecological province]{An ecological province containing three eco-subsections. The red, yellow, and seafoam areas represent eco-subsections. The green hexagons represent forested areas sampled by the FIA. The beige hexagons represent non-forested areas sampled by the FIA.}\label{fig:ecological-province-diagram}
 \end{figure}
-We are interested in making inferences at the sub-population level, and in Figure \ref{fig:ecological-province-diagram} these sub-populations are represented by the red, yellow, and seafoam areas. Importantly, estimates of forest attributes in each of these sub-populations are required. There are wide range of techniques that can be used to carry out this small area estimation. Broadly, these methods fall into three categories: direct estimators, indirect estimators with implicit models, and indirect estimators with explicit models. I will often refer to indirect models with explicit models as ``model-based estimators.'' Each of these methods attempts to make inferences at the sub-population level, however, they are quite different from each other.
+We are interested in making inferences at the sub-population level, and in Figure \ref{fig:ecological-province-diagram} these sub-populations are represented by the red, yellow, and seafoam areas. Importantly, estimates of forest attributes in each of these sub-populations are required. There are wide range of techniques that can be used to carry out this small area estimation. Broadly, these methods fall into three categories: direct estimators, indirect estimators with implicit models, and indirect estimators with explicit models. I will sometimes refer to indirect estimators with explicit models more succinctly as just ``model-based estimators.'' Each of these methods attempts to make inferences at the sub-population level, however, they are quite different from each other.
 
 Direct estimators are defined as those that rely only on the samples within the small area which we would like to measure. Some examples of a direct estimator are the sample mean or the post-stratified estimator. The post-stratified estimator is similar to the sample mean; however, it accounts for under- and over-sampling of forested areas in a given sub-population. These estimators do not rely on information outside of the small area being estimated; however, the post-stratified estimator uses auxiliary information such as the predicted proportion of forested land within the small area to produce estimates. Direct estimation is the simplest kind of small area estimator, as it only relies on samples within the sub-population of interest to produce its estimates. Figures \ref{fig:mean-diagram} and \ref{fig:ps-diagram} visualize these two estimators which allows for one to get a better sense of their estimation process by considering how they would estimate some forest attribute \(y\) in the seafoam sub-population \(j\) from Figure \ref{fig:ecological-province-diagram}.
 \begin{figure}
