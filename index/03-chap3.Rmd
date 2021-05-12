@@ -2,7 +2,7 @@
 
 Currently, there are three main types of estimators used to estimate the value of forest attributes: direct, indirect with implicit models, and indirect with explicit models. Direct estimators are commonly thought of as the simplest estimators, as they do not borrow strength across small areas for estimation. Direct estimators are hence easy to use and interpret, but we often do not get precise enough estimates with them; in other words, they have high variance. Indirect estimators with implicit models borrow strength implicitly across small areas to produce estimates. These estimators decrease variance by providing a link to related small areas through supplementary data [@rao2014]. Finally, indirect estimators that make explicit use of a model, or "model-based estimators", aim to reduce variance in estimates by using auxiliary data and making specific allowance for between-area variation. As explained in Rao (2014), these model-based estimators have significant advantages over direct estimators and implicit indirect estimators. Notably, model diagnostics can be used, small area-specific measures of precision can be attained (in the case of this thesis, comparisons of the coefficient of variation are made between estimators), and we can use mixed or hierarchical models to capture the dependence structure in the data. 
 
-This thesis explores the application of two model-based estimators: the hierarchical Bayesian unit-level model and the hierarchical Bayesian area-level model. These hierarchical Bayesian models are not commonly used in forest inventory research; however, these models are often applied in a variety of other application areas ranging from agriculture to ophthalmology to economic growth to tracking the spread of invasive species, to name a few [@agri; @med; @inbook; @doves]. We compare these novel Bayesian models to the frequentist EBLUP unit- and area-level models and two common direct estimators: the sample mean and the post-stratified estimator. To compare these estimators, I will apply them over many ecological provinces in the Interior West and study their performance when considering four key response variables with one explanatory variable. 
+This thesis explores the application of two model-based estimators: the hierarchical Bayesian unit-level model and the hierarchical Bayesian area-level model. These hierarchical Bayesian models are not commonly used in forest inventory research; however, these models are often applied in a variety of other application areas ranging from agriculture to ophthalmology to economic growth to tracking the spread of invasive species, to name a few [@agri; @med; @inbook; @doves]. We compare these novel Bayesian models to the frequentist EBLUP unit- and area-level models and two common direct estimators: the sample mean and the post-stratified estimator. To compare these estimators, I will apply them over many eco-provinces in the Interior West and study their performance when considering four key response variables with one explanatory variable. 
 
 In order to explore these estimators in depth, I will now introduce notation relevant to them. First of all, the indices used will work as follows: $i$ indexes over units sampled; $j$ indexes over eco-subsections or "small areas"; and $k$ indexes over strata. Now, recall the goal of producing estimates of the mean of some response variable $y$, such as trees per acre or biomass, in a small area. So, let $\mu_{y_j}$ be the population mean of the study variable in eco-subsection $j$ in the Interior West. To denote the estimate produced of $\mu_{y_j}$ I will use $\hat\mu_{y_j}$ with a superscript denoting which estimator is being used. I will also use $\hat V(\hat\mu_{y_j})$ to denote the estimate of the variance of $\hat\mu_{y_j}$. In summary, each of the estimators aims to estimate $\mu_{y_j}$, the population mean of some study variable in the $j$th eco-subsection. The estimated value is denoted by $\hat\mu_{y_j}$ and its estimated variance is denoted by $\hat V(\hat\mu_{y_j})$. I also introduce $s_j$, which is a set. The set $s_j$ includes all units sampled within eco-subsection $j$. Next, I also introduce $U_j$, the set of all the area in subsection $j$. The "$U$" is chosen, as it stands for "universe." Also, I introduce $n_j$, which denotes the number of sampled units within an eco-subsection $j$, i.e. the cardinality of $s_j$. 
 
@@ -13,7 +13,7 @@ There are two direct estimators that are implemented throughout this thesis: the
 
 ### The Horvitz-Thompson Estimator
 
-The most intuitive approach to estimating the population mean $\mu_{y_j}$ might be taking the sample mean, i.e. using the "Horvitz-Thompson estimator," as it is referred to by survey samplers [@hor52]. This estimator can be expressed as follows:
+The most intuitive approach to estimating the population mean $\mu_{y_j}$ might be the sample mean, i.e. using the "Horvitz-Thompson estimator," as it is referred to by survey samplers [@hor52]. This estimator can be expressed as follows:
 \begin{align}
 \hat\mu_{y_j}^{HT} = \frac{1}{n_j} \sum_{i \in s_j} y_i
 \end{align}
@@ -48,7 +48,7 @@ Another direct estimator that is often used for small area estimation is the sur
 \end{align}
 where $N_j$ is the population size in the $j$th area and $\hat y_{ji}$ is the estimated value of $y$ for unit $i$ in the $j$th small area. The first term of Equation \@ref(eq:sre) is the average of the fitted model in the area $j$ of interest and the second term of Equation \@ref(eq:sre) is the average of the residuals over the sampled plots in the area $j$ of interest. This second term serves to correct for issues of bias in the model fit. 
 
-The survey regression estimator has a particular subtlety which makes it arguably not a direct estimator. Particularly, the $\hat y_{ji}$ is calculated through linear regression with $\beta$'s fit by ordinary least squares across the eco-province rather than the small area. This survey regression estimator is used to partially represent the unit-level EBLUP estimator. One may make a legitimate argument that this estimator should in fact be considered an implicit model-based estimator, however Rao (2014) sticks to the convention that this estimator is in fact still a direct estimator. He argues that we should consider this estimator to be a direct estimator, as the strength we are borrowing does not increase the "effective" sample size. Making a final decision on this estimator's class is left as an exercise for the reader.  
+The survey regression estimator has a particular subtlety which makes it arguably not a direct estimator. Particularly, the $\hat y_{ji}$ is calculated through linear regression with $\beta$'s fit by ordinary least squares across the eco-province rather than the small area. One may make a legitimate argument that this estimator should in fact be considered an implicit model-based estimator, however Rao (2014) sticks to the convention that this estimator is in fact still a direct estimator. He argues that we should consider this estimator to be a direct estimator, as the strength we are borrowing does not increase the "effective" sample size. Making a final decision on this estimator's class is left as an exercise for the reader.  
 
 ## Implicit Model-Based Indirect Estimation
 
@@ -78,7 +78,7 @@ This unit-level model is then fit to the data:
 \begin{align}
 \hat y_{ji} = \hat\beta_0 + \hat\beta_1 X_{ji}.
 \end{align}
-Note that I use capital $X$ to denote the population mean of the explanatory variable at the unit-level. The unit-level regression-synthetic estimator is expressed below:
+Note that I use capital $X$ to denote the population value of the explanatory variable at the unit-level. The unit-level regression-synthetic estimator is expressed below:
 \begin{align}
 \hat\mu_{y_j}^{RSU} = \frac{1}{N_j} \sum_{i \in U_j} \hat y_{ji}
 \end{align}
@@ -176,7 +176,7 @@ P(A ~\vert~ B) &= \frac{P(B ~\vert~ A) \cdot P(A)}{P(B)} \nonumber \\
 \end{align}
 Bayes' Theorem allows for the derivation of one conditional probability, $P(A ~\vert~ B)$, given the inverse conditional probability and each marginal distribution are known [@bayes-orig]. This theorem is the basis of hierarchical Bayesian models. Replacing $A$ with our parameter of interest, $\mu_{y_j}$, and $B$ with the data, the following equation is derived:
 \begin{align}
-f(\mu_{y_j} ~\vert~ \text{data}) \propto P(\text{data} ~\vert~ \mu_{y_j}) \cdot P(\mu_{y_j})
+P(\mu_{y_j} ~\vert~ \text{data}) \propto P(\text{data} ~\vert~ \mu_{y_j}) \cdot P(\mu_{y_j})
 (\#eq:bayes-thm)
 \end{align}
 In the application of this thesis, inferences are made about $\mu_{y_j}$ given the data. This is represented on the lefthand side of Equation \@ref(eq:bayes-thm). This quantity is called the posterior distribution of $\mu_{y_j}$ given the data. As one continues to read left to right, one sees the likelihood (i.e. data given parameters) multiplied with the distribution of $\mu_{y_j}$. Clearly, the true value of $\mu_{y_j}$ is unknown or else there would be no need to attempt to estimate $\mu_{y_j}$. In order to estimate the posterior distribution one must multiply something with the likelihood function, so a "prior" distribution is chosen which reflects one's prior belief of the distribution of $\mu_{y_j}$. Figure \@ref(fig:bayes-dists) visualizes obtaining a posterior distribution from the prior distribution and likelihood function.
@@ -203,7 +203,7 @@ ggplot(bayes_df, aes(x = x, y = distributions, color = which_one)) +
 ```
 In Figure \@ref(fig:bayes-dists), one can see that the estimate is informed by both the data and the prior distribution, rather than in the frequentist paradigm in which only the data is used. One can also see that if the prior is "flat", the posterior would just be the likelihood function, leading to the same result achieved through a frequentist analysis, just through a different method. 
 
-These are the concepts and basics of Bayesian statistics applied to the problem at hand: estimating $\mu_{y_j}$. I introduce two methods which estimate $\mu_{y_j}$: the unit-level hierarchical Bayesian estimator and the area-level hierarchical Bayesian estimator. These estimators are analogous to the unit-level EBLUP and the area-level EBLUP, respectively. Notably, when the variance parameters are known and flat priors are used to attain the posterior, the hierarchical Bayesian approach and EBLUPs give the same estimates and measures of variability [@rao2014]. However, the value of the underlying parameter of the variances is of course unknown. I will now introduce each estimator.
+These are the concepts and basics of Bayesian statistics applied to the problem at hand: estimating $\mu_{y_j}$. I introduce two methods which estimate $\mu_{y_j}$: the unit-level hierarchical Bayesian estimator and the area-level hierarchical Bayesian estimator. These estimators are analogous to the unit-level EBLUP and the area-level EBLUP, respectively. Notably, when the variance parameters are known and flat priors are used to attain the posterior, the hierarchical Bayesian approach and EBLUPs give the same estimates and measures of variability [@rao2014]. However, the value of the underlying parameters of the variances are of course unknown. I will now introduce each estimator.
 
 ### The Unit-level Hierarchical Bayesian Estimator
 
@@ -240,7 +240,7 @@ where $f(\beta)$ and $f(\sigma^2_\nu)$ are priors specified below:
 &f(\beta) \propto 1, \\
 &f(\sigma^2_\nu) = \text{IG}(\text{df} = 10000 \cdot m,~ \text{scale} = 1).
 \end{align*}
-where $m$ is the number of small areas in the eco-province into which the estimator is fit. Now that the estimator has been specified, it is easy to attain the small area estimate and variance. For the estimate in eco-subsection $j$, the Bayes estimator for $\mu_{y_j}$ is used:
+where $m$ is the number of small areas in the eco-province where the estimator is fit. Now that the estimator has been specified, it is easy to attain the small area estimate and variance. For the estimate in eco-subsection $j$, the Bayes estimator for $\mu_{y_j}$ is used:
 \begin{align}
 \hat\mu_{y_j}^{HBA} = E[\mu_{y_j} ~\vert~ \hat\mu_{y_j}^{PS}] 
 \end{align}
