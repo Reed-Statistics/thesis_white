@@ -1,3 +1,11 @@
 # A Hierarchical Bayesian Approach to Small Area Estimation of Forest Attributes
 
-This repository contains the work done for my senior thesis at Reed College in the 2020-21 academic year. 
+This repository contains the work completed for my senior thesis at Reed College in the 2020-21 academic year, advised by [Dr. Kelly McConville](https://mcconville.rbind.io/).
+
+The thesis document can be found at [index/_book/thesis.pdf](https://github.com/Reed-Statistics/thesis_white/blob/master/index/_book/thesis.pdf). 
+
+The data used in this thesis are not included in this repository due to privacy restrictions. 
+
+## Abstract
+
+The U.S. Forest Inventory and Analysis Program (FIA) collects plot data on many forest attributes of interest to monitor the status and trends of the nation’s forests. Increasingly, the FIA needs to produce estimates of the mean of these forest attributes in small ecological regions such as eco-subsections. This thesis implements unit- and area-level hierarchical Bayesian model-based small area estimators to reduce esti- mate variance to a sufficient level for meaningful inference at the eco-subsection level. This thesis applies these hierarchical Bayesian estimators to four key forest attributes across the entire Interior West region of the United States. The explanatory variable used is total canopy cover, which was collected via remote sensing methods. The area- level hierarchical Bayesian estimator reduces variance significantly compared to other common small area estimation techniques. The area-level hierarchical Bayesian esti- mator has lower variance than the analogous area-level frequentist estimator and the industry standard post-stratified estimator in 82.7% and 84.0% of forest attribute and eco-subsection combinations, respectively. Not only is variance reduced in a large percent of eco-subsections, but this variance is also reduced by a large margin: the median percent reduction in the coefficient of variation from the area-level hi- erarchical Bayesian estimator to the analogous area-level frequentist estimator and post-stratified estimator were 55.8% and 63.0%, respectively. These results illustrate the applicability and benefit of performing small area estimation of forest attributes in a hierarchical Bayesian framework and allow for more informative inference at the eco-subsection level, which in turn allows for better implementation of programs that seek to maintain the health of our forests.
